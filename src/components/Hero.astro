@@ -1,0 +1,92 @@
+---
+const PAGE_TITLE_ID = '_top';
+
+const route = Astro.locals.starlightRoute;
+const { data } = route.entry;
+const { title = data.title, tagline, actions = [] } = data.hero || {};
+const isZh = route.locale === 'zh-cn';
+
+const t = isZh
+  ? {
+      eyebrow: 'AMD Radeon GPU 云平台',
+      forkA: '开发环境',
+      forkATitle: '启动一个 GPU 实例',
+      forkADesc: '创建模板、启动实例，用 JupyterLab 或 SSH 进入一台配好 ROCm 的 Radeon GPU 机器。',
+      forkB: 'API',
+      forkBTitle: '调用模型 API',
+      forkBDesc: '共享端点免费可用，或用自己的实例部署专属端点。两者都兼容 OpenAI 协议。',
+      terminal: '你的第一次调用',
+    }
+  : {
+      eyebrow: 'AMD Radeon GPUs in the cloud',
+      forkA: 'Development',
+      forkATitle: 'Launch a GPU instance',
+      forkADesc:
+        'Create a template, launch it, and get into a ROCm-ready Radeon GPU machine through JupyterLab or SSH.',
+      forkB: 'API',
+      forkBTitle: 'Call a model API',
+      forkBDesc:
+        'Use the free shared endpoints, or deploy a dedicated one on your own instance. Both speak the OpenAI protocol.',
+      terminal: 'your first call',
+    };
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const p = (s: string) => `${base}/${isZh ? 'zh-cn/' : ''}${s}`;
+---
+
+<div class="rc-hero">
+  <div class="rc-hero__inner">
+    <div class="rc-hero__lede">
+      <p class="rc-eyebrow">{t.eyebrow}</p>
+      <h1 id={PAGE_TITLE_ID} data-page-title set:html={title} />
+      {tagline && <p class="rc-hero__tagline" set:html={tagline} />}
+      <div class="rc-actions">
+        {
+          actions.map((action: any) => (
+            <a
+              href={action.link}
+              class={`rc-btn rc-btn--${action.variant === 'primary' ? 'primary' : 'ghost'}`}
+            >
+              {action.text}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="rc-terminal" role="img" aria-label={t.terminal}>
+      <div class="rc-terminal__bar">
+        <span class="rc-terminal__dot"></span>
+        <span class="rc-terminal__dot"></span>
+        <span class="rc-terminal__dot"></span>
+        <span class="rc-terminal__title">{t.terminal}</span>
+      </div>
+      <pre class="rc-terminal__body"><span class="rc-t-prompt">$</span> <span class="rc-t-cmd">curl</span> <span class="rc-t-str">https://developer.amd.com.cn/radeon/api/v1/chat/completions</span> <span class="rc-t-dim">\</span>
+  <span class="rc-t-flag">-H</span> <span class="rc-t-str">"Authorization: Bearer </span><span class="rc-t-key">rc-••••</span><span class="rc-t-str">"</span> <span class="rc-t-dim">\</span>
+  <span class="rc-t-flag">-H</span> <span class="rc-t-str">"Content-Type: application/json"</span> <span class="rc-t-dim">\</span>
+  <span class="rc-t-flag">-d</span> <span class="rc-t-str">'&lbrace;"model":"Qwen3.6-35B-A3B",</span>
+      <span class="rc-t-str">"messages":[&lbrace;"role":"user","content":"Hello"&rbrace;]&rbrace;'</span>
+
+<span class="rc-t-dim">&lbrace;</span>
+<span class="rc-t-dim">  "object": "chat.completion",</span>
+<span class="rc-t-dim">  "model": "Qwen3.6-35B-A3B",</span>
+<span class="rc-t-dim">  "choices": [&lbrace; "message": &lbrace;</span>
+<span class="rc-t-dim">    "role": "assistant",</span>
+<span class="rc-t-out">    "content": "Hello! How can I help you today?"</span>
+<span class="rc-t-dim">  &rbrace; &rbrace;]</span>
+<span class="rc-t-dim">&rbrace;</span> <span class="rc-cursor"></span></pre>
+    </div>
+  </div>
+
+  <div class="rc-fork">
+    <a class="rc-card" href={p('quickstart/')}>
+      <span class="rc-card__tag">{t.forkA}</span>
+      <h3>{t.forkATitle}</h3>
+      <p>{t.forkADesc}</p>
+    </a>
+    <a class="rc-card" href={p('api/overview/')}>
+      <span class="rc-card__tag">{t.forkB}</span>
+      <h3>{t.forkBTitle}</h3>
+      <p>{t.forkBDesc}</p>
+    </a>
+  </div>
+</div>

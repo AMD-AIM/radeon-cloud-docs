@@ -1,0 +1,19 @@
+{
+  "name": "radeon-cloud-docs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Radeon Cloud documentation — user guide and API reference (EN / 简体中文)",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.36.3",
+    "astro": "^5.16.2",
+    "sharp": "^0.34.4"
+  }
+}
