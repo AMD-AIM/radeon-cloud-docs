@@ -1,6 +1,6 @@
 ---
 title: Errors
-description: Status codes returned by the Radeon Cloud API and what to do about each.
+description: Status codes returned by the AMD Radeon Cloud API and what to do about each.
 sidebar:
   order: 11
 ---

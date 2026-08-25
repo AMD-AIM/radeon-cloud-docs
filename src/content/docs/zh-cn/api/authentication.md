@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-Radeon Cloud 接受两种凭据。端点要哪一种，取决于它做什么事。
+AMD Radeon Cloud 接受两种凭据。端点要哪一种，取决于它做什么事。
 
 **API 密钥**是给机器访问用的 Bearer 令牌。它认证 Model API，也能用在大多数 Platform API 端点上。
 

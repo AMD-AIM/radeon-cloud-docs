@@ -1,11 +1,26 @@
 ---
 title: 额度
-description: 额度怎么消耗，以及怎么充值。
+description: 额度怎么消耗，以及怎么把 AMD AI 开发者计划的积分变成额度。
 sidebar:
   order: 8
 ---
 
 额度用来付 GPU 实例的钱。免费的共享[模型 API](/radeon-cloud-docs/zh-cn/guides/model-apis/) 不占额度。
+
+## 积分和额度
+
+两种不同的「货币」，容易混。
+
+**积分（Points）** 在 [AMD AI 开发者计划](https://developer.amd.com.cn/points/redeem) 里通过参与开发者活动获得。它是整个开发者计划通用的，不专属于 AMD Radeon Cloud。
+
+**额度（Credits）** 是 AMD Radeon Cloud 用来跑 GPU 实例的，只在平台内部存在。
+
+积分变成额度分两步：
+
+1. 在 [developer.amd.com.cn/points/redeem](https://developer.amd.com.cn/points/redeem) 用积分兑换出优惠码。
+2. 在 AMD Radeon Cloud 的 **Profile** 里兑换这个优惠码，额度就加到余额上了。
+
+黑客松和工作坊发的优惠码在第 2 步用法一样，只是不用做第 1 步 —— 码是直接发给你的。
 
 ## 怎么消耗
 
@@ -19,9 +34,9 @@ sidebar:
 
 ## 兑换优惠码
 
-如果你拿到了优惠码 —— 比如在黑客松或工作坊上 —— 在 **Profile** 里兑换。额度会立即加到余额上。
+不管码是来自开发者计划还是活动，兑换方式都一样：打开 **Profile** 输入即可。额度立即加到余额上。
 
-每个码只能用一次，有些还绑定了特定账号。兑换失败时，检查一下你登录的是不是发码时指定的那个账号。
+每个码只能用一次，有些还绑定了特定账号。兑换失败时，检查一下你登录的是不是发码时指定的那个账号 —— 如果你在中国站和全球站都有账号，还要确认用的是对的那个。额度归属于单个站点，不能跨站转移。
 
 ## 模型 API 的消耗
 

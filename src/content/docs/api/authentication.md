@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-Radeon Cloud accepts two kinds of credential. Which one an endpoint wants depends on what it does.
+AMD Radeon Cloud accepts two kinds of credential. Which one an endpoint wants depends on what it does.
 
 **API keys** are bearer tokens for machine access. They authenticate the Model API and can also be used against most Platform API endpoints.
 

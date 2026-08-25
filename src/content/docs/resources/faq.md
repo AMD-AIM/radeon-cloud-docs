@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: Short answers to common questions about Radeon Cloud.
+description: Short answers to common questions about AMD Radeon Cloud.
 sidebar:
   order: 2
 ---

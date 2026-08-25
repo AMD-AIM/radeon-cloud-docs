@@ -15,11 +15,11 @@ export default defineConfig({
   integrations: [
     starlight({
       title: {
-        en: 'Radeon Cloud Docs',
-        'zh-cn': 'Radeon Cloud 文档',
+        en: 'AMD Radeon Cloud Docs',
+        'zh-cn': 'AMD Radeon Cloud 文档',
       },
       description:
-        'Run AMD Radeon GPUs in the cloud. Launch notebooks, deploy OpenAI-compatible model endpoints, and call the Radeon Cloud API.',
+        'Run AMD Radeon GPUs in the cloud. Launch notebooks, deploy OpenAI-compatible model endpoints, and call the AMD Radeon Cloud API.',
       logo: {
         light: './src/assets/logo-light.svg',
         dark: './src/assets/logo-dark.svg',

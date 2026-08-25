@@ -5,7 +5,7 @@ sidebar:
   order: 6
 ---
 
-Radeon Cloud serves models behind an OpenAI-compatible HTTP API. Any client that talks to OpenAI works by changing the base URL and the key: `curl`, the `openai` SDK, LangChain, Cherry Studio.
+AMD Radeon Cloud serves models behind an OpenAI-compatible HTTP API. Any client that talks to OpenAI works by changing the base URL and the key: `curl`, the `openai` SDK, LangChain, Cherry Studio.
 
 Two options, and the difference is who owns the GPU.
 

@@ -1,6 +1,6 @@
 ---
 title: 常见问题
-description: 关于 Radeon Cloud 的常见问题简答。
+description: 关于 AMD Radeon Cloud 的常见问题简答。
 sidebar:
   order: 2
 ---

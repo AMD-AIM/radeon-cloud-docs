@@ -1,6 +1,11 @@
-# Radeon Cloud Docs
+# AMD Radeon Cloud Docs
 
-Documentation for [Radeon Cloud](https://radeon-global.anruicloud.com/) — user guide and API reference, in English and 简体中文.
+Documentation for AMD Radeon Cloud — user guide and API reference, in English and 简体中文.
+
+The platform has two regional entry points, both covered by these docs:
+
+- China — https://developer.amd.com.cn/radeon/
+- Global — https://radeon-global.anruicloud.com/
 
 Built with [Astro Starlight](https://starlight.astro.build/). Published to GitHub Pages at **https://amd-aim.github.io/radeon-cloud-docs/**.
 

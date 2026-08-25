@@ -1,13 +1,13 @@
 ---
 title: 登录
-description: 用邮箱登录 Radeon Cloud 控制台。
+description: 用邮箱登录 AMD Radeon Cloud 控制台。
 sidebar:
   order: 1
 ---
 
 打开 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/)，点右上角的 **Login**，选择 **Login with Email**。
 
-![Radeon Cloud 登录界面](../../../../assets/guide/login.png)
+![AMD Radeon Cloud 登录界面](../../../../assets/guide/login.png)
 
 填入邮箱和收到的验证码。验证码是六位数字，几分钟后失效；如果没收到，等冷却时间过了再重新发一次。
 

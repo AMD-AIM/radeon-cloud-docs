@@ -1,6 +1,6 @@
 ---
 title: 错误
-description: Radeon Cloud API 返回的状态码，以及各自该怎么处理。
+description: AMD Radeon Cloud API 返回的状态码，以及各自该怎么处理。
 sidebar:
   order: 11
 ---

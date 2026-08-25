@@ -1,13 +1,13 @@
 ---
 title: Sign in
-description: Sign in to the Radeon Cloud console with your email.
+description: Sign in to the AMD Radeon Cloud console with your email.
 sidebar:
   order: 1
 ---
 
 Open [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/), click **Login** in the top-right corner, and choose **Login with Email**.
 
-![The Radeon Cloud login screen](../../../assets/guide/login.png)
+![The AMD Radeon Cloud login screen](../../../assets/guide/login.png)
 
 Enter your email address and the verification code sent to it. Codes are six digits and expire after a few minutes; if one doesn't arrive, wait for the cooldown to pass and request another.
 

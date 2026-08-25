@@ -1,11 +1,11 @@
 ---
 title: API overview
-description: Base URLs, conventions, and what the Radeon Cloud API exposes.
+description: Base URLs, conventions, and what the AMD Radeon Cloud API exposes.
 sidebar:
   order: 1
 ---
 
-The Radeon Cloud API has two halves that are useful to keep separate in your head.
+The AMD Radeon Cloud API has two halves that are useful to keep separate in your head.
 
 **The Model API** is OpenAI-compatible and authenticated with a bearer token. This is what your application calls to run inference.
 
@@ -22,7 +22,7 @@ The Radeon Cloud API has two halves that are useful to keep separate in your hea
 The dedicated base URL is generated when the instance starts and is shown in the launch dialog and under **Active Instance**. Don't construct it by hand — the port depends on the serving stack (8000 for vLLM, 30000 for SGLang).
 
 :::note[Deployments differ]
-Radeon Cloud runs behind more than one hostname. The values above are the public ones at the time of writing; always prefer the base URL the console gives you over a hard-coded string.
+AMD Radeon Cloud runs behind more than one hostname. The values above are the public ones at the time of writing; always prefer the base URL the console gives you over a hard-coded string.
 :::
 
 ## Conventions

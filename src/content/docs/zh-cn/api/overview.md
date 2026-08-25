@@ -1,11 +1,11 @@
 ---
 title: API 概览
-description: 基础 URL、约定，以及 Radeon Cloud API 提供了什么。
+description: 基础 URL、约定，以及 AMD Radeon Cloud API 提供了什么。
 sidebar:
   order: 1
 ---
 
-Radeon Cloud API 分成两半，在脑子里分开看会清楚很多。
+AMD Radeon Cloud API 分成两半，在脑子里分开看会清楚很多。
 
 **Model API** 兼容 OpenAI，用 Bearer 令牌认证。你的应用调它来跑推理。
 
@@ -22,7 +22,7 @@ Radeon Cloud API 分成两半，在脑子里分开看会清楚很多。
 独占的基础 URL 在实例启动时生成，会显示在启动对话框和 **Active Instance** 里。别自己拼——端口取决于服务栈（vLLM 是 8000，SGLang 是 30000）。
 
 :::note[部署环境不止一套]
-Radeon Cloud 背后有多个主机名。上面这些是撰写时的公开地址；始终优先用控制台给你的基础 URL，而不是写死的字符串。
+AMD Radeon Cloud 背后有多个主机名。上面这些是撰写时的公开地址；始终优先用控制台给你的基础 URL，而不是写死的字符串。
 :::
 
 ## 约定
