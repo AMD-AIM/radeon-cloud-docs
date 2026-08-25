@@ -47,7 +47,7 @@ curl "https://radeon-global.anruicloud.com/api/profile/model-usage?include_recen
   "last_30_days": { "requests": 2840, "total_tokens": 1904221, "cost": 39.77 },
   "all_time":     { "requests": 9120, "total_tokens": 6210443, "cost": 128.44 },
   "by_model": [
-    { "model": "Qwen3.6-35B-A3B", "requests": 120, "total_tokens": 74001, "cost": 1.55 }
+    { "model": "DeepSeek-V4-Flash", "requests": 120, "total_tokens": 74001, "cost": 1.55 }
   ],
   "recent": []
 }

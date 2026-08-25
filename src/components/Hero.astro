@@ -63,12 +63,12 @@ const p = (s: string) => `${base}/${isZh ? 'zh-cn/' : ''}${s}`;
       <pre class="rc-terminal__body"><span class="rc-t-prompt">$</span> <span class="rc-t-cmd">curl</span> <span class="rc-t-str">https://developer.amd.com.cn/radeon/api/v1/chat/completions</span> <span class="rc-t-dim">\</span>
   <span class="rc-t-flag">-H</span> <span class="rc-t-str">"Authorization: Bearer </span><span class="rc-t-key">rc-••••</span><span class="rc-t-str">"</span> <span class="rc-t-dim">\</span>
   <span class="rc-t-flag">-H</span> <span class="rc-t-str">"Content-Type: application/json"</span> <span class="rc-t-dim">\</span>
-  <span class="rc-t-flag">-d</span> <span class="rc-t-str">'&lbrace;"model":"Qwen3.6-35B-A3B",</span>
+  <span class="rc-t-flag">-d</span> <span class="rc-t-str">'&lbrace;"model":"DeepSeek-V4-Flash",</span>
       <span class="rc-t-str">"messages":[&lbrace;"role":"user","content":"Hello"&rbrace;]&rbrace;'</span>
 
 <span class="rc-t-dim">&lbrace;</span>
 <span class="rc-t-dim">  "object": "chat.completion",</span>
-<span class="rc-t-dim">  "model": "Qwen3.6-35B-A3B",</span>
+<span class="rc-t-dim">  "model": "DeepSeek-V4-Flash",</span>
 <span class="rc-t-dim">  "choices": [&lbrace; "message": &lbrace;</span>
 <span class="rc-t-dim">    "role": "assistant",</span>
 <span class="rc-t-out">    "content": "Hello! How can I help you today?"</span>

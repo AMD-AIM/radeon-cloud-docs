@@ -19,7 +19,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   -H "Authorization: Bearer $RADEON_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Qwen3.6-35B-A3B",
+    "model": "DeepSeek-V4-Flash",
     "messages": [{"role": "user", "content": "Say hello in one sentence."}]
   }'
 ```
@@ -42,7 +42,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="Qwen3.6-35B-A3B",
+    model="DeepSeek-V4-Flash",
     messages=[{"role": "user", "content": "Say hello in one sentence."}],
 )
 print(response.choices[0].message.content)

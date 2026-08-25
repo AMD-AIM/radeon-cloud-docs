@@ -25,7 +25,7 @@ Under **Public Free Model APIs**, pick a model. The detail dialog shows the base
 curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   -H "Authorization: Bearer $RADEON_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"Qwen3.6-35B-A3B","messages":[{"role":"user","content":"Hello"}]}'
+  -d '{"model":"DeepSeek-V4-Flash","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
 One key covers every shared model. To use a different one, change the `model` field.

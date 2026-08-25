@@ -40,7 +40,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   -H "Authorization: Bearer $RADEON_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Qwen3.6-35B-A3B",
+    "model": "DeepSeek-V4-Flash",
     "messages": [
       {"role": "system", "content": "You are a concise assistant."},
       {"role": "user", "content": "What is ROCm?"}
@@ -57,7 +57,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   "id": "chatcmpl-8f3b21d0",
   "object": "chat.completion",
   "created": 1756108800,
-  "model": "Qwen3.6-35B-A3B",
+  "model": "DeepSeek-V4-Flash",
   "choices": [
     {
       "index": 0,
@@ -91,7 +91,7 @@ client = OpenAI(
 )
 
 stream = client.chat.completions.create(
-    model="Qwen3.6-35B-A3B",
+    model="DeepSeek-V4-Flash",
     messages=[{"role": "user", "content": "Explain ROCm in two sentences."}],
     stream=True,
 )

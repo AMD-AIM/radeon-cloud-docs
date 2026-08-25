@@ -31,12 +31,6 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
   "object": "list",
   "data": [
     {
-      "id": "Qwen3.6-35B-A3B",
-      "object": "model",
-      "created": 1756108800,
-      "owned_by": "radeon-cloud"
-    },
-    {
       "id": "DeepSeek-V4-Flash",
       "object": "model",
       "created": 1756108800,

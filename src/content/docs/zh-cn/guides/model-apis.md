@@ -25,7 +25,7 @@ AMD Radeon Cloud 通过兼容 OpenAI 的 HTTP API 提供模型服务。任何能
 curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   -H "Authorization: Bearer $RADEON_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"Qwen3.6-35B-A3B","messages":[{"role":"user","content":"Hello"}]}'
+  -d '{"model":"DeepSeek-V4-Flash","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
 一个 key 通用于所有共享模型。想换模型，改 `model` 字段就行。
