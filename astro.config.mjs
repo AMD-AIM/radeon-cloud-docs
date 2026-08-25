@@ -63,24 +63,27 @@ export default defineConfig({
         {
           label: 'Start here',
           translations: { 'zh-CN': '从这里开始' },
-          items: [
-            { slug: 'introduction' },
-            { slug: 'quickstart' },
-          ],
+          items: [{ slug: 'introduction' }, { slug: 'quickstart' }],
         },
         {
-          label: 'User Guide',
-          translations: { 'zh-CN': '用户指南' },
+          label: 'Guides',
+          translations: { 'zh-CN': '使用指南' },
           items: [
             { slug: 'guides/login' },
-            { slug: 'guides/templates' },
-            { slug: 'guides/launch' },
-            { slug: 'guides/jupyterlab' },
-            { slug: 'guides/ssh' },
+            {
+              label: 'GPU instances',
+              translations: { 'zh-CN': 'GPU 实例' },
+              items: [
+                { slug: 'guides/templates' },
+                { slug: 'guides/launch' },
+                { slug: 'guides/jupyterlab' },
+                { slug: 'guides/ssh' },
+                { slug: 'guides/tunnel' },
+                { slug: 'guides/destroy' },
+              ],
+            },
             { slug: 'guides/model-apis' },
-            { slug: 'guides/tunnel' },
             { slug: 'guides/credits' },
-            { slug: 'guides/destroy' },
           ],
         },
         {
@@ -89,20 +92,36 @@ export default defineConfig({
           items: [
             { slug: 'api/overview' },
             { slug: 'api/authentication' },
-            { slug: 'api/models' },
-            { slug: 'api/chat-completions' },
-            { slug: 'api/dedicated-endpoints' },
-            { slug: 'api/usage' },
-            { slug: 'api/instances' },
-            { slug: 'api/templates' },
-            { slug: 'api/account' },
-            { slug: 'api/rate-limits' },
-            { slug: 'api/errors' },
+            {
+              label: 'Model API',
+              translations: { 'zh-CN': '模型 API' },
+              items: [
+                { slug: 'api/models' },
+                { slug: 'api/chat-completions' },
+                { slug: 'api/dedicated-endpoints' },
+                { slug: 'api/usage' },
+              ],
+            },
+            {
+              label: 'Platform API',
+              translations: { 'zh-CN': '平台 API' },
+              items: [
+                { slug: 'api/instances' },
+                { slug: 'api/templates' },
+                { slug: 'api/account' },
+              ],
+            },
+            {
+              label: 'Limits and errors',
+              translations: { 'zh-CN': '限流与错误' },
+              collapsed: true,
+              items: [{ slug: 'api/rate-limits' }, { slug: 'api/errors' }],
+            },
           ],
         },
         {
-          label: 'Resources',
-          translations: { 'zh-CN': '资源' },
+          label: 'Help',
+          translations: { 'zh-CN': '帮助' },
           items: [
             { slug: 'resources/troubleshooting' },
             { slug: 'resources/faq' },
