@@ -15,8 +15,8 @@ export default defineConfig({
   integrations: [
     starlight({
       title: {
-        en: 'AMD Radeon Cloud Docs',
-        'zh-cn': 'AMD Radeon Cloud 文档',
+        en: 'Radeon Cloud Docs',
+        'zh-CN': 'Radeon Cloud 文档',
       },
       description:
         'Run AMD Radeon GPUs in the cloud. Launch notebooks, deploy OpenAI-compatible model endpoints, and call the AMD Radeon Cloud API.',
@@ -25,7 +25,17 @@ export default defineConfig({
         dark: './src/assets/amd-logo-white.png',
         alt: 'AMD',
       },
-      favicon: '/favicon.png',
+      favicon: '/favicon.ico',
+      head: [
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'apple-touch-icon',
+            href: '/radeon-cloud-docs/apple-touch-icon.png',
+            sizes: '180x180',
+          },
+        },
+      ],
       customCss: ['./src/styles/custom.css'],
       defaultLocale: 'root',
       locales: {
