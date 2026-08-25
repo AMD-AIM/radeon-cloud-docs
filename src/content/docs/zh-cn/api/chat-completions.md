@@ -5,7 +5,7 @@ sidebar:
   order: 4
 ---
 
-主要的推理端点，遵循 OpenAI 的聊天补全 schema。
+主要的推理端点，属于 **Public Free Model APIs**，遵循 OpenAI 的聊天补全 schema。[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)用你自己的 vLLM 或 SGLang 提供同一条路径，下面说的请求过滤在那边一条都不适用。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
@@ -20,18 +20,25 @@ sidebar:
 | 参数 | 类型 | | 说明 |
 |---|---|---|---|
 | `model` | string | <span class="rc-req">必填</span> | 要跑的模型。必须是 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 返回的某一个。 |
-| `messages` | array | <span class="rc-req">必填</span> | 到目前为止的对话。每一项有一个 `role`（`system`、`user` 或 `assistant`）和 `content`。 |
+| `messages` | array | <span class="rc-req">必填</span> | 到目前为止的对话。每一项有一个 `role`（`system`、`user`、`assistant` 或 `tool`）和 `content`。 |
 | `stream` | boolean | <span class="rc-opt">选填</span> | 以 server-sent events 流式返回。默认 `false`。 |
 | `temperature` | number | <span class="rc-opt">选填</span> | 采样温度。越高越随机。 |
 | `top_p` | number | <span class="rc-opt">选填</span> | 核采样阈值。 |
 | `max_tokens` | integer | <span class="rc-opt">选填</span> | 回复生成的 token 上限。 |
-| `stop` | string 或 array | <span class="rc-opt">选填</span> | 终止生成的序列。 |
 | `presence_penalty` | number | <span class="rc-opt">选填</span> | 惩罚已出现过的 token。 |
 | `frequency_penalty` | number | <span class="rc-opt">选填</span> | 按出现频次惩罚 token。 |
-| `seed` | integer | <span class="rc-opt">选填</span> | 尽力而为的可复现性。 |
+| `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 或一个 `json_schema`，适用于 `json_output` 为 true 的模型。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
+| `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
+| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 推理预算，适用于声明支持它的模型。 |
 
-请求体会原样传给服务后端，所以后端认的任何参数都能送到。某个模型认哪些参数，写在它 Token Factory 卡片的「支持的参数」里——模型不认的参数会被悄悄丢掉，而不是报错。
+:::caution[清单之外的参数会被丢掉，不是透传]
+请求先按上面的 schema 校验，然后在送往服务后端前**逐字段重建**。不在接受集里的字段会被静默移除——不报错，也不生效。
+
+这里面包括一些 OpenAI 或 vLLM 客户端会合理期待能用的参数：`stop`、`seed`、`logit_bias`、
+`logprobs`、`top_logprobs`、`top_k`、`min_p`、`repetition_penalty`。真需要它们里的任何一个，
+用[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)，那条路会把你的请求体直接送给 vLLM 或 SGLang。
+:::
 
 ## 示例
 
@@ -78,6 +85,9 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 
 模型自己说完了，`finish_reason` 是 `stop`；撞到 `max_tokens` 是 `length`；想调用工具是 `tool_calls`。
 
+推理模型会在 `usage` 里多一个 `reasoning_tokens`；命中前缀缓存时还会多出
+`usage.prompt_tokens_details.cached_tokens`。
+
 ## 流式
 
 设 `stream: true` 就能收到 server-sent events。每个事件带的是增量而不是整条消息，流以 `data: [DONE]` 结束。
@@ -106,8 +116,10 @@ for chunk in stream:
 
 ## 超时
 
-一个非流式请求最多跑 10 分钟，之后平台放弃。长生成应该用流式，既能看到进度，也能让连接保持活跃。
+一个非流式请求最多跑 10 分钟，之后平台放弃。流式的话，这 10 分钟算的是**两个分片之间的间隔**，而不是整次生成的总时长。长生成应该用流式，既能看到进度，也能让连接保持活跃。
 
 ## 错误
 
-`401` 密钥无效。`429` 触发限流——见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。`502` 或 `503` 后端不可达或已饱和，退避后重试。模型自己报的错，比如模型名不存在或上下文超长，会带着后端自己的状态码和消息透传出来。
+`401` 密钥无效。`429` 触发限流——见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。`502` 或 `503` 后端不可达或已饱和，退避后重试。
+
+目录里没有的模型名由**网关**直接拒掉，返回 `400` 和 `Requested model <名字> not supported`，请求根本到不了后端。模型自己报的错，比如上下文超长，会带着后端自己的状态码和消息透传出来。响应体形状见[错误](/radeon-cloud-docs/zh-cn/api/errors/)。

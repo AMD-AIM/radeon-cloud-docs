@@ -2,7 +2,7 @@
 title: Dedicated endpoints
 description: Serve your own model on your own instance behind an OpenAI-compatible URL.
 sidebar:
-  order: 5
+  order: 7
 ---
 
 A dedicated endpoint runs vLLM or SGLang inside an instance you own, and the platform routes a public URL to it. You choose the model and the serving flags; requests reach your server directly.

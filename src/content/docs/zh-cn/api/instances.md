@@ -2,7 +2,7 @@
 title: 实例
 description: 用程序启动、查看和销毁 GPU 实例。
 sidebar:
-  order: 7
+  order: 8
 ---
 
 每个账户同时只能有一个活跃实例。下面这些端点负责启动它、轮询它、拆掉它。

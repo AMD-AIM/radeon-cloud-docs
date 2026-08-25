@@ -93,14 +93,19 @@ export default defineConfig({
             { slug: 'api/overview' },
             { slug: 'api/authentication' },
             {
-              label: 'Model API',
-              translations: { 'zh-CN': '模型 API' },
+              label: 'Public Free Model APIs',
+              translations: { 'zh-CN': '免费共享模型 API' },
               items: [
                 { slug: 'api/models' },
                 { slug: 'api/chat-completions' },
-                { slug: 'api/dedicated-endpoints' },
+                { slug: 'api/messages' },
                 { slug: 'api/usage' },
               ],
+            },
+            {
+              label: 'Dedicated Model APIs',
+              translations: { 'zh-CN': '独占模型 API' },
+              items: [{ slug: 'api/dedicated-endpoints' }],
             },
             {
               label: 'Platform API',

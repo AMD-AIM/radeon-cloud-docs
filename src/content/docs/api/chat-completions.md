@@ -5,7 +5,10 @@ sidebar:
   order: 4
 ---
 
-The main inference endpoint. It follows OpenAI's chat completions schema.
+The main inference endpoint on the **Public Free Model APIs**. It follows OpenAI's chat
+completions schema. A [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) serves
+the same path from your own vLLM or SGLang, and none of the request filtering below applies
+there.
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
@@ -20,18 +23,29 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | Parameter | Type | | Description |
 |---|---|---|---|
 | `model` | string | <span class="rc-req">Required</span> | Model to run. Must be one returned by [`GET /v1/models`](/radeon-cloud-docs/api/models/). |
-| `messages` | array | <span class="rc-req">Required</span> | Conversation so far. Each item has a `role` (`system`, `user`, or `assistant`) and `content`. |
+| `messages` | array | <span class="rc-req">Required</span> | Conversation so far. Each item has a `role` (`system`, `user`, `assistant`, or `tool`) and `content`. |
 | `stream` | boolean | <span class="rc-opt">Optional</span> | Stream the response as server-sent events. Defaults to `false`. |
 | `temperature` | number | <span class="rc-opt">Optional</span> | Sampling temperature. Higher is more random. |
 | `top_p` | number | <span class="rc-opt">Optional</span> | Nucleus sampling threshold. |
 | `max_tokens` | integer | <span class="rc-opt">Optional</span> | Cap on tokens generated in the response. |
-| `stop` | string or array | <span class="rc-opt">Optional</span> | Sequences that end generation. |
 | `presence_penalty` | number | <span class="rc-opt">Optional</span> | Penalises tokens already present. |
 | `frequency_penalty` | number | <span class="rc-opt">Optional</span> | Penalises tokens by how often they've appeared. |
-| `seed` | integer | <span class="rc-opt">Optional</span> | Best-effort reproducibility. |
+| `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` or a `json_schema`, on models where `json_output` is true. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
+| `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
+| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Reasoning budget on models that declare support for it. |
 
-The request body is passed to the serving backend unchanged, so any parameter that backend accepts will reach it. Which parameters a given model honours is listed in its Token Factory card under supported parameters — a parameter the model ignores is silently dropped rather than rejected.
+:::caution[Unlisted parameters are dropped, not forwarded]
+The request is validated against the schema above and then **rebuilt field by field** before it
+reaches the serving backend. Anything outside the accepted set is removed silently — no error,
+no effect.
+
+That includes some parameters an OpenAI or vLLM client would reasonably expect to work:
+`stop`, `seed`, `logit_bias`, `logprobs`, `top_logprobs`, `top_k`, `min_p`, and
+`repetition_penalty`. If you need any of them, run a
+[dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/), which passes your body
+straight to vLLM or SGLang.
+:::
 
 ## Example
 
@@ -78,6 +92,9 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 
 `finish_reason` is `stop` when the model finished on its own, `length` when it hit `max_tokens`, and `tool_calls` when it wants a tool invoked.
 
+Reasoning models add `reasoning_tokens` to `usage`, and a prompt-cache hit adds
+`usage.prompt_tokens_details.cached_tokens`.
+
 ## Streaming
 
 Set `stream: true` to receive server-sent events. Each event carries a delta rather than the whole message, and the stream ends with `data: [DONE]`.
@@ -106,8 +123,13 @@ Streaming responses aren't buffered by the platform, so tokens arrive as the mod
 
 ## Timeouts
 
-A non-streaming request can take up to 10 minutes before the platform gives up. Long generations should stream, both so you see progress and so the connection stays active.
+A non-streaming request can take up to 10 minutes before the platform gives up. When streaming, the same 10 minutes applies to the gap between chunks rather than to the whole generation. Long generations should stream, both so you see progress and so the connection stays active.
 
 ## Errors
 
-`401` invalid key. `429` rate limited — see [Rate limits](/radeon-cloud-docs/api/rate-limits/). `502` or `503` the backend is unreachable or saturated; retry with backoff. Errors from the model itself, such as an unknown model name or a context-length overflow, are passed through with the backend's own status and message.
+`401` invalid key. `429` rate limited — see [Rate limits](/radeon-cloud-docs/api/rate-limits/). `502` or `503` the backend is unreachable or saturated; retry with backoff.
+
+A model name that isn't in the catalog is rejected by the gateway with `400` and
+`Requested model <name> not supported` — the request never reaches a backend. Errors the model
+itself raises, such as a context-length overflow, are passed through with the backend's own
+status and message. See [Errors](/radeon-cloud-docs/api/errors/) for the response shapes.
