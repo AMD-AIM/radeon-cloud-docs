@@ -104,6 +104,31 @@ h1, h2, h3 {
 }
 
 /* ---------- Nav ---------- */
+
+/* The AMD wordmark is a wide raster (800x191). Constrain it by height and
+   let width follow, then separate it from the site title with a hairline. */
+.site-title img {
+  height: 1.4rem;
+  width: auto;
+}
+
+.site-title {
+  gap: 0.6rem;
+}
+
+.site-title::after {
+  content: '';
+  align-self: center;
+  width: 1px;
+  height: 1.1rem;
+  background: var(--sl-color-hairline-light);
+  order: 1;
+}
+
+.site-title > :not(img) {
+  order: 2;
+}
+
 header.header {
   backdrop-filter: saturate(160%) blur(12px);
   border-bottom: 1px solid var(--sl-color-hairline);

@@ -21,11 +21,11 @@ export default defineConfig({
       description:
         'Run AMD Radeon GPUs in the cloud. Launch notebooks, deploy OpenAI-compatible model endpoints, and call the AMD Radeon Cloud API.',
       logo: {
-        light: './src/assets/logo-light.svg',
-        dark: './src/assets/logo-dark.svg',
-        replacesTitle: true,
+        light: './src/assets/amd-logo.png',
+        dark: './src/assets/amd-logo-white.png',
+        alt: 'AMD',
       },
-      favicon: '/favicon.svg',
+      favicon: '/favicon.png',
       customCss: ['./src/styles/custom.css'],
       defaultLocale: 'root',
       locales: {
