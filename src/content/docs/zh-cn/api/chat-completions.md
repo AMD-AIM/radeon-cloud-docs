@@ -30,7 +30,7 @@ sidebar:
 | `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 或一个 `json_schema`，适用于 `json_output` 为 true 的模型。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
 | `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
-| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度，适用于声明支持它的模型。取值 `minimal`、`low`、`medium`、`high`、`max`。**不传就不思考。** |
+| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；`low` 和 `medium` 所有模型都收。**不传就不思考。** |
 | `reasoning.effort` | string | <span class="rc-opt">选填</span> | 同上，统一写法。不能和 `reasoning_effort` 同时用。 |
 
 :::tip[怎么开思考]
@@ -44,10 +44,24 @@ sidebar:
 }
 ```
 
-思考内容从响应的 `choices[0].message.reasoning_content` 里取。
+思考内容从响应的 `choices[0].message.reasoning` 里取（不是 `reasoning_content`），
+`usage.reasoning_tokens` 给出占用的 token 数。
 
-实际档位比枚举值少：在 DeepSeek-V4-Flash 上，`minimal`/`low`/`medium` 行为接近，
-`high`/`max` 明显更长。需要短思考就用 `low`，需要长思考就用 `high`。
+**各模型接受的档位不一样**，传了不支持的值会直接 400：
+
+| 档位 | DeepSeek-V4-Flash | Qwen3.8-Flash-Next | GLM-5.2 |
+|---|:---:|:---:|:---:|
+| `minimal` | ✅ | ❌ | ❌ |
+| **`low`** | ✅ | ✅ | ✅ |
+| **`medium`** | ✅ | ✅ | ✅ |
+| `high` | ✅ | ❌ | ✅ |
+| `xhigh` | ✅ | ❌ | ❌ |
+| `max` | ✅ | ❌ | ❌ |
+
+要写一套代码跑所有模型，**只用 `low` 和 `medium`**——只有这两个三边都认。
+
+另外实际档位比枚举值少：在 DeepSeek-V4-Flash 上，`minimal`/`low`/`medium` 思考长度接近，
+`high`/`max` 明显更长，实测就两档。
 :::
 
 :::danger[不要用 `thinking`，它不生效]

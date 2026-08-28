@@ -33,7 +33,7 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` or a `json_schema`, on models where `json_output` is true. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
 | `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
-| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length on models that declare support for it. One of `minimal`, `low`, `medium`, `high`, `max`. **Omit it and the model does not think.** |
+| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model — see the table below; `low` and `medium` work everywhere. **Omit it and the model does not think.** |
 | `reasoning.effort` | string | <span class="rc-opt">Optional</span> | Same thing, unified form. Cannot be combined with `reasoning_effort`. |
 
 :::tip[How to turn thinking on]
@@ -48,11 +48,25 @@ to enable thinking.
 }
 ```
 
-The thinking text comes back in `choices[0].message.reasoning_content`.
+The thinking text comes back in `choices[0].message.reasoning` (not `reasoning_content`), and
+`usage.reasoning_tokens` reports how many tokens it took.
 
-There are fewer effective tiers than enum values: on DeepSeek-V4-Flash, `minimal`/`low`/`medium`
-behave alike, while `high`/`max` think noticeably longer. Use `low` for short thinking and
-`high` for long thinking.
+**Which tiers a model accepts differs per model.** Passing an unsupported value returns 400:
+
+| Tier | DeepSeek-V4-Flash | Qwen3.8-Flash-Next | GLM-5.2 |
+|---|:---:|:---:|:---:|
+| `minimal` | ✅ | ❌ | ❌ |
+| **`low`** | ✅ | ✅ | ✅ |
+| **`medium`** | ✅ | ✅ | ✅ |
+| `high` | ✅ | ❌ | ✅ |
+| `xhigh` | ✅ | ❌ | ❌ |
+| `max` | ✅ | ❌ | ❌ |
+
+For one code path across all models, **stick to `low` and `medium`** — those are the only two
+every model accepts.
+
+There are also fewer effective tiers than enum values: on DeepSeek-V4-Flash, `minimal`/`low`/`medium`
+think about the same amount, while `high`/`max` think noticeably longer — two tiers in practice.
 :::
 
 :::danger[Do not use `thinking` — it has no effect]
