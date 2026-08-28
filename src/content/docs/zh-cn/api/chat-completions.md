@@ -30,7 +30,48 @@ sidebar:
 | `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 或一个 `json_schema`，适用于 `json_output` 为 true 的模型。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
 | `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
-| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 推理预算，适用于声明支持它的模型。 |
+| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度，适用于声明支持它的模型。取值 `minimal`、`low`、`medium`、`high`、`max`。**不传就不思考。** |
+| `reasoning.effort` | string | <span class="rc-opt">选填</span> | 同上，统一写法。不能和 `reasoning_effort` 同时用。 |
+
+:::tip[怎么开思考]
+在这个端点上，**开启思考只有 `reasoning_effort`（或等价的 `reasoning.effort`）一种写法**。
+
+```json
+{
+  "model": "DeepSeek-V4-Flash",
+  "reasoning_effort": "high",
+  "messages": [{ "role": "user", "content": "..." }]
+}
+```
+
+思考内容从响应的 `choices[0].message.reasoning_content` 里取。
+
+实际档位比枚举值少：在 DeepSeek-V4-Flash 上，`minimal`/`low`/`medium` 行为接近，
+`high`/`max` 明显更长。需要短思考就用 `low`，需要长思考就用 `high`。
+:::
+
+:::danger[不要用 `thinking`，它不生效]
+有些客户端（尤其是 Anthropic 风格的）会发 `thinking: {"type": "enabled", "budget_tokens": N}`
+来开思考。**这个端点不支持它**，服务后端也不支持按 token 数给思考定额。
+
+现在遇到 `thinking` 或 `reasoning.enabled` 会直接返回 **400**，并在报错里指向
+`reasoning_effort`：
+
+```json
+{
+  "error": {
+    "message": "\"thinking\" is not supported on /v1/chat/completions and was not applied. Use \"reasoning_effort\" (or \"reasoning.effort\") to control thinking.",
+    "type": "invalid_request_error",
+    "code": "unsupported_parameter"
+  }
+}
+```
+
+宁可报错也不静默丢弃：早先这类请求会返回 200，但一点思考都没有，调用方很难发现。
+
+非要走 Anthropic 格式的话，[`POST /v1/messages`](/radeon-cloud-docs/zh-cn/api/messages/)
+上能用的是 `output_config: {"effort": "high"}`；那里的 `thinking` 同样会被拒绝。
+:::
 
 :::caution[清单之外的参数会被丢掉，不是透传]
 请求先按上面的 schema 校验，然后在送往服务后端前**逐字段重建**。不在接受集里的字段会被静默移除——不报错，也不生效。

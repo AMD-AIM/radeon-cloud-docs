@@ -32,12 +32,44 @@ sidebar:
 | `temperature` | number | <span class="rc-opt">选填</span> | 采样温度，`0` 到 `1`。是 Anthropic 的取值范围，不是 OpenAI 的——填 `1.5` 会被 `400` 拒掉。 |
 | `stream` | boolean | <span class="rc-opt">选填</span> | 以 server-sent events 流式返回。默认 `false`。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
-| `thinking` | object | <span class="rc-opt">选填</span> | 扩展思考配置，会映射到后端认识的推理控制项上。 |
+| `thinking` | object | <span class="rc-opt">选填</span> | 扩展思考配置，会映射到后端认识的推理控制项上。**带 `budget_tokens` 的写法目前会被拒绝**，见下文。 |
 | `output_config` | object | <span class="rc-opt">选填</span> | `effort` 控制支持该能力的模型的自适应推理深度。 |
 | `metadata` | object | <span class="rc-opt">选填</span> | `user_id` 用于粘性路由。Claude Code 把它的会话 id 放在这里。 |
 
 :::caution[清单之外的参数会被丢掉，不是透传]
 和[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)一样，请求先按上面这组字段校验，再重建后才送往后端。`top_p`、`top_k`、`stop_sequences` 不在这组里，会被静默移除。
+:::
+
+:::danger[`budget_tokens` 式的扩展思考会被拒绝]
+`thinking: {"type": "enabled", "budget_tokens": N}`（Claude Code 默认就发这个）会被映射成
+`reasoning.max_tokens`。目前在服的模型**都不支持按 token 数给思考定额**，所以会返回 400：
+
+```json
+{
+  "type": "error",
+  "error": {
+    "type": "invalid_request_error",
+    "message": "\"thinking\" is not supported for this model. Remove the \"thinking\" parameter or use a model that supports extended thinking."
+  }
+}
+```
+
+这不是故障。后端引擎会把 `budget_tokens` 静默丢弃，放行只会让你拿到一个没有思考过程的回答。
+
+在这个端点上想开思考，用 `output_config.effort`：
+
+```json
+{
+  "model": "DeepSeek-V4-Flash",
+  "output_config": { "effort": "high" },
+  "messages": [{ "role": "user", "content": "..." }],
+  "max_tokens": 1024
+}
+```
+
+思考内容会以 `thinking` 块的形式出现在 `content` 里，和 `text` 块并列。
+也可以改用 [`POST /v1/chat/completions`](/radeon-cloud-docs/zh-cn/api/chat-completions/)
+的 `reasoning_effort`。
 :::
 
 ## 示例

@@ -37,7 +37,7 @@ name. `claude-3-5-sonnet-20241022` is not served here and will be rejected with 
 | `temperature` | number | <span class="rc-opt">Optional</span> | Sampling temperature, `0` to `1`. Anthropic's range, not OpenAI's — `1.5` is rejected with `400`. |
 | `stream` | boolean | <span class="rc-opt">Optional</span> | Stream the response as server-sent events. Defaults to `false`. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
-| `thinking` | object | <span class="rc-opt">Optional</span> | Extended-thinking configuration. Mapped onto the reasoning controls the backend understands. |
+| `thinking` | object | <span class="rc-opt">Optional</span> | Extended-thinking configuration. Mapped onto the reasoning controls the backend understands. **The `budget_tokens` form is currently rejected** — see below. |
 | `output_config` | object | <span class="rc-opt">Optional</span> | `effort` controls adaptive reasoning depth on models that support it. |
 | `metadata` | object | <span class="rc-opt">Optional</span> | `user_id` is used for sticky routing. Claude Code puts its session id here. |
 
@@ -45,6 +45,40 @@ name. `claude-3-5-sonnet-20241022` is not served here and will be rejected with 
 As on [chat completions](/radeon-cloud-docs/api/chat-completions/), the request is validated
 against the set above and rebuilt before it reaches the backend. `top_p`, `top_k` and
 `stop_sequences` are not in that set, so they are removed silently.
+:::
+
+:::danger[Budget-based extended thinking is rejected]
+`thinking: {"type": "enabled", "budget_tokens": N}` — what Claude Code sends by default — is
+mapped onto `reasoning.max_tokens`. None of the models currently served **support a token budget
+for thinking**, so the request returns 400:
+
+```json
+{
+  "type": "error",
+  "error": {
+    "type": "invalid_request_error",
+    "message": "\"thinking\" is not supported for this model. Remove the \"thinking\" parameter or use a model that supports extended thinking."
+  }
+}
+```
+
+This is not an outage. The serving engine drops `budget_tokens` silently, so letting it through
+would only hand you an answer with no thinking in it.
+
+To enable thinking on this endpoint, use `output_config.effort`:
+
+```json
+{
+  "model": "DeepSeek-V4-Flash",
+  "output_config": { "effort": "high" },
+  "messages": [{ "role": "user", "content": "..." }],
+  "max_tokens": 1024
+}
+```
+
+The thinking text arrives as `thinking` blocks in `content`, alongside the `text` ones.
+Alternatively, use `reasoning_effort` on
+[`POST /v1/chat/completions`](/radeon-cloud-docs/api/chat-completions/).
 :::
 
 ## Example

@@ -33,7 +33,53 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` or a `json_schema`, on models where `json_output` is true. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
 | `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
-| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Reasoning budget on models that declare support for it. |
+| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length on models that declare support for it. One of `minimal`, `low`, `medium`, `high`, `max`. **Omit it and the model does not think.** |
+| `reasoning.effort` | string | <span class="rc-opt">Optional</span> | Same thing, unified form. Cannot be combined with `reasoning_effort`. |
+
+:::tip[How to turn thinking on]
+On this endpoint, **`reasoning_effort` (or the equivalent `reasoning.effort`) is the only way**
+to enable thinking.
+
+```json
+{
+  "model": "DeepSeek-V4-Flash",
+  "reasoning_effort": "high",
+  "messages": [{ "role": "user", "content": "..." }]
+}
+```
+
+The thinking text comes back in `choices[0].message.reasoning_content`.
+
+There are fewer effective tiers than enum values: on DeepSeek-V4-Flash, `minimal`/`low`/`medium`
+behave alike, while `high`/`max` think noticeably longer. Use `low` for short thinking and
+`high` for long thinking.
+:::
+
+:::danger[Do not use `thinking` — it has no effect]
+Some clients (Anthropic-flavored ones in particular) send
+`thinking: {"type": "enabled", "budget_tokens": N}` to enable thinking. **This endpoint does not
+support it**, and the serving backend has no notion of a token budget for thinking either.
+
+`thinking` and `reasoning.enabled` now return **400**, with the error naming the parameter that
+does work:
+
+```json
+{
+  "error": {
+    "message": "\"thinking\" is not supported on /v1/chat/completions and was not applied. Use \"reasoning_effort\" (or \"reasoning.effort\") to control thinking.",
+    "type": "invalid_request_error",
+    "code": "unsupported_parameter"
+  }
+}
+```
+
+An error beats a silent drop: these requests used to return 200 with no thinking at all, which is
+hard for a caller to notice.
+
+If you must speak Anthropic, the working control on
+[`POST /v1/messages`](/radeon-cloud-docs/api/messages/) is `output_config: {"effort": "high"}`;
+`thinking` is rejected there too.
+:::
 
 :::caution[Unlisted parameters are dropped, not forwarded]
 The request is validated against the schema above and then **rebuilt field by field** before it
