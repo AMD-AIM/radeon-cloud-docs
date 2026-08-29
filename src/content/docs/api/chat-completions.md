@@ -33,7 +33,7 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` or a `json_schema`, on models where `json_output` is true. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
 | `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
-| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model — see the table below; `low` and `medium` work everywhere. **Omit it and the model does not think.** |
+| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model — see the table below; `low` and `medium` work everywhere. **Whether omitting it disables thinking also varies per model.** |
 | `reasoning.effort` | string | <span class="rc-opt">Optional</span> | Same thing, unified form. Cannot be combined with `reasoning_effort`. |
 
 :::tip[How to turn thinking on]
@@ -48,10 +48,28 @@ to enable thinking.
 }
 ```
 
-The thinking text comes back in `choices[0].message.reasoning` (not `reasoning_content`), and
-`usage.reasoning_tokens` reports how many tokens it took.
+The thinking text comes back in `choices[0].message.reasoning` (not `reasoning_content`). For the
+token count use **`usage.completion_tokens_details.reasoning_tokens`** — every model reports it.
+The top-level `usage.reasoning_tokens` is only emitted by some models (DeepSeek-V4-Flash has it,
+Qwen3.8-Flash-Next does not), so do not rely on it.
 
-**Which tiers a model accepts differs per model.** Passing an unsupported value returns 400:
+**Omitting `reasoning_effort` does not mean no thinking.** The default differs per model:
+
+| Model | When omitted |
+|---|---|
+| DeepSeek-V4-Flash | Does not think (`reasoning` empty, `reasoning_tokens` 0) |
+| Qwen3.8-Flash-Next | **Still thinks** — the default tier is `xhigh`, the longest one |
+
+Pass the value explicitly if you want deterministic behaviour; send `low` to make
+Qwen3.8-Flash-Next think less.
+
+**Which tiers a model accepts differs per model.** An unsupported value is rejected, but **with one
+of two status codes** — validation happens in two layers, so do not catch only 400:
+
+| Status | Layer | Looks like |
+|---|---|---|
+| `400` | Model | `Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.` |
+| `422` | Request-body deserialisation | `Failed to deserialize the JSON body into the target type: reasoning_effort: unknown variant 'max', expected one of 'low', 'medium', 'high'` |
 
 | Tier | DeepSeek-V4-Flash | Qwen3.8-Flash-Next | GLM-5.2 |
 |---|:---:|:---:|:---:|

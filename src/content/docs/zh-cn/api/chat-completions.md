@@ -30,7 +30,7 @@ sidebar:
 | `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 或一个 `json_schema`，适用于 `json_output` 为 true 的模型。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
 | `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
-| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；`low` 和 `medium` 所有模型都收。**不传就不思考。** |
+| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；`low` 和 `medium` 所有模型都收。**不传时是否思考也因模型而异。** |
 | `reasoning.effort` | string | <span class="rc-opt">选填</span> | 同上，统一写法。不能和 `reasoning_effort` 同时用。 |
 
 :::tip[怎么开思考]
@@ -45,9 +45,25 @@ sidebar:
 ```
 
 思考内容从响应的 `choices[0].message.reasoning` 里取（不是 `reasoning_content`），
-`usage.reasoning_tokens` 给出占用的 token 数。
+token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——这个字段所有模型都有。
+顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek-V4-Flash 有，Qwen3.8-Flash-Next 没有），别依赖它。
 
-**各模型接受的档位不一样**，传了不支持的值会直接 400：
+**不传 `reasoning_effort` 不等于不思考**，各模型的默认值不一样：
+
+| 模型 | 不传时 |
+|---|---|
+| DeepSeek-V4-Flash | 不思考（`reasoning` 为空，`reasoning_tokens` 为 0） |
+| Qwen3.8-Flash-Next | **照样思考**，默认档位是 `xhigh`，也就是最长的一档 |
+
+要确定性地控制，就显式传值；想让 Qwen3.8-Flash-Next 少思考，传 `low`。
+
+**各模型接受的档位不一样**，传了不支持的值会被拒，但**状态码有两种**——
+校验分在两层，别只 catch 400：
+
+| 状态码 | 来自 | 长这样 |
+|---|---|---|
+| `400` | 模型层 | `Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.` |
+| `422` | 请求体反序列化层 | `Failed to deserialize the JSON body into the target type: reasoning_effort: unknown variant 'max', expected one of 'low', 'medium', 'high'` |
 
 | 档位 | DeepSeek-V4-Flash | Qwen3.8-Flash-Next | GLM-5.2 |
 |---|:---:|:---:|:---:|
