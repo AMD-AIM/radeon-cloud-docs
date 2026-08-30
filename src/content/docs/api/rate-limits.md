@@ -27,7 +27,7 @@ Two tiers sit in the path, and a request has to pass both. The platform admits t
 
 | Limit | Scope | Typical value |
 |---|---|---|
-| Requests per minute | Per account | 30, on a 60-second sliding window |
+| Requests per minute | Per account | 20, on a 60-second sliding window |
 | Spend cap | Per account | A rolling period that starts at your first billed request and resets when it expires — not a fixed midnight boundary |
 
 :::tip[Your quota is on every response]
@@ -83,7 +83,7 @@ Gateway metering returns an OpenAI-shaped error at the top level, with the gener
 ```json
 {
   "error": {
-    "message": "Rate limit exceeded: maximum 30 requests per minute for this OneClick user. Please try again later.",
+    "message": "Rate limit exceeded: maximum 20 requests per minute for this OneClick user. Please try again later.",
     "type": "rate_limit_error",
     "param": null,
     "code": "rate_limit_exceeded"

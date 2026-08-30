@@ -26,7 +26,7 @@ sidebar:
 
 | 限制 | 范围 | 典型值 |
 |---|---|---|
-| 每分钟请求数 | 每个账户 | 30，60 秒滑动窗口 |
+| 每分钟请求数 | 每个账户 | 20，60 秒滑动窗口 |
 | 花费上限 | 每个账户 | 一个滚动周期：从你第一次产生计费开始起算，到期自动重置——**不是**固定的午夜边界 |
 
 :::tip[配额就在每次响应里]
@@ -81,7 +81,7 @@ sidebar:
 ```json
 {
   "error": {
-    "message": "Rate limit exceeded: maximum 30 requests per minute for this OneClick user. Please try again later.",
+    "message": "Rate limit exceeded: maximum 20 requests per minute for this OneClick user. Please try again later.",
     "type": "rate_limit_error",
     "param": null,
     "code": "rate_limit_exceeded"
