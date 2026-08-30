@@ -1,11 +1,9 @@
 ---
 title: DeepSeek-V4-Flash
-description: 100 万 token 上下文、支持工具调用、思考默认关闭——两个模型里比较宽松的那个。
+description: DeepSeek 的百万 token 智能体模型——官方规格，以及它在本端点上的实际行为。
 sidebar:
   order: 2
 ---
-
-**免费共享模型 API** 上下文更大的那个模型。它对 `messages` 的形状也比另一个宽容得多。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
@@ -13,36 +11,72 @@ sidebar:
   <span class="rc-auth">model: <code>DeepSeek-V4-Flash</code></span>
 </div>
 
-## 概览
+## 官方介绍
+
+这里跑的权重是 **DeepSeek-V4-Flash-0731**，DeepSeek 对 DeepSeek-V4-Flash 的正式发布版，取代此前的
+预览版。官方把它定位为智能体（agentic）模型：在其模型卡公布的基准上，尽管激活参数量小得多，仍胜过
+DeepSeek-V4-Pro（预览版）。配套技术报告题为 *DeepSeek-V4: Towards Highly Efficient Million-Token
+Context Intelligence*（[arXiv:2606.19348](https://arxiv.org/abs/2606.19348)）。
+
+### 架构
+
+取自随权重发布的 `config.json`：
+
+| | |
+|---|---|
+| 架构 | `DeepseekV4ForCausalLM`（`deepseek_v4`）|
+| 层数 | 43 |
+| 隐藏维度 | 4,096 |
+| 注意力 | 64 个 Q 头、1 个 KV 头 —— MLA，`q_lora_rank` 1,024，RoPE 分量 64 维 |
+| 专家混合 | 256 个路由专家 + 1 个共享，**每 token 激活 6 个路由专家**，专家中间维度 2,048 |
+| 词表 | 129,280 |
+| 原生上下文 | 1,048,576 |
+| 多 token 预测 | 1 层 |
+| 量化 | FP8 `e4m3`，块大小 `[128, 128]`，激活动态缩放 |
+| 许可证 | MIT |
+
+百万 token 窗口是**原生的**——它就是 config 里的 `max_position_embeddings`，不是服务端加的 RoPE 外推。
+
+### 官方建议
+
+模型卡建议 `temperature = 1.0`；智能体场景 `top_p = 0.95`，其余场景 `top_p = 1.0`。这两个参数本端点
+都接受，可以照着用。
+
+:::note[没有 Jinja chat template]
+和多数开源权重不同，这份权重**不带 Jinja chat template**——提示词拼装放在 Python 的 `encoding/`
+目录里。这正是它对 `system` 消息放在哪毫不在意的原因：没有模板去抛异常。带模板的模型会是什么样，
+见 [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/)。
+:::
+
+## 本端点上的行为
+
+以下全部是对着线上端点实测的。与模型卡不一致的地方以端点为准——网关会先校验并重建请求，再送到推理
+后端。
+
+### 概览
 
 | | |
 |---|---|
 | 上下文长度 | **1,048,576** token |
 | 输入模态 | 仅文本 |
-| 输出模态 | 文本 |
 | 流式 | ✅ |
 | 工具调用 | ✅（不支持并行调用）|
 | JSON 输出 | ✅ `json_object` · ❌ `json_schema` |
 | 思考 | ✅ —— **不主动要就不思考** |
 | 稳定性 | `experimental` |
 
-## 思考
+### 思考
 
-**不传 `reasoning_effort` 就不会思考。** 基线请求返回的 `reasoning` 是空的、`reasoning_tokens` 为 0。
+**不传 `reasoning_effort` 就不会思考。** 基线请求返回的 `reasoning` 为空、`reasoning_tokens` 为 0。
 
-六个档位全部接受：
+模型卡写的是三档：`low`、`high`、`max`。而本端点接受六个值，全部返回 `200`：
 
-| 档位 | 状态 |
-|---|:---:|
-| `minimal` | `200` |
-| `low` | `200` |
-| `medium` | `200` |
-| `high` | `200` |
-| `xhigh` | `200` |
-| `max` | `200` |
+| `minimal` | `low` | `medium` | `high` | `xhigh` | `max` |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| `200` | `200` | `200` | `200` | `200` | `200` |
 
-但**实际生效的档位比枚举值少**：`minimal`/`low`/`medium` 的思考量差不多，`high`/`max` 明显更长
-——实践中只有两档。
+但它们并不对应六种行为：`minimal`/`low`/`medium` 的思考量差不多，`high`/`max` 明显更长——实际两档，
+和官方文档的三档大体吻合。
 
 结果放在哪：
 
@@ -53,11 +87,11 @@ sidebar:
 | 额外提供 | `usage.reasoning_tokens` —— 这个模型有顶层字段 |
 
 :::note[不思考时字段名会变]
-传了 `reasoning_effort` 时，`message` 里是 `reasoning`；而不思考的普通请求里出现的是
+传了 `reasoning_effort` 时，`message` 里是 `reasoning`；不思考的普通请求里出现的是
 `reasoning_content`，且为空。**读 `reasoning`，把键不存在当成"没思考"**，不要按哪个键存在来分支。
 :::
 
-## `messages`
+### `messages`
 
 我们测过的所有形状它都接受：
 
@@ -69,10 +103,10 @@ sidebar:
 | 两个 `system` 消息 | `200` |
 | 用 `developer` 代替 `system` | `200` |
 
-但 [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) **不是这样**。如果你
-打算用一套代码在模型之间切换，请按那个模型更严格的规则来写。
+但 [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) **不是这样**。要用一套
+代码同时打两个模型，请按那个模型更严格的规则写。
 
-## 上限与拒绝
+### 上限与拒绝
 
 | 你发的 | 返回 |
 |---|---|
@@ -81,7 +115,7 @@ sidebar:
 | `content` 里带 `image_url` | `400` `Model DeepSeek-V4-Flash does not support image input.` |
 | `thinking: {...}` | `400` —— 请改用 `reasoning_effort` |
 
-## 示例
+### 示例
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
@@ -90,6 +124,8 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   -d '{
     "model": "DeepSeek-V4-Flash",
     "reasoning_effort": "low",
+    "temperature": 1.0,
+    "top_p": 0.95,
     "messages": [
       { "role": "system", "content": "用一句话回答。" },
       { "role": "user", "content": "天空为什么是蓝的？" }

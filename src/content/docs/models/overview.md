@@ -15,6 +15,10 @@ right now; it currently returns two.
 
 | | [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) | [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) |
 |---|---|---|
+| Vendor build | DeepSeek-V4-Flash-0731 | Qwen3.8-Flash-Next-FP8 |
+| Parameters | 43 layers, 256+1 experts, 6 activated | 125B total / **6B activated**, 512 experts, 10+1 activated |
+| Attention | MLA — 64 Q heads, 1 KV head | Hybrid — 36 linear-attention layers + 12 QSA layers |
+| Licence | MIT | Qwen Community License 1.0 |
 | Context | **1,048,576** | 262,144 |
 | Input | text | text |
 | Streaming | ✅ | ✅ |
@@ -30,6 +34,9 @@ right now; it currently returns two.
 | `system` anywhere in `messages` | ✅ | ❌ first position only |
 | More than one `system` | ✅ | ❌ |
 | `developer` role | ✅ | ❌ |
+
+The `messages` differences trace back to one thing: Qwen ships a Jinja chat template that raises
+on anything but a single leading `system` message, and DeepSeek ships no Jinja template at all.
 
 ## Writing one code path for both
 

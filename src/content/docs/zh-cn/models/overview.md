@@ -14,6 +14,10 @@ sidebar:
 
 | | [DeepSeek-V4-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash/) | [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) |
 |---|---|---|
+| 官方构建版本 | DeepSeek-V4-Flash-0731 | Qwen3.8-Flash-Next-FP8 |
+| 参数 | 43 层，256+1 专家、激活 6 个 | 总 125B / **激活 6B**，512 专家、激活 10+1 |
+| 注意力 | MLA —— 64 个 Q 头、1 个 KV 头 | 混合 —— 36 层线性注意力 + 12 层 QSA |
+| 许可证 | MIT | Qwen Community License 1.0 |
 | 上下文 | **1,048,576** | 262,144 |
 | 输入模态 | 纯文本 | 纯文本 |
 | 流式 | ✅ | ✅ |
@@ -29,6 +33,9 @@ sidebar:
 | `system` 可以放在任意位置 | ✅ | ❌ 只能在第一位 |
 | 允许多个 `system` | ✅ | ❌ |
 | `developer` 角色 | ✅ | ❌ |
+
+`messages` 上的差异归根到底只是一件事：Qwen 带了一份 Jinja chat template，遇到不是“单个且在首位”的
+`system` 就抛异常；而 DeepSeek 压根没带 Jinja 模板。
 
 ## 想用一套代码打所有模型
 
