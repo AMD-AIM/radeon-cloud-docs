@@ -23,7 +23,7 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | Parameter | Type | | Description |
 |---|---|---|---|
 | `model` | string | <span class="rc-req">Required</span> | Model to run. Must be one returned by [`GET /v1/models`](/radeon-cloud-docs/api/models/). |
-| `messages` | array | <span class="rc-req">Required</span> | Conversation so far. Each item has a `role` (`system`, `user`, `assistant`, or `tool`) and `content`. |
+| `messages` | array | <span class="rc-req">Required</span> | Conversation so far. Each item has a `role` (`system`, `user`, `assistant`, or `tool`) and `content`. **Where a `system` message may sit differs per model — see below.** |
 | `stream` | boolean | <span class="rc-opt">Optional</span> | Stream the response as server-sent events. Defaults to `false`. |
 | `temperature` | number | <span class="rc-opt">Optional</span> | Sampling temperature. Higher is more random. |
 | `top_p` | number | <span class="rc-opt">Optional</span> | Nucleus sampling threshold. |
@@ -35,6 +35,24 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
 | `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model — see the table below; `low` and `medium` work everywhere. **Whether omitting it disables thinking also varies per model.** |
 | `reasoning.effort` | string | <span class="rc-opt">Optional</span> | Same thing, unified form. Cannot be combined with `reasoning_effort`. |
+
+:::caution[`messages`: roles and system-message placement differ per model]
+The accepted `role` set is `system`, `user`, `assistant`, `tool`. **`developer` — the role newer
+OpenAI SDKs emit in place of `system` — is not accepted by every model**, and neither is a `system`
+message anywhere other than first.
+
+| `messages` shape | DeepSeek-V4-Flash | Qwen3.8-Flash-Next |
+|---|:---:|:---:|
+| `system` first, then `user` | `200` | `200` |
+| `system` after a user turn | `200` | **`400`** |
+| `system` last | `200` | **`400`** |
+| two `system` (first + middle) | `200` | **`400`** |
+| `developer` in place of `system` | `200` | **`422`** |
+
+**For one code path across both models: send at most one `system` message, put it first, and use
+`system` rather than `developer`.** Per-model detail and the exact error strings are on the
+[model reference pages](/radeon-cloud-docs/models/overview/).
+:::
 
 :::tip[How to turn thinking on]
 On this endpoint, **`reasoning_effort` (or the equivalent `reasoning.effort`) is the only way**

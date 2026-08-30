@@ -20,7 +20,7 @@ sidebar:
 | 参数 | 类型 | | 说明 |
 |---|---|---|---|
 | `model` | string | <span class="rc-req">必填</span> | 要跑的模型。必须是 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 返回的某一个。 |
-| `messages` | array | <span class="rc-req">必填</span> | 到目前为止的对话。每一项有一个 `role`（`system`、`user`、`assistant` 或 `tool`）和 `content`。 |
+| `messages` | array | <span class="rc-req">必填</span> | 到目前为止的对话。每一项有一个 `role`（`system`、`user`、`assistant` 或 `tool`）和 `content`。**`system` 消息能放在哪因模型而异，见下文。** |
 | `stream` | boolean | <span class="rc-opt">选填</span> | 以 server-sent events 流式返回。默认 `false`。 |
 | `temperature` | number | <span class="rc-opt">选填</span> | 采样温度。越高越随机。 |
 | `top_p` | number | <span class="rc-opt">选填</span> | 核采样阈值。 |
@@ -32,6 +32,22 @@ sidebar:
 | `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
 | `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；`low` 和 `medium` 所有模型都收。**不传时是否思考也因模型而异。** |
 | `reasoning.effort` | string | <span class="rc-opt">选填</span> | 同上，统一写法。不能和 `reasoning_effort` 同时用。 |
+
+:::caution[`messages`：角色和 system 位置因模型而异]
+接受的 `role` 只有 `system`、`user`、`assistant`、`tool`。**较新 OpenAI SDK 用来代替 `system` 的
+`developer` 角色，并非每个模型都收**；`system` 消息能不能放在首位以外的位置，也因模型而异。
+
+| `messages` 形状 | DeepSeek-V4-Flash | Qwen3.8-Flash-Next |
+|---|:---:|:---:|
+| `system` 在首位，后接 `user` | `200` | `200` |
+| `system` 出现在 user 轮之后 | `200` | **`400`** |
+| `system` 在末尾 | `200` | **`400`** |
+| 两个 `system`（首位 + 中间）| `200` | **`400`** |
+| 用 `developer` 代替 `system` | `200` | **`422`** |
+
+**想用一套代码打两个模型：最多发一个 `system` 消息、放在首位、角色名写 `system` 而不是
+`developer`。** 逐模型的细节和确切的报错文本见[模型参考页](/radeon-cloud-docs/zh-cn/models/overview/)。
+:::
 
 :::tip[怎么开思考]
 在这个端点上，**开启思考只有 `reasoning_effort`（或等价的 `reasoning.effort`）一种写法**。

@@ -103,6 +103,11 @@ export default defineConfig({
               ],
             },
             {
+              label: 'Model reference',
+              translations: { 'zh-CN': '模型参考' },
+              autogenerate: { directory: 'models' },
+            },
+            {
               label: 'Dedicated Model APIs',
               translations: { 'zh-CN': '独占模型 API' },
               items: [{ slug: 'api/dedicated-endpoints' }],
