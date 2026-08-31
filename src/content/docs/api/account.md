@@ -2,7 +2,7 @@
 title: Account
 description: Profile, credits, API key, and SSH key.
 sidebar:
-  order: 9
+  order: 10
 ---
 
 ## Get your profile

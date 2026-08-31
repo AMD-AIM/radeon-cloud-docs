@@ -2,7 +2,7 @@
 title: 账户
 description: 个人资料、额度、API 密钥和 SSH 密钥。
 sidebar:
-  order: 9
+  order: 10
 ---
 
 ## 获取个人资料

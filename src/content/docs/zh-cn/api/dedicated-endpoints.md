@@ -2,7 +2,7 @@
 title: 独占端点
 description: 在你自己的实例上跑你自己的模型，对外是一个兼容 OpenAI 的 URL。
 sidebar:
-  order: 5
+  order: 7
 ---
 
 独占端点是在你自己的实例里跑 vLLM 或 SGLang，平台把一个公网 URL 路由过去。模型和服务参数由你决定，请求直接打到你的服务器。

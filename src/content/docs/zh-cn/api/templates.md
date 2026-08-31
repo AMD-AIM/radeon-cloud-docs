@@ -2,7 +2,7 @@
 title: 模板
 description: 通过 API 创建、更新和启动模板。
 sidebar:
-  order: 8
+  order: 9
 ---
 
 模板保存实例启动所依据的配置。这些字段在实际用起来是什么意思，见[创建模板](/radeon-cloud-docs/zh-cn/guides/templates/)。

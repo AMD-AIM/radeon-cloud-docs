@@ -28,6 +28,21 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
   -H "Authorization: Bearer $RADEON_API_KEY"
 ```
 
+The **Public Free Model APIs** also accept the same key in the `x-api-key` header, which is how
+Anthropic SDKs authenticate. Use it together with `anthropic-version` when calling
+[`/v1/messages`](/radeon-cloud-docs/api/messages/):
+
+```bash
+curl https://developer.amd.com.cn/radeon/api/v1/messages \
+  -H "x-api-key: $RADEON_API_KEY" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"DeepSeek-V4-Flash","max_tokens":256,"messages":[{"role":"user","content":"Hello"}]}'
+```
+
+`Authorization` wins if both are present. `x-api-key` is read on the free shared endpoints
+only — Platform API endpoints and dedicated endpoints ignore it.
+
 ### Getting a key
 
 Your key is issued automatically the first time you open the [Token Factory](https://developer.amd.com.cn/radeon/modelapis) or launch an instance. It's shown in the model detail dialog and on your Profile page.
@@ -64,8 +79,8 @@ Sessions are invalidated when you sign out, when the upstream identity provider'
 
 | Endpoint group | API key | Session |
 |---|---|---|
-| Model API — shared | Yes | Yes |
-| Model API — dedicated | Yes | Yes |
+| Public Free Model APIs | Yes | Yes |
+| Dedicated Model APIs | Yes | Yes |
 | Instances, templates, account | Yes | Yes |
 | Instance proxy (`/instances/...`) | No | **Session only** |
 

@@ -2,7 +2,7 @@
 title: Templates
 description: Create, update, and launch templates through the API.
 sidebar:
-  order: 8
+  order: 9
 ---
 
 Templates hold the configuration an instance launches from. See [Create a template](/radeon-cloud-docs/guides/templates/) for what the fields mean in practice.

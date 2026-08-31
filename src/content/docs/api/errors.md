@@ -2,7 +2,7 @@
 title: Errors
 description: Status codes returned by the AMD Radeon Cloud API and what to do about each.
 sidebar:
-  order: 11
+  order: 12
 ---
 
 ## Status codes
@@ -12,7 +12,7 @@ sidebar:
 | `400` | The request was rejected. Invalid parameter, an instance already running, or too few credits. | Read `detail` and fix the request. Retrying won't help. |
 | `401` | Missing, malformed, or unrecognised credential. | Check the `Authorization` header. Rotate the key if it may have been revoked. |
 | `403` | Authenticated, but not permitted. | See below — the cause varies. |
-| `404` | No such template, instance, or model. | Confirm the identifier. |
+| `404` | No such template or instance, or a Model API path that isn't served. | Confirm the identifier. A model name that isn't in the catalog is a `400`, not a `404`. |
 | `409` | A conflicting state, such as email verification being required first. | Follow the `code` in the body. |
 | `429` | Rate limited. | Wait for `Retry-After`, then back off. See [Rate limits](/radeon-cloud-docs/api/rate-limits/). |
 | `502` | The upstream model gateway or serving backend is unreachable. | Transient. Retry with backoff. |
@@ -26,19 +26,67 @@ Platform API errors use FastAPI's shape:
 { "detail": "Each user can only have one active instance" }
 ```
 
-Model API errors use OpenAI's shape, so existing OpenAI error handling works unchanged:
+Public Free Model API errors come from two places, and the shapes differ.
+
+Errors raised by the **gateway** — an invalid key, an unknown model, a gateway-side rate limit — use OpenAI's shape, so existing OpenAI error handling works unchanged:
 
 ```json
 {
   "error": {
-    "message": "Model API rate limit exceeded; please retry later",
-    "type": "rate_limit_error",
-    "code": "token_rate_limit_exceeded"
+    "message": "Unauthorized: No API key provided.",
+    "type": "invalid_request_error",
+    "param": null,
+    "code": "invalid_api_key"
   }
 }
 ```
 
-Errors raised by the model itself — an unknown model name, a prompt over the context limit — are passed through from the serving backend with its own status and message.
+On `/v1/messages` and `/v1/messages/count_tokens` the same errors use Anthropic's envelope, so Anthropic SDKs parse them unchanged:
+
+```json
+{
+  "type": "error",
+  "error": {
+    "type": "authentication_error",
+    "message": "Unauthorized: No API key provided."
+  }
+}
+```
+
+Errors raised by the **platform** in front of the gateway — credential rejection, admission control, gateway unreachable — are wrapped in `detail` like every other Platform API error:
+
+```json
+{ "detail": "Invalid bearer token" }
+```
+
+```json
+{
+  "detail": {
+    "error": {
+      "message": "Model API rate limit exceeded; please retry later",
+      "type": "rate_limit_error",
+      "code": "token_rate_limit_exceeded"
+    }
+  }
+}
+```
+
+:::caution[Unwrap `detail` before reading `error`]
+An OpenAI SDK reads `error.type` at the top level and will not find it on a platform-raised
+error. Handle both: read `body.error` if present, otherwise `body.detail.error`, otherwise
+treat `body.detail` as the message. The HTTP status and `Retry-After` are reliable in every
+case.
+:::
+
+A model name that isn't in the catalog is rejected by the gateway with `400` and
+`Requested model <name> not supported`; the request never reaches a backend. Errors the model
+itself raises, such as a prompt over the context limit, are passed through from the serving
+backend with its own status and message.
+
+**Dedicated Model API** errors are none of the above. There is no gateway on that path, so once
+the proxy has admitted the request the body you get back is whatever vLLM or SGLang produced,
+verbatim. A `403` from the proxy means the key, the instance or the port didn't match; a `503`
+means the instance is still starting. Everything else is your server talking.
 
 ## Common cases
 
@@ -66,4 +114,4 @@ Confirm the key is being sent, and sent as `Authorization: Bearer rc-...`. A mis
 
 For a dedicated endpoint, confirm the instance is `ready` and the model has finished loading. vLLM answers the port before weights are loaded, so early requests can fail with backend errors that look like platform problems.
 
-If a call worked yesterday and fails today with `404` on the model, the shared catalog has probably changed. Re-resolve with [`GET /v1/models`](/radeon-cloud-docs/api/models/).
+If a call worked yesterday and fails today with `400 Requested model ... not supported`, the shared catalog has probably changed. Re-resolve with [`GET /v1/models`](/radeon-cloud-docs/api/models/).

@@ -28,6 +28,18 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
   -H "Authorization: Bearer $RADEON_API_KEY"
 ```
 
+**Public Free Model APIs** 也接受把同一把密钥放在 `x-api-key` 头里——Anthropic SDK 就是这么认证的。调 [`/v1/messages`](/radeon-cloud-docs/zh-cn/api/messages/) 时和 `anthropic-version` 一起用：
+
+```bash
+curl https://developer.amd.com.cn/radeon/api/v1/messages \
+  -H "x-api-key: $RADEON_API_KEY" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"DeepSeek-V4-Flash","max_tokens":256,"messages":[{"role":"user","content":"Hello"}]}'
+```
+
+两个头都在时以 `Authorization` 为准。`x-api-key` 只在免费共享端点上被读取——Platform API 端点和独占端点都不认它。
+
 ### 拿到密钥
 
 你第一次打开 [Token Factory](https://developer.amd.com.cn/radeon/modelapis) 或启动实例时，密钥会自动签发。它显示在模型详情对话框和你的 Profile 页面上。
@@ -64,8 +76,8 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
 
 | 端点分组 | API 密钥 | 会话 |
 |---|---|---|
-| Model API — 共享 | 是 | 是 |
-| Model API — 独占 | 是 | 是 |
+| Public Free Model APIs | 是 | 是 |
+| Dedicated Model APIs | 是 | 是 |
 | 实例、模板、账户 | 是 | 是 |
 | 实例代理（`/instances/...`） | 否 | **仅会话** |
 

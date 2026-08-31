@@ -2,7 +2,7 @@
 title: Instances
 description: Launch, inspect, and destroy GPU instances programmatically.
 sidebar:
-  order: 7
+  order: 8
 ---
 
 Each account can have one active instance at a time. These endpoints launch it, poll it, and tear it down.

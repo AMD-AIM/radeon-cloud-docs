@@ -5,7 +5,7 @@ sidebar:
   order: 4
 ---
 
-主要的推理端点，遵循 OpenAI 的聊天补全 schema。
+主要的推理端点，属于 **Public Free Model APIs**，遵循 OpenAI 的聊天补全 schema。[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)用你自己的 vLLM 或 SGLang 提供同一条路径，下面说的请求过滤在那边一条都不适用。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
@@ -20,18 +20,112 @@ sidebar:
 | 参数 | 类型 | | 说明 |
 |---|---|---|---|
 | `model` | string | <span class="rc-req">必填</span> | 要跑的模型。必须是 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 返回的某一个。 |
-| `messages` | array | <span class="rc-req">必填</span> | 到目前为止的对话。每一项有一个 `role`（`system`、`user` 或 `assistant`）和 `content`。 |
+| `messages` | array | <span class="rc-req">必填</span> | 到目前为止的对话。每一项有一个 `role`（`system`、`user`、`assistant` 或 `tool`）和 `content`。**`system` 消息能放在哪因模型而异，见下文。** |
 | `stream` | boolean | <span class="rc-opt">选填</span> | 以 server-sent events 流式返回。默认 `false`。 |
 | `temperature` | number | <span class="rc-opt">选填</span> | 采样温度。越高越随机。 |
 | `top_p` | number | <span class="rc-opt">选填</span> | 核采样阈值。 |
 | `max_tokens` | integer | <span class="rc-opt">选填</span> | 回复生成的 token 上限。 |
-| `stop` | string 或 array | <span class="rc-opt">选填</span> | 终止生成的序列。 |
 | `presence_penalty` | number | <span class="rc-opt">选填</span> | 惩罚已出现过的 token。 |
 | `frequency_penalty` | number | <span class="rc-opt">选填</span> | 按出现频次惩罚 token。 |
-| `seed` | integer | <span class="rc-opt">选填</span> | 尽力而为的可复现性。 |
+| `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 或一个 `json_schema`，适用于 `json_output` 为 true 的模型。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
+| `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
+| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；`low` 和 `medium` 所有模型都收。**不传时是否思考也因模型而异。** |
+| `reasoning.effort` | string | <span class="rc-opt">选填</span> | 同上，统一写法。不能和 `reasoning_effort` 同时用。 |
 
-请求体会原样传给服务后端，所以后端认的任何参数都能送到。某个模型认哪些参数，写在它 Token Factory 卡片的「支持的参数」里——模型不认的参数会被悄悄丢掉，而不是报错。
+:::caution[`messages`：角色和 system 位置因模型而异]
+接受的 `role` 只有 `system`、`user`、`assistant`、`tool`。**较新 OpenAI SDK 用来代替 `system` 的
+`developer` 角色，并非每个模型都收**；`system` 消息能不能放在首位以外的位置，也因模型而异。
+
+| `messages` 形状 | DeepSeek-V4-Flash | Qwen3.8-Flash-Next |
+|---|:---:|:---:|
+| `system` 在首位，后接 `user` | `200` | `200` |
+| `system` 出现在 user 轮之后 | `200` | **`400`** |
+| `system` 在末尾 | `200` | **`400`** |
+| 两个 `system`（首位 + 中间）| `200` | **`400`** |
+| 用 `developer` 代替 `system` | `200` | **`422`** |
+
+**想用一套代码打两个模型：最多发一个 `system` 消息、放在首位、角色名写 `system` 而不是
+`developer`。** 逐模型的细节和确切的报错文本见[模型参考页](/radeon-cloud-docs/zh-cn/models/overview/)。
+:::
+
+:::tip[怎么开思考]
+在这个端点上，**开启思考只有 `reasoning_effort`（或等价的 `reasoning.effort`）一种写法**。
+
+```json
+{
+  "model": "DeepSeek-V4-Flash",
+  "reasoning_effort": "high",
+  "messages": [{ "role": "user", "content": "..." }]
+}
+```
+
+思考内容从响应的 `choices[0].message.reasoning` 里取（不是 `reasoning_content`），
+token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——这个字段所有模型都有。
+顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek-V4-Flash 有，Qwen3.8-Flash-Next 没有），别依赖它。
+
+**不传 `reasoning_effort` 不等于不思考**，各模型的默认值不一样：
+
+| 模型 | 不传时 |
+|---|---|
+| DeepSeek-V4-Flash | 不思考（`reasoning` 为空，`reasoning_tokens` 为 0） |
+| Qwen3.8-Flash-Next | **照样思考**，默认档位是 `xhigh`，也就是最长的一档 |
+
+要确定性地控制，就显式传值；想让 Qwen3.8-Flash-Next 少思考，传 `low`。
+
+**各模型接受的档位不一样**，传了不支持的值会被拒，但**状态码有两种**——
+校验分在两层，别只 catch 400：
+
+| 状态码 | 来自 | 长这样 |
+|---|---|---|
+| `400` | 模型层 | `Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.` |
+| `422` | 请求体反序列化层 | `Failed to deserialize the JSON body into the target type: reasoning_effort: unknown variant 'max', expected one of 'low', 'medium', 'high'` |
+
+| 档位 | DeepSeek-V4-Flash | Qwen3.8-Flash-Next | GLM-5.2 |
+|---|:---:|:---:|:---:|
+| `minimal` | ✅ | ❌ | ❌ |
+| **`low`** | ✅ | ✅ | ✅ |
+| **`medium`** | ✅ | ✅ | ✅ |
+| `high` | ✅ | ❌ | ✅ |
+| `xhigh` | ✅ | ❌ | ❌ |
+| `max` | ✅ | ❌ | ❌ |
+
+要写一套代码跑所有模型，**只用 `low` 和 `medium`**——只有这两个三边都认。
+
+另外实际档位比枚举值少：在 DeepSeek-V4-Flash 上，`minimal`/`low`/`medium` 思考长度接近，
+`high`/`max` 明显更长，实测就两档。
+:::
+
+:::danger[不要用 `thinking`，它不生效]
+有些客户端（尤其是 Anthropic 风格的）会发 `thinking: {"type": "enabled", "budget_tokens": N}`
+来开思考。**这个端点不支持它**，服务后端也不支持按 token 数给思考定额。
+
+现在遇到 `thinking` 或 `reasoning.enabled` 会直接返回 **400**，并在报错里指向
+`reasoning_effort`：
+
+```json
+{
+  "error": {
+    "message": "\"thinking\" is not supported on /v1/chat/completions and was not applied. Use \"reasoning_effort\" (or \"reasoning.effort\") to control thinking.",
+    "type": "invalid_request_error",
+    "code": "unsupported_parameter"
+  }
+}
+```
+
+宁可报错也不静默丢弃：早先这类请求会返回 200，但一点思考都没有，调用方很难发现。
+
+非要走 Anthropic 格式的话，[`POST /v1/messages`](/radeon-cloud-docs/zh-cn/api/messages/)
+上能用的是 `output_config: {"effort": "high"}`；那里的 `thinking` 同样会被拒绝。
+:::
+
+:::caution[清单之外的参数会被丢掉，不是透传]
+请求先按上面的 schema 校验，然后在送往服务后端前**逐字段重建**。不在接受集里的字段会被静默移除——不报错，也不生效。
+
+这里面包括一些 OpenAI 或 vLLM 客户端会合理期待能用的参数：`stop`、`seed`、`logit_bias`、
+`logprobs`、`top_logprobs`、`top_k`、`min_p`、`repetition_penalty`。真需要它们里的任何一个，
+用[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)，那条路会把你的请求体直接送给 vLLM 或 SGLang。
+:::
 
 ## 示例
 
@@ -78,6 +172,9 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 
 模型自己说完了，`finish_reason` 是 `stop`；撞到 `max_tokens` 是 `length`；想调用工具是 `tool_calls`。
 
+推理模型会在 `usage` 里多一个 `reasoning_tokens`；命中前缀缓存时还会多出
+`usage.prompt_tokens_details.cached_tokens`。
+
 ## 流式
 
 设 `stream: true` 就能收到 server-sent events。每个事件带的是增量而不是整条消息，流以 `data: [DONE]` 结束。
@@ -106,8 +203,10 @@ for chunk in stream:
 
 ## 超时
 
-一个非流式请求最多跑 10 分钟，之后平台放弃。长生成应该用流式，既能看到进度，也能让连接保持活跃。
+一个非流式请求最多跑 10 分钟，之后平台放弃。流式的话，这 10 分钟算的是**两个分片之间的间隔**，而不是整次生成的总时长。长生成应该用流式，既能看到进度，也能让连接保持活跃。
 
 ## 错误
 
-`401` 密钥无效。`429` 触发限流——见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。`502` 或 `503` 后端不可达或已饱和，退避后重试。模型自己报的错，比如模型名不存在或上下文超长，会带着后端自己的状态码和消息透传出来。
+`401` 密钥无效。`429` 触发限流——见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。`502` 或 `503` 后端不可达或已饱和，退避后重试。
+
+目录里没有的模型名由**网关**直接拒掉，返回 `400` 和 `Requested model <名字> not supported`，请求根本到不了后端。模型自己报的错，比如上下文超长，会带着后端自己的状态码和消息透传出来。响应体形状见[错误](/radeon-cloud-docs/zh-cn/api/errors/)。
