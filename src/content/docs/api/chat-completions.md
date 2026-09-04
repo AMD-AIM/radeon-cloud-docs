@@ -41,16 +41,18 @@ The accepted `role` set is `system`, `user`, `assistant`, `tool`. **`developer` 
 OpenAI SDKs emit in place of `system` — is not accepted by every model**, and neither is a `system`
 message anywhere other than first.
 
-| `messages` shape | DeepSeek-V4-Flash | Qwen3.8-Flash-Next |
-|---|:---:|:---:|
-| `system` first, then `user` | `200` | `200` |
-| `system` after a user turn | `200` | **`400`** |
-| `system` last | `200` | **`400`** |
-| two `system` (first + middle) | `200` | **`400`** |
-| `developer` in place of `system` | `200` | **`422`** |
+| `messages` shape | Accepted by |
+|---|---|
+| one `system` message at index `0`, role spelled `system` | **every model** |
 
-**For one code path across both models: send at most one `system` message, put it first, and use
-`system` rather than `developer`.** Per-model detail and the exact error strings are on the
+```json
+"messages": [
+  { "role": "system", "content": "Answer in one sentence." },
+  { "role": "user",   "content": "Why is the sky blue?" }
+]
+```
+
+Some models are more permissive than that — per-model detail is on the
 [model reference pages](/radeon-cloud-docs/models/overview/).
 :::
 
@@ -68,8 +70,8 @@ to enable thinking.
 
 The thinking text comes back in `choices[0].message.reasoning` (not `reasoning_content`). For the
 token count use **`usage.completion_tokens_details.reasoning_tokens`** — every model reports it.
-The top-level `usage.reasoning_tokens` is only emitted by some models (DeepSeek-V4-Flash has it,
-Qwen3.8-Flash-Next does not), so do not rely on it.
+The top-level `usage.reasoning_tokens` is only emitted by some models (both DeepSeek models and
+Qwen3.8-Flash-Next have it; MiniCPM5-1B does not), so do not rely on it.
 
 **Omitting `reasoning_effort` does not mean no thinking.** The default differs per model:
 
@@ -81,25 +83,19 @@ Qwen3.8-Flash-Next does not), so do not rely on it.
 Pass the value explicitly if you want deterministic behaviour; send `low` to make
 Qwen3.8-Flash-Next think less.
 
-**Which tiers a model accepts differs per model.** An unsupported value is rejected, but **with one
-of two status codes** — validation happens in two layers, so do not catch only 400:
+**Which tiers a model accepts differs per model:**
 
-| Status | Layer | Looks like |
-|---|---|---|
-| `400` | Model | `Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.` |
-| `422` | Request-body deserialisation | `Failed to deserialize the JSON body into the target type: reasoning_effort: unknown variant 'max', expected one of 'low', 'medium', 'high'` |
-
-| Tier | DeepSeek-V4-Flash | Qwen3.8-Flash-Next | GLM-5.2 |
-|---|:---:|:---:|:---:|
-| `minimal` | ✅ | ❌ | ❌ |
-| **`low`** | ✅ | ✅ | ✅ |
-| **`medium`** | ✅ | ✅ | ✅ |
-| `high` | ✅ | ❌ | ✅ |
-| `xhigh` | ✅ | ❌ | ❌ |
-| `max` | ✅ | ❌ | ❌ |
+| Model | Accepted values |
+|---|---|
+| DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
+| MiniCPM5-1B | `low` `medium` `high` |
 
 For one code path across all models, **stick to `low` and `medium`** — those are the only two
-every model accepts.
+every model accepts. Note that the name of the top tier is not portable: Qwen3.8-Flash-Next uses
+`xhigh`, MiniCPM5-1B uses `high`. The full matrix is in the
+[model reference](/radeon-cloud-docs/models/overview/).
 
 There are also fewer effective tiers than enum values: on DeepSeek-V4-Flash, `minimal`/`low`/`medium`
 think about the same amount, while `high`/`max` think noticeably longer — two tiers in practice.

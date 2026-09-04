@@ -37,16 +37,17 @@ sidebar:
 接受的 `role` 只有 `system`、`user`、`assistant`、`tool`。**较新 OpenAI SDK 用来代替 `system` 的
 `developer` 角色，并非每个模型都收**；`system` 消息能不能放在首位以外的位置，也因模型而异。
 
-| `messages` 形状 | DeepSeek-V4-Flash | Qwen3.8-Flash-Next |
-|---|:---:|:---:|
-| `system` 在首位，后接 `user` | `200` | `200` |
-| `system` 出现在 user 轮之后 | `200` | **`400`** |
-| `system` 在末尾 | `200` | **`400`** |
-| 两个 `system`（首位 + 中间）| `200` | **`400`** |
-| 用 `developer` 代替 `system` | `200` | **`422`** |
+**所有模型都接受的写法**：最多一条 `system` 消息、放在数组下标 `0`、角色名写 `system`
+而不是 `developer`。
 
-**想用一套代码打两个模型：最多发一个 `system` 消息、放在首位、角色名写 `system` 而不是
-`developer`。** 逐模型的细节和确切的报错文本见[模型参考页](/radeon-cloud-docs/zh-cn/models/overview/)。
+```json
+"messages": [
+  { "role": "system", "content": "用一句话回答。" },
+  { "role": "user",   "content": "天空为什么是蓝的？" }
+]
+```
+
+逐模型的宽松程度见[模型参考页](/radeon-cloud-docs/zh-cn/models/overview/)。
 :::
 
 :::tip[怎么开思考]
@@ -62,7 +63,7 @@ sidebar:
 
 思考内容从响应的 `choices[0].message.reasoning` 里取（不是 `reasoning_content`），
 token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——这个字段所有模型都有。
-顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek-V4-Flash 有，Qwen3.8-Flash-Next 没有），别依赖它。
+顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek 两个模型和 Qwen3.8-Flash-Next 有，MiniCPM5-1B 没有），别依赖它。
 
 **不传 `reasoning_effort` 不等于不思考**，各模型的默认值不一样：
 
@@ -73,24 +74,18 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——这
 
 要确定性地控制，就显式传值；想让 Qwen3.8-Flash-Next 少思考，传 `low`。
 
-**各模型接受的档位不一样**，传了不支持的值会被拒，但**状态码有两种**——
-校验分在两层，别只 catch 400：
+**各模型接受的档位不一样**：
 
-| 状态码 | 来自 | 长这样 |
-|---|---|---|
-| `400` | 模型层 | `Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.` |
-| `422` | 请求体反序列化层 | `Failed to deserialize the JSON body into the target type: reasoning_effort: unknown variant 'max', expected one of 'low', 'medium', 'high'` |
+| 模型 | 支持的取值 |
+|---|---|
+| DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
+| MiniCPM5-1B | `low` `medium` `high` |
 
-| 档位 | DeepSeek-V4-Flash | Qwen3.8-Flash-Next | GLM-5.2 |
-|---|:---:|:---:|:---:|
-| `minimal` | ✅ | ❌ | ❌ |
-| **`low`** | ✅ | ✅ | ✅ |
-| **`medium`** | ✅ | ✅ | ✅ |
-| `high` | ✅ | ❌ | ✅ |
-| `xhigh` | ✅ | ❌ | ❌ |
-| `max` | ✅ | ❌ | ❌ |
-
-要写一套代码跑所有模型，**只用 `low` 和 `medium`**——只有这两个三边都认。
+要写一套代码跑所有模型，**用 `low` 或 `medium`**——只有这两个四边都认。注意最高档的名字不通用：
+Qwen3.8-Flash-Next 用 `xhigh`，MiniCPM5-1B 用 `high`。完整对照表见
+[模型总览](/radeon-cloud-docs/zh-cn/models/overview/)。
 
 另外实际档位比枚举值少：在 DeepSeek-V4-Flash 上，`minimal`/`low`/`medium` 思考长度接近，
 `high`/`max` 明显更长，实测就两档。
