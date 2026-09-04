@@ -65,8 +65,8 @@ the endpoint wins — the gateway validates and rebuilds requests before they re
 | Context length | **1,048,576** tokens |
 | Input modalities | text only |
 | Streaming | ✅ |
-| Tool calling | ✅ (no parallel calls) |
-| JSON output | ✅ `json_object` · ❌ `json_schema` |
+| Tool calling | ✅ |
+| JSON output | ✅ `json_object` |
 | Thinking | ✅ — **off unless you ask** |
 | Stability | `experimental` |
 
@@ -75,14 +75,14 @@ the endpoint wins — the gateway validates and rebuilds requests before they re
 **Omitting `reasoning_effort` means no thinking.** A plain request returns an empty `reasoning`
 and `reasoning_tokens: 0`.
 
-The model card describes three levels — `low`, `high`, `max`. This endpoint accepts six values,
-all with `200`:
+The model card describes three levels — `low`, `high`, `max`. This endpoint accepts all seven
+values:
 
-| `minimal` | `low` | `medium` | `high` | `xhigh` | `max` |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| `200` | `200` | `200` | `200` | `200` | `200` |
+| `none` | `minimal` | `low` | `medium` | `high` | `xhigh` | `max` |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
-They do not map to six distinct behaviours: `minimal`/`low`/`medium` produce a similar amount of
+They do not map to seven distinct behaviours: `minimal`/`low`/`medium` produce a similar amount of
 thinking and `high`/`max` think noticeably longer — two effective tiers, broadly consistent with
 the three the vendor documents.
 
@@ -102,27 +102,21 @@ as "did not think"; do not branch on which key exists.
 
 ### `messages`
 
-Every shape we tested is accepted:
-
-| Shape | Status |
-|---|:---:|
-| `system` first, then `user` | `200` |
-| `system` after a user turn | `200` |
-| `system` last | `200` |
-| Two `system` messages | `200` |
-| `developer` instead of `system` | `200` |
+A `system` message may sit at any position, there may be more than one, and the role may be spelled
+either `system` or `developer`.
 
 That is *not* true of [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/). If one
-code path has to serve both, write to that model's stricter rules.
+code path has to serve both, write to that model's stricter rules: a single `system` message, first
+in the array, with the role spelled `system`.
 
-### Limits and refusals
+### Limits
 
-| What you send | What comes back |
+| | |
 |---|---|
-| `max_tokens` beyond the window | `400` `Requested token count exceeds the model's maximum context length of 1048576 tokens.` |
-| `response_format: json_schema` | `400` `Model DeepSeek-V4-Flash does not support JSON schema output mode` |
-| An `image_url` content part | `400` `Model DeepSeek-V4-Flash does not support image input.` |
-| `thinking: {...}` | `400` — use `reasoning_effort` |
+| Context window | 1,048,576 tokens, counted as **prompt plus output** |
+| JSON output | `response_format: {"type": "json_object"}` |
+| Turning thinking on | `reasoning_effort` (or the equivalent `reasoning.effort`) |
+| Input | text only; for images use [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) |
 
 ### Example
 

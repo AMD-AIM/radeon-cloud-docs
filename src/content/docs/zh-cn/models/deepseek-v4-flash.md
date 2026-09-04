@@ -60,8 +60,8 @@ Context Intelligence*（[arXiv:2606.19348](https://arxiv.org/abs/2606.19348)）�
 | 上下文长度 | **1,048,576** token |
 | 输入模态 | 仅文本 |
 | 流式 | ✅ |
-| 工具调用 | ✅（不支持并行调用）|
-| JSON 输出 | ✅ `json_object` · ❌ `json_schema` |
+| 工具调用 | ✅ |
+| JSON 输出 | ✅ `json_object` |
 | 思考 | ✅ —— **不主动要就不思考** |
 | 稳定性 | `experimental` |
 
@@ -69,13 +69,13 @@ Context Intelligence*（[arXiv:2606.19348](https://arxiv.org/abs/2606.19348)）�
 
 **不传 `reasoning_effort` 就不会思考。** 基线请求返回的 `reasoning` 为空、`reasoning_tokens` 为 0。
 
-模型卡写的是三档：`low`、`high`、`max`。而本端点接受六个值，全部返回 `200`：
+模型卡写的是三档：`low`、`high`、`max`。而本端点接受全部七个取值：
 
-| `minimal` | `low` | `medium` | `high` | `xhigh` | `max` |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| `200` | `200` | `200` | `200` | `200` | `200` |
+| `none` | `minimal` | `low` | `medium` | `high` | `xhigh` | `max` |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
-但它们并不对应六种行为：`minimal`/`low`/`medium` 的思考量差不多，`high`/`max` 明显更长——实际两档，
+但它们并不对应七种行为：`minimal`/`low`/`medium` 的思考量差不多，`high`/`max` 明显更长——实际两档，
 和官方文档的三档大体吻合。
 
 结果放在哪：
@@ -93,27 +93,19 @@ Context Intelligence*（[arXiv:2606.19348](https://arxiv.org/abs/2606.19348)）�
 
 ### `messages`
 
-我们测过的所有形状它都接受：
-
-| 形状 | 状态 |
-|---|:---:|
-| `system` 在首位，后接 `user` | `200` |
-| `system` 出现在 user 轮之后 | `200` |
-| `system` 在末尾 | `200` |
-| 两个 `system` 消息 | `200` |
-| 用 `developer` 代替 `system` | `200` |
+`system` 消息放在哪个位置都行、可以放多条，角色名写 `system` 或 `developer` 都接受。
 
 但 [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) **不是这样**。要用一套
-代码同时打两个模型，请按那个模型更严格的规则写。
+代码同时打两个模型，请按那个模型更严格的规则写：一条 `system`、放在首位、角色名写 `system`。
 
-### 上限与拒绝
+### 上限
 
-| 你发的 | 返回 |
+| | |
 |---|---|
-| `max_tokens` 超出窗口 | `400` `Requested token count exceeds the model's maximum context length of 1048576 tokens.` |
-| `response_format: json_schema` | `400` `Model DeepSeek-V4-Flash does not support JSON schema output mode` |
-| `content` 里带 `image_url` | `400` `Model DeepSeek-V4-Flash does not support image input.` |
-| `thinking: {...}` | `400` —— 请改用 `reasoning_effort` |
+| 上下文窗口 | 1,048,576 token，**按 prompt + 输出 的总和算** |
+| JSON 输出 | 只支持 `response_format: {"type": "json_object"}` |
+| 开启思考 | 只能用 `reasoning_effort`（或等价的 `reasoning.effort`）|
+| 输入 | 纯文本；要发图请用 [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/) |
 
 ### 示例
 
