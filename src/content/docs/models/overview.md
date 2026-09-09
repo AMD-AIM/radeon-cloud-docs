@@ -12,9 +12,12 @@ documentation, these pages win.
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available.
 Today that is four models.
 
-:::note[Measured on 2026-09-04]
+:::note[Measured on 2026-09-04, revised 2026-09-09]
 Behaviour can change when a model moves to a different inference engine. If the endpoint disagrees
 with this page, the endpoint is right.
+
+**MiniCPM5-1B is no longer published.** Its page has been removed;
+[MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) serves the same size class.
 :::
 
 ## Specifications
@@ -24,7 +27,7 @@ with this page, the endpoint is right.
 | [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
 | [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
 | [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
-| [MiniCPM5-1B](/radeon-cloud-docs/models/minicpm5-1b/) | 131,072 | ❌ | ❌ |
+| [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 
 ## Supported `reasoning_effort` values
 
@@ -35,14 +38,14 @@ The accepted tiers differ per model:
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
-| MiniCPM5-1B | `low` `medium` `high` |
 
-The parameter may also be omitted entirely on any of the four.
+The parameter may also be omitted entirely. MiniCPM5-2B does not return separated thinking, so
+`reasoning_effort` does not apply to it.
 
-:::tip[For one client across all models, use `low` or `medium`]
+:::tip[For one client across the thinking models, use `low` or `medium`]
 Those two are the intersection. Note that the name of the top tier is not portable:
-Qwen3.8-Flash-Next spells it `xhigh`, MiniCPM5-1B spells it `high`, and the two are not
-interchangeable. To pick per model, read
+Qwen3.8-Flash-Next spells it `xhigh` while the DeepSeek models also accept `max`, and the two are
+not interchangeable. To pick per model, read
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and match it
 against the table above.
 :::
@@ -54,9 +57,10 @@ against the table above.
 | DeepSeek-V4-Flash | does not think | ✅ |
 | DeepSeek-V4-Flash-Vision-Exp | does not think | ✅ |
 | Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
-| MiniCPM5-1B | does not think | ❌ |
+| MiniCPM5-2B | does not think | ❌ |
 
-Thinking text always arrives in `choices[0].message.reasoning`.
+Thinking text arrives in `choices[0].message.reasoning`. MiniCPM5-2B answers directly, so that
+field is empty and `reasoning_tokens` is `0` — read `content` for its answer.
 
 For the token count use **`usage.completion_tokens_details.reasoning_tokens`** — present on all four
 models. The top-level `usage.reasoning_tokens` is only emitted by three of them, so do not use it
@@ -69,7 +73,7 @@ for cross-model accounting.
 | DeepSeek-V4-Flash | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4-Flash-Vision-Exp | any position, more than one allowed | `system` or `developer` |
 | Qwen3.8-Flash-Next | **exactly one, and it must come first** | `system` |
-| MiniCPM5-1B | any position, more than one allowed | `system` |
+| MiniCPM5-2B | any position, more than one allowed | `system` |
 
 The constraint on Qwen3.8-Flash-Next comes from the Jinja chat template shipped with the weights,
 not from a gateway rule.

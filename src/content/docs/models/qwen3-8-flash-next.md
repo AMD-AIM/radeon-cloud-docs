@@ -126,7 +126,7 @@ Accepted values:
 :::caution[This model's top tier is called `xhigh`, not `high`]
 When writing cross-model code: `low` and `medium` work everywhere, but the name of the top tier is
 not portable — this model uses `xhigh` while
-[MiniCPM5-1B](/radeon-cloud-docs/models/minicpm5-1b/) uses `high`. For the longest thinking, send
+[MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) uses `high`. For the longest thinking, send
 `xhigh` or omit the parameter entirely.
 :::
 
