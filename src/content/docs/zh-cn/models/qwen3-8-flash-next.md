@@ -2,7 +2,7 @@
 title: Qwen3.8-Flash-Next
 description: Qwen 对 Qwen4 架构的预览版——官方规格，以及它在本端点上强制的两条规则。
 sidebar:
-  order: 3
+  order: 4
 ---
 
 <div class="rc-endpoint">
@@ -57,9 +57,10 @@ Qwen 另有一个叫 **Qwen3.8-Flash** 的托管服务模型跑在 Qwen Cloud �
 最值得记住的数字是 **QSA 预算**：无论对话多长，对 KV cache 的注意力最多只落在 2,048 个被选中的 token
 上；而 48 层里有 36 层是线性注意力，其状态大小根本不随上下文增长。
 
-:::caution[模型卡写着「带视觉编码器」，但本端点仍然拒绝图像]
+:::note[模型卡写着「带视觉编码器」，本端点也收图片]
 Qwen 把类型标为 *Causal Language Model with Vision Encoder*，仓库也打了 `image-text-to-text` 标签。
-**但本端点会拒绝图像内容**——见[上限与拒绝](#上限与拒绝)。在这里调用时请当作纯文本模型。
+实测：一张写着 `7412` 的图，模型答对，`usage.prompt_tokens_details.image_tokens` 计为 144；
+同一个问题不附图时答不出来。见[图像输入](#图像输入)。
 :::
 
 ## 本端点上的行为
@@ -71,50 +72,30 @@ Qwen 把类型标为 *Causal Language Model with Vision Encoder*，仓库也打�
 | | |
 |---|---|
 | 上下文长度 | 262,144 token |
-| 输入模态 | 仅文本 |
+| 输入模态 | 文本 + **图像** |
 | 流式 | ✅ |
-| 工具调用 | ✅（不支持并行调用）|
-| JSON 输出 | ✅ `json_object` · ❌ `json_schema` |
+| 工具调用 | ✅ |
+| JSON 输出 | ✅ `json_object` |
 | 思考 | ✅ —— **不主动调低就一直在思考** |
 | 稳定性 | `experimental` |
 
-### `messages` —— 会咬人的两条规则
+### `messages` —— 两条硬规矩
 
-:::danger[有且只能有一个 `system` 消息，而且必须在第一位]
-其它写法一律拒绝：
-
-| 形状 | 状态 |
-|---|:---:|
-| `system` 在首位，后接 `user` | `200` |
-| `system` 出现在 user 轮之后 | **`400`** |
-| `system` 在末尾 | **`400`** |
-| 两个 `system` 消息 | **`400`** |
+:::caution[`system` 只能放一条，且必须在第一位]
+模型自带的 Jinja chat template 把这条检查写在 `tokenizer_config.json` 里，不是网关加的规则——
+用同一份权重跑[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)也一样。
 
 ```json
-{
-  "error": {
-    "message": "System message must be at the beginning.",
-    "type": "BadRequestError",
-    "code": 400
-  }
-}
+"messages": [
+  { "role": "system", "content": "用一句话回答。" },
+  { "role": "user",   "content": "天空为什么是蓝的？" }
+]
 ```
-
-这是模型自带的 Jinja chat template 在抛异常，不是网关的规则——Qwen 把这条检查写在
-`tokenizer_config.json` 里。用同一份权重跑[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)，
-一样会拒。
 :::
 
-:::danger[不接受 `developer` 角色]
-较新的 OpenAI SDK 会用 `developer` 代替 `system`。这里接受的角色只有 `system`、`user`、`assistant`、
-`tool`，`developer` 不在其中；而且它是在**请求体反序列化阶段**失败的，所以状态码是 **`422` 而不是
-`400`**：
-
-```
-Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
-```
-
-如果你的客户端库默认发 `developer`，把它改回 `system`。
+:::caution[角色名写 `system`，不是 `developer`]
+本模型接受的角色是 `system`、`user`、`assistant`、`tool`。较新的 OpenAI SDK 会用 `developer`
+代替 `system`，如果你的客户端库默认如此，把它改回 `system`。
 :::
 
 ### 思考
@@ -122,21 +103,20 @@ Failed to deserialize the JSON body into the target type: messages[0]: unknown r
 **不传 `reasoning_effort` 并不会关掉思考。** 普通请求返回的 `reasoning` 已经有内容、
 `reasoning_tokens` 也非 0。模型内部默认档位是 `xhigh`，也就是最长的一档。
 
-真正能传进去的只有两档：
+支持的取值：
 
-| 档位 | 状态 | 原因 |
-|---|:---:|---|
-| `low` | `200` | |
-| `medium` | `200` | |
-| `high` | **`400`** | 过得了请求校验，但模型拒绝：`Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.` |
-| `xhigh` | **`422`** | 反序列化阶段就被拒——不在端点的枚举里 |
-| `max` | **`422`** | 同上 |
-| `minimal` | **`422`** | 同上 |
+| 档位 | 说明 |
+|---|---|
+| 不传 | 走模型默认的 `xhigh` |
+| `none` | |
+| `low` | |
+| `medium` | |
+| `xhigh` | 最长的一档 |
 
-:::caution[`xhigh` 是默认值，却传不进去]
-模型自称默认档位是 `xhigh`，但端点的请求 schema 只接受 `low`、`medium`、`high`——于是 `xhigh` 只有
-"不传该参数"这一条路能走到，而 `high` 过得了 schema 却被模型拒绝。**请显式传 `low` 或 `medium`**，
-这是仅有的两个端到端都能走通的值。
+:::caution[本模型的最高档叫 `xhigh`，不是 `high`]
+写跨模型代码时注意：`low` 和 `medium` 在所有模型上都能用，而最高档的名字不通用——
+本模型用 `xhigh`，[MiniCPM5-1B](/radeon-cloud-docs/zh-cn/models/minicpm5-1b/) 用 `high`。
+想要最长的思考，传 `xhigh` 或者干脆不传这个参数。
 :::
 
 结果放在哪：
@@ -145,18 +125,26 @@ Failed to deserialize the JSON body into the target type: messages[0]: unknown r
 |---|---|
 | 思考文本 | `choices[0].message.reasoning` |
 | token 数 | `usage.completion_tokens_details.reasoning_tokens` |
-| 不提供 | `usage.reasoning_tokens` —— **没有顶层字段**，和 DeepSeek-V4-Flash 不同 |
+| 顶层别名 | `usage.reasoning_tokens` —— 本模型**有**这个字段（与 DeepSeek-V4-Flash 相同）|
 
-### 上限与拒绝
+### 图像输入
 
-| 你发的 | 返回 |
+本模型接受 `image_url` 内容块。实测：一张 520×300 的图、上面写着 `7412`，问它数字是多少，
+回答 `7412`；同一个问题不附图时答不出来——它确实看到了图。
+
+| | |
 |---|---|
-| `max_tokens` 超出窗口 | `400` `max_tokens=… cannot be greater than max_model_len=max_total_tokens=262144.` |
-| `response_format: json_schema` | `400` `Model Qwen3.8-Flash-Next does not support JSON schema output mode` |
-| `content` 里带 `image_url` | `400` `Model Qwen3.8-Flash-Next does not support image input.` |
-| `thinking: {...}` | `400` —— 请改用 `reasoning_effort` |
+| 传法 | `content` 数组里放 `{"type":"image_url","image_url":{"url":"data:image/png;base64,..."}}` |
+| 计量 | `usage.prompt_tokens_details.image_tokens`（上例为 144）|
+| 单图上限 | 权重自带 `vision_max_n_token = 384`，再大的图也按 384 封顶 |
 
-`max_tokens` 是按**总预算**算的，包含 prompt：262,144 是输入加输出的总和，不是单给输出的额度。
+### 上限
+
+| | |
+|---|---|
+| 上下文窗口 | 262,144 token，**按总预算算**——输入加输出的总和，不是单给输出的额度 |
+| JSON 输出 | 只支持 `response_format: {"type": "json_object"}` |
+| 开启思考 | 只能用 `reasoning_effort`（或等价的 `reasoning.effort`）|
 
 ### 示例
 

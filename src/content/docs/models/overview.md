@@ -1,67 +1,143 @@
 ---
-title: Models overview
-description: What each model on the Public Free Model APIs accepts and returns — measured, not copied from upstream.
+title: Model reference
+description: What each model on the free shared model API accepts and returns — measured, not copied from upstream docs.
 sidebar:
   order: 1
 ---
 
-One page per model. Everything on these pages was measured against the live endpoint, so where a
-model disagrees with its upstream documentation, these pages follow the endpoint.
+One page per model. Everything here was measured against
+`https://developer.amd.com.cn/radeon/api/v1`; where a model's behaviour disagrees with its upstream
+documentation, these pages win.
 
-[`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for which models exist
-right now; it currently returns two.
+[`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available.
+Today that is four models.
 
-## Side by side
+:::note[Measured on 2026-09-04]
+Behaviour can change when a model moves to a different inference engine. If the endpoint disagrees
+with this page, the endpoint is right.
+:::
 
-| | [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) | [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) |
+## Specifications
+
+| Model | Context | Image input | Thinks with `reasoning_effort` omitted |
+|---|---|:---:|:---:|
+| [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
+| [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
+| [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
+| [MiniCPM5-1B](/radeon-cloud-docs/models/minicpm5-1b/) | 131,072 | ❌ | ❌ |
+
+## Supported `reasoning_effort` values
+
+The accepted tiers differ per model:
+
+| Model | Accepted values |
+|---|---|
+| DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
+| MiniCPM5-1B | `low` `medium` `high` |
+
+The parameter may also be omitted entirely on any of the four.
+
+:::tip[For one client across all models, use `low` or `medium`]
+Those two are the intersection. Note that the name of the top tier is not portable:
+Qwen3.8-Flash-Next spells it `xhigh`, MiniCPM5-1B spells it `high`, and the two are not
+interchangeable. To pick per model, read
+[`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and match it
+against the table above.
+:::
+
+## Thinking behaviour
+
+| Model | With `reasoning_effort` omitted | `usage.reasoning_tokens` (top level) |
+|---|:---:|:---:|
+| DeepSeek-V4-Flash | does not think | ✅ |
+| DeepSeek-V4-Flash-Vision-Exp | does not think | ✅ |
+| Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
+| MiniCPM5-1B | does not think | ❌ |
+
+Thinking text always arrives in `choices[0].message.reasoning`.
+
+For the token count use **`usage.completion_tokens_details.reasoning_tokens`** — present on all four
+models. The top-level `usage.reasoning_tokens` is only emitted by three of them, so do not use it
+for cross-model accounting.
+
+## Writing `messages`
+
+| Model | `system` messages | Role name |
 |---|---|---|
-| Vendor build | DeepSeek-V4-Flash-0731 | Qwen3.8-Flash-Next-FP8 |
-| Parameters | 43 layers, 256+1 experts, 6 activated | 125B total / **6B activated**, 512 experts, 10+1 activated |
-| Attention | MLA — 64 Q heads, 1 KV head | Hybrid — 36 linear-attention layers + 12 QSA layers |
-| Licence | MIT | Qwen Community License 1.0 |
-| Context | **1,048,576** | 262,144 |
-| Input | text | text |
-| Streaming | ✅ | ✅ |
-| Tool calling | ✅ | ✅ |
-| Parallel tool calls | ❌ | ❌ |
-| `response_format: json_object` | ✅ | ✅ |
-| `response_format: json_schema` | ❌ | ❌ |
-| Image input | ❌ | ❌ |
-| Thinking | ✅ | ✅ |
-| Thinks when `reasoning_effort` omitted | ❌ | ✅ |
-| Usable `reasoning_effort` tiers | `minimal` `low` `medium` `high` `xhigh` `max` | **`low` `medium` only** |
-| `usage.reasoning_tokens` | ✅ | ❌ |
-| `system` anywhere in `messages` | ✅ | ❌ first position only |
-| More than one `system` | ✅ | ❌ |
-| `developer` role | ✅ | ❌ |
+| DeepSeek-V4-Flash | any position, more than one allowed | `system` or `developer` |
+| DeepSeek-V4-Flash-Vision-Exp | any position, more than one allowed | `system` or `developer` |
+| Qwen3.8-Flash-Next | **exactly one, and it must come first** | `system` |
+| MiniCPM5-1B | any position, more than one allowed | `system` |
 
-The `messages` differences trace back to one thing: Qwen ships a Jinja chat template that raises
-on anything but a single leading `system` message, and DeepSeek ships no Jinja template at all.
+The constraint on Qwen3.8-Flash-Next comes from the Jinja chat template shipped with the weights,
+not from a gateway rule.
 
-## Writing one code path for both
+**The shape all four accept**: a single `system` message at index `0`, with the role spelled
+`system`.
 
-The intersection that works on every model today:
+## Structured output and tools
 
-- one `system` message, at index `0`, using the role name `system` — not `developer`
-- `reasoning_effort` set explicitly to `low` or `medium`, never omitted
+All four models support:
+
+- `response_format: {"type": "json_object"}`
+- function calling via `tools` + `tool_choice` (all four issued a correct call when measured)
+
+`parallel_tool_calls` is accepted by all four, but emitting several `tool_calls` in one turn is the
+model's own choice — do not build on it.
+
+## Image input
+
+Two models take images; put an `image_url` content part in the `content` array:
+
+| Model | Per-image metering |
+|---|---|
+| DeepSeek-V4-Flash-Vision-Exp | `usage.prompt_tokens_details.image_tokens`, 115 in the sample |
+| Qwen3.8-Flash-Next | `usage.prompt_tokens_details.image_tokens`, 144 in the sample |
+
+```json
+{
+  "model": "DeepSeek-V4-Flash-Vision-Exp",
+  "messages": [{
+    "role": "user",
+    "content": [
+      { "type": "image_url", "image_url": { "url": "data:image/png;base64,iVBORw0KGgo..." } },
+      { "type": "text", "text": "What does this image say?" }
+    ]
+  }]
+}
+```
+
+Both passed the same check: an image reading `7412`, asked "what is the large number in this
+image", answered correctly — and could not answer the same question without the image.
+
+Check the table above before sending images; the other two models are text-only.
+
+## Writing one client for every model
+
+The shape all four accept:
+
+- a single `system` message at index `0`, with the role spelled `system`
+- `reasoning_effort` of `low` or `medium`, or omitted entirely
 - read thinking text from `choices[0].message.reasoning`
-- read thinking token count from `usage.completion_tokens_details.reasoning_tokens`
-- `response_format: {"type": "json_object"}` for JSON, never `json_schema`
-- text-only `content`
+- read thinking tokens from `usage.completion_tokens_details.reasoning_tokens`
+- use `response_format: {"type": "json_object"}` for JSON
+- keep `content` textual unless the target model supports images
+- size `max_tokens` against the target model's window — these four span 131,072 to 1,048,576, an
+  eightfold difference
 
-## Common to every model
-
-These hold regardless of which model you call:
+## True for every model
 
 | | |
 |---|---|
-| Accepted parameters | `temperature`, `max_tokens`, `top_p`, `stream`, `response_format`, `tools`, `tool_choice` |
-| Dropped silently | `stop`, `seed`, `logit_bias`, `logprobs`, `top_logprobs`, `top_k`, `min_p`, `repetition_penalty` |
-| `thinking` parameter | Rejected with `400` — use `reasoning_effort` |
-| Tokenizer reported | `GPT` |
+| Accepted parameters | `temperature`, `max_tokens`, `top_p`, `stream`, `response_format`, `tools`, `tool_choice`, `parallel_tool_calls`, `reasoning_effort` |
+| Silently dropped | `stop`, `seed`, `logit_bias`, `logprobs`, `top_logprobs`, `top_k`, `min_p`, `repetition_penalty` |
+| How to turn thinking on | `reasoning_effort` (or the equivalent `reasoning.effort`) |
+| Reported tokenizer | `GPT` |
 | Stability | `experimental` |
 
-Anything outside the accepted set is removed before the request reaches the serving backend — no
-error, no effect. If you need those parameters, run a
-[dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/), which passes your body straight
-through to vLLM or SGLang.
+Parameters outside the accepted list are stripped before the request reaches the inference backend —
+no error, no effect. If you need them, use a
+[dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/), which forwards the request body
+to vLLM or SGLang untouched.

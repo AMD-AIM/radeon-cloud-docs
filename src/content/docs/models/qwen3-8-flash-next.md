@@ -2,7 +2,7 @@
 title: Qwen3.8-Flash-Next
 description: Qwen's preview of the Qwen4 architecture — what the vendor ships, and the two rules it enforces on this endpoint.
 sidebar:
-  order: 3
+  order: 4
 ---
 
 <div class="rc-endpoint">
@@ -62,10 +62,11 @@ The QSA budget is the number worth remembering: attention over the KV cache is c
 selected tokens regardless of how long the conversation is, and 36 of the 48 layers are linear
 attention whose state does not grow with context at all.
 
-:::caution[The model card says "with Vision Encoder" — image input is still refused here]
+:::note[The model card says "with Vision Encoder" — and this endpoint takes images]
 Qwen lists the type as *Causal Language Model with Vision Encoder*, and the repository is tagged
-`image-text-to-text`. **This endpoint rejects image content anyway** — see
-[Limits and refusals](#limits-and-refusals). Treat the model as text-only when calling it here.
+`image-text-to-text`. Measured: an image reading `7412` is transcribed correctly and
+`usage.prompt_tokens_details.image_tokens` comes back as 144; the same question without the image
+cannot be answered. See [Image input](#image-input).
 :::
 
 ## On this endpoint
@@ -78,50 +79,32 @@ the endpoint wins.
 | | |
 |---|---|
 | Context length | 262,144 tokens |
-| Input modalities | text only |
+| Input modalities | text + **images** |
 | Streaming | ✅ |
-| Tool calling | ✅ (no parallel calls) |
-| JSON output | ✅ `json_object` · ❌ `json_schema` |
+| Tool calling | ✅ |
+| JSON output | ✅ `json_object` |
 | Thinking | ✅ — **on unless you turn it down** |
 | Stability | `experimental` |
 
-### `messages` — the two rules that bite
+### `messages` — two hard rules
 
-:::danger[Exactly one `system` message, and it must be first]
-Anything else is refused:
-
-| Shape | Status |
-|---|:---:|
-| `system` first, then `user` | `200` |
-| `system` after a user turn | **`400`** |
-| `system` last | **`400`** |
-| Two `system` messages | **`400`** |
+:::caution[Exactly one `system` message, and it must come first]
+This comes from the Jinja chat template shipped with the weights — Qwen writes the check into
+`tokenizer_config.json` — not from a gateway rule, so a
+[dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) running the same weights behaves
+the same way.
 
 ```json
-{
-  "error": {
-    "message": "System message must be at the beginning.",
-    "type": "BadRequestError",
-    "code": 400
-  }
-}
+"messages": [
+  { "role": "system", "content": "Answer in one sentence." },
+  { "role": "user",   "content": "Why is the sky blue?" }
+]
 ```
-
-This is the model's own Jinja chat template raising, not a gateway rule — Qwen ships the check in
-`tokenizer_config.json`. A [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/)
-running the same weights refuses the same requests.
 :::
 
-:::danger[The `developer` role is not accepted]
-Newer OpenAI SDKs emit `developer` where older ones emit `system`. The accepted role set is
-`system`, `user`, `assistant`, `tool` — `developer` is not in it, and it fails during request-body
-deserialisation, so the status is **`422`, not `400`**:
-
-```
-Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
-```
-
-If your client library defaults to `developer`, override it to `system`.
+:::caution[Spell the role `system`, not `developer`]
+The accepted roles are `system`, `user`, `assistant`, `tool`. Newer OpenAI SDKs emit `developer` in
+place of `system`; if yours does, override it back to `system`.
 :::
 
 ### Thinking
@@ -130,22 +113,21 @@ If your client library defaults to `developer`, override it to `system`.
 populated `reasoning` and a non-zero `reasoning_tokens`. The model's internal default is `xhigh`,
 its longest tier.
 
-Only two tiers can actually be requested:
+Accepted values:
 
-| Tier | Status | Why |
-|---|:---:|---|
-| `low` | `200` | |
-| `medium` | `200` | |
-| `high` | **`400`** | Passes request validation, then the model refuses: `Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.` |
-| `xhigh` | **`422`** | Rejected during deserialisation — not in the endpoint's enum |
-| `max` | **`422`** | Same |
-| `minimal` | **`422`** | Same |
+| Tier | Notes |
+|---|---|
+| omitted | falls through to the model's own `xhigh` |
+| `none` | |
+| `low` | |
+| `medium` | |
+| `xhigh` | the longest tier |
 
-:::caution[`xhigh` is the default but cannot be requested]
-The model names `xhigh` as its default, yet the endpoint's request schema only accepts `low`,
-`medium`, `high` — so `xhigh` is reachable only by omitting the parameter, and `high` passes the
-schema then gets refused by the model. **Send `low` or `medium` explicitly.** Those are the only
-two values that work end to end.
+:::caution[This model's top tier is called `xhigh`, not `high`]
+When writing cross-model code: `low` and `medium` work everywhere, but the name of the top tier is
+not portable — this model uses `xhigh` while
+[MiniCPM5-1B](/radeon-cloud-docs/models/minicpm5-1b/) uses `high`. For the longest thinking, send
+`xhigh` or omit the parameter entirely.
 :::
 
 Where the output lands:
@@ -154,16 +136,27 @@ Where the output lands:
 |---|---|
 | Thinking text | `choices[0].message.reasoning` |
 | Token count | `usage.completion_tokens_details.reasoning_tokens` |
-| Not emitted | `usage.reasoning_tokens` — **no top-level field**, unlike DeepSeek-V4-Flash |
+| Top-level alias | `usage.reasoning_tokens` — this model **does** emit it (same as DeepSeek-V4-Flash) |
 
-### Limits and refusals
+### Image input
 
-| What you send | What comes back |
+This model accepts `image_url` content parts. Measured: a 520×300 image reading `7412` is
+transcribed correctly, and the same question without the image cannot be answered — it really is
+looking at the picture.
+
+| | |
 |---|---|
-| `max_tokens` beyond the window | `400` `max_tokens=… cannot be greater than max_model_len=max_total_tokens=262144.` |
-| `response_format: json_schema` | `400` `Model Qwen3.8-Flash-Next does not support JSON schema output mode` |
-| An `image_url` content part | `400` `Model Qwen3.8-Flash-Next does not support image input.` |
-| `thinking: {...}` | `400` — use `reasoning_effort` |
+| How to send | an `{"type":"image_url","image_url":{"url":"data:image/png;base64,…"}}` part in `content` |
+| Metering | `usage.prompt_tokens_details.image_tokens` (144 in the example above) |
+| Per-image ceiling | the weights ship `vision_max_n_token = 384`, so larger images still cap at 384 |
+
+### Limits
+
+| | |
+|---|---|
+| Context window | 262,144 tokens, counted as a **total budget** — prompt plus output, not an output-only allowance |
+| JSON output | `response_format: {"type": "json_object"}` |
+| Turning thinking on | `reasoning_effort` (or the equivalent `reasoning.effort`) |
 
 `max_tokens` is capped against the **total** budget, prompt included — 262,144 covers input plus
 output, not output alone.
