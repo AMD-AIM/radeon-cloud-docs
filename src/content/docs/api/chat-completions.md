@@ -90,7 +90,7 @@ Qwen3.8-Flash-Next think less.
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
-| MiniCPM5-2B | `low` `medium` `high` — accepted, no observable effect |
+| MiniCPM5-2B | not applicable — answers directly |
 
 For one code path across all models, **stick to `low` and `medium`** — those are the only two
 every model accepts. Note that the name of the top tier is not portable: Qwen3.8-Flash-Next uses

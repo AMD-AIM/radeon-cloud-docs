@@ -81,7 +81,7 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——这
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
-| MiniCPM5-2B | `low` `medium` `high` —— 收，但不起作用 |
+| MiniCPM5-2B | 不适用——直接给答案 |
 
 要写一套代码跑所有模型，**用 `low` 或 `medium`**——只有这两个四边都认。注意最高档的名字不通用：
 Qwen3.8-Flash-Next 用 `xhigh`，MiniCPM5-2B 用 `high`。完整对照表见

@@ -13,9 +13,8 @@ sidebar:
 :::note[本页数据的采集时间：2026-09-04，2026-09-09 修订]
 模型换了推理引擎，行为就可能跟着变。碰到与本页不符的行为，以端点实际返回为准。
 
-**MiniCPM5-1B 已于 2026-09-09 下线**，现在调用会返回
-`400 Requested model MiniCPM5-1B not supported`，其说明页已移除。
-同体量级的替代是 [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/)。
+**MiniCPM5-1B 已不再对外提供**，其说明页已移除。
+同体量级由 [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) 提供。
 :::
 
 ## 规格
@@ -36,14 +35,12 @@ sidebar:
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
-| MiniCPM5-2B | `low` `medium` `high` —— **收，但不起作用** |
 
-这个参数可以整个不传，四个模型都接受。
+这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
 
-:::tip[一套代码打所有模型，就用 `low` 或 `medium`]
-这两个值是四个模型的交集。注意最高档的名字不通用：Qwen3.8-Flash-Next 用 `xhigh`，
-MiniCPM5-2B 用 `high`，两者不能互换。而且 MiniCPM5-2B 上各档都接受、却一律返回
-零个 reasoning token，在它上面当空操作处理就行。要按模型选值时，读
+:::tip[一套代码打所有思考模型，就用 `low` 或 `medium`]
+这两个值是它们的交集。注意最高档的名字不通用：Qwen3.8-Flash-Next 用 `xhigh`，
+而两个 DeepSeek 模型还接受 `max`，不能互换。要按模型选值时，读
 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 确认当前发布的是哪几个模型，再对照上表。
 :::
 
@@ -56,8 +53,8 @@ MiniCPM5-2B 用 `high`，两者不能互换。而且 MiniCPM5-2B 上各档都接
 | Qwen3.8-Flash-Next | **照样思考** | ✅ |
 | MiniCPM5-2B | 不思考 | ❌ |
 
-思考文本从 `choices[0].message.reasoning` 读——**MiniCPM5-2B 除外**，它这个字段存在但
-各档都是空的。不要把空的 `reasoning` 当成错误。
+思考文本从 `choices[0].message.reasoning` 读。MiniCPM5-2B 直接给答案，该字段为空、
+`reasoning_tokens` 为 `0`，答案从 `content` 读。
 
 token 数用 **`usage.completion_tokens_details.reasoning_tokens`**——这个字段四个模型都有。顶层的
 `usage.reasoning_tokens` 只有三个模型给，跨模型统计别用它。

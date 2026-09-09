@@ -16,9 +16,8 @@ Today that is four models.
 Behaviour can change when a model moves to a different inference engine. If the endpoint disagrees
 with this page, the endpoint is right.
 
-**MiniCPM5-1B was withdrawn on 2026-09-09** and now returns
-`400 Requested model MiniCPM5-1B not supported`. Its page has been removed.
-[MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) takes its place in the same size class.
+**MiniCPM5-1B is no longer published.** Its page has been removed;
+[MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) serves the same size class.
 :::
 
 ## Specifications
@@ -39,15 +38,14 @@ The accepted tiers differ per model:
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
-| MiniCPM5-2B | `low` `medium` `high` — **accepted, but with no observable effect** |
 
-The parameter may also be omitted entirely on any of the four.
+The parameter may also be omitted entirely. MiniCPM5-2B does not return separated thinking, so
+`reasoning_effort` does not apply to it.
 
-:::tip[For one client across all models, use `low` or `medium`]
+:::tip[For one client across the thinking models, use `low` or `medium`]
 Those two are the intersection. Note that the name of the top tier is not portable:
-Qwen3.8-Flash-Next spells it `xhigh`, MiniCPM5-2B spells it `high`, and the two are not
-interchangeable. On MiniCPM5-2B the parameter is accepted at every tier it takes and still
-produces zero reasoning tokens, so treat it as a no-op there. To pick per model, read
+Qwen3.8-Flash-Next spells it `xhigh` while the DeepSeek models also accept `max`, and the two are
+not interchangeable. To pick per model, read
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and match it
 against the table above.
 :::
@@ -61,8 +59,8 @@ against the table above.
 | Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
 | MiniCPM5-2B | does not think | ❌ |
 
-Thinking text arrives in `choices[0].message.reasoning` — **except on MiniCPM5-2B**, where the
-field is present but stays empty at every tier. Do not treat an empty `reasoning` as an error.
+Thinking text arrives in `choices[0].message.reasoning`. MiniCPM5-2B answers directly, so that
+field is empty and `reasoning_tokens` is `0` — read `content` for its answer.
 
 For the token count use **`usage.completion_tokens_details.reasoning_tokens`** — present on all four
 models. The top-level `usage.reasoning_tokens` is only emitted by three of them, so do not use it

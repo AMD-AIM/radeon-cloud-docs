@@ -1,6 +1,6 @@
 ---
 title: MiniCPM5-2B
-description: OpenBMB's 2B dense model — the smallest window here, and the only one that accepts reasoning_effort without acting on it.
+description: OpenBMB's 2B dense model — the shortest context on this endpoint, served unquantised.
 sidebar:
   order: 5
 ---
@@ -41,45 +41,31 @@ context is the shortest here.
 | Streaming | ✅ |
 | Tool calling | ✅ (see below) |
 | JSON output | ✅ `json_object` |
-| Thinking | ❌ — **see below**, the parameter is accepted but nothing is separated |
+| Thinking | ❌ |
 | Engine | vLLM |
 | Stability | `experimental` |
 
 ### Thinking
 
-**`reasoning_effort` is accepted here but has no observable effect.** Measured at every tier it
-takes, with a multi-step word problem and `max_tokens: 600`:
+This model answers directly. It does not return separated thinking, so
+`choices[0].message.reasoning` stays empty and
+`usage.completion_tokens_details.reasoning_tokens` is `0`.
 
-| `reasoning_effort` | HTTP | `reasoning` | `reasoning_tokens` |
-|---|:---:|:---:|:---:|
-| omitted | `200` | empty | `0` |
-| `low` | `200` | empty | `0` |
-| `medium` | `200` | empty | `0` |
-| `high` | `200` | empty | `0` |
-| `none` `minimal` `xhigh` `max` | `422` | — | — |
-
-The same prompt sent to [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/)
-returned 392 reasoning tokens, so this is the model, not the endpoint.
-
-:::caution[Do not use this model to get separated thinking]
-The model still reasons — it just does it **inline in `content`**, the way a non-thinking model
-does. If your code reads `choices[0].message.reasoning` to show a thinking pane, it will render
-an empty pane for this model. Branch on the model, or read `content` only.
-
-Sending `reasoning_effort` costs you nothing here, but it buys you nothing either.
-:::
+Read the answer from `choices[0].message.content`. For separated thinking, use
+[DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) or
+[Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/).
 
 ### `messages`
 
 A `system` message may sit at any position, and there may be more than one. Spell the role
-`system` — this model does not take `developer` (`422`).
+`system`.
 
 ### Tools
 
 Both `tools` and `parallel_tool_calls` are accepted. Offered a `get_weather` tool and asked for
-the weather in Paris, the model issued the call correctly and returned
-`finish_reason: "tool_calls"`. Keep in mind that **this is a 2B model**: measure it against your
-own prompts, more than once, before handing it tool-driven work.
+the weather in Paris, the model issued the call and returned
+`finish_reason: "tool_calls"`. As with any model this size, try it against your own prompts
+before relying on it for tool-driven work.
 
 ### Limits
 
@@ -87,7 +73,7 @@ own prompts, more than once, before handing it tool-driven work.
 |---|---|
 | Context window | 131,072 tokens, counted as **prompt plus output** |
 | JSON output | `response_format: {"type": "json_object"}` |
-| Input | text only — an image part returns `400 Model MiniCPM5-2B does not support image input` |
+| Input | text only |
 
 :::caution[This is the smallest window on the endpoint]
 131,072 is far below the others (both DeepSeek models serve 1,048,576). When migrating from another
