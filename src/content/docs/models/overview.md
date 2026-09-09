@@ -10,7 +10,8 @@ One page per model. Everything here was measured against
 documentation, these pages win.
 
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available.
-Today that is four models.
+Today that is four chat models. The video model is listed separately below — it is not in that
+catalog.
 
 :::note[Measured on 2026-09-04, revised 2026-09-09]
 Behaviour can change when a model moves to a different inference engine. If the endpoint disagrees
@@ -19,6 +20,17 @@ with this page, the endpoint is right.
 **MiniCPM5-1B is no longer published.** Its page has been removed;
 [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) serves the same size class.
 :::
+
+## Video
+
+One video model. It is called through a different endpoint, billed per second instead of per token,
+and takes minutes rather than seconds:
+
+| Model | Endpoint | Price |
+|---|---|---|
+| [MiniMax-H3](/radeon-cloud-docs/models/minimax-h3/) | [`POST /v1/videos`](/radeon-cloud-docs/api/videos/) | $0.08 per second |
+
+Everything from here down describes the four chat models.
 
 ## Specifications
 

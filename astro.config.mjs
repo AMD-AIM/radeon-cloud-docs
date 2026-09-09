@@ -99,6 +99,7 @@ export default defineConfig({
                 { slug: 'api/models' },
                 { slug: 'api/chat-completions' },
                 { slug: 'api/messages' },
+                { slug: 'api/videos' },
                 { slug: 'api/usage' },
               ],
             },

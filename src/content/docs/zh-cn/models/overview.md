@@ -8,7 +8,8 @@ sidebar:
 每个模型一页。这些页面上的结论都是对着 `https://developer.amd.com.cn/radeon/api/v1` 实测出来的；
 模型行为和它上游文档不一致的地方，以这里为准。
 
-当前有哪些模型以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准，目前是四个。
+当前有哪些模型以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准，目前是四个聊天模型。
+视频模型在下面单列——它不在那份目录里。
 
 :::note[本页数据的采集时间：2026-09-04，2026-09-09 修订]
 模型换了推理引擎，行为就可能跟着变。碰到与本页不符的行为，以端点实际返回为准。
@@ -16,6 +17,16 @@ sidebar:
 **MiniCPM5-1B 已不再对外提供**，其说明页已移除。
 同体量级由 [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) 提供。
 :::
+
+## 视频
+
+一个视频模型。它走另一套端点，按秒计费而不是按 token，耗时以分钟计而不是秒：
+
+| 模型 | 端点 | 价格 |
+|---|---|---|
+| [MiniMax-H3](/radeon-cloud-docs/zh-cn/models/minimax-h3/) | [`POST /v1/videos`](/radeon-cloud-docs/zh-cn/api/videos/) | 每秒 $0.08 |
+
+从这里往下都是在说那四个聊天模型。
 
 ## 规格
 
