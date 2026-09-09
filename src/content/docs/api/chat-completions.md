@@ -71,7 +71,7 @@ to enable thinking.
 The thinking text comes back in `choices[0].message.reasoning` (not `reasoning_content`). For the
 token count use **`usage.completion_tokens_details.reasoning_tokens`** — every model reports it.
 The top-level `usage.reasoning_tokens` is only emitted by some models (both DeepSeek models and
-Qwen3.8-Flash-Next have it; MiniCPM5-1B does not), so do not rely on it.
+Qwen3.8-Flash-Next have it; MiniCPM5-2B does not), so do not rely on it.
 
 **Omitting `reasoning_effort` does not mean no thinking.** The default differs per model:
 
@@ -90,11 +90,11 @@ Qwen3.8-Flash-Next think less.
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
-| MiniCPM5-1B | `low` `medium` `high` |
+| MiniCPM5-2B | `low` `medium` `high` — accepted, no observable effect |
 
 For one code path across all models, **stick to `low` and `medium`** — those are the only two
 every model accepts. Note that the name of the top tier is not portable: Qwen3.8-Flash-Next uses
-`xhigh`, MiniCPM5-1B uses `high`. The full matrix is in the
+`xhigh`, MiniCPM5-2B uses `high`. The full matrix is in the
 [model reference](/radeon-cloud-docs/models/overview/).
 
 There are also fewer effective tiers than enum values: on DeepSeek-V4-Flash, `minimal`/`low`/`medium`

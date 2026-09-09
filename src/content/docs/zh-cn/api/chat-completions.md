@@ -63,7 +63,7 @@ sidebar:
 
 思考内容从响应的 `choices[0].message.reasoning` 里取（不是 `reasoning_content`），
 token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——这个字段所有模型都有。
-顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek 两个模型和 Qwen3.8-Flash-Next 有，MiniCPM5-1B 没有），别依赖它。
+顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek 两个模型和 Qwen3.8-Flash-Next 有，MiniCPM5-2B 没有），别依赖它。
 
 **不传 `reasoning_effort` 不等于不思考**，各模型的默认值不一样：
 
@@ -81,10 +81,10 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——这
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
-| MiniCPM5-1B | `low` `medium` `high` |
+| MiniCPM5-2B | `low` `medium` `high` —— 收，但不起作用 |
 
 要写一套代码跑所有模型，**用 `low` 或 `medium`**——只有这两个四边都认。注意最高档的名字不通用：
-Qwen3.8-Flash-Next 用 `xhigh`，MiniCPM5-1B 用 `high`。完整对照表见
+Qwen3.8-Flash-Next 用 `xhigh`，MiniCPM5-2B 用 `high`。完整对照表见
 [模型总览](/radeon-cloud-docs/zh-cn/models/overview/)。
 
 另外实际档位比枚举值少：在 DeepSeek-V4-Flash 上，`minimal`/`low`/`medium` 思考长度接近，
