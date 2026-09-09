@@ -8,9 +8,8 @@ sidebar:
 视频生成是**任务接口**，不是请求/响应式的。一条片子会占住一张 GPU 好几分钟，所以 `POST`
 立刻返回一个任务 id，结果靠轮询取。
 
-:::caution[公网入口尚未开放]
-截至 2026-09-09，`https://developer.amd.com.cn/radeon/api` 只放行聊天流量，这条路径会返回
-`404 model_not_found`。下面的行为都是直连网关实测的。等公网前置转发 `/v1/videos` 之后删掉本提示。
+:::caution[尚未对外开放]
+本端点还没在公网 base URL 上开放，调用会返回 `404 model_not_found`。下面记录的行为都是实测且已稳定的，只差开放。
 :::
 
 <div class="rc-endpoint">

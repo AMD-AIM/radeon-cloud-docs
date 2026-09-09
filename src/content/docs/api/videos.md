@@ -8,10 +8,9 @@ sidebar:
 Video generation is a **job API**, not a request/response one. A single clip occupies a GPU for
 minutes, so `POST` returns immediately with an id and you poll for the result.
 
-:::caution[Not yet open on the public base URL]
-As of 2026-09-09 `https://developer.amd.com.cn/radeon/api` routes chat traffic only; this path
-answers `404 model_not_found`. Everything below was measured against the gateway directly. Remove
-this notice once the public front forwards `/v1/videos`.
+:::caution[Not generally available yet]
+This endpoint is not open on the public base URL yet — calls return `404 model_not_found`. The
+behaviour documented below is measured and settled; only availability is pending.
 :::
 
 <div class="rc-endpoint">

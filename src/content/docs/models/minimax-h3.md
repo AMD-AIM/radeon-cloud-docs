@@ -15,9 +15,9 @@ The only video model here, and the only model on this endpoint that is not calle
 [`/v1/chat/completions`](/radeon-cloud-docs/api/chat-completions/). Read
 [Video generation](/radeon-cloud-docs/api/videos/) first — it is an asynchronous job API.
 
-:::caution[Not yet open on the public base URL]
-As of 2026-09-09 `https://developer.amd.com.cn/radeon/api` routes chat traffic only, so this model
-answers `404 model_not_found` there. The behaviour below was measured against the gateway directly.
+:::caution[Not generally available yet]
+This model is not open on the public base URL yet — calls return `404 model_not_found`. The
+behaviour documented below is measured and settled; only availability is pending.
 :::
 
 ## Specification
@@ -30,7 +30,7 @@ The weights served here are **`MiniMaxAI/MiniMax-H3`**.
 | Frame rate | 24 fps |
 | Duration | 4–15 s |
 | Output | MP4, H.264 video + AAC audio |
-| Hardware | one AMD Instinct MI300X per instance |
+| Licence | MiniMax H3 Community License |
 | Stability | `experimental` |
 
 H3 generates picture and sound in the same pass rather than dubbing a silent clip afterwards. The
@@ -82,11 +82,12 @@ as an exact output geometry, and read the real dimensions from the returned file
 
 ### How long it takes
 
-A 4-second clip took **307 s and 326 s** on two consecutive measured runs, end to end — create,
-denoise, encode, and download. That is roughly five minutes of one MI300X for four seconds of video,
-so the wall-clock cost does not scale with how short you make the clip.
+A 4-second clip took **307 s and 326 s** on two consecutive runs, measured end to end from create to
+downloaded file. Generation time is dominated by the model rather than by clip length, so asking for
+a shorter clip does not make it proportionally faster.
 
-Jobs queue per instance. With several clips in flight, wait times add up rather than overlap.
+Concurrent jobs queue rather than run side by side — submitting several at once adds their
+wall-clock times together.
 
 ### Audio
 
@@ -112,9 +113,3 @@ done
 curl -sL "https://developer.amd.com.cn/radeon/api/v1/videos/$ID/content" \
   -H "Authorization: Bearer $RADEON_API_KEY" -o clip.mp4
 ```
-
-## Licence
-
-MiniMax publishes H3 under its own community licence, which carries territorial and downstream
-conditions that differ from the Apache-2.0 and MIT terms of the chat models on this endpoint. Read
-it before you build on the outputs.

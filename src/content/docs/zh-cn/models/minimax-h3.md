@@ -15,9 +15,8 @@ sidebar:
 [`/v1/chat/completions`](/radeon-cloud-docs/zh-cn/api/chat-completions/) 的模型。先读
 [视频生成](/radeon-cloud-docs/zh-cn/api/videos/)——它是异步任务接口。
 
-:::caution[公网入口尚未开放]
-截至 2026-09-09，`https://developer.amd.com.cn/radeon/api` 只放行聊天流量，这个模型在那里会返回
-`404 model_not_found`。下面的行为都是直连网关实测的。
+:::caution[尚未对外开放]
+本模型还没在公网 base URL 上开放，调用会返回 `404 model_not_found`。下面记录的行为都是实测且已稳定的，只差开放。
 :::
 
 ## 规格
@@ -30,7 +29,7 @@ sidebar:
 | 帧率 | 24 fps |
 | 时长 | 4–15 秒 |
 | 输出 | MP4，H.264 视频 + AAC 音频 |
-| 硬件 | 每个实例一张 AMD Instinct MI300X |
+| 许可 | MiniMax H3 Community License |
 | 稳定性 | `experimental` |
 
 H3 是在同一次生成里出画面和声音，不是先出无声片再配音。音轨是真立体声——实测样片的左右声道内容不同。
@@ -76,10 +75,10 @@ H3 是在同一次生成里出画面和声音，不是先出无声片再配音�
 
 ### 要跑多久
 
-一条 4 秒的片子，连续两次实测端到端是 **307 秒和 326 秒**——包含创建、去噪、编码和下载。也就是说
-四秒视频要花掉一张 MI300X 大约五分钟，把片子做得更短并不会等比变快。
+一条 4 秒的片子，连续两次实测端到端是 **307 秒和 326 秒**——从创建到文件下载完成。耗时主要由
+模型决定，不是由片长决定，所以把片子做得更短并不会等比变快。
 
-任务在每个实例上排队。同时投多条时，等待时间是累加的，不是重叠的。
+多个任务是排队而不是并行——同时投多条，等待时间是累加的。
 
 ### 音频
 
@@ -104,8 +103,3 @@ done
 curl -sL "https://developer.amd.com.cn/radeon/api/v1/videos/$ID/content" \
   -H "Authorization: Bearer $RADEON_API_KEY" -o clip.mp4
 ```
-
-## 许可
-
-MiniMax 用自己的社区许可发布 H3，其中的地域限制和下游条件与本端点上聊天模型的 Apache-2.0、MIT
-条款不同。基于它的输出做产品之前请先读许可原文。
