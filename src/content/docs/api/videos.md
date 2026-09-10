@@ -9,8 +9,9 @@ Video generation is a **job API**, not a request/response one. A single clip occ
 minutes, so `POST` returns immediately with an id and you poll for the result.
 
 :::caution[Not generally available yet]
-This endpoint is not open on the public base URL yet — calls return `404 model_not_found`. The
-behaviour documented below is measured and settled; only availability is pending.
+`MiniMax-H3` is not in the model list on the public base URL yet, so calls return
+`404 model_not_found`. The behaviour documented below is measured and settled;
+only availability is pending.
 :::
 
 <div class="rc-endpoint">
