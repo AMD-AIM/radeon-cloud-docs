@@ -137,6 +137,11 @@ export default defineConfig({
             { slug: 'resources/faq' },
           ],
         },
+        {
+          label: 'Policies',
+          translations: { 'zh-CN': '条款' },
+          items: [{ slug: 'policies/terms' }],
+        },
       ],
     }),
   ],
