@@ -92,6 +92,7 @@ export default defineConfig({
           items: [
             { slug: 'api/overview' },
             { slug: 'api/authentication' },
+            { slug: 'api/terms' },
             {
               label: 'Public Free Model APIs',
               translations: { 'zh-CN': '免费共享模型 API' },
