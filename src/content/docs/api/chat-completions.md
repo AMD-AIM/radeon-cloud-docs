@@ -69,19 +69,24 @@ to enable thinking.
 ```
 
 The thinking text comes back in `choices[0].message.reasoning` (not `reasoning_content`). For the
-token count use **`usage.completion_tokens_details.reasoning_tokens`** — every model reports it.
-The top-level `usage.reasoning_tokens` is only emitted by some models (both DeepSeek models and
-Qwen3.8-Flash-Next have it; MiniCPM5-2B does not), so do not rely on it.
+token count use **`usage.completion_tokens_details.reasoning_tokens`**, which every model reports
+except Qwen3.8-27B — that one omits `completion_tokens_details`, and its thinking tokens are
+counted in `usage.completion_tokens` instead. The top-level `usage.reasoning_tokens` is only
+emitted by some models, so do not rely on it.
 
 **Omitting `reasoning_effort` does not mean no thinking.** The default differs per model:
 
 | Model | When omitted |
 |---|---|
 | DeepSeek-V4-Flash | Does not think (`reasoning` empty, `reasoning_tokens` 0) |
+| DeepSeek-V4-Flash-Vision-Exp | Does not think |
+| DeepSeek-V4.1-Flash | Does not think |
 | Qwen3.8-Flash-Next | **Still thinks** — the default tier is `xhigh`, the longest one |
+| Qwen3.8-27B | **Still thinks** — the default tier is `xhigh` |
+| MiniCPM5-2B | Does not think |
 
-Pass the value explicitly if you want deterministic behaviour; send `low` to make
-Qwen3.8-Flash-Next think less.
+Pass the value explicitly if you want deterministic behaviour; send `low` to make the Qwen models
+think less.
 
 **Which tiers a model accepts differs per model:**
 
@@ -89,16 +94,15 @@ Qwen3.8-Flash-Next think less.
 |---|---|
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
+| Qwen3.8-27B | `low` `medium` `xhigh` |
 | MiniCPM5-2B | not applicable — answers directly |
 
 For one code path across all models, **stick to `low` and `medium`** — those are the only two
-every model accepts. Note that the name of the top tier is not portable: Qwen3.8-Flash-Next uses
-`xhigh`, MiniCPM5-2B uses `high`. The full matrix is in the
+every model accepts. The name of the top tier is not portable: the Qwen models use `xhigh`, and
+Qwen3.8-27B returns 400 for `high`. The full matrix is in the
 [model reference](/radeon-cloud-docs/models/overview/).
-
-There are also fewer effective tiers than enum values: on DeepSeek-V4-Flash, `minimal`/`low`/`medium`
-think about the same amount, while `high`/`max` think noticeably longer — two tiers in practice.
 :::
 
 :::danger[Do not use `thinking` — it has no effect]

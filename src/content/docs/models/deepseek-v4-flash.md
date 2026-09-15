@@ -55,9 +55,6 @@ model does ship one.
 
 ## On this endpoint
 
-Everything below was measured against the live endpoint. Where it disagrees with the model card,
-the endpoint wins — the gateway validates and rebuilds requests before they reach the backend.
-
 ### At a glance
 
 | | |

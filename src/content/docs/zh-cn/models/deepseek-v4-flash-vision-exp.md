@@ -48,8 +48,6 @@ sidebar:
 
 ## 本端点上的行为
 
-以下全部实测。
-
 ### 概览
 
 | | |
@@ -69,9 +67,6 @@ sidebar:
 | 传法 | `content` 数组里放 `{"type":"image_url","image_url":{"url":"data:image/png;base64,..."}}` |
 | 计量 | `usage.prompt_tokens_details.image_tokens` |
 | 单图上限 | 384 token（见上）|
-
-实测：一张写着 `7412` 的图，问"图中大号数字是多少"，答 `7412`，`image_tokens` 为 115；
-同一个问题不附图时答不出来。
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \

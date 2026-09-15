@@ -2,7 +2,7 @@
 title: MiniCPM5-2B
 description: OpenBMB's 2B dense model — the shortest context on this endpoint, served unquantised.
 sidebar:
-  order: 5
+  order: 7
 ---
 
 <div class="rc-endpoint">

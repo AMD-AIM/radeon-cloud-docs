@@ -2,7 +2,7 @@
 title: Qwen3.8-Flash-Next
 description: Qwen's preview of the Qwen4 architecture — what the vendor ships, and the two rules it enforces on this endpoint.
 sidebar:
-  order: 4
+  order: 5
 ---
 
 <div class="rc-endpoint">
@@ -58,21 +58,15 @@ From the model card and the shipped `config.json`:
 | Quantisation | FP8, block `[128, 128]`, dynamic activation scaling |
 | Licence | Qwen Community License 1.0 |
 
-The QSA budget is the number worth remembering: attention over the KV cache is capped at 2,048
-selected tokens regardless of how long the conversation is, and 36 of the 48 layers are linear
-attention whose state does not grow with context at all.
+Attention over the KV cache is capped at 2,048 selected tokens regardless of conversation length,
+and 36 of the 48 layers are linear attention whose state does not grow with context.
 
 :::note[The model card says "with Vision Encoder" — and this endpoint takes images]
 Qwen lists the type as *Causal Language Model with Vision Encoder*, and the repository is tagged
-`image-text-to-text`. Measured: an image reading `7412` is transcribed correctly and
-`usage.prompt_tokens_details.image_tokens` comes back as 144; the same question without the image
-cannot be answered. See [Image input](#image-input).
+`image-text-to-text`. See [Image input](#image-input).
 :::
 
 ## On this endpoint
-
-Everything below was measured against the live endpoint. Where it disagrees with the model card,
-the endpoint wins.
 
 ### At a glance
 
@@ -140,14 +134,12 @@ Where the output lands:
 
 ### Image input
 
-This model accepts `image_url` content parts. Measured: a 520×300 image reading `7412` is
-transcribed correctly, and the same question without the image cannot be answered — it really is
-looking at the picture.
+This model accepts `image_url` content parts.
 
 | | |
 |---|---|
 | How to send | an `{"type":"image_url","image_url":{"url":"data:image/png;base64,…"}}` part in `content` |
-| Metering | `usage.prompt_tokens_details.image_tokens` (144 in the example above) |
+| Metering | `usage.prompt_tokens_details.image_tokens` |
 | Per-image ceiling | the weights ship `vision_max_n_token = 384`, so larger images still cap at 384 |
 
 ### Limits

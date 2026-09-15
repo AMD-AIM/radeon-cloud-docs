@@ -2,7 +2,7 @@
 title: Qwen3.8-Flash-Next
 description: Qwen 对 Qwen4 架构的预览版——官方规格，以及它在本端点上强制的两条规则。
 sidebar:
-  order: 4
+  order: 5
 ---
 
 <div class="rc-endpoint">
@@ -54,18 +54,15 @@ Qwen 另有一个叫 **Qwen3.8-Flash** 的托管服务模型跑在 Qwen Cloud �
 | 量化 | FP8，块大小 `[128, 128]`，激活动态缩放 |
 | 许可证 | Qwen Community License 1.0 |
 
-最值得记住的数字是 **QSA 预算**：无论对话多长，对 KV cache 的注意力最多只落在 2,048 个被选中的 token
-上；而 48 层里有 36 层是线性注意力，其状态大小根本不随上下文增长。
+无论对话多长，对 KV cache 的注意力最多只落在 2,048 个被选中的 token 上；
+48 层里有 36 层是线性注意力，其状态大小不随上下文增长。
 
 :::note[模型卡写着「带视觉编码器」，本端点也收图片]
 Qwen 把类型标为 *Causal Language Model with Vision Encoder*，仓库也打了 `image-text-to-text` 标签。
-实测：一张写着 `7412` 的图，模型答对，`usage.prompt_tokens_details.image_tokens` 计为 144；
-同一个问题不附图时答不出来。见[图像输入](#图像输入)。
+见[图像输入](#图像输入)。
 :::
 
 ## 本端点上的行为
-
-以下全部是对着线上端点实测的。与模型卡不一致的地方以端点为准。
 
 ### 概览
 
@@ -129,13 +126,12 @@ Qwen 把类型标为 *Causal Language Model with Vision Encoder*，仓库也打�
 
 ### 图像输入
 
-本模型接受 `image_url` 内容块。实测：一张 520×300 的图、上面写着 `7412`，问它数字是多少，
-回答 `7412`；同一个问题不附图时答不出来——它确实看到了图。
+本模型接受 `image_url` 内容块。
 
 | | |
 |---|---|
 | 传法 | `content` 数组里放 `{"type":"image_url","image_url":{"url":"data:image/png;base64,..."}}` |
-| 计量 | `usage.prompt_tokens_details.image_tokens`（上例为 144）|
+| 计量 | `usage.prompt_tokens_details.image_tokens` |
 | 单图上限 | 权重自带 `vision_max_n_token = 384`，再大的图也按 384 封顶 |
 
 ### 上限
