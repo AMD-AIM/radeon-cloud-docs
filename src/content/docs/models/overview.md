@@ -1,20 +1,18 @@
 ---
 title: Model reference
-description: What each model on the free shared model API accepts and returns — measured, not copied from upstream docs.
+description: What each model on the free shared model API accepts and returns.
 sidebar:
   order: 1
 ---
 
-One page per model. Everything here was measured against
-`https://developer.amd.com.cn/radeon/api/v1`; where a model's behaviour disagrees with its upstream
-documentation, these pages win.
+One page per model, for the models served at `https://developer.amd.com.cn/radeon/api/v1`.
 
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available.
-Today that is four models.
+Six of them answer on `/v1/chat/completions`;
+[MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is document OCR and has its own endpoint.
 
-:::note[Measured on 2026-09-04, revised 2026-09-09]
-Behaviour can change when a model moves to a different inference engine. If the endpoint disagrees
-with this page, the endpoint is right.
+:::note[Last updated 2026-09-15]
+Behaviour can change when a model moves to a different inference engine.
 
 **MiniCPM5-1B is no longer published.** Its page has been removed;
 [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) serves the same size class.
@@ -26,8 +24,14 @@ with this page, the endpoint is right.
 |---|---|:---:|:---:|
 | [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
 | [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
+| [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
 | [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
+| [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) | 131,072 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
+
+[MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is not in this table: it takes a PDF or
+an image on `POST /v1/ocr`, returns Markdown, and is billed per page. The parameters below do not
+apply to it.
 
 ## Supported `reasoning_effort` values
 
@@ -37,15 +41,29 @@ The accepted tiers differ per model:
 |---|---|
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
+| Qwen3.8-27B | `low` `medium` `xhigh` |
 
 The parameter may also be omitted entirely. MiniCPM5-2B does not return separated thinking, so
 `reasoning_effort` does not apply to it.
 
+:::caution[`high` is a 400 on Qwen3.8-27B]
+`high` is what most OpenAI-compatible clients send for "think hard", and it is the one value that
+is accepted by the DeepSeek models and **rejected** by
+[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/):
+
+```
+Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.
+```
+
+That model's top tier is `xhigh`. `minimal` and `max` are rejected by it too.
+:::
+
 :::tip[For one client across the thinking models, use `low` or `medium`]
-Those two are the intersection. Note that the name of the top tier is not portable:
-Qwen3.8-Flash-Next spells it `xhigh` while the DeepSeek models also accept `max`, and the two are
-not interchangeable. To pick per model, read
+Those two are the intersection of every model in the table. The name of the top tier is not
+portable — the Qwen models spell it `xhigh`, the DeepSeek models accept `xhigh` and `max` and
+`high`, and they are not interchangeable. To pick per model, read
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and match it
 against the table above.
 :::
@@ -56,15 +74,25 @@ against the table above.
 |---|:---:|:---:|
 | DeepSeek-V4-Flash | does not think | ✅ |
 | DeepSeek-V4-Flash-Vision-Exp | does not think | ✅ |
+| DeepSeek-V4.1-Flash | does not think | ✅ |
 | Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
+| Qwen3.8-27B | **thinks anyway** | ❌ |
 | MiniCPM5-2B | does not think | ❌ |
 
 Thinking text arrives in `choices[0].message.reasoning`. MiniCPM5-2B answers directly, so that
 field is empty and `reasoning_tokens` is `0` — read `content` for its answer.
 
-For the token count use **`usage.completion_tokens_details.reasoning_tokens`** — present on all four
-models. The top-level `usage.reasoning_tokens` is only emitted by three of them, so do not use it
-for cross-model accounting.
+For the token count use **`usage.completion_tokens_details.reasoning_tokens`**, which every model
+here reports **except [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/)** — that one omits the
+`completion_tokens_details` object entirely, so its thinking tokens cannot be separated from the
+rest of its output. They are still counted in `usage.completion_tokens`, and still billed.
+
+:::caution[Thinking is on by default on both Qwen models, and it spends `max_tokens`]
+On Qwen3.8-Flash-Next and Qwen3.8-27B a request with no `reasoning_effort` still thinks, and the
+thinking pass draws on the same `max_tokens` budget as the answer. A budget that was generous for
+a non-thinking model can come back with an empty `content`. Either raise `max_tokens` or send
+`reasoning_effort: "low"`.
+:::
 
 ## Writing `messages`
 
@@ -72,33 +100,44 @@ for cross-model accounting.
 |---|---|---|
 | DeepSeek-V4-Flash | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4-Flash-Vision-Exp | any position, more than one allowed | `system` or `developer` |
+| DeepSeek-V4.1-Flash | any position, more than one allowed | `system` or `developer` |
 | Qwen3.8-Flash-Next | **exactly one, and it must come first** | `system` |
+| Qwen3.8-27B | **at most one, and it must come first** | `system` or `developer` |
 | MiniCPM5-2B | any position, more than one allowed | `system` |
 
-The constraint on Qwen3.8-Flash-Next comes from the Jinja chat template shipped with the weights,
-not from a gateway rule.
+The constraints on the two Qwen models come from the Jinja chat template shipped with their
+weights, not from a gateway rule. Qwen3.8-27B reports a violation as
+`System message must be at the beginning.`
 
-**The shape all four accept**: a single `system` message at index `0`, with the role spelled
+**The shape every model accepts**: a single `system` message at index `0`, with the role spelled
 `system`.
 
 ## Structured output and tools
 
-All four models support:
+Every chat model here supports:
 
 - `response_format: {"type": "json_object"}`
-- function calling via `tools` + `tool_choice` (all four issued a correct call when measured)
+- function calling via `tools` + `tool_choice`
 
-`parallel_tool_calls` is accepted by all four, but emitting several `tool_calls` in one turn is the
+`parallel_tool_calls` is accepted everywhere, but emitting several `tool_calls` in one turn is the
 model's own choice — do not build on it.
 
 ## Image input
 
-Two models take images; put an `image_url` content part in the `content` array:
+Four models take images; put an `image_url` content part in the `content` array:
 
 | Model | Per-image metering |
 |---|---|
 | DeepSeek-V4-Flash-Vision-Exp | `usage.prompt_tokens_details.image_tokens`, 115 in the sample |
+| DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`, 202 in the sample |
 | Qwen3.8-Flash-Next | `usage.prompt_tokens_details.image_tokens`, 144 in the sample |
+| Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`, 72 in the sample |
+
+:::caution[Qwen3.8-27B nests the image count one level deeper]
+Three of the four report `prompt_tokens_details.image_tokens`. Qwen3.8-27B reports
+`prompt_tokens_details.multimodal_tokens.image` instead, so code that tallies image usage across
+models has to read both shapes.
+:::
 
 ```json
 {
@@ -113,10 +152,9 @@ Two models take images; put an `image_url` content part in the `content` array:
 }
 ```
 
-Both passed the same check: an image reading `7412`, asked "what is the large number in this
-image", answered correctly — and could not answer the same question without the image.
-
-Check the table above before sending images; the other two models are text-only.
+Check the table above before sending images; the remaining chat models are text-only. To pull text
+out of a PDF or a scan, use [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) — it returns
+Markdown and is billed per page.
 
 ## Writing one client for every model
 

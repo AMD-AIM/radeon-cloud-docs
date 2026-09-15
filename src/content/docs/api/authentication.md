@@ -84,7 +84,7 @@ Sessions are invalidated when you sign out, when the upstream identity provider'
 | Instances, templates, account | Yes | Yes |
 | Instance proxy (`/instances/...`) | No | **Session only** |
 
-The instance proxy is the one exception worth remembering. JupyterLab and other interactive apps are reached only with a browser session, because they're interactive surfaces rather than APIs.
+The instance proxy is the one exception. JupyterLab and other interactive apps are reached only with a browser session, because they're interactive surfaces rather than APIs.
 
 For a dedicated model endpoint under `/spaces/...`, a bearer key works, but only your own key against your own instance, and only on the port that instance actually serves.
 

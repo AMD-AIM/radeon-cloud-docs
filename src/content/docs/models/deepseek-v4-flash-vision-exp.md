@@ -51,8 +51,6 @@ high-resolution inputs do not cost linearly more — and do not carry more detai
 
 ## On this endpoint
 
-Everything below was measured.
-
 ### At a glance
 
 | | |
@@ -72,9 +70,6 @@ Everything below was measured.
 | How to send | an `{"type":"image_url","image_url":{"url":"data:image/png;base64,…"}}` part in `content` |
 | Metering | `usage.prompt_tokens_details.image_tokens` |
 | Per-image ceiling | 384 tokens (above) |
-
-Measured: an image reading `7412`, asked "what is the large number in this image", answers `7412`
-with `image_tokens` of 115 — and cannot answer the same question without the image.
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
