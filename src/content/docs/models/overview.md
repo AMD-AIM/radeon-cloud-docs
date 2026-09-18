@@ -27,6 +27,7 @@ Behaviour can change when a model moves to a different inference engine.
 | [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
 | [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
 | [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) | 131,072 | ✅ | ✅ |
+| [GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 
 [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is not in this table: it takes a PDF or
@@ -44,6 +45,7 @@ The accepted tiers differ per model:
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
+| GLM-5.3-Flash | `low` `medium` `high` |
 
 The parameter may also be omitted entirely. MiniCPM5-2B does not return separated thinking, so
 `reasoning_effort` does not apply to it.
@@ -60,10 +62,22 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 That model's top tier is `xhigh`. `minimal` and `max` are rejected by it too.
 :::
 
+:::danger[… and `xhigh` is a 400 on GLM-5.3-Flash]
+[GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) is the mirror image of the Qwen models:
+it takes the OpenAI trio and nothing else.
+
+```
+reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `high`
+```
+
+So the two names for "think hard" are mutually exclusive across this catalogue: `xhigh` is a 400
+on GLM-5.3-Flash, `high` is a 400 on Qwen3.8-27B. No single literal reaches the top tier of both.
+:::
+
 :::tip[For one client across the thinking models, use `low` or `medium`]
 Those two are the intersection of every model in the table. The name of the top tier is not
-portable — the Qwen models spell it `xhigh`, the DeepSeek models accept `xhigh` and `max` and
-`high`, and they are not interchangeable. To pick per model, read
+portable — the Qwen models spell it `xhigh`, GLM-5.3-Flash spells it `high`, the DeepSeek models
+accept `xhigh` and `max` and `high`, and they are not interchangeable. To pick per model, read
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and match it
 against the table above.
 :::
@@ -77,6 +91,7 @@ against the table above.
 | DeepSeek-V4.1-Flash | does not think | ✅ |
 | Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
 | Qwen3.8-27B | **thinks anyway** | ❌ |
+| GLM-5.3-Flash | **thinks anyway** | ❌ |
 | MiniCPM5-2B | does not think | ❌ |
 
 Thinking text arrives in `choices[0].message.reasoning`. MiniCPM5-2B answers directly, so that

@@ -27,6 +27,7 @@ sidebar:
 | [DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
 | [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
 | [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) | 131,072 | ✅ | ✅ |
+| [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 
 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/) 不在此表：它在 `POST /v1/ocr`
@@ -43,6 +44,7 @@ sidebar:
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
+| GLM-5.3-Flash | `low` `medium` `high` |
 
 这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
 
@@ -57,9 +59,21 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 那个模型的顶层档位叫 `xhigh`，`minimal` 和 `max` 同样被它拒绝。
 :::
 
+:::danger[…而 `xhigh` 在 GLM-5.3-Flash 上是 400]
+[GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) 和 Qwen 系列恰好相反，
+只收 OpenAI 那三个值：
+
+```
+reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `high`
+```
+
+所以「多想一会儿」的两个写法在本平台是互斥的：`xhigh` 在 GLM-5.3-Flash 上报 400，
+`high` 在 Qwen3.8-27B 上报 400。**没有任何一个值能同时命中两边的最高档。**
+:::
+
 :::tip[一套代码打所有思考模型，就用 `low` 或 `medium`]
 这两个值是上表所有模型的交集。最高档的名字不通用——两个 Qwen 模型用 `xhigh`，
-DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模型选值时，读
+GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模型选值时，读
 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 确认当前发布的是哪几个模型，再对照上表。
 :::
 
@@ -72,6 +86,7 @@ DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模
 | DeepSeek-V4.1-Flash | 不思考 | ✅ |
 | Qwen3.8-Flash-Next | **照样思考** | ✅ |
 | Qwen3.8-27B | **照样思考** | ❌ |
+| GLM-5.3-Flash | **照样思考** | ❌ |
 | MiniCPM5-2B | 不思考 | ❌ |
 
 思考文本从 `choices[0].message.reasoning` 读。MiniCPM5-2B 直接给答案，该字段为空、
