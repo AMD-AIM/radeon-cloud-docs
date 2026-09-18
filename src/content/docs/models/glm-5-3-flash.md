@@ -1,6 +1,6 @@
 ---
 title: GLM-5.3-Flash
-description: Zhipu's GLM-5.3-Flash — thinking is on by default, and this is the one model whose top effort tier is `high`.
+description: Z.AI's sparse MoE reasoning model — thinking is on by default, and its top effort tier is spelled differently from every other model here.
 sidebar:
   order: 7
 ---
@@ -13,8 +13,38 @@ sidebar:
 
 ## About the model
 
-GLM-5.3-Flash is the speed-oriented member of Zhipu's GLM-5.3 line. It is a text-only reasoning
-model: it thinks before answering, and it does so without being asked.
+The weights served here are **GLM-5.3-Flash**, Z.AI's speed-oriented member of the GLM-5.3 line —
+a sparse Mixture-of-Experts model that thinks before answering, and does so without being asked.
+
+### Architecture
+
+From the shipped `config.json`:
+
+| | |
+|---|---|
+| Architecture | `Glm5NextForConditionalGeneration`, `model_type = glm5_next` |
+| Layers | 45 — the first 3 dense, the rest MoE |
+| Hidden dimension | 4,096 |
+| Attention | 64 query heads, 64 KV heads — full MHA, not grouped |
+| Dense intermediate | 12,288 |
+| Mixture of Experts | 288 routed experts + 1 shared, **8 routed activated** per token, expert intermediate 2,048 |
+| Multi-token prediction | 1 layer |
+| Vocabulary | 154,880 |
+| Native context | 1,048,576 |
+| Quantisation | FP8, `e4m3`, block `[128, 128]`, dynamic activation scaling |
+| Licence | MIT |
+
+:::note[Served at 262,144, not the native 1,048,576]
+The weights declare a 1M-token window, but this endpoint runs them with `--max-model-len 262144`.
+262,144 is what you get here; requests are measured against that, not against the number in
+`config.json`.
+:::
+
+:::note[The weights carry a vision encoder — this endpoint does not use it]
+`config.json` includes a `glm5_next_vision` tower (24 layers, 448 px, patch 14) and image/video
+token ids, so the release is multimodal. This deployment serves text only. See
+[Image input](#image-input) for what an image request actually returns.
+:::
 
 ## On this endpoint
 
@@ -23,18 +53,30 @@ model: it thinks before answering, and it does so without being asked.
 | | |
 |---|---|
 | Context length | 262,144 tokens |
-| Input modalities | text only — **no image input** |
+| Input modalities | text only |
 | Streaming | ✅ |
 | Tool calling | ✅ |
 | JSON output | ✅ `json_object` |
 | Thinking | ✅ — **on unless you turn it down** |
+| Inference engine | vLLM |
+| Stability | `experimental` |
+
+### `messages`
+
+A `system` message may sit at any position, and there may be more than one — unlike
+[Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/), which allows exactly one and
+insists it comes first.
+
+:::caution[Spell the role `system`, not `developer`]
+The accepted roles are `system`, `user`, `assistant`, `tool`. Newer OpenAI SDKs emit `developer`
+in place of `system`; if yours does, override it back to `system`, or every request fails.
+:::
 
 ### Thinking
 
-**Omitting `reasoning_effort` does not disable thinking.** Across 48 hours of production traffic,
-60.5% of requests that sent no `reasoning_effort` still came back with a populated `reasoning` and
-a non-zero `reasoning_tokens`. Whether the model thinks, and for how long, tracks the prompt: the
-median was 77 reasoning tokens, and the longest single response used 32,000.
+**Omitting `reasoning_effort` does not disable thinking.** A plain request already returns a
+populated `reasoning`. How long the model thinks tracks the prompt rather than the tier — a
+one-line question may produce a few dozen reasoning tokens, a puzzle several thousand.
 
 Accepted values:
 
@@ -45,15 +87,18 @@ Accepted values:
 | `medium` | |
 | `high` | the longest tier |
 
-:::danger[`xhigh` is a 400 here — this model is the exception]
+:::caution[`xhigh` is a 422 here — this model is the exception]
 Every other thinking model on this platform takes `xhigh` as its top tier, and
 [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) and
 [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) reject `high`. GLM-5.3-Flash is the mirror
 image: `high` works, `xhigh` does not.
 
 ```
-reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `high`
+Failed to deserialize the JSON body into the target type: reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `high` at line 1 column 131
 ```
+
+The status is **422**, not the 400 that Qwen3.8-27B returns for the same class of mistake — the
+value is rejected while the request body is being deserialised, before any validator sees it.
 
 `none`, `minimal` and `max` are rejected the same way. Only `low`, `medium` and `high` are
 accepted — the OpenAI trio, and nothing else.
@@ -66,9 +111,12 @@ There is no `reasoning_effort` value that turns thinking off — `none` is not i
 a response short, cap `max_tokens` instead, and read the answer from `content` rather than
 `reasoning`.
 
-Thinking text arrives in `choices[0].message.reasoning`. This model does not return
-`usage.completion_tokens_details`, so thinking tokens are not reported separately; they are
-included in `usage.completion_tokens`.
+Where the output lands:
+
+| | |
+|---|---|
+| Thinking text | `choices[0].message.reasoning` |
+| Token count | `usage.completion_tokens_details.reasoning_tokens` |
 
 :::caution[Thinking consumes your `max_tokens` budget]
 Reasoning tokens are billed and counted as output. A small `max_tokens` can be spent entirely on
@@ -76,20 +124,35 @@ thinking, leaving `content` as `null` and `finish_reason` as `length`. Budget fo
 the tier.
 :::
 
+### Image input
+
+Not available on this endpoint, despite the vision tower in the weights. An `image_url` part comes
+back as a 400 whose message describes a server-side path setting rather than the real reason:
+
+```
+Invalid `--allowed-local-media-path`: The path <path> does not exist.
+```
+
+Send text only. For images use
+[DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/),
+[DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) or either Qwen3.8 model.
+
 ### Limits
 
 | | |
 |---|---|
 | Context window | 262,144 tokens, counted as a **total budget** — prompt plus output, not an output-only allowance |
+| Input | text only; for images use [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) |
 | JSON output | `response_format: {"type": "json_object"}` |
-| Controlling thinking | `reasoning_effort` (or the equivalent `reasoning.effort`) — `low`, `medium`, `high` |
+| Thinking tiers | `reasoning_effort` (or the equivalent `reasoning.effort`) — `low`, `medium`, `high` |
 
-`max_tokens` is capped against the **total** budget, prompt included. Requesting 65,536 output
-tokens on top of a long prompt fails with:
+`max_tokens` is capped against the **total** budget, prompt included:
 
 ```
-This model's maximum context length is 262144 tokens. However, you requested 65536 output tokens …
+This model's maximum context length is 262144 tokens. However, you requested 128000 output tokens and your prompt contains at least 134145 input tokens, for a total of at least 262145 tokens. Please reduce the length of the input prompt or the number of requested output tokens.
 ```
+
+That one is a 400, unlike the 422 above.
 
 ### Example
 
@@ -106,5 +169,5 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   }'
 ```
 
-Swap `high` for `xhigh` and the same request becomes a 400 on this model — see
-[the warning above](#thinking).
+Swap `high` for `xhigh` and the same request becomes a 422 on this model — see
+[Thinking](#thinking).

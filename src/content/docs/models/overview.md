@@ -8,10 +8,10 @@ sidebar:
 One page per model, for the models served at `https://developer.amd.com.cn/radeon/api/v1`.
 
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available.
-Six of them answer on `/v1/chat/completions`;
+Seven of them answer on `/v1/chat/completions`;
 [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is document OCR and has its own endpoint.
 
-:::note[Last updated 2026-09-15]
+:::note[Last updated 2026-09-18]
 Behaviour can change when a model moves to a different inference engine.
 
 **MiniCPM5-1B is no longer published.** Its page has been removed;
@@ -62,7 +62,7 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 That model's top tier is `xhigh`. `minimal` and `max` are rejected by it too.
 :::
 
-:::danger[… and `xhigh` is a 400 on GLM-5.3-Flash]
+:::caution[`xhigh` is a 422 on GLM-5.3-Flash]
 [GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) is the mirror image of the Qwen models:
 it takes the OpenAI trio and nothing else.
 
@@ -70,8 +70,10 @@ it takes the OpenAI trio and nothing else.
 reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `high`
 ```
 
-So the two names for "think hard" are mutually exclusive across this catalogue: `xhigh` is a 400
-on GLM-5.3-Flash, `high` is a 400 on Qwen3.8-27B. No single literal reaches the top tier of both.
+So the two names for "think hard" are mutually exclusive across this catalogue: `xhigh` fails on
+GLM-5.3-Flash, `high` fails on Qwen3.8-27B. No single literal reaches the top tier of both. Note
+the status codes differ too — GLM-5.3-Flash returns **422** because the value is rejected during
+deserialisation, while Qwen3.8-27B returns **400** from a validator.
 :::
 
 :::tip[For one client across the thinking models, use `low` or `medium`]
@@ -102,7 +104,7 @@ here reports **except [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/)** �
 `completion_tokens_details` object entirely, so its thinking tokens cannot be separated from the
 rest of its output. They are still counted in `usage.completion_tokens`, and still billed.
 
-:::caution[Thinking is on by default on both Qwen models, and it spends `max_tokens`]
+:::caution[Thinking is on by default on both Qwen models and on GLM-5.3-Flash, and it spends `max_tokens`]
 On Qwen3.8-Flash-Next and Qwen3.8-27B a request with no `reasoning_effort` still thinks, and the
 thinking pass draws on the same `max_tokens` budget as the answer. A budget that was generous for
 a non-thinking model can come back with an empty `content`. Either raise `max_tokens` or send
@@ -118,6 +120,7 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | DeepSeek-V4.1-Flash | any position, more than one allowed | `system` or `developer` |
 | Qwen3.8-Flash-Next | **exactly one, and it must come first** | `system` |
 | Qwen3.8-27B | **at most one, and it must come first** | `system` or `developer` |
+| GLM-5.3-Flash | any position, more than one allowed | `system` |
 | MiniCPM5-2B | any position, more than one allowed | `system` |
 
 The constraints on the two Qwen models come from the Jinja chat template shipped with their
@@ -173,15 +176,17 @@ Markdown and is billed per page.
 
 ## Writing one client for every model
 
-The shape all four accept:
+The shape every chat model here accepts:
 
 - a single `system` message at index `0`, with the role spelled `system`
-- `reasoning_effort` of `low` or `medium`, or omitted entirely
+- `reasoning_effort` of `low` or `medium`, or omitted entirely — **not `high`** (400 on
+  Qwen3.8-27B) and **not `xhigh`** (422 on GLM-5.3-Flash)
 - read thinking text from `choices[0].message.reasoning`
-- read thinking tokens from `usage.completion_tokens_details.reasoning_tokens`
+- read thinking tokens from `usage.completion_tokens_details.reasoning_tokens` (Qwen3.8-27B
+  omits it)
 - use `response_format: {"type": "json_object"}` for JSON
 - keep `content` textual unless the target model supports images
-- size `max_tokens` against the target model's window — these four span 131,072 to 1,048,576, an
+- size `max_tokens` against the target model's window — they span 131,072 to 1,048,576, an
   eightfold difference
 
 ## True for every model
