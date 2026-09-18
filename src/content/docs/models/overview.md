@@ -119,9 +119,19 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | DeepSeek-V4-Flash-Vision-Exp | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4.1-Flash | any position, more than one allowed | `system` or `developer` |
 | Qwen3.8-Flash-Next | **exactly one, and it must come first** | `system` |
-| Qwen3.8-27B | **at most one, and it must come first** | `system` or `developer` |
+| Qwen3.8-27B | **at most one, and it must come first** | `system` |
 | GLM-5.3-Flash | any position, more than one allowed | `system` |
 | MiniCPM5-2B | any position, more than one allowed | `system` |
+
+Only the three DeepSeek models accept `developer` as an alias for `system`. The other four reject
+it outright — Qwen3.8-27B with `Unexpected message role.`, and Qwen3.8-Flash-Next, GLM-5.3-Flash
+and MiniCPM5-2B with a deserialisation error naming the offending index:
+
+```
+Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
+```
+
+Newer OpenAI SDKs emit `developer` in place of `system`. If yours does, override it back.
 
 The constraints on the two Qwen models come from the Jinja chat template shipped with their
 weights, not from a gateway rule. Qwen3.8-27B reports a violation as

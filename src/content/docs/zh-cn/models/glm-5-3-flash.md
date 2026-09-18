@@ -68,7 +68,12 @@ token id，也就是说这个发布版本是多模态的。但本部署只提供
 
 :::caution[角色名要写 `system`，不是 `developer`]
 接受的角色是 `system`、`user`、`assistant`、`tool`。较新的 OpenAI SDK 会发 `developer`
-代替 `system`，如果你用的是这种，请改回 `system`，否则请求全部失败。
+代替 `system`，如果你用的是这种，请改回 `system`。没有降级处理——请求在反序列化
+阶段就被拒，返回 **422**：
+
+```
+Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
+```
 :::
 
 ### 思考
@@ -99,8 +104,8 @@ Failed to deserialize the JSON body into the target type: reasoning_effort: unkn
 状态码是 **422**，不是 Qwen3.8-27B 对同类错误返回的 400——这个值是在请求体
 反序列化阶段就被拒掉的，还没轮到校验器。
 
-`none`、`minimal`、`max` 同样被拒。**只有 `low`、`medium`、`high` 三个值可用**，
-也就是 OpenAI 那三档，再没有别的。
+`none`、`minimal`、`max` 会报同样的 422，只是报文里换成它们自己的名字。
+**只有 `low`、`medium`、`high` 三个值可用**，也就是 OpenAI 那三档，再没有别的。
 
 同一套代码要同时打这个模型和 Qwen 系列时，「多想一会儿」没法共用一个字面量：
 这边发 `high`，那边发 `xhigh`，或者两边都干脆不传。

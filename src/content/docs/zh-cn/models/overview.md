@@ -113,9 +113,19 @@ Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照�
 | DeepSeek-V4-Flash-Vision-Exp | 位置任意，可多条 | `system` 或 `developer` |
 | DeepSeek-V4.1-Flash | 位置任意，可多条 | `system` 或 `developer` |
 | Qwen3.8-Flash-Next | **只放一条，且必须在首位** | `system` |
-| Qwen3.8-27B | **最多一条，且必须在首位** | `system` 或 `developer` |
+| Qwen3.8-27B | **最多一条，且必须在首位** | `system` |
 | GLM-5.3-Flash | 位置任意，可多条 | `system` |
 | MiniCPM5-2B | 位置任意，可多条 | `system` |
+
+只有三个 DeepSeek 模型把 `developer` 当作 `system` 的别名接受。其余四个一律拒绝——
+Qwen3.8-27B 报 `Unexpected message role.`，Qwen3.8-Flash-Next、GLM-5.3-Flash 和
+MiniCPM5-2B 报反序列化错误，并指出是第几条消息：
+
+```
+Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
+```
+
+较新的 OpenAI SDK 会发 `developer` 代替 `system`，如果你用的是这种，请改回。
 
 两个 Qwen 模型的限制来自它们自带的 Jinja chat template，不是网关加的规则。
 Qwen3.8-27B 违规时报 `System message must be at the beginning.`

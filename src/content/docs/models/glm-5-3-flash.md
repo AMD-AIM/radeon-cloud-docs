@@ -69,7 +69,12 @@ insists it comes first.
 
 :::caution[Spell the role `system`, not `developer`]
 The accepted roles are `system`, `user`, `assistant`, `tool`. Newer OpenAI SDKs emit `developer`
-in place of `system`; if yours does, override it back to `system`, or every request fails.
+in place of `system`; if yours does, override it back to `system`. There is no fallback — the
+request is rejected while the body is being deserialised, with a **422**:
+
+```
+Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
+```
 :::
 
 ### Thinking
@@ -100,8 +105,8 @@ Failed to deserialize the JSON body into the target type: reasoning_effort: unkn
 The status is **422**, not the 400 that Qwen3.8-27B returns for the same class of mistake — the
 value is rejected while the request body is being deserialised, before any validator sees it.
 
-`none`, `minimal` and `max` are rejected the same way. Only `low`, `medium` and `high` are
-accepted — the OpenAI trio, and nothing else.
+`none`, `minimal` and `max` produce the same 422 with their own name in the message. Only `low`,
+`medium` and `high` are accepted — the OpenAI trio, and nothing else.
 
 Portable code that has to run against both this model and the Qwen models cannot share one literal
 for "think hard": send `high` here and `xhigh` there, or omit the parameter on both.
