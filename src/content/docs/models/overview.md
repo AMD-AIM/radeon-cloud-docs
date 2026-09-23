@@ -106,17 +106,19 @@ against the table above.
 Thinking text arrives in `choices[0].message.reasoning`. MiniCPM5-2B answers directly, so that
 field is empty and `reasoning_tokens` is `0` — read `content` for its answer.
 
-For the token count use **`usage.completion_tokens_details.reasoning_tokens`**, which every model
-here reports **except [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/)** — that one omits the
-`completion_tokens_details` object entirely, so its thinking tokens cannot be separated from the
-rest of its output. They are still counted in `usage.completion_tokens`, and still billed.
+For the token count read **`usage.completion_tokens_details.reasoning_tokens`**. The object is
+always present, but the number is only meaningful on the models that report it.
 
-:::caution[MiMo-V2.6-Flash reports the field but never fills it]
-[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) returns `reasoning_tokens` as `0`
-even on a request that clearly thought — a puzzle that produced several hundred characters of
-`reasoning` still reported `0`. Like Qwen3.8-27B, its thinking tokens are only visible inside
-`usage.completion_tokens`. Do not use `reasoning_tokens` to decide whether it thought; check
-whether `reasoning` is non-empty instead.
+:::caution[On Qwen3.8-27B and MiMo-V2.6-Flash this counter is always `0`]
+Neither engine reports thinking separately, so the field is filled in with `0` even on a request
+that clearly thought — a puzzle that produced several hundred characters of `reasoning` on
+[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) still came back as `0`. Those tokens
+are not lost: they are inside `usage.completion_tokens`, and they are billed. They just cannot be
+split out from the answer.
+
+So do not use `reasoning_tokens` to decide whether a model thought — check whether `reasoning` is
+non-empty instead. A `0` means either "did not think" or "does not count", and the two are
+indistinguishable from the number alone.
 :::
 
 :::caution[Thinking is on by default on both Qwen models and on GLM-5.3-Flash, and it spends `max_tokens`]
@@ -210,8 +212,8 @@ The shape every chat model here accepts:
 - `reasoning_effort` of `low` or `medium`, or omitted entirely — **not `high`** (400 on
   Qwen3.8-27B) and **not `xhigh`** (422 on GLM-5.3-Flash)
 - read thinking text from `choices[0].message.reasoning`
-- read thinking tokens from `usage.completion_tokens_details.reasoning_tokens` (Qwen3.8-27B
-  omits it, MiMo-V2.6-Flash always reports `0`)
+- read thinking tokens from `usage.completion_tokens_details.reasoning_tokens` (always `0` on
+  Qwen3.8-27B and MiMo-V2.6-Flash)
 - use `response_format: {"type": "json_object"}` for JSON
 - keep `content` textual unless the target model supports images
 - size `max_tokens` against the target model's window — they span 131,072 to 1,048,576, an

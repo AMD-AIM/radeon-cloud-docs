@@ -100,16 +100,17 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 思考文本从 `choices[0].message.reasoning` 读。MiniCPM5-2B 直接给答案，该字段为空、
 `reasoning_tokens` 为 `0`，答案从 `content` 读。
 
-token 数用 **`usage.completion_tokens_details.reasoning_tokens`**，除
-[Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) 外每个模型都给——那一个
-压根不返回 `completion_tokens_details` 对象，所以它的思考 token 无法与其余输出分开统计，
-但仍然计入 `usage.completion_tokens`，也仍然计费。
+token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 读。这个对象总是存在，
+但里面的数字只有在模型确实上报时才有意义。
 
-:::caution[MiMo-V2.6-Flash 有这个字段，但从不填]
-[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 在确实思考了的请求上
-依然把 `reasoning_tokens` 报为 `0`——一道产生了几百字符 `reasoning` 的推理题，该字段仍是 `0`。
-和 Qwen3.8-27B 一样，它的思考 token 只能从 `usage.completion_tokens` 里看到。
-不要用 `reasoning_tokens` 判断它是否思考过，改看 `reasoning` 是否非空。
+:::caution[Qwen3.8-27B 和 MiMo-V2.6-Flash 上这个计数恒为 `0`]
+这两个引擎都不单独上报思考量，所以即便请求确实思考了，该字段也会被填成 `0`——
+[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 上一道产生了几百字符
+`reasoning` 的推理题，该字段仍是 `0`。这些 token 并没有丢：它们在 `usage.completion_tokens`
+里，也照常计费，只是无法与正文拆开。
+
+所以不要用 `reasoning_tokens` 判断模型是否思考过，改看 `reasoning` 是否非空。`0` 既可能是
+"没思考"，也可能是"不统计"，光看这个数字分不出来。
 :::
 
 :::caution[两个 Qwen 模型和 GLM-5.3-Flash 默认就在思考，而且思考要花 `max_tokens`]
@@ -197,7 +198,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 - `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400；
   **也别用 `xhigh`**，GLM-5.3-Flash 会 422）
 - 思考文本从 `choices[0].message.reasoning` 读
-- 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 不给，MiMo-V2.6-Flash 恒为 `0`）
+- 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 和 MiMo-V2.6-Flash 上恒为 `0`）
 - 要 JSON 用 `response_format: {"type": "json_object"}`
 - `content` 只放文本；要发图先确认模型支持，并注意 Qwen3.8-27B 的计量字段不同
 - `max_tokens` 按目标模型的窗口算，从 131,072 到 1,048,576 差了 8 倍
