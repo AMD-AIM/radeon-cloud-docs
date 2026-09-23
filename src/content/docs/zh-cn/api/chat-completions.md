@@ -74,8 +74,11 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——除
 | DeepSeek-V4-Flash-Vision-Exp | 不思考 |
 | DeepSeek-V4.1-Flash | 不思考 |
 | Qwen3.8-Flash-Next | **照样思考**，默认档位是 `xhigh`，也就是最长的一档 |
+| Qwen3.8-27B | **照样思考**，默认档位是 `xhigh` |
+| GLM-5.3-Flash | **照样思考** |
+| MiniCPM5-2B | 不思考 |
 
-要确定性地控制，就显式传值；想让 Qwen3.8-Flash-Next 少思考，传 `low`。
+要确定性地控制，就显式传值；想让两个 Qwen 模型和 GLM-5.3-Flash 少思考，传 `low`。
 
 **各模型接受的档位不一样**：
 
@@ -86,10 +89,12 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——除
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
+| GLM-5.3-Flash | `low` `medium` `high` |
 | MiniCPM5-2B | 不适用——直接给答案 |
 
 要写一套代码跑所有模型，**用 `low` 或 `medium`**——只有这两个所有模型都认。
-最高档的名字不通用：两个 Qwen 模型用 `xhigh`，其中 Qwen3.8-27B 传 `high` 会返回 400。
+最高档的名字不通用，而且两种写法互斥：Qwen3.8-27B 传 `high` 返回 400，
+GLM-5.3-Flash 传 `xhigh` 返回 422。
 完整对照表见[模型总览](/radeon-cloud-docs/zh-cn/models/overview/)。
 :::
 

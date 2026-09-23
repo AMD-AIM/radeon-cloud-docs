@@ -7,11 +7,12 @@ sidebar:
 
 One page per model, for the models served at `https://developer.amd.com.cn/radeon/api/v1`.
 
-[`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available.
-Six of them answer on `/v1/chat/completions`;
-[MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is document OCR and has its own endpoint.
+[`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available —
+a page existing here does not guarantee the model is currently published. All of them answer on
+`/v1/chat/completions` except [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/), which is
+document OCR and has its own endpoint.
 
-:::note[Last updated 2026-09-15]
+:::note[Last updated 2026-09-23]
 Behaviour can change when a model moves to a different inference engine.
 
 **MiniCPM5-1B is no longer published.** Its page has been removed;
@@ -27,7 +28,12 @@ Behaviour can change when a model moves to a different inference engine.
 | [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
 | [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
 | [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) | 131,072 | ✅ | ✅ |
+| [GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
+| [MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
+
+[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) is the only model here that also
+accepts **audio** input, and the only one that accepts a strict `json_schema`.
 
 [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is not in this table: it takes a PDF or
 an image on `POST /v1/ocr`, returns Markdown, and is billed per page. The parameters below do not
@@ -44,6 +50,8 @@ The accepted tiers differ per model:
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
+| GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | `none` and the usual tiers — send `none` to disable thinking |
 
 The parameter may also be omitted entirely. MiniCPM5-2B does not return separated thinking, so
 `reasoning_effort` does not apply to it.
@@ -60,10 +68,24 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 That model's top tier is `xhigh`. `minimal` and `max` are rejected by it too.
 :::
 
+:::caution[`xhigh` is a 422 on GLM-5.3-Flash]
+[GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) is the mirror image of the Qwen models:
+it takes the OpenAI trio and nothing else.
+
+```
+reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `high`
+```
+
+So the two names for "think hard" are mutually exclusive across this catalogue: `xhigh` fails on
+GLM-5.3-Flash, `high` fails on Qwen3.8-27B. No single literal reaches the top tier of both. Note
+the status codes differ too — GLM-5.3-Flash returns **422** because the value is rejected during
+deserialisation, while Qwen3.8-27B returns **400** from a validator.
+:::
+
 :::tip[For one client across the thinking models, use `low` or `medium`]
 Those two are the intersection of every model in the table. The name of the top tier is not
-portable — the Qwen models spell it `xhigh`, the DeepSeek models accept `xhigh` and `max` and
-`high`, and they are not interchangeable. To pick per model, read
+portable — the Qwen models spell it `xhigh`, GLM-5.3-Flash spells it `high`, the DeepSeek models
+accept `xhigh` and `max` and `high`, and they are not interchangeable. To pick per model, read
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and match it
 against the table above.
 :::
@@ -77,6 +99,7 @@ against the table above.
 | DeepSeek-V4.1-Flash | does not think | ✅ |
 | Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
 | Qwen3.8-27B | **thinks anyway** | ❌ |
+| GLM-5.3-Flash | **thinks anyway** | ❌ |
 | MiniCPM5-2B | does not think | ❌ |
 
 Thinking text arrives in `choices[0].message.reasoning`. MiniCPM5-2B answers directly, so that
@@ -87,7 +110,7 @@ here reports **except [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/)** �
 `completion_tokens_details` object entirely, so its thinking tokens cannot be separated from the
 rest of its output. They are still counted in `usage.completion_tokens`, and still billed.
 
-:::caution[Thinking is on by default on both Qwen models, and it spends `max_tokens`]
+:::caution[Thinking is on by default on both Qwen models and on GLM-5.3-Flash, and it spends `max_tokens`]
 On Qwen3.8-Flash-Next and Qwen3.8-27B a request with no `reasoning_effort` still thinks, and the
 thinking pass draws on the same `max_tokens` budget as the answer. A budget that was generous for
 a non-thinking model can come back with an empty `content`. Either raise `max_tokens` or send
@@ -102,8 +125,19 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | DeepSeek-V4-Flash-Vision-Exp | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4.1-Flash | any position, more than one allowed | `system` or `developer` |
 | Qwen3.8-Flash-Next | **exactly one, and it must come first** | `system` |
-| Qwen3.8-27B | **at most one, and it must come first** | `system` or `developer` |
+| Qwen3.8-27B | **at most one, and it must come first** | `system` |
+| GLM-5.3-Flash | any position, more than one allowed | `system` |
 | MiniCPM5-2B | any position, more than one allowed | `system` |
+
+Only the three DeepSeek models accept `developer` as an alias for `system`. The other four reject
+it outright — Qwen3.8-27B with `Unexpected message role.`, and Qwen3.8-Flash-Next, GLM-5.3-Flash
+and MiniCPM5-2B with a deserialisation error naming the offending index:
+
+```
+Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
+```
+
+Newer OpenAI SDKs emit `developer` in place of `system`. If yours does, override it back.
 
 The constraints on the two Qwen models come from the Jinja chat template shipped with their
 weights, not from a gateway rule. Qwen3.8-27B reports a violation as
@@ -158,15 +192,17 @@ Markdown and is billed per page.
 
 ## Writing one client for every model
 
-The shape all four accept:
+The shape every chat model here accepts:
 
 - a single `system` message at index `0`, with the role spelled `system`
-- `reasoning_effort` of `low` or `medium`, or omitted entirely
+- `reasoning_effort` of `low` or `medium`, or omitted entirely — **not `high`** (400 on
+  Qwen3.8-27B) and **not `xhigh`** (422 on GLM-5.3-Flash)
 - read thinking text from `choices[0].message.reasoning`
-- read thinking tokens from `usage.completion_tokens_details.reasoning_tokens`
+- read thinking tokens from `usage.completion_tokens_details.reasoning_tokens` (Qwen3.8-27B
+  omits it)
 - use `response_format: {"type": "json_object"}` for JSON
 - keep `content` textual unless the target model supports images
-- size `max_tokens` against the target model's window — these four span 131,072 to 1,048,576, an
+- size `max_tokens` against the target model's window — they span 131,072 to 1,048,576, an
   eightfold difference
 
 ## True for every model

@@ -7,11 +7,11 @@ sidebar:
 
 每个模型一页，对应 `https://developer.amd.com.cn/radeon/api/v1` 上提供的模型。
 
-当前有哪些模型以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准。其中六个在
-`/v1/chat/completions` 上应答；[MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/)
-是文档 OCR，走自己的端点。
+当前有哪些模型以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准 ——
+这里有页面并不代表该模型当前在线。除 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/)
+是文档 OCR、走自己的端点以外，其余都在 `/v1/chat/completions` 上应答。
 
-:::note[最后更新：2026-09-15]
+:::note[最后更新：2026-09-23]
 模型换了推理引擎，行为就可能跟着变。
 
 **MiniCPM5-1B 已不再对外提供**，其说明页已移除。
@@ -27,7 +27,12 @@ sidebar:
 | [DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
 | [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
 | [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) | 131,072 | ✅ | ✅ |
+| [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
+| [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
+
+[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 是表中唯一还收**音频**输入的模型，
+也是唯一支持严格 `json_schema` 的模型。
 
 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/) 不在此表：它在 `POST /v1/ocr`
 上收 PDF 或图片、返回 Markdown、按页计费，下面的参数对它不适用。
@@ -43,6 +48,8 @@ sidebar:
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
+| GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | `none` 及常见各档 —— 传 `none` 关闭思考 |
 
 这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
 
@@ -57,9 +64,23 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 那个模型的顶层档位叫 `xhigh`，`minimal` 和 `max` 同样被它拒绝。
 :::
 
+:::caution[`xhigh` 在 GLM-5.3-Flash 上是 422]
+[GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) 和 Qwen 系列恰好相反，
+只收 OpenAI 那三个值：
+
+```
+reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `high`
+```
+
+所以「多想一会儿」的两个写法在本平台是互斥的：`xhigh` 在 GLM-5.3-Flash 上失败，
+`high` 在 Qwen3.8-27B 上失败。**没有任何一个值能同时命中两边的最高档。**
+注意状态码也不同——GLM-5.3-Flash 返回 **422**（值在反序列化阶段就被拒），
+Qwen3.8-27B 返回的是校验器报的 **400**。
+:::
+
 :::tip[一套代码打所有思考模型，就用 `low` 或 `medium`]
 这两个值是上表所有模型的交集。最高档的名字不通用——两个 Qwen 模型用 `xhigh`，
-DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模型选值时，读
+GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模型选值时，读
 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 确认当前发布的是哪几个模型，再对照上表。
 :::
 
@@ -72,6 +93,7 @@ DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模
 | DeepSeek-V4.1-Flash | 不思考 | ✅ |
 | Qwen3.8-Flash-Next | **照样思考** | ✅ |
 | Qwen3.8-27B | **照样思考** | ❌ |
+| GLM-5.3-Flash | **照样思考** | ❌ |
 | MiniCPM5-2B | 不思考 | ❌ |
 
 思考文本从 `choices[0].message.reasoning` 读。MiniCPM5-2B 直接给答案，该字段为空、
@@ -82,7 +104,7 @@ token 数用 **`usage.completion_tokens_details.reasoning_tokens`**，除
 压根不返回 `completion_tokens_details` 对象，所以它的思考 token 无法与其余输出分开统计，
 但仍然计入 `usage.completion_tokens`，也仍然计费。
 
-:::caution[两个 Qwen 模型默认就在思考，而且思考要花 `max_tokens`]
+:::caution[两个 Qwen 模型和 GLM-5.3-Flash 默认就在思考，而且思考要花 `max_tokens`]
 Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
 而思考和正文共用同一份 `max_tokens` 预算。对非思考模型够用的预算，换到这里可能返回空 `content`。
 要么调大 `max_tokens`，要么传 `reasoning_effort: "low"`。
@@ -96,8 +118,19 @@ Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照�
 | DeepSeek-V4-Flash-Vision-Exp | 位置任意，可多条 | `system` 或 `developer` |
 | DeepSeek-V4.1-Flash | 位置任意，可多条 | `system` 或 `developer` |
 | Qwen3.8-Flash-Next | **只放一条，且必须在首位** | `system` |
-| Qwen3.8-27B | **最多一条，且必须在首位** | `system` 或 `developer` |
+| Qwen3.8-27B | **最多一条，且必须在首位** | `system` |
+| GLM-5.3-Flash | 位置任意，可多条 | `system` |
 | MiniCPM5-2B | 位置任意，可多条 | `system` |
+
+只有三个 DeepSeek 模型把 `developer` 当作 `system` 的别名接受。其余四个一律拒绝——
+Qwen3.8-27B 报 `Unexpected message role.`，Qwen3.8-Flash-Next、GLM-5.3-Flash 和
+MiniCPM5-2B 报反序列化错误，并指出是第几条消息：
+
+```
+Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
+```
+
+较新的 OpenAI SDK 会发 `developer` 代替 `system`，如果你用的是这种，请改回。
 
 两个 Qwen 模型的限制来自它们自带的 Jinja chat template，不是网关加的规则。
 Qwen3.8-27B 违规时报 `System message must be at the beginning.`
@@ -151,7 +184,8 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 所有对话模型都接受的写法：
 
 - 一条 `system` 消息，放在下标 `0`，角色名写 `system`
-- `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400）
+- `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400；
+  **也别用 `xhigh`**，GLM-5.3-Flash 会 422）
 - 思考文本从 `choices[0].message.reasoning` 读
 - 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 不给）
 - 要 JSON 用 `response_format: {"type": "json_object"}`

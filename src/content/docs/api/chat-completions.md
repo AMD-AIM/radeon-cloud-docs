@@ -83,10 +83,11 @@ emitted by some models, so do not rely on it.
 | DeepSeek-V4.1-Flash | Does not think |
 | Qwen3.8-Flash-Next | **Still thinks** — the default tier is `xhigh`, the longest one |
 | Qwen3.8-27B | **Still thinks** — the default tier is `xhigh` |
+| GLM-5.3-Flash | **Still thinks** |
 | MiniCPM5-2B | Does not think |
 
 Pass the value explicitly if you want deterministic behaviour; send `low` to make the Qwen models
-think less.
+and GLM-5.3-Flash think less.
 
 **Which tiers a model accepts differs per model:**
 
@@ -97,12 +98,13 @@ think less.
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
+| GLM-5.3-Flash | `low` `medium` `high` |
 | MiniCPM5-2B | not applicable — answers directly |
 
 For one code path across all models, **stick to `low` and `medium`** — those are the only two
-every model accepts. The name of the top tier is not portable: the Qwen models use `xhigh`, and
-Qwen3.8-27B returns 400 for `high`. The full matrix is in the
-[model reference](/radeon-cloud-docs/models/overview/).
+every model accepts. The name of the top tier is not portable, and the two spellings are mutually
+exclusive: Qwen3.8-27B returns 400 for `high`, while GLM-5.3-Flash returns 422 for `xhigh`. The
+full matrix is in the [model reference](/radeon-cloud-docs/models/overview/).
 :::
 
 :::danger[Do not use `thinking` — it has no effect]
