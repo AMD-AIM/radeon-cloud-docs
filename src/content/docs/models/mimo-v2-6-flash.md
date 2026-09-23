@@ -40,10 +40,10 @@ From the shipped `config.json`:
 The vision tower is a 681M-parameter MiMo ViT (28 layers, 24 sliding-window + 4 full, patch 16,
 spatial merge 2×2). Audio goes through a 308M AudioTokenizer plus a 127M patch encoder.
 
-:::note[The 128-token sliding window is why long context behaves the way it does]
-Only the **9 global layers** keep a full KV cache. The other 39 keep 128 tokens each. At a
-512K-token prompt that is roughly 6 GB of KV instead of the ~32 GB a uniformly-global model of
-this shape would need — which is how a 1M window fits at all.
+:::note[The 128-token sliding window is what makes the long context practical]
+Only the **9 global layers** keep a full KV cache; the other 39 keep 128 tokens each. Most of the
+depth therefore does not grow its cache as the prompt grows, which is what allows a window this
+wide on a model of this shape.
 :::
 
 ## On this endpoint
