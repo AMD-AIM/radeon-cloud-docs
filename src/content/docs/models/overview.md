@@ -7,11 +7,12 @@ sidebar:
 
 One page per model, for the models served at `https://developer.amd.com.cn/radeon/api/v1`.
 
-[`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available.
-Seven of them answer on `/v1/chat/completions`;
-[MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is document OCR and has its own endpoint.
+[`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available —
+a page existing here does not guarantee the model is currently published. All of them answer on
+`/v1/chat/completions` except [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/), which is
+document OCR and has its own endpoint.
 
-:::note[Last updated 2026-09-18]
+:::note[Last updated 2026-09-23]
 Behaviour can change when a model moves to a different inference engine.
 
 **MiniCPM5-1B is no longer published.** Its page has been removed;
@@ -28,7 +29,11 @@ Behaviour can change when a model moves to a different inference engine.
 | [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
 | [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) | 131,072 | ✅ | ✅ |
 | [GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
+| [MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
+
+[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) is the only model here that also
+accepts **audio** input, and the only one that accepts a strict `json_schema`.
 
 [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is not in this table: it takes a PDF or
 an image on `POST /v1/ocr`, returns Markdown, and is billed per page. The parameters below do not
@@ -46,6 +51,7 @@ The accepted tiers differ per model:
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | `none` and the usual tiers — send `none` to disable thinking |
 
 The parameter may also be omitted entirely. MiniCPM5-2B does not return separated thinking, so
 `reasoning_effort` does not apply to it.

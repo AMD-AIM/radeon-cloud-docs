@@ -2,7 +2,7 @@
 title: MiniCPM5-2B
 description: 面壁的 2B 稠密模型——本端点上上下文最短的一个，未量化供应。
 sidebar:
-  order: 8
+  order: 9
 ---
 
 <div class="rc-endpoint">

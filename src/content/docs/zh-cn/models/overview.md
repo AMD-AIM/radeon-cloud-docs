@@ -7,11 +7,11 @@ sidebar:
 
 每个模型一页，对应 `https://developer.amd.com.cn/radeon/api/v1` 上提供的模型。
 
-当前有哪些模型以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准。其中七个在
-`/v1/chat/completions` 上应答；[MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/)
-是文档 OCR，走自己的端点。
+当前有哪些模型以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准 ——
+这里有页面并不代表该模型当前在线。除 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/)
+是文档 OCR、走自己的端点以外，其余都在 `/v1/chat/completions` 上应答。
 
-:::note[最后更新：2026-09-18]
+:::note[最后更新：2026-09-23]
 模型换了推理引擎，行为就可能跟着变。
 
 **MiniCPM5-1B 已不再对外提供**，其说明页已移除。
@@ -28,7 +28,11 @@ sidebar:
 | [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
 | [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) | 131,072 | ✅ | ✅ |
 | [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
+| [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
+
+[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 是表中唯一还收**音频**输入的模型，
+也是唯一支持严格 `json_schema` 的模型。
 
 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/) 不在此表：它在 `POST /v1/ocr`
 上收 PDF 或图片、返回 Markdown、按页计费，下面的参数对它不适用。
@@ -45,6 +49,7 @@ sidebar:
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | `none` 及常见各档 —— 传 `none` 关闭思考 |
 
 这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
 
