@@ -100,6 +100,7 @@ against the table above.
 | Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
 | Qwen3.8-27B | **thinks anyway** | ❌ |
 | GLM-5.3-Flash | **thinks anyway** | ❌ |
+| MiMo-V2.6-Flash | **thinks anyway** | present, but always `0` |
 | MiniCPM5-2B | does not think | ❌ |
 
 Thinking text arrives in `choices[0].message.reasoning`. MiniCPM5-2B answers directly, so that
@@ -109,6 +110,14 @@ For the token count use **`usage.completion_tokens_details.reasoning_tokens`**, 
 here reports **except [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/)** — that one omits the
 `completion_tokens_details` object entirely, so its thinking tokens cannot be separated from the
 rest of its output. They are still counted in `usage.completion_tokens`, and still billed.
+
+:::caution[MiMo-V2.6-Flash reports the field but never fills it]
+[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) returns `reasoning_tokens` as `0`
+even on a request that clearly thought — a puzzle that produced several hundred characters of
+`reasoning` still reported `0`. Like Qwen3.8-27B, its thinking tokens are only visible inside
+`usage.completion_tokens`. Do not use `reasoning_tokens` to decide whether it thought; check
+whether `reasoning` is non-empty instead.
+:::
 
 :::caution[Thinking is on by default on both Qwen models and on GLM-5.3-Flash, and it spends `max_tokens`]
 On Qwen3.8-Flash-Next and Qwen3.8-27B a request with no `reasoning_effort` still thinks, and the
@@ -127,11 +136,13 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | Qwen3.8-Flash-Next | **exactly one, and it must come first** | `system` |
 | Qwen3.8-27B | **at most one, and it must come first** | `system` |
 | GLM-5.3-Flash | any position, more than one allowed | `system` |
+| MiMo-V2.6-Flash | any position, more than one allowed | `system` or `developer` |
 | MiniCPM5-2B | any position, more than one allowed | `system` |
 
-Only the three DeepSeek models accept `developer` as an alias for `system`. The other four reject
-it outright — Qwen3.8-27B with `Unexpected message role.`, and Qwen3.8-Flash-Next, GLM-5.3-Flash
-and MiniCPM5-2B with a deserialisation error naming the offending index:
+The three DeepSeek models and MiMo-V2.6-Flash accept `developer` as an alias for `system`. The
+other four reject it outright — Qwen3.8-27B with `Unexpected message role.`, and
+Qwen3.8-Flash-Next, GLM-5.3-Flash and MiniCPM5-2B with a deserialisation error naming the
+offending index:
 
 ```
 Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
@@ -158,7 +169,7 @@ model's own choice — do not build on it.
 
 ## Image input
 
-Four models take images; put an `image_url` content part in the `content` array:
+Five models take images; put an `image_url` content part in the `content` array:
 
 | Model | Per-image metering |
 |---|---|
@@ -166,9 +177,10 @@ Four models take images; put an `image_url` content part in the `content` array:
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`, 202 in the sample |
 | Qwen3.8-Flash-Next | `usage.prompt_tokens_details.image_tokens`, 144 in the sample |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`, 72 in the sample |
+| MiMo-V2.6-Flash | `usage.prompt_tokens_details.image_tokens`, 494 in the sample |
 
 :::caution[Qwen3.8-27B nests the image count one level deeper]
-Three of the four report `prompt_tokens_details.image_tokens`. Qwen3.8-27B reports
+Four of the five report `prompt_tokens_details.image_tokens`. Qwen3.8-27B reports
 `prompt_tokens_details.multimodal_tokens.image` instead, so code that tallies image usage across
 models has to read both shapes.
 :::
@@ -199,7 +211,7 @@ The shape every chat model here accepts:
   Qwen3.8-27B) and **not `xhigh`** (422 on GLM-5.3-Flash)
 - read thinking text from `choices[0].message.reasoning`
 - read thinking tokens from `usage.completion_tokens_details.reasoning_tokens` (Qwen3.8-27B
-  omits it)
+  omits it, MiMo-V2.6-Flash always reports `0`)
 - use `response_format: {"type": "json_object"}` for JSON
 - keep `content` textual unless the target model supports images
 - size `max_tokens` against the target model's window — they span 131,072 to 1,048,576, an

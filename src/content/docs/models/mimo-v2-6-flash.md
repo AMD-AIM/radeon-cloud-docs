@@ -89,6 +89,13 @@ populated `reasoning`:
 
 To turn it off, send `reasoning_effort: "none"` — `reasoning` then comes back empty.
 
+:::caution[`reasoning_tokens` is always `0` here — do not branch on it]
+The field is present but never filled. A puzzle that produced several hundred characters of
+`reasoning` still reported `reasoning_tokens: 0`, with the whole cost folded into
+`usage.completion_tokens`. Thinking is billed, it is just not itemised. To tell whether the model
+thought, check that `reasoning` is non-empty rather than reading the counter.
+:::
+
 :::caution[Budget for the thinking, not just the answer]
 Thinking length varies a lot at the recommended sampling settings. The same image question has
 returned a 62-character `reasoning` on one call and exhausted a 2,000-token budget on the

@@ -76,6 +76,6 @@ before relying on it for tool-driven work.
 | Input | text only |
 
 :::caution[This is the smallest window on the endpoint]
-131,072 is far below the others (both DeepSeek models serve 1,048,576). When migrating from another
-model, bring `max_tokens` down with it.
+131,072 is far below the others (the three DeepSeek models and MiMo-V2.6-Flash all serve
+1,048,576). When migrating from another model, bring `max_tokens` down with it.
 :::

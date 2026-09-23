@@ -94,6 +94,7 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 | Qwen3.8-Flash-Next | **照样思考** | ✅ |
 | Qwen3.8-27B | **照样思考** | ❌ |
 | GLM-5.3-Flash | **照样思考** | ❌ |
+| MiMo-V2.6-Flash | **照样思考** | 有这个字段，但恒为 `0` |
 | MiniCPM5-2B | 不思考 | ❌ |
 
 思考文本从 `choices[0].message.reasoning` 读。MiniCPM5-2B 直接给答案，该字段为空、
@@ -103,6 +104,13 @@ token 数用 **`usage.completion_tokens_details.reasoning_tokens`**，除
 [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) 外每个模型都给——那一个
 压根不返回 `completion_tokens_details` 对象，所以它的思考 token 无法与其余输出分开统计，
 但仍然计入 `usage.completion_tokens`，也仍然计费。
+
+:::caution[MiMo-V2.6-Flash 有这个字段，但从不填]
+[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 在确实思考了的请求上
+依然把 `reasoning_tokens` 报为 `0`——一道产生了几百字符 `reasoning` 的推理题，该字段仍是 `0`。
+和 Qwen3.8-27B 一样，它的思考 token 只能从 `usage.completion_tokens` 里看到。
+不要用 `reasoning_tokens` 判断它是否思考过，改看 `reasoning` 是否非空。
+:::
 
 :::caution[两个 Qwen 模型和 GLM-5.3-Flash 默认就在思考，而且思考要花 `max_tokens`]
 Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
@@ -120,9 +128,10 @@ Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照�
 | Qwen3.8-Flash-Next | **只放一条，且必须在首位** | `system` |
 | Qwen3.8-27B | **最多一条，且必须在首位** | `system` |
 | GLM-5.3-Flash | 位置任意，可多条 | `system` |
+| MiMo-V2.6-Flash | 位置任意，可多条 | `system` 或 `developer` |
 | MiniCPM5-2B | 位置任意，可多条 | `system` |
 
-只有三个 DeepSeek 模型把 `developer` 当作 `system` 的别名接受。其余四个一律拒绝——
+三个 DeepSeek 模型和 MiMo-V2.6-Flash 把 `developer` 当作 `system` 的别名接受。其余四个一律拒绝——
 Qwen3.8-27B 报 `Unexpected message role.`，Qwen3.8-Flash-Next、GLM-5.3-Flash 和
 MiniCPM5-2B 报反序列化错误，并指出是第几条消息：
 
@@ -149,7 +158,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 ## 图像输入
 
-四个模型收图，`content` 数组里放 `image_url` 内容块即可：
+五个模型收图，`content` 数组里放 `image_url` 内容块即可：
 
 | 模型 | 单图计量 |
 |---|---|
@@ -157,9 +166,10 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`，示例值 202 |
 | Qwen3.8-Flash-Next | `usage.prompt_tokens_details.image_tokens`，示例值 144 |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`，示例值 72 |
+| MiMo-V2.6-Flash | `usage.prompt_tokens_details.image_tokens`，示例值 494 |
 
 :::caution[Qwen3.8-27B 的图片计数多嵌了一层]
-四个里有三个报 `prompt_tokens_details.image_tokens`，Qwen3.8-27B 报的是
+五个里有四个报 `prompt_tokens_details.image_tokens`，Qwen3.8-27B 报的是
 `prompt_tokens_details.multimodal_tokens.image`。跨模型统计图片用量的代码两种都要读。
 :::
 
@@ -187,7 +197,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 - `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400；
   **也别用 `xhigh`**，GLM-5.3-Flash 会 422）
 - 思考文本从 `choices[0].message.reasoning` 读
-- 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 不给）
+- 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 不给，MiMo-V2.6-Flash 恒为 `0`）
 - 要 JSON 用 `response_format: {"type": "json_object"}`
 - `content` 只放文本；要发图先确认模型支持，并注意 Qwen3.8-27B 的计量字段不同
 - `max_tokens` 按目标模型的窗口算，从 131,072 到 1,048,576 差了 8 倍

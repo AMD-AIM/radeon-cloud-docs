@@ -100,8 +100,8 @@ only a single leading `system`. For one client driving both, follow the stricter
 **Off by default.** With `reasoning_effort` omitted, `reasoning_tokens` comes back as 0; you have to
 ask for thinking explicitly.
 
-All six `reasoning_effort` values are accepted (`minimal`, `low`, `medium`, `high`, `xhigh`, `max`,
-plus `none` and omission) — the most permissive model on this endpoint.
+All seven `reasoning_effort` values are accepted (`none`, `minimal`, `low`, `medium`, `high`,
+`xhigh`, `max`, plus omission) — the most permissive model on this endpoint.
 
 | | |
 |---|---|

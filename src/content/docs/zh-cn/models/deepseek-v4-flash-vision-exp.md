@@ -96,8 +96,8 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 
 **默认不思考。** 不传 `reasoning_effort` 时 `reasoning_tokens` 为 0，要思考就得显式传。
 
-`reasoning_effort` 的六个取值**全部接受**（`minimal`、`low`、`medium`、`high`、`xhigh`、`max`，
-外加 `none` 和不传），是本端点上取值最宽容的模型。
+`reasoning_effort` 的七个取值**全部接受**（`none`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`，
+外加不传），是本端点上取值最宽容的模型。
 
 | | |
 |---|---|

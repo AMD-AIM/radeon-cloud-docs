@@ -84,6 +84,12 @@ sidebar:
 
 要关掉，传 `reasoning_effort: "none"`，此时 `reasoning` 返回空。
 
+:::caution[这里的 `reasoning_tokens` 恒为 `0`，不要拿它做判断]
+字段存在，但从来不填。一道产生了几百字符 `reasoning` 的推理题，`reasoning_tokens` 依然是 `0`，
+整个开销都并到了 `usage.completion_tokens` 里。思考是计费的，只是不单列。
+要判断模型是否思考过，看 `reasoning` 是否非空，不要读这个计数器。
+:::
+
 :::caution[预算要算上思考，不只是答案]
 在推荐采样参数下思考长度波动很大。同一个图像问题，一次只用了 62 个字符的 `reasoning`，
 下一次把 2,000 token 的预算全部耗尽，导致 `content` 为空、`finish_reason: "length"`。

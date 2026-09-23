@@ -112,7 +112,7 @@ Qwen 把类型标为 *Causal Language Model with Vision Encoder*，仓库也打�
 
 :::caution[本模型的最高档叫 `xhigh`，不是 `high`]
 写跨模型代码时注意：`low` 和 `medium` 在所有模型上都能用，而最高档的名字不通用——
-本模型用 `xhigh`，[MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) 用 `high`。
+本模型用 `xhigh`，[GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) 用 `high`。
 想要最长的思考，传 `xhigh` 或者干脆不传这个参数。
 :::
 
