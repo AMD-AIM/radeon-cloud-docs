@@ -31,8 +31,8 @@ sidebar:
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 
-[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 是表中唯一还收**音频**输入的模型，
-也是唯一支持严格 `json_schema` 的模型。
+[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 还接受**音频**输入和严格 `json_schema`，
+两者都见它自己的页面。
 
 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/) 不在此表：它在 `POST /v1/ocr`
 上收 PDF 或图片、返回 Markdown、按页计费，下面的参数对它不适用。
@@ -54,8 +54,8 @@ sidebar:
 这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
 
 :::caution[`high` 在 Qwen3.8-27B 上是 400]
-`high` 是多数 OpenAI 兼容客户端表达「多想一会儿」时发的值，也恰恰是唯一一个
-DeepSeek 系列都收、而 [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) **拒收**的值：
+`high` 是多数 OpenAI 兼容客户端表达「多想一会儿」时发的值。DeepSeek 系列接受它，
+而 [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) **拒收**：
 
 ```
 Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.
@@ -160,7 +160,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 ## 图像输入
 
-五个模型收图，`content` 数组里放 `image_url` 内容块即可：
+下列模型收图，`content` 数组里放 `image_url` 内容块即可：
 
 | 模型 | 单图计量 |
 |---|---|

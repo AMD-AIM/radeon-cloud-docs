@@ -32,8 +32,8 @@ Behaviour can change when a model moves to a different inference engine.
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 
-[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) is the only model here that also
-accepts **audio** input, and the only one that accepts a strict `json_schema`.
+[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) also accepts **audio** input and a
+strict `json_schema`; see its page for both.
 
 [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is not in this table: it takes a PDF or
 an image on `POST /v1/ocr`, returns Markdown, and is billed per page. The parameters below do not
@@ -57,9 +57,8 @@ The parameter may also be omitted entirely. MiniCPM5-2B does not return separate
 `reasoning_effort` does not apply to it.
 
 :::caution[`high` is a 400 on Qwen3.8-27B]
-`high` is what most OpenAI-compatible clients send for "think hard", and it is the one value that
-is accepted by the DeepSeek models and **rejected** by
-[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/):
+`high` is what most OpenAI-compatible clients send for "think hard". The DeepSeek models accept
+it; [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) **rejects** it:
 
 ```
 Unexpected reasoning effort high. Supported types are xhigh (default), medium, and low.
@@ -173,7 +172,7 @@ below. Emitting several `tool_calls` in one turn is the model's own choice; you 
 
 ## Image input
 
-Five models take images; put an `image_url` content part in the `content` array:
+These models take images; put an `image_url` content part in the `content` array:
 
 | Model | Per-image metering |
 |---|---|

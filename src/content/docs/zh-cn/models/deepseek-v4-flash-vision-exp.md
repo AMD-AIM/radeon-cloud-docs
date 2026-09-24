@@ -14,9 +14,7 @@ sidebar:
 ## 这是什么
 
 在 [DeepSeek-V4-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash/) 的权重上接了一座视觉塔，
-名字里的 `Exp` 就是 experimental。它同时具备 100 万上下文和读图能力——
-[DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/) 和
-[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 也是。
+名字里的 `Exp` 就是 experimental。它提供 100 万上下文，并接受图像输入。
 
 语言侧的架构与文本版同源，逐字段核对过；下面这张表取自本端点实际加载的那份权重的 `config.json`。
 
@@ -99,7 +97,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 **默认不思考。** 不传 `reasoning_effort` 时 `reasoning_tokens` 为 0，要思考就得显式传。
 
 `reasoning_effort` 的七个取值**全部接受**（`none`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`，
-外加不传），是本端点上取值最宽容的模型。
+外加不传）。
 
 | | |
 |---|---|

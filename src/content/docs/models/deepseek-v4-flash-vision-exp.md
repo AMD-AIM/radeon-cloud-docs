@@ -14,9 +14,8 @@ sidebar:
 ## What this is
 
 A vision tower bolted onto the [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/)
-weights; the `Exp` in the name is *experimental*. It pairs a one-million-token context with image
-input — as do [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) and
-[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/).
+weights; the `Exp` in the name is *experimental*. It serves a one-million-token context and takes
+image input.
 
 The language side shares its architecture with the text model, field for field. The table below is
 read from the `config.json` of the weights this endpoint actually loads.
@@ -101,8 +100,8 @@ only a single leading `system`. For one client driving both, follow the stricter
 **Off by default.** With `reasoning_effort` omitted, `reasoning_tokens` comes back as 0; you have to
 ask for thinking explicitly.
 
-All seven `reasoning_effort` values are accepted (`none`, `minimal`, `low`, `medium`, `high`,
-`xhigh`, `max`, plus omission) — the most permissive model on this endpoint.
+All seven `reasoning_effort` values are accepted: `none`, `minimal`, `low`, `medium`, `high`,
+`xhigh`, `max`. The parameter may also be omitted.
 
 | | |
 |---|---|

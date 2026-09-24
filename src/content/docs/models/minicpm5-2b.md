@@ -1,6 +1,6 @@
 ---
 title: MiniCPM5-2B
-description: OpenBMB's 2B dense model — one of the two unquantised dense models here, tied for the shortest context.
+description: OpenBMB's 2B dense model, served unquantised at a 131,072-token context.
 sidebar:
   order: 9
 ---
@@ -26,10 +26,6 @@ them:
 | Vocabulary | 130,560 |
 | Context | 131,072 |
 | Precision | `bfloat16` — **not quantised** |
-
-One of the two dense, unquantised models here — the other is
-[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/), which shares its 131,072-token context, the
-shortest on this endpoint.
 
 ## On this endpoint
 
@@ -76,7 +72,6 @@ before relying on it for tool-driven work.
 | JSON output | `response_format: {"type": "json_object"}` |
 | Input | text only |
 
-:::caution[This is the shortest window on the endpoint, tied with Qwen3.8-27B]
-131,072 is far below the rest (the three DeepSeek models and MiMo-V2.6-Flash all serve 1,048,576).
-When migrating from another model, bring `max_tokens` down with it.
+:::caution[131,072 covers the prompt and the output together]
+If you are moving here from a model with a longer window, bring `max_tokens` down with it.
 :::

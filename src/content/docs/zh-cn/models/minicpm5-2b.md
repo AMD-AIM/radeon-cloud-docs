@@ -1,6 +1,6 @@
 ---
 title: MiniCPM5-2B
-description: 面壁的 2B 稠密模型——本端点上两个未量化稠密模型之一，上下文并列最短。
+description: 面壁的 2B 稠密模型，未量化供应，上下文 131,072。
 sidebar:
   order: 9
 ---
@@ -25,9 +25,6 @@ sidebar:
 | 词表 | 130,560 |
 | 上下文 | 131,072 |
 | 精度 | `bfloat16` —— **未量化** |
-
-本端点上两个稠密（非 MoE）且未量化的模型之一，另一个是
-[Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/)；两者同为 131,072 上下文，是这里最短的。
 
 ## 本端点上的行为
 
@@ -71,7 +68,6 @@ sidebar:
 | JSON 输出 | `response_format: {"type": "json_object"}` |
 | 输入 | 仅文本 |
 
-:::caution[这是本端点上最短的窗口，与 Qwen3.8-27B 持平]
-131,072 远小于其余模型（三个 DeepSeek 模型和 MiMo-V2.6-Flash 都是 1,048,576）。从别的模型迁过来时，
-记得把 `max_tokens` 一起调小。
+:::caution[131,072 是提示词和输出合起来的预算]
+从窗口更长的模型迁过来时，记得把 `max_tokens` 一起调小。
 :::

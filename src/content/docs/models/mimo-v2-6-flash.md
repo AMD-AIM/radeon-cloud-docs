@@ -1,6 +1,6 @@
 ---
 title: MiMo-V2.6-Flash
-description: Xiaomi's omnimodal sparse MoE model — the only endpoint here that takes audio, and the only one whose sliding-window layers are just 128 tokens wide.
+description: Xiaomi's omnimodal sparse MoE model — takes text, images and audio, and thinks by default.
 sidebar:
   order: 8
 ---
@@ -60,9 +60,6 @@ wide on a model of this shape.
 | Thinking | ✅ — **on unless you turn it off** |
 | Inference engine | SGLang |
 | Stability | `experimental` |
-
-This is the only model on this API that accepts **audio**, and the only one that accepts a
-**strict `json_schema`** rather than just `json_object`.
 
 ### `messages`
 

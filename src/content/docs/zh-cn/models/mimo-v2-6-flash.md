@@ -1,6 +1,6 @@
 ---
 title: MiMo-V2.6-Flash
-description: 小米的全模态稀疏 MoE 模型 —— 这里唯一接受音频输入的端点，也是唯一滑动窗口只有 128 token 的模型。
+description: 小米的全模态稀疏 MoE 模型 —— 接受文本、图像和音频，默认先思考再回答。
 sidebar:
   order: 8
 ---
@@ -58,8 +58,6 @@ sidebar:
 | 思考 | ✅ —— **默认开启，需要显式关闭** |
 | 推理引擎 | SGLang |
 | 稳定性 | `experimental` |
-
-这是本 API 上唯一接受**音频**的模型，也是唯一接受**严格 `json_schema`**（而不只是 `json_object`）的模型。
 
 ### `messages`
 
