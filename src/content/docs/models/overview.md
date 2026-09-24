@@ -109,16 +109,18 @@ field is empty and `reasoning_tokens` is `0` — read `content` for its answer.
 For the token count read **`usage.completion_tokens_details.reasoning_tokens`**. The object is
 always present, but the number is only meaningful on the models that report it.
 
-:::caution[On Qwen3.8-27B and MiMo-V2.6-Flash this counter is always `0`]
-Neither engine reports thinking separately, so the field is filled in with `0` even on a request
-that clearly thought — a puzzle that produced several hundred characters of `reasoning` on
-[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) still came back as `0`. Those tokens
-are not lost: they are inside `usage.completion_tokens`, and they are billed. They just cannot be
-split out from the answer.
+:::caution[A non-zero `reasoning_tokens` is not always a count from the model]
+When the engine reports thinking separately, this is its number. When it does not, the gateway
+fills the field in by **estimating from the length of the `reasoning` text**, so the value can be
+an approximation rather than a measurement.
 
-So do not use `reasoning_tokens` to decide whether a model thought — check whether `reasoning` is
-non-empty instead. A `0` means either "did not think" or "does not count", and the two are
-indistinguishable from the number alone.
+[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) is the opposite case: its engine
+reports an explicit `0`, which is taken at face value. A puzzle that produced several hundred
+characters of `reasoning` still came back as `reasoning_tokens: 0`. Those tokens are not lost —
+they are inside `usage.completion_tokens`, and they are billed.
+
+Either way, do not use `reasoning_tokens` to decide whether a model thought — check whether
+`reasoning` is non-empty instead.
 :::
 
 :::caution[Thinking is on by default on both Qwen models and on GLM-5.3-Flash, and it spends `max_tokens`]
@@ -166,8 +168,8 @@ Every chat model here supports:
 - `response_format: {"type": "json_object"}`
 - function calling via `tools` + `tool_choice`
 
-`parallel_tool_calls` is accepted everywhere, but emitting several `tool_calls` in one turn is the
-model's own choice — do not build on it.
+`parallel_tool_calls` is **not** forwarded — it is stripped with the other unsupported parameters
+below. Emitting several `tool_calls` in one turn is the model's own choice; you cannot request it.
 
 ## Image input
 
@@ -212,8 +214,8 @@ The shape every chat model here accepts:
 - `reasoning_effort` of `low` or `medium`, or omitted entirely — **not `high`** (400 on
   Qwen3.8-27B) and **not `xhigh`** (422 on GLM-5.3-Flash)
 - read thinking text from `choices[0].message.reasoning`
-- read thinking tokens from `usage.completion_tokens_details.reasoning_tokens` (always `0` on
-  Qwen3.8-27B and MiMo-V2.6-Flash)
+- read thinking tokens from `usage.completion_tokens_details.reasoning_tokens`, remembering it can
+  be an estimate, and is `0` on MiMo-V2.6-Flash
 - use `response_format: {"type": "json_object"}` for JSON
 - keep `content` textual unless the target model supports images
 - size `max_tokens` against the target model's window — they span 131,072 to 1,048,576, an
@@ -223,8 +225,8 @@ The shape every chat model here accepts:
 
 | | |
 |---|---|
-| Accepted parameters | `temperature`, `max_tokens`, `top_p`, `stream`, `response_format`, `tools`, `tool_choice`, `parallel_tool_calls`, `reasoning_effort` |
-| Silently dropped | `stop`, `seed`, `logit_bias`, `logprobs`, `top_logprobs`, `top_k`, `min_p`, `repetition_penalty` |
+| Accepted parameters | `temperature`, `max_tokens`, `top_p`, `stream`, `response_format`, `tools`, `tool_choice`, `reasoning_effort` |
+| Silently dropped | `parallel_tool_calls`, `stop`, `seed`, `logit_bias`, `logprobs`, `top_logprobs`, `top_k`, `min_p`, `repetition_penalty` |
 | How to turn thinking on | `reasoning_effort` (or the equivalent `reasoning.effort`) |
 | Reported tokenizer | `GPT` |
 | Stability | `experimental` |

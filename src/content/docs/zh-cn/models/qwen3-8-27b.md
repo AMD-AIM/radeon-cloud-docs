@@ -59,9 +59,9 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 要最长的思考请传 `xhigh`，或者不传这个参数。
 :::
 
-思考文本在 `choices[0].message.reasoning`。这个模型不单独统计思考 token：
-`usage.completion_tokens_details.reasoning_tokens` 字段存在，但恒为 `0`。这部分 token
-已包含在 `usage.completion_tokens` 里，也从那里计费。
+思考文本在 `choices[0].message.reasoning`。引擎不单独统计思考量，所以
+`usage.completion_tokens_details.reasoning_tokens` 是网关按 `reasoning` 文本长度估算填入的，
+而不是数出来的。token 本身已包含在 `usage.completion_tokens` 里，也从那里计费。
 
 思考和正文共用同一份 `max_tokens` 预算。`content` 返回空时，调大 `max_tokens`
 或传 `reasoning_effort: "low"`。

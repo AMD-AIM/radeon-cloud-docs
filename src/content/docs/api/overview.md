@@ -34,17 +34,20 @@ Requests and responses are JSON, `Content-Type: application/json`. Timestamps ar
 
 ## Public Free Model APIs
 
-Always on, no instance, no credits. AMD picks which models are served. Four operations:
+Always on, no instance, no credits. AMD picks which models are served. Five operations:
 
 - [`POST /v1/chat/completions`](/radeon-cloud-docs/api/chat-completions/) — OpenAI-compatible
 - [`GET /v1/models`](/radeon-cloud-docs/api/models/)
 - [`POST /v1/messages`](/radeon-cloud-docs/api/messages/) — Anthropic-compatible, for clients such as Claude Code
 - [`POST /v1/messages/count_tokens`](/radeon-cloud-docs/api/messages/#counting-tokens) — the token-count preflight those clients issue
+- [`POST /v1/ocr`](/radeon-cloud-docs/models/mineru2-5-pro/) — document OCR, PDF or image in, Markdown out
 
 Every path is also reachable under `/api/v1/...`; the two spellings are the same endpoint.
 
 Legacy completions, embeddings, image, audio, rerank, and `/v1/responses` endpoints are **not**
-served here, and return `404`.
+served here, and return `404`. That is about dedicated endpoints: audio still reaches the platform
+as an `input_audio` content part on `/v1/chat/completions`, which
+[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) accepts.
 
 These requests pass through a gateway. The body is validated against a fixed set of fields and
 rebuilt before it reaches the serving backend, so a parameter outside that set is dropped

@@ -14,8 +14,9 @@ sidebar:
 ## What this is
 
 A vision tower bolted onto the [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/)
-weights; the `Exp` in the name is *experimental*. **It is the only model on this endpoint that has
-both a one-million-token context and image input.**
+weights; the `Exp` in the name is *experimental*. It pairs a one-million-token context with image
+input — as do [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) and
+[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/).
 
 The language side shares its architecture with the text model, field for field. The table below is
 read from the `config.json` of the weights this endpoint actually loads.

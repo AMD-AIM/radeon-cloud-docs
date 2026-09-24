@@ -67,7 +67,7 @@ Requests are forwarded to vLLM or SGLang with the routing prefix stripped, so th
 | `/v1/completions` | Legacy text completion |
 | `/v1/embeddings` | Embeddings, for embedding models |
 
-This is wider than the shared endpoints, which are limited to chat completions and model listing. Consult your serving stack's own documentation for the exact set and for version-specific parameters.
+This is wider than the shared endpoints, which are limited to chat completions, model listing, the Anthropic Messages surface and OCR. Consult your serving stack's own documentation for the exact set and for version-specific parameters.
 
 ## Access control
 

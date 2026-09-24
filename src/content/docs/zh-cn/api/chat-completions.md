@@ -27,7 +27,7 @@ sidebar:
 | `max_tokens` | integer | <span class="rc-opt">选填</span> | 回复生成的 token 上限。 |
 | `presence_penalty` | number | <span class="rc-opt">选填</span> | 惩罚已出现过的 token。 |
 | `frequency_penalty` | number | <span class="rc-opt">选填</span> | 按出现频次惩罚 token。 |
-| `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 或一个 `json_schema`，适用于 `json_output` 为 true 的模型。 |
+| `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 适用于 `json_output` 为 true 的模型；严格 `json_schema` 只有 MiMo-V2.6-Flash 支持。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
 | `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
 | `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；`low` 和 `medium` 所有模型都收。**不传时是否思考也因模型而异。** |
@@ -61,10 +61,12 @@ sidebar:
 }
 ```
 
-思考内容从响应的 `choices[0].message.reasoning` 里取（不是 `reasoning_content`），
-token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——除 Qwen3.8-27B 外每个模型都有；那一个不返回 `completion_tokens_details`，
-它的思考 token 计入 `usage.completion_tokens`。
-顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek 两个模型和 Qwen3.8-Flash-Next 有，MiniCPM5-2B 没有），别依赖它。
+思考内容从响应的 `choices[0].message.reasoning` 里取（不是 `reasoning_content`）。
+token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取。这个对象总是存在，
+但只有引擎单独上报思考量的模型上它才是实测值——否则网关会按 `reasoning` 文本长度估算。
+MiMo-V2.6-Flash 会显式返回 `0`，网关按原值采用。
+顶层的 `usage.reasoning_tokens` 只有部分模型给，别依赖它。
+要判断模型是否思考过，看 `reasoning` 是否非空，不要读这两个计数器。
 
 **不传 `reasoning_effort` 不等于不思考**，各模型的默认值不一样：
 
@@ -76,6 +78,7 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——除
 | Qwen3.8-Flash-Next | **照样思考**，默认档位是 `xhigh`，也就是最长的一档 |
 | Qwen3.8-27B | **照样思考**，默认档位是 `xhigh` |
 | GLM-5.3-Flash | **照样思考** |
+| MiMo-V2.6-Flash | **照样思考**，传 `reasoning_effort: "none"` 关掉 |
 | MiniCPM5-2B | 不思考 |
 
 要确定性地控制，就显式传值；想让两个 Qwen 模型和 GLM-5.3-Flash 少思考，传 `low`。
@@ -90,6 +93,7 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——除
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | `none` 及常见各档 —— 传 `none` 关闭思考 |
 | MiniCPM5-2B | 不适用——直接给答案 |
 
 要写一套代码跑所有模型，**用 `low` 或 `medium`**——只有这两个所有模型都认。

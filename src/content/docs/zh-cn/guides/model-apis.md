@@ -30,7 +30,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 
 一个 key 通用于所有共享模型。想换模型，改 `model` 字段就行。
 
-共享端点支持 **chat completions** 和**列出模型**。请求按 key 和按 IP 限流，另有每日消耗上限 —— 见[频率限制](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
+共享端点支持 **chat completions**、**列出模型**、**Anthropic Messages** 接口和 **OCR**。请求按 key 和按 IP 限流，另有每日消耗上限 —— 见[频率限制](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
 
 ## 专属端点
 

@@ -1,6 +1,6 @@
 ---
 title: MiniCPM5-2B
-description: 面壁的 2B 稠密模型——本端点上上下文最短的一个，未量化供应。
+description: 面壁的 2B 稠密模型——本端点上两个未量化稠密模型之一，上下文并列最短。
 sidebar:
   order: 9
 ---
@@ -26,7 +26,8 @@ sidebar:
 | 上下文 | 131,072 |
 | 精度 | `bfloat16` —— **未量化** |
 
-本端点上唯一一个稠密（非 MoE）模型，也是唯一一个未量化的模型。上下文 131,072 是这里最短的。
+本端点上两个稠密（非 MoE）且未量化的模型之一，另一个是
+[Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/)；两者同为 131,072 上下文，是这里最短的。
 
 ## 本端点上的行为
 
@@ -58,7 +59,7 @@ sidebar:
 
 ### 工具
 
-`tools` 和 `parallel_tool_calls` 都接受。给它一个 `get_weather` 工具、问巴黎天气，
+`tools` 可用。给它一个 `get_weather` 工具、问巴黎天气，
 模型发出了调用，`finish_reason` 返回 `tool_calls`。和任何同等体量的模型一样，
 交给它工具驱动的活之前，先用你自己的 prompt 试一试。
 
@@ -70,7 +71,7 @@ sidebar:
 | JSON 输出 | `response_format: {"type": "json_object"}` |
 | 输入 | 仅文本 |
 
-:::caution[这是本端点上最小的窗口]
-131,072 远小于其它模型（三个 DeepSeek 模型和 MiMo-V2.6-Flash 都是 1,048,576）。从别的模型迁过来时，
+:::caution[这是本端点上最短的窗口，与 Qwen3.8-27B 持平]
+131,072 远小于其余模型（三个 DeepSeek 模型和 MiMo-V2.6-Flash 都是 1,048,576）。从别的模型迁过来时，
 记得把 `max_tokens` 一起调小。
 :::

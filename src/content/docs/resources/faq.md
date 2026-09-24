@@ -53,7 +53,7 @@ Anything vLLM or SGLang supports and that fits in the GPU memory you've allocate
 Yes, `stream: true` on chat completions. Responses aren't buffered by the platform.
 
 **Are embeddings available?**
-Not on shared endpoints — those serve chat completions and model listing only. A dedicated endpoint exposes whatever your serving stack does, which for vLLM typically includes embeddings.
+Not on shared endpoints — those serve chat completions, model listing, the Anthropic Messages surface and OCR only. A dedicated endpoint exposes whatever your serving stack does, which for vLLM typically includes embeddings.
 
 ## Access
 

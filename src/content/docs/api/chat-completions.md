@@ -30,7 +30,7 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | `max_tokens` | integer | <span class="rc-opt">Optional</span> | Cap on tokens generated in the response. |
 | `presence_penalty` | number | <span class="rc-opt">Optional</span> | Penalises tokens already present. |
 | `frequency_penalty` | number | <span class="rc-opt">Optional</span> | Penalises tokens by how often they've appeared. |
-| `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` or a `json_schema`, on models where `json_output` is true. |
+| `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` on any model where `json_output` is true; a strict `json_schema` only on MiMo-V2.6-Flash. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
 | `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
 | `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model — see the table below; `low` and `medium` work everywhere. **Whether omitting it disables thinking also varies per model.** |
@@ -69,10 +69,12 @@ to enable thinking.
 ```
 
 The thinking text comes back in `choices[0].message.reasoning` (not `reasoning_content`). For the
-token count use **`usage.completion_tokens_details.reasoning_tokens`**, which every model reports
-except Qwen3.8-27B — that one omits `completion_tokens_details`, and its thinking tokens are
-counted in `usage.completion_tokens` instead. The top-level `usage.reasoning_tokens` is only
-emitted by some models, so do not rely on it.
+token count use **`usage.completion_tokens_details.reasoning_tokens`**. That object is always
+present, but the number is only a measurement on the models whose engine reports thinking
+separately — otherwise the gateway estimates it from the length of the `reasoning` text.
+MiMo-V2.6-Flash reports an explicit `0` and is taken at face value. The top-level
+`usage.reasoning_tokens` is only emitted by some models, so do not rely on it. To tell whether a
+model thought, check that `reasoning` is non-empty rather than reading either counter.
 
 **Omitting `reasoning_effort` does not mean no thinking.** The default differs per model:
 
@@ -84,6 +86,7 @@ emitted by some models, so do not rely on it.
 | Qwen3.8-Flash-Next | **Still thinks** — the default tier is `xhigh`, the longest one |
 | Qwen3.8-27B | **Still thinks** — the default tier is `xhigh` |
 | GLM-5.3-Flash | **Still thinks** |
+| MiMo-V2.6-Flash | **Still thinks** — send `reasoning_effort: "none"` to disable |
 | MiniCPM5-2B | Does not think |
 
 Pass the value explicitly if you want deterministic behaviour; send `low` to make the Qwen models
@@ -99,6 +102,7 @@ and GLM-5.3-Flash think less.
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | `none` and the usual tiers — send `none` to disable thinking |
 | MiniCPM5-2B | not applicable — answers directly |
 
 For one code path across all models, **stick to `low` and `medium`** — those are the only two

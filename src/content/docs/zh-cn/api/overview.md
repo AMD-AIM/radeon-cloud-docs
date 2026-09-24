@@ -31,16 +31,19 @@ AMD Radeon Cloud 背后有多个主机名。上面这些是撰写时的公开地
 
 ## Public Free Model APIs
 
-常开，不用起实例，不花额度。上哪些模型由 AMD 决定。四个操作：
+常开，不用起实例，不花额度。上哪些模型由 AMD 决定。五个操作：
 
 - [`POST /v1/chat/completions`](/radeon-cloud-docs/zh-cn/api/chat-completions/) —— 兼容 OpenAI
 - [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/)
 - [`POST /v1/messages`](/radeon-cloud-docs/zh-cn/api/messages/) —— 兼容 Anthropic，供 Claude Code 这类客户端使用
 - [`POST /v1/messages/count_tokens`](/radeon-cloud-docs/zh-cn/api/messages/#计算-token) —— 这类客户端发起的 token 计数预检
+- [`POST /v1/ocr`](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/) —— 文档 OCR，收 PDF 或图片，返回 Markdown
 
 每条路径同样可以用 `/api/v1/...` 访问，两种写法是同一个端点。
 
 旧版 completions、embeddings、图像、音频、rerank 以及 `/v1/responses` 这里**不提供**，会返回 `404`。
+这说的是独立端点：音频仍可以作为 `input_audio` 内容块走 `/v1/chat/completions`，
+[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 接受这种输入。
 
 这些请求要过一层网关。请求体先按一组固定字段校验、再重建，然后才送往服务后端——所以这组字段之外的参数是被丢掉而不是被转发的，接受的字段清单见[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)。按密钥的限流、并发额度和花费上限都生效，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
 

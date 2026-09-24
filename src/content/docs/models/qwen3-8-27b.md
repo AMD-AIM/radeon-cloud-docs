@@ -59,9 +59,10 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 Send `xhigh` for the longest thinking, or omit the parameter.
 :::
 
-Thinking text arrives in `choices[0].message.reasoning`. This model does not count thinking
-separately: `usage.completion_tokens_details.reasoning_tokens` is present but always `0`. The
-tokens are included in `usage.completion_tokens`, and billed there.
+Thinking text arrives in `choices[0].message.reasoning`. The engine does not itemise thinking, so
+`usage.completion_tokens_details.reasoning_tokens` is filled in by the gateway, estimated from the
+length of the `reasoning` text rather than counted. The tokens themselves are included in
+`usage.completion_tokens`, and billed there.
 
 Thinking draws on the same `max_tokens` budget as the answer. If `content` comes back empty, raise
 `max_tokens` or send `reasoning_effort: "low"`.

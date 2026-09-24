@@ -53,7 +53,7 @@ ROCm 实现了同一套 PyTorch API 面，`torch.cuda.*` 调用在 ROCm 版本�
 能，聊天补全加 `stream: true`。平台不会缓冲响应。
 
 **有 embeddings 吗？**
-共享端点上没有——那边只提供聊天补全和模型列表。独占端点上有什么取决于你的服务栈，vLLM 通常带 embeddings。
+共享端点上没有——那边只提供聊天补全、模型列表、Anthropic Messages 接口和 OCR。独占端点上有什么取决于你的服务栈，vLLM 通常带 embeddings。
 
 ## 访问
 

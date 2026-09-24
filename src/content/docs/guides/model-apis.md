@@ -30,7 +30,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 
 One key covers every shared model. To use a different one, change the `model` field.
 
-Shared endpoints support **chat completions** and **listing models**. Requests are rate limited per key and per IP, and a daily spend cap applies — see [Rate limits](/radeon-cloud-docs/api/rate-limits/).
+Shared endpoints support **chat completions**, **listing models**, the **Anthropic Messages** surface and **OCR**. Requests are rate limited per key and per IP, and a daily spend cap applies — see [Rate limits](/radeon-cloud-docs/api/rate-limits/).
 
 ## Dedicated endpoints
 

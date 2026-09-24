@@ -103,14 +103,15 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 读。这个对象总是存在，
 但里面的数字只有在模型确实上报时才有意义。
 
-:::caution[Qwen3.8-27B 和 MiMo-V2.6-Flash 上这个计数恒为 `0`]
-这两个引擎都不单独上报思考量，所以即便请求确实思考了，该字段也会被填成 `0`——
-[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 上一道产生了几百字符
-`reasoning` 的推理题，该字段仍是 `0`。这些 token 并没有丢：它们在 `usage.completion_tokens`
-里，也照常计费，只是无法与正文拆开。
+:::caution[非零的 `reasoning_tokens` 不一定是模型数出来的]
+引擎单独上报思考量时，这就是它的数字；不上报时，网关会**按 `reasoning` 文本长度估算**填进去，
+所以这个值可能是近似而非实测。
 
-所以不要用 `reasoning_tokens` 判断模型是否思考过，改看 `reasoning` 是否非空。`0` 既可能是
-"没思考"，也可能是"不统计"，光看这个数字分不出来。
+[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 是另一种情况：它的引擎会显式返回 `0`，
+网关按原值采用。一道产生了几百字符 `reasoning` 的推理题，`reasoning_tokens` 仍是 `0`。
+这些 token 并没有丢：它们在 `usage.completion_tokens` 里，也照常计费。
+
+两种情况下都不要用 `reasoning_tokens` 判断模型是否思考过，改看 `reasoning` 是否非空。
 :::
 
 :::caution[两个 Qwen 模型和 GLM-5.3-Flash 默认就在思考，而且思考要花 `max_tokens`]
@@ -154,7 +155,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 - `response_format: {"type": "json_object"}`
 - `tools` + `tool_choice` 的函数调用
 
-`parallel_tool_calls` 参数各模型都接受，但一轮返回多个 `tool_calls` 属于模型自主行为，
+`parallel_tool_calls` **不会**被转发，它和下面那些不受支持的参数一起被丢弃。一轮返回多个 `tool_calls` 属于模型自主行为，
 不要在设计上依赖它。
 
 ## 图像输入
@@ -198,7 +199,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 - `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400；
   **也别用 `xhigh`**，GLM-5.3-Flash 会 422）
 - 思考文本从 `choices[0].message.reasoning` 读
-- 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 和 MiMo-V2.6-Flash 上恒为 `0`）
+- 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读，注意它可能是估算值，在 MiMo-V2.6-Flash 上是 `0`
 - 要 JSON 用 `response_format: {"type": "json_object"}`
 - `content` 只放文本；要发图先确认模型支持，并注意 Qwen3.8-27B 的计量字段不同
 - `max_tokens` 按目标模型的窗口算，从 131,072 到 1,048,576 差了 8 倍
@@ -207,8 +208,8 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 | | |
 |---|---|
-| 接受的参数 | `temperature`、`max_tokens`、`top_p`、`stream`、`response_format`、`tools`、`tool_choice`、`parallel_tool_calls`、`reasoning_effort` |
-| 会被静默丢弃 | `stop`、`seed`、`logit_bias`、`logprobs`、`top_logprobs`、`top_k`、`min_p`、`repetition_penalty` |
+| 接受的参数 | `temperature`、`max_tokens`、`top_p`、`stream`、`response_format`、`tools`、`tool_choice`、`reasoning_effort` |
+| 会被静默丢弃 | `parallel_tool_calls`、`stop`、`seed`、`logit_bias`、`logprobs`、`top_logprobs`、`top_k`、`min_p`、`repetition_penalty` |
 | 开启思考的写法 | 只有 `reasoning_effort`（或等价的 `reasoning.effort`）|
 | 上报的分词器 | `GPT` |
 | 稳定性 | `experimental` |

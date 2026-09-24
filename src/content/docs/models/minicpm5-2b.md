@@ -1,6 +1,6 @@
 ---
 title: MiniCPM5-2B
-description: OpenBMB's 2B dense model — the shortest context on this endpoint, served unquantised.
+description: OpenBMB's 2B dense model — one of the two unquantised dense models here, tied for the shortest context.
 sidebar:
   order: 9
 ---
@@ -27,8 +27,9 @@ them:
 | Context | 131,072 |
 | Precision | `bfloat16` — **not quantised** |
 
-The only dense (non-MoE) model on this endpoint, and the only unquantised one. Its 131,072-token
-context is the shortest here.
+One of the two dense, unquantised models here — the other is
+[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/), which shares its 131,072-token context, the
+shortest on this endpoint.
 
 ## On this endpoint
 
@@ -62,7 +63,7 @@ A `system` message may sit at any position, and there may be more than one. Spel
 
 ### Tools
 
-Both `tools` and `parallel_tool_calls` are accepted. Offered a `get_weather` tool and asked for
+`tools` is accepted. Offered a `get_weather` tool and asked for
 the weather in Paris, the model issued the call and returned
 `finish_reason: "tool_calls"`. As with any model this size, try it against your own prompts
 before relying on it for tool-driven work.
@@ -75,7 +76,7 @@ before relying on it for tool-driven work.
 | JSON output | `response_format: {"type": "json_object"}` |
 | Input | text only |
 
-:::caution[This is the smallest window on the endpoint]
-131,072 is far below the others (the three DeepSeek models and MiMo-V2.6-Flash all serve
-1,048,576). When migrating from another model, bring `max_tokens` down with it.
+:::caution[This is the shortest window on the endpoint, tied with Qwen3.8-27B]
+131,072 is far below the rest (the three DeepSeek models and MiMo-V2.6-Flash all serve 1,048,576).
+When migrating from another model, bring `max_tokens` down with it.
 :::
