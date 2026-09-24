@@ -111,6 +111,12 @@ Image usage is reported at `usage.prompt_tokens_details.multimodal_tokens.image`
 max_tokens=999999 cannot be greater than max_model_len=max_total_tokens=131072.
 ```
 
+:::caution[`GET /v1/models` reports a larger window than this model enforces]
+The catalogue entry currently advertises `262144` for this model, but the server it runs on is
+started with `max_model_len=131072` and rejects anything above that. Size your requests against
+131,072, not against the number in the model listing.
+:::
+
 ## Example
 
 ```bash

@@ -30,7 +30,7 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | `max_tokens` | integer | <span class="rc-opt">Optional</span> | Cap on tokens generated in the response. |
 | `presence_penalty` | number | <span class="rc-opt">Optional</span> | Penalises tokens already present. |
 | `frequency_penalty` | number | <span class="rc-opt">Optional</span> | Penalises tokens by how often they've appeared. |
-| `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` on any model where `json_output` is true; a strict `json_schema` only on MiMo-V2.6-Flash. |
+| `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` or a strict `json_schema`, on models where `json_output` is true. Whether the model honours a schema is its own business — MiMo-V2.6-Flash is the one verified here. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
 | `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
 | `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model — see the table below; `low` and `medium` work everywhere. **Whether omitting it disables thinking also varies per model.** |

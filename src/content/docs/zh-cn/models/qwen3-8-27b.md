@@ -109,6 +109,11 @@ System message must be at the beginning.
 max_tokens=999999 cannot be greater than max_model_len=max_total_tokens=131072.
 ```
 
+:::caution[`GET /v1/models` 报的窗口比这个模型实际允许的大]
+目录条目当前对外写的是 `262144`，但它跑在的服务器是用 `max_model_len=131072` 启动的，
+超过就报错。请按 131,072 估算请求大小，不要以模型列表里的数字为准。
+:::
+
 ## 示例
 
 ```bash

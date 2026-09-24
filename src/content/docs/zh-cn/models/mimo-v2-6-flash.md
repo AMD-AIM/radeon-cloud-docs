@@ -1,6 +1,6 @@
 ---
 title: MiMo-V2.6-Flash
-description: 小米的全模态稀疏 MoE 模型 —— 接受文本、图像和音频，默认先思考再回答。
+description: 小米的全模态稀疏 MoE 模型 —— 在这里接受文本和图像，默认先思考再回答。
 sidebar:
   order: 8
 ---
@@ -14,7 +14,7 @@ sidebar:
 ## 关于这个模型
 
 这里提供的权重是 **MiMo-V2.6-Flash**，小米 MiMo-V2.6 系列里侧重效率的那一档 ——
-一个稀疏 MoE 模型，在同一个端点上接受文本、图像、视频和音频，并且默认先思考再回答。
+一个稀疏 MoE 模型，权重覆盖文本、图像、视频和音频，并且默认先思考再回答。本端点提供其中的文本和图像部分。
 
 ### 架构
 
@@ -51,7 +51,7 @@ sidebar:
 | | |
 |---|---|
 | 上下文长度 | 1,048,576 token |
-| 输入模态 | **文本、图像、音频** |
+| 输入模态 | 文本、图像 —— 音频见[音频输入](#音频输入) |
 | 流式 | ✅ |
 | 工具调用 | ✅ |
 | JSON 输出 | ✅ `json_object` **和** `json_schema` |
@@ -113,19 +113,14 @@ sidebar:
 
 ### 音频输入
 
-音频使用 OpenAI 的 `input_audio` 部件：
+本端点不提供，尽管权重里带了音频编码器。网关只会把请求路由给目录条目中开启了音频的 provider，
+而本模型的条目没有开，所以 `input_audio` 内容块在到达模型之前就会被拒：
 
-```json
-{
-  "role": "user",
-  "content": [
-    { "type": "input_audio", "input_audio": { "data": "<base64>", "format": "wav" } },
-    { "type": "text", "text": "这是什么声音？" }
-  ]
-}
+```
+No provider with audio support is available for model MiMo-V2.6-Flash.
 ```
 
-音频前端会重采样到 24 kHz。本 API 上没有其它模型接受这个部件类型。
+只发文本和图像。
 
 ### 结构化输出
 
@@ -141,7 +136,7 @@ sidebar:
 | | |
 |---|---|
 | 上下文窗口 | 1,048,576 token，按**总预算**计 —— 提示词加输出 |
-| 输入 | 文本、图像、音频 |
+| 输入 | 文本、图像 |
 | JSON 输出 | `json_object` 与严格 `json_schema` |
 | 思考档位 | `reasoning_effort` —— 传 `none` 关闭；其它档位会被接受，但本模型没有像 DeepSeek 系列那样按档位标定 |
 

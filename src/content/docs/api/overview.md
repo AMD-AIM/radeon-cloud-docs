@@ -45,9 +45,7 @@ Always on, no instance, no credits. AMD picks which models are served. Five oper
 Every path is also reachable under `/api/v1/...`; the two spellings are the same endpoint.
 
 Legacy completions, embeddings, image, audio, rerank, and `/v1/responses` endpoints are **not**
-served here, and return `404`. That is about dedicated endpoints: audio still reaches the platform
-as an `input_audio` content part on `/v1/chat/completions`, which
-[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) accepts.
+served here, and return `404`.
 
 These requests pass through a gateway. The body is validated against a fixed set of fields and
 rebuilt before it reaches the serving backend, so a parameter outside that set is dropped

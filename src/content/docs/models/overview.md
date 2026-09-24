@@ -32,8 +32,8 @@ Behaviour can change when a model moves to a different inference engine.
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 
-[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) also accepts **audio** input and a
-strict `json_schema`; see its page for both.
+[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) also accepts a strict `json_schema`;
+see its page.
 
 [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is not in this table: it takes a PDF or
 an image on `POST /v1/ocr`, returns Markdown, and is billed per page. The parameters below do not

@@ -27,7 +27,7 @@ sidebar:
 | `max_tokens` | integer | <span class="rc-opt">选填</span> | 回复生成的 token 上限。 |
 | `presence_penalty` | number | <span class="rc-opt">选填</span> | 惩罚已出现过的 token。 |
 | `frequency_penalty` | number | <span class="rc-opt">选填</span> | 按出现频次惩罚 token。 |
-| `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 适用于 `json_output` 为 true 的模型；严格 `json_schema` 只有 MiMo-V2.6-Flash 支持。 |
+| `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 或严格 `json_schema`，适用于 `json_output` 为 true 的模型。模型是否真的遵守 schema 是另一回事——已验证的是 MiMo-V2.6-Flash。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
 | `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
 | `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；`low` 和 `medium` 所有模型都收。**不传时是否思考也因模型而异。** |

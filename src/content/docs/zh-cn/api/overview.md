@@ -42,8 +42,6 @@ AMD Radeon Cloud 背后有多个主机名。上面这些是撰写时的公开地
 每条路径同样可以用 `/api/v1/...` 访问，两种写法是同一个端点。
 
 旧版 completions、embeddings、图像、音频、rerank 以及 `/v1/responses` 这里**不提供**，会返回 `404`。
-这说的是独立端点：音频仍可以作为 `input_audio` 内容块走 `/v1/chat/completions`，
-[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 接受这种输入。
 
 这些请求要过一层网关。请求体先按一组固定字段校验、再重建，然后才送往服务后端——所以这组字段之外的参数是被丢掉而不是被转发的，接受的字段清单见[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)。按密钥的限流、并发额度和花费上限都生效，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
 

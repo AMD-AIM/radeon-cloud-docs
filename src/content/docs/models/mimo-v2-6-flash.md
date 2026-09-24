@@ -1,6 +1,6 @@
 ---
 title: MiMo-V2.6-Flash
-description: Xiaomi's omnimodal sparse MoE model — takes text, images and audio, and thinks by default.
+description: Xiaomi's omnimodal sparse MoE model — takes text and images here, and thinks by default.
 sidebar:
   order: 8
 ---
@@ -14,8 +14,9 @@ sidebar:
 ## About the model
 
 The weights served here are **MiMo-V2.6-Flash**, the efficiency-balanced member of Xiaomi's
-MiMo-V2.6 line — a sparse Mixture-of-Experts model that accepts text, images, video and audio
-in one endpoint, and thinks before answering unless told not to.
+MiMo-V2.6 line — a sparse Mixture-of-Experts model whose weights handle text, images, video and
+audio, and which thinks before answering unless told not to. This endpoint serves the text and
+image halves.
 
 ### Architecture
 
@@ -53,7 +54,7 @@ wide on a model of this shape.
 | | |
 |---|---|
 | Context length | 1,048,576 tokens |
-| Input modalities | **text, image, audio** |
+| Input modalities | text, image — see [Audio input](#audio-input) |
 | Streaming | ✅ |
 | Tool calling | ✅ |
 | JSON output | ✅ `json_object` **and** `json_schema` |
@@ -119,19 +120,15 @@ back as 494 image tokens.
 
 ### Audio input
 
-Audio uses the OpenAI `input_audio` part:
+Not available on this endpoint, despite the audio encoder in the weights. The gateway only routes a
+request to a provider whose catalogue entry has audio enabled, and the entry for this model does
+not, so an `input_audio` content part is rejected before it reaches the model:
 
-```json
-{
-  "role": "user",
-  "content": [
-    { "type": "input_audio", "input_audio": { "data": "<base64>", "format": "wav" } },
-    { "type": "text", "text": "What is this sound?" }
-  ]
-}
+```
+No provider with audio support is available for model MiMo-V2.6-Flash.
 ```
 
-The audio front end resamples to 24 kHz. No other model on this API accepts this part type.
+Send text and images only.
 
 ### Structured output
 
@@ -147,7 +144,7 @@ Both forms work:
 | | |
 |---|---|
 | Context window | 1,048,576 tokens, counted as a **total budget** — prompt plus output |
-| Input | text, image, audio |
+| Input | text, image |
 | JSON output | `json_object` and strict `json_schema` |
 | Thinking tiers | `reasoning_effort` — send `none` to disable; other tiers are accepted but the model is not tier-calibrated the way the DeepSeek models are |
 
