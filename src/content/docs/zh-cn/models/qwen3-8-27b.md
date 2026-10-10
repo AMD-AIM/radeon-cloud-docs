@@ -37,6 +37,18 @@ sidebar:
 | 推理引擎 | vLLM |
 | 稳定性 | `experimental` |
 
+## 价格
+
+目录接口返回的是每 token 美元价，换算成每百万 token：
+
+| | 每百万 token（美元）|
+|---|---:|
+| 输入 | $0.425 |
+| 输出 | $2.55 |
+| 缓存输入读取 | $0.085 |
+
+实际价格以运行时 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 返回的目录为准。
+
 ## 思考
 
 不主动调低就一直开着；不传 `reasoning_effort` 时落到 `xhigh`。

@@ -59,8 +59,8 @@ The catalogue reports USD per token. The equivalent per-million-token prices are
 
 | | USD per 1M tokens |
 |---|---:|
-| Input | $0.50 |
-| Output | $3.00 |
+| Input | $0.09 |
+| Output | $0.34 |
 | Cached input read | $0.05 |
 
 The catalogue marks this entry as `free: false`, so calls are metered at these prices even though

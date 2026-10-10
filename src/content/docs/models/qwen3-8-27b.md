@@ -37,6 +37,18 @@ sidebar:
 | Inference engine | vLLM |
 | Stability | `experimental` |
 
+## Pricing
+
+The catalogue reports USD per token. The equivalent per-million-token prices are:
+
+| | USD per 1M tokens |
+|---|---:|
+| Input | $0.425 |
+| Output | $2.55 |
+| Cached input read | $0.085 |
+
+Read [`GET /v1/models`](/radeon-cloud-docs/api/models/) at runtime for the current catalogue value.
+
 ## Thinking
 
 Thinking is on unless you turn it down; omitting `reasoning_effort` falls through to `xhigh`.
