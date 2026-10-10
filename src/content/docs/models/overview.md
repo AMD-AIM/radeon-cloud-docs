@@ -12,7 +12,7 @@ a page existing here does not guarantee the model is currently published. All of
 `/v1/chat/completions` except [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/), which is
 document OCR and has its own endpoint.
 
-:::note[Last updated 2026-09-23]
+:::note[Last updated 2026-10-10]
 Behaviour can change when a model moves to a different inference engine.
 
 **MiniCPM5-1B is no longer published.** Its page has been removed;
@@ -30,6 +30,7 @@ Behaviour can change when a model moves to a different inference engine.
 | [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) | 131,072 | ✅ | ✅ |
 | [GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
+| [Gemma-4-31B-IT](/radeon-cloud-docs/models/gemma-4-31b-it/) | 262,144 | ✅ | ❌ |
 | [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 
 [MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) is the only model here that also
@@ -41,7 +42,8 @@ apply to it.
 
 ## Supported `reasoning_effort` values
 
-The accepted tiers differ per model:
+The accepted values differ per model. Acceptance by the API does not necessarily mean the model
+implements distinct effort tiers:
 
 | Model | Accepted values |
 |---|---|
@@ -52,9 +54,17 @@ The accepted tiers differ per model:
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | `none` and the usual tiers — send `none` to disable thinking |
+| Gemma-4-31B-IT | `none` is off; every accepted non-`none` value maps to the same on switch |
 
 The parameter may also be omitted entirely. MiniCPM5-2B does not return separated thinking, so
 `reasoning_effort` does not apply to it.
+
+:::note[Gemma 4 does not have effort tiers]
+Google's official control is the boolean `enable_thinking`. The public API accepts its generic
+`reasoning_effort` enum for compatibility, but SGLang reduces it to
+`reasoning_effort != "none"`. Use `none` for off and `high` for on; `minimal`, `low`, `medium`,
+`high`, `xhigh` and `max` are not distinct Gemma reasoning levels.
+:::
 
 :::caution[`high` is a 400 on Qwen3.8-27B]
 `high` is what most OpenAI-compatible clients send for "think hard", and it is the one value that
@@ -100,6 +110,8 @@ against the table above.
 | Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
 | Qwen3.8-27B | **thinks anyway** | ❌ |
 | GLM-5.3-Flash | **thinks anyway** | ❌ |
+| MiMo-V2.6-Flash | **thinks anyway** | ❌ |
+| Gemma-4-31B-IT | does not think | ✅ |
 | MiniCPM5-2B | does not think | ❌ |
 
 Thinking text arrives in `choices[0].message.reasoning`. MiniCPM5-2B answers directly, so that
@@ -127,17 +139,23 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | Qwen3.8-Flash-Next | **exactly one, and it must come first** | `system` |
 | Qwen3.8-27B | **at most one, and it must come first** | `system` |
 | GLM-5.3-Flash | any position, more than one allowed | `system` |
+| MiMo-V2.6-Flash | any position, more than one allowed | `system` or `developer` |
+| Gemma-4-31B-IT | one leading message (official portable shape) | `system` |
 | MiniCPM5-2B | any position, more than one allowed | `system` |
 
-Only the three DeepSeek models accept `developer` as an alias for `system`. The other four reject
-it outright — Qwen3.8-27B with `Unexpected message role.`, and Qwen3.8-Flash-Next, GLM-5.3-Flash
-and MiniCPM5-2B with a deserialisation error naming the offending index:
+The three DeepSeek models and MiMo-V2.6-Flash accept `developer` as an alias for `system`.
+Qwen3.8-27B rejects it with `Unexpected message role.`, while Qwen3.8-Flash-Next,
+GLM-5.3-Flash and MiniCPM5-2B return a deserialisation error naming the offending index:
 
 ```
 Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
 ```
 
 Newer OpenAI SDKs emit `developer` in place of `system`. If yours does, override it back.
+
+The current Gemma endpoint also parses `developer`, but Google's official Gemma 4 prompt format
+documents `system`, `user` and `assistant`. Use one leading `system` message for portable Gemma
+requests rather than depending on an inference-server compatibility extension.
 
 The constraints on the two Qwen models come from the Jinja chat template shipped with their
 weights, not from a gateway rule. Qwen3.8-27B reports a violation as
@@ -158,7 +176,7 @@ model's own choice — do not build on it.
 
 ## Image input
 
-Four models take images; put an `image_url` content part in the `content` array:
+Six models take images; put an `image_url` content part in the `content` array:
 
 | Model | Per-image metering |
 |---|---|
@@ -166,9 +184,11 @@ Four models take images; put an `image_url` content part in the `content` array:
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`, 202 in the sample |
 | Qwen3.8-Flash-Next | `usage.prompt_tokens_details.image_tokens`, 144 in the sample |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`, 72 in the sample |
+| MiMo-V2.6-Flash | `usage.prompt_tokens_details.image_tokens`, 494 in the sample |
+| Gemma-4-31B-IT | `usage.prompt_tokens_details.image_tokens`, 256 in the sample |
 
 :::caution[Qwen3.8-27B nests the image count one level deeper]
-Three of the four report `prompt_tokens_details.image_tokens`. Qwen3.8-27B reports
+Five of the six report `prompt_tokens_details.image_tokens`. Qwen3.8-27B reports
 `prompt_tokens_details.multimodal_tokens.image` instead, so code that tallies image usage across
 models has to read both shapes.
 :::
@@ -195,8 +215,9 @@ Markdown and is billed per page.
 The shape every chat model here accepts:
 
 - a single `system` message at index `0`, with the role spelled `system`
-- `reasoning_effort` of `low` or `medium`, or omitted entirely — **not `high`** (400 on
-  Qwen3.8-27B) and **not `xhigh`** (422 on GLM-5.3-Flash)
+- `reasoning_effort` of `low` or `medium`, or omitted entirely — on Gemma either non-`none` value
+  is simply "on"; **not `high`** (400 on Qwen3.8-27B) and **not `xhigh`** (422 on
+  GLM-5.3-Flash)
 - read thinking text from `choices[0].message.reasoning`
 - read thinking tokens from `usage.completion_tokens_details.reasoning_tokens` (Qwen3.8-27B
   omits it)

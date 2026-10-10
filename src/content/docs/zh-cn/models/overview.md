@@ -11,7 +11,7 @@ sidebar:
 这里有页面并不代表该模型当前在线。除 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/)
 是文档 OCR、走自己的端点以外，其余都在 `/v1/chat/completions` 上应答。
 
-:::note[最后更新：2026-09-23]
+:::note[最后更新：2026-10-10]
 模型换了推理引擎，行为就可能跟着变。
 
 **MiniCPM5-1B 已不再对外提供**，其说明页已移除。
@@ -29,6 +29,7 @@ sidebar:
 | [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) | 131,072 | ✅ | ✅ |
 | [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
+| [Gemma-4-31B-IT](/radeon-cloud-docs/zh-cn/models/gemma-4-31b-it/) | 262,144 | ✅ | ❌ |
 | [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 
 [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 是表中唯一还收**音频**输入的模型，
@@ -39,7 +40,7 @@ sidebar:
 
 ## `reasoning_effort` 支持的取值
 
-各模型接受的档位不一样，按下表取值：
+各模型接受的取值不一样。API 接受某个值，不一定代表模型实现了不同强度的思考档位：
 
 | 模型 | 支持的取值 |
 |---|---|
@@ -50,8 +51,16 @@ sidebar:
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | `none` 及常见各档 —— 传 `none` 关闭思考 |
+| Gemma-4-31B-IT | `none` 为关；所有协议接受的非 `none` 值都映射为同一个开关 |
 
 这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
+
+:::note[Gemma 4 没有思考强度档]
+Google 官方控制项是布尔值 `enable_thinking`。公网 API 为兼容通用协议而接受
+`reasoning_effort` 枚举，但 SGLang 最终只计算 `reasoning_effort != "none"`。
+用 `none` 表示关闭、`high` 表示开启即可；`minimal`、`low`、`medium`、`high`、
+`xhigh`、`max` 并不是不同的 Gemma 推理档位。
+:::
 
 :::caution[`high` 在 Qwen3.8-27B 上是 400]
 `high` 是多数 OpenAI 兼容客户端表达「多想一会儿」时发的值，也恰恰是唯一一个
@@ -94,6 +103,8 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 | Qwen3.8-Flash-Next | **照样思考** | ✅ |
 | Qwen3.8-27B | **照样思考** | ❌ |
 | GLM-5.3-Flash | **照样思考** | ❌ |
+| MiMo-V2.6-Flash | **照样思考** | ❌ |
+| Gemma-4-31B-IT | 不思考 | ✅ |
 | MiniCPM5-2B | 不思考 | ❌ |
 
 思考文本从 `choices[0].message.reasoning` 读。MiniCPM5-2B 直接给答案，该字段为空、
@@ -120,17 +131,23 @@ Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照�
 | Qwen3.8-Flash-Next | **只放一条，且必须在首位** | `system` |
 | Qwen3.8-27B | **最多一条，且必须在首位** | `system` |
 | GLM-5.3-Flash | 位置任意，可多条 | `system` |
+| MiMo-V2.6-Flash | 位置任意，可多条 | `system` 或 `developer` |
+| Gemma-4-31B-IT | 一条且置于首位（官方可移植写法） | `system` |
 | MiniCPM5-2B | 位置任意，可多条 | `system` |
 
-只有三个 DeepSeek 模型把 `developer` 当作 `system` 的别名接受。其余四个一律拒绝——
-Qwen3.8-27B 报 `Unexpected message role.`，Qwen3.8-Flash-Next、GLM-5.3-Flash 和
-MiniCPM5-2B 报反序列化错误，并指出是第几条消息：
+三个 DeepSeek 模型和 MiMo-V2.6-Flash 会把 `developer` 当作 `system` 的别名接受。
+Qwen3.8-27B 会报 `Unexpected message role.`；Qwen3.8-Flash-Next、GLM-5.3-Flash 和
+MiniCPM5-2B 则返回反序列化错误，并指出是第几条消息：
 
 ```
 Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
 ```
 
 较新的 OpenAI SDK 会发 `developer` 代替 `system`，如果你用的是这种，请改回。
+
+当前 Gemma 端点也能解析 `developer`，但 Google 官方 Gemma 4 提示格式只明确记录
+`system`、`user`、`assistant`。为了不依赖推理服务的兼容扩展，Gemma 请求请使用一条置于首位的
+`system` 消息。
 
 两个 Qwen 模型的限制来自它们自带的 Jinja chat template，不是网关加的规则。
 Qwen3.8-27B 违规时报 `System message must be at the beginning.`
@@ -149,7 +166,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 ## 图像输入
 
-四个模型收图，`content` 数组里放 `image_url` 内容块即可：
+六个模型收图，`content` 数组里放 `image_url` 内容块即可：
 
 | 模型 | 单图计量 |
 |---|---|
@@ -157,9 +174,11 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`，示例值 202 |
 | Qwen3.8-Flash-Next | `usage.prompt_tokens_details.image_tokens`，示例值 144 |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`，示例值 72 |
+| MiMo-V2.6-Flash | `usage.prompt_tokens_details.image_tokens`，示例值 494 |
+| Gemma-4-31B-IT | `usage.prompt_tokens_details.image_tokens`，示例值 256 |
 
 :::caution[Qwen3.8-27B 的图片计数多嵌了一层]
-四个里有三个报 `prompt_tokens_details.image_tokens`，Qwen3.8-27B 报的是
+六个里有五个报 `prompt_tokens_details.image_tokens`，Qwen3.8-27B 报的是
 `prompt_tokens_details.multimodal_tokens.image`。跨模型统计图片用量的代码两种都要读。
 :::
 
@@ -184,8 +203,8 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 所有对话模型都接受的写法：
 
 - 一条 `system` 消息，放在下标 `0`，角色名写 `system`
-- `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400；
-  **也别用 `xhigh`**，GLM-5.3-Flash 会 422）
+- `reasoning_effort` 用 `low` 或 `medium`，或者整个不传；在 Gemma 上任一非 `none` 值都只是“开启”
+  （**别用 `high`**，Qwen3.8-27B 会 400；**也别用 `xhigh`**，GLM-5.3-Flash 会 422）
 - 思考文本从 `choices[0].message.reasoning` 读
 - 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 不给）
 - 要 JSON 用 `response_format: {"type": "json_object"}`

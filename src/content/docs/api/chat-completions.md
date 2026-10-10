@@ -33,7 +33,7 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` or a `json_schema`, on models where `json_output` is true. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
 | `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
-| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model — see the table below; `low` and `medium` work everywhere. **Whether omitting it disables thinking also varies per model.** |
+| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking. Some models implement effort tiers; Gemma 4 reduces it to an on/off switch. Accepted values and omission behaviour vary per model — see below. |
 | `reasoning.effort` | string | <span class="rc-opt">Optional</span> | Same thing, unified form. Cannot be combined with `reasoning_effort`. |
 
 :::caution[`messages`: roles and system-message placement differ per model]
@@ -84,6 +84,8 @@ emitted by some models, so do not rely on it.
 | Qwen3.8-Flash-Next | **Still thinks** — the default tier is `xhigh`, the longest one |
 | Qwen3.8-27B | **Still thinks** — the default tier is `xhigh` |
 | GLM-5.3-Flash | **Still thinks** |
+| MiMo-V2.6-Flash | **Still thinks** |
+| Gemma-4-31B-IT | Does not think |
 | MiniCPM5-2B | Does not think |
 
 Pass the value explicitly if you want deterministic behaviour; send `low` to make the Qwen models
@@ -99,10 +101,13 @@ and GLM-5.3-Flash think less.
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | `none` and the usual tiers — `none` disables thinking |
+| Gemma-4-31B-IT | `none` is off; accepted non-`none` values are equivalent aliases for on |
 | MiniCPM5-2B | not applicable — answers directly |
 
 For one code path across all models, **stick to `low` and `medium`** — those are the only two
-every model accepts. The name of the top tier is not portable, and the two spellings are mutually
+every thinking model accepts. On Gemma both mean only "thinking on"; they do not select different
+effort levels. The name of the top tier is not portable, and the two spellings are mutually
 exclusive: Qwen3.8-27B returns 400 for `high`, while GLM-5.3-Flash returns 422 for `xhigh`. The
 full matrix is in the [model reference](/radeon-cloud-docs/models/overview/).
 :::

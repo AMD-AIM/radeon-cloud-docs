@@ -30,7 +30,7 @@ sidebar:
 | `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 或一个 `json_schema`，适用于 `json_output` 为 true 的模型。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
 | `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
-| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；`low` 和 `medium` 所有模型都收。**不传时是否思考也因模型而异。** |
+| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考。部分模型有强度档位，Gemma 4 则只把它当开关。支持的值及不传时的行为因模型而异，见下文。 |
 | `reasoning.effort` | string | <span class="rc-opt">选填</span> | 同上，统一写法。不能和 `reasoning_effort` 同时用。 |
 
 :::caution[`messages`：角色和 system 位置因模型而异]
@@ -76,6 +76,8 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——除
 | Qwen3.8-Flash-Next | **照样思考**，默认档位是 `xhigh`，也就是最长的一档 |
 | Qwen3.8-27B | **照样思考**，默认档位是 `xhigh` |
 | GLM-5.3-Flash | **照样思考** |
+| MiMo-V2.6-Flash | **照样思考** |
+| Gemma-4-31B-IT | 不思考 |
 | MiniCPM5-2B | 不思考 |
 
 要确定性地控制，就显式传值；想让两个 Qwen 模型和 GLM-5.3-Flash 少思考，传 `low`。
@@ -90,10 +92,13 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取——除
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | `none` 及常见各档——`none` 关闭思考 |
+| Gemma-4-31B-IT | `none` 为关；协议接受的非 `none` 值都是等价的“开启”别名 |
 | MiniCPM5-2B | 不适用——直接给答案 |
 
-要写一套代码跑所有模型，**用 `low` 或 `medium`**——只有这两个所有模型都认。
-最高档的名字不通用，而且两种写法互斥：Qwen3.8-27B 传 `high` 返回 400，
+要写一套代码跑所有模型，**用 `low` 或 `medium`**——只有这两个所有思考模型都认。
+在 Gemma 上二者都只表示“开启”，不代表不同强度。最高档的名字不通用，而且两种写法互斥：
+Qwen3.8-27B 传 `high` 返回 400，
 GLM-5.3-Flash 传 `xhigh` 返回 422。
 完整对照表见[模型总览](/radeon-cloud-docs/zh-cn/models/overview/)。
 :::
