@@ -26,7 +26,10 @@ sidebar:
 | 上下文 | 131,072 |
 | 精度 | `bfloat16` —— **未量化** |
 
-本端点上唯一一个稠密（非 MoE）模型，也是唯一一个未量化的模型。上下文 131,072 是这里最短的。
+这是上下文为131,072的未量化稠密（非MoE）文本模型。另行提供的
+[MiniCPM-V-4.7-1B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-1b/)和
+[MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-35b-a3b/)是视觉语言模型，
+使用不同的API模型ID和控制参数；本页限制不适用于这两款新模型。
 
 ## 本端点上的行为
 
