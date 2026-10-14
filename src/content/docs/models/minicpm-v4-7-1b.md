@@ -11,6 +11,8 @@ sidebar:
   <span class="rc-auth">model: <code>MiniCPM-V-4.7-1B</code></span>
 </div>
 
+## About the model
+
 This page documents **MiniCPM-V-4.7-1B on the shared Model API**, using the official
 [OpenBMB weights](https://huggingface.co/openbmb/MiniCPM-V-4.7-1B). It is a vision-language
 model with a dense language backbone, not the text-only
@@ -23,7 +25,9 @@ come from [`GET /v1/models`](/radeon-cloud-docs/api/models/). A page existing he
 guarantee current availability. This is not a claim about every regional or dedicated endpoint.
 :::
 
-## Endpoint and limits
+## On this endpoint
+
+### At a glance
 
 | Item | Value |
 |---|---|
@@ -51,22 +55,27 @@ The platform rates verified on 2026-10-13 were:
 | 0.035 | 0.07 | 0.0007 | USD / 1M tokens |
 
 These are usage/allowance accounting rates, not a claim that every request incurs a cash
-charge. Read current pricing from the model catalog and your actual usage from
-[Usage](/radeon-cloud-docs/api/usage/); do not infer zero metering from the shared API's name.
+charge. Read current pricing from the model catalog and actual usage from your China-region
+console. [Usage](/radeon-cloud-docs/api/usage/) describes the response format; its global-host
+example is not a query for China-region usage. Do not infer zero metering from the shared API's name.
 
-## Text chat
+### Text chat
 
 Use the exact model ID, without `openbmb/`. Set `RADEON_API_KEY` in your environment; do not
 commit a real key to source code.
 
-| Request field | Purpose |
-|---|---|
-| `model`, `messages` | Required: exact model ID and conversation |
-| `max_tokens`, `temperature` | Output budget and sampling; examples use bounded outputs |
-| `stream`, `stream_options.include_usage` | SSE and its final usage chunk |
-| `tools`, `tool_choice` | Function definitions and `auto`, `required`, `none`, or named selection |
-| `response_format` | Use `{"type":"json_object"}`; strict Schema is unavailable here |
-| `chat_template_kwargs.enable_thinking` | Optional boolean, default `false`; SDK uses `extra_body` |
+| Parameter | Type | | Description |
+|---|---|---|---|
+| `model` | string | <span class="rc-req">Required</span> | Exact model ID shown above |
+| `messages` | array | <span class="rc-req">Required</span> | Conversation and any image content parts |
+| `max_tokens` | integer | <span class="rc-opt">Optional</span> | Generation budget, including thinking |
+| `temperature` | number | <span class="rc-opt">Optional</span> | Sampling temperature |
+| `stream` | boolean | <span class="rc-opt">Optional</span> | Enable SSE; default `false` |
+| `stream_options.include_usage` | boolean | <span class="rc-opt">Optional</span> | Request final stream usage |
+| `tools` | array | <span class="rc-opt">Optional</span> | Function definitions |
+| `tool_choice` | string or object | <span class="rc-opt">Optional</span> | `auto`, `required`, `none`, or named function |
+| `response_format` | object | <span class="rc-opt">Optional</span> | `{"type":"json_object"}`; strict Schema unavailable |
+| `chat_template_kwargs.enable_thinking` | boolean | <span class="rc-opt">Optional</span> | Default `false`; SDK uses `extra_body` |
 
 ```bash
 curl --fail-with-body https://developer.amd.com.cn/radeon/api/v1/chat/completions \
@@ -85,7 +94,7 @@ Use standard `user` / `assistant` conversation turns; if you include a system in
 use one leading `system` message. More permissive system/developer-role layouts are not
 qualified by this page.
 
-## Images and multiple images
+### Images and multiple images
 
 With the Python OpenAI SDK installed, this example sends a local PNG as a base64 data URL:
 
@@ -118,7 +127,7 @@ The shared endpoint uses the default **16x** visual compression profile. Request
 `mm_processor_kwargs` overrides, including `downsample_mode="4x"`, are **not forwarded** on
 this endpoint. Do not send them expecting different resolution or token usage.
 
-## Function calling
+### Function calling
 
 `tools` plus `tool_choice="auto"`, `"required"`, or a named function passed the functional
 checks. The model requests calls; **your application executes the tools**. Example round trip:
@@ -175,7 +184,7 @@ Tool-result continuation and streamed tool calls were tested. For tool SSE, accu
 `parallel_tool_calls` is not forwarded. In particular, `false` does **not** guarantee a single
 call here. Handle all returned calls; schedule them serially in your application if necessary.
 
-## JSON output
+### JSON output
 
 Ordinary JSON object mode is available:
 
@@ -197,7 +206,7 @@ not available through this shared endpoint**: it currently returns 400. JSON obj
 JSON tool arguments do not provide strict response-schema enforcement; validate your application's
 expected fields yourself.
 
-## Thinking and streaming
+### Thinking and streaming
 
 Thinking is **off by default** for this model. With the Python SDK, pass the model-specific
 switch through `extra_body`; it becomes the top-level `chat_template_kwargs` field on the wire:
@@ -209,6 +218,7 @@ from openai import OpenAI
 client = OpenAI(base_url="https://developer.amd.com.cn/radeon/api/v1",
                 api_key=os.environ["RADEON_API_KEY"])
 thinking_parts, answer_parts = [], []
+finish_reason, usage = None, None
 stream = client.chat.completions.create(
     model="MiniCPM-V-4.7-1B",
     messages=[{"role": "user", "content": "Solve x+y=23 and x-y=7. Give x and y."}],
@@ -216,13 +226,21 @@ stream = client.chat.completions.create(
     stream=True, stream_options={"include_usage": True}, max_tokens=512,
 )
 for chunk in stream:
-    for choice in chunk.choices:
-        thought = getattr(choice.delta, "reasoning", None)
-        if isinstance(thought, str) and thought:
-            thinking_parts.append(thought)
-        if isinstance(choice.delta.content, str) and choice.delta.content:
-            answer_parts.append(choice.delta.content)
+  if chunk.usage is not None:
+    usage = chunk.usage
+  for choice in chunk.choices:
+    if choice.finish_reason is not None:
+      finish_reason = choice.finish_reason
+    thought = getattr(choice.delta, "reasoning", None)
+    if isinstance(thought, str) and thought:
+      thinking_parts.append(thought)
+    if isinstance(choice.delta.content, str) and choice.delta.content:
+      answer_parts.append(choice.delta.content)
+if finish_reason != "stop":
+  raise RuntimeError(f"Incomplete answer: finish_reason={finish_reason!r}")
 print("".join(answer_parts))  # Keep thinking_parts separate from the final answer.
+if usage is not None:
+  print(usage.model_dump(exclude_none=True))
 ```
 
 To disable it explicitly, set `enable_thinking` to `false`. No `reasoning_effort` tier or
@@ -236,11 +254,13 @@ thinking-token-budget contract is established for this model; do not copy anothe
 Read `reasoning`, not `reasoning_content`; absent/null text and usage-only chunks are valid.
 Thinking SSE and normal text/tool SSE passed tests. Non-streaming field names follow the gateway
 contract; a separate non-streaming thinking run was not part of this qualification.
-See [response fields and usage](/radeon-cloud-docs/api/chat-completions/#thinking-response-fields).
+Keep the `usage` counts as returned. A separate thinking-token count may be in
+`usage.reasoning_tokens` or `usage.completion_tokens_details.reasoning_tokens`; do not add both
+or add them again to totals. If neither is supplied, the separate count is unavailable, not necessarily zero.
 If `finish_reason` is `length`, the generation budget was reached; do not treat a partial answer
 or partial tool-argument string as complete.
 
-## Unsupported or unverified paths
+### Limits and unverified paths
 
 - **Video**: `video_url` is not accepted on this shared chat endpoint (400); video support is
   not enabled by the model's image capability. Audio input is not qualified for this endpoint/model.

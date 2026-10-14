@@ -27,10 +27,8 @@ them:
 | Context | 131,072 |
 | Precision | `bfloat16` — **not quantised** |
 
-A dense (non-MoE), unquantised text model with a 131,072-token context. The separately documented
-[MiniCPM-V-4.7-1B](/radeon-cloud-docs/models/minicpm-v4-7-1b/) and
-[MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/models/minicpm-v4-7-35b-a3b/) are newer vision-language
-models with different API model IDs and controls; do not apply this page's limits to them.
+The only dense (non-MoE) model on this endpoint, and the only unquantised one. Its 131,072-token
+context is the shortest here.
 
 ## On this endpoint
 

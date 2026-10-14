@@ -11,12 +11,8 @@ sidebar:
 这里有页面并不代表该模型当前在线。除 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/)
 是文档 OCR、走自己的端点以外，其余都在 `/v1/chat/completions` 上应答。
 
-:::note[新增MiniCPM-V4.7：2026-10-13验证]
-[MiniCPM-V-4.7-1B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-1b/)和
-[MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-35b-a3b/)已新增独立接口页。
-两款均支持文本/图像，使用262,144-token窗口，以`chat_template_kwargs.enable_thinking`控制可选思考。
-共享端点的实际限制见各模型页。其它旧条目保留原验收范围，本次不是全目录重新认证；
-推理引擎或部署版本变化可能改变行为。
+:::note[最后更新：2026-09-23]
+模型换了推理引擎，行为就可能跟着变。
 
 **MiniCPM5-1B 已不再对外提供**，其说明页已移除。
 同体量级由 [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) 提供。
@@ -34,12 +30,9 @@ sidebar:
 | [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
-| [MiniCPM-V-4.7-1B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-1b/) | 262,144 | ✅ | 默认关闭，使用模型专用开关 |
-| [MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-35b-a3b/) | 262,144 | ✅ | 默认关闭，使用模型专用开关 |
 
-[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/)另有音频输入说明。
-不能从图像能力推导音频或视频能力；严格`json_schema`也是独立的端点能力，
-**当前两款MiniCPM-V4.7共享端点不支持它**。
+[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 是表中唯一还收**音频**输入的模型，
+也是唯一支持严格 `json_schema` 的模型。
 
 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/) 不在此表：它在 `POST /v1/ocr`
 上收 PDF 或图片、返回 Markdown、按页计费，下面的参数对它不适用。
@@ -59,9 +52,6 @@ sidebar:
 | MiMo-V2.6-Flash | `none` 及常见各档 —— 传 `none` 关闭思考 |
 
 这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
-
-**MiniCPM-V4.7不属于上表的effort档位模型。** 两款使用`chat_template_kwargs.enable_thinking`
-（`true`/`false`），默认`false`；不要套用其它模型的档位。Python SDK的`extra_body`示例见各模型页。
 
 :::caution[`high` 在 Qwen3.8-27B 上是 400]
 `high` 是多数 OpenAI 兼容客户端表达「多想一会儿」时发的值，也恰恰是唯一一个
@@ -88,9 +78,8 @@ reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `hig
 Qwen3.8-27B 返回的是校验器报的 **400**。
 :::
 
-:::tip[上表采用effort控制的模型，共同档位为 `low` 或 `medium`]
-这两个值是该effort表中模型的交集，不是MiniCPM-V4.7等新增模型的通用设置。
-最高档的名字不通用——两个 Qwen 模型用 `xhigh`，
+:::tip[一套代码打所有思考模型，就用 `low` 或 `medium`]
+这两个值是上表所有模型的交集。最高档的名字不通用——两个 Qwen 模型用 `xhigh`，
 GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模型选值时，读
 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 确认当前发布的是哪几个模型，再对照上表。
 :::
@@ -106,15 +95,14 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 | Qwen3.8-27B | **照样思考** | ❌ |
 | GLM-5.3-Flash | **照样思考** | ❌ |
 | MiniCPM5-2B | 不思考 | ❌ |
-| MiniCPM-V-4.7-1B | 默认关闭；由 `chat_template_kwargs.enable_thinking` 控制 | 思考SSE实测返回 |
-| MiniCPM-V-4.7-35B-A3B | 默认关闭；由 `chat_template_kwargs.enable_thinking` 控制 | 思考SSE实测返回 |
 
 思考文本从 `choices[0].message.reasoning` 读。MiniCPM5-2B 直接给答案，该字段为空、
 `reasoning_tokens` 为 `0`，答案从 `content` 读。
 
-token计数按响应实际返回的`usage.completion_tokens_details.reasoning_tokens`或
-`usage.reasoning_tokens`读取；V4.7思考SSE实测返回后者。两项不要相加，也不要再加进总计数；
-缺少明细不代表一定没有思考。详见[思考响应字段](/radeon-cloud-docs/zh-cn/api/chat-completions/#思考响应字段)。
+token 数用 **`usage.completion_tokens_details.reasoning_tokens`**，除
+[Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) 外每个模型都给——那一个
+压根不返回 `completion_tokens_details` 对象，所以它的思考 token 无法与其余输出分开统计，
+但仍然计入 `usage.completion_tokens`，也仍然计费。
 
 :::caution[两个 Qwen 模型和 GLM-5.3-Flash 默认就在思考，而且思考要花 `max_tokens`]
 Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
@@ -134,8 +122,7 @@ Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照�
 | GLM-5.3-Flash | 位置任意，可多条 | `system` |
 | MiniCPM5-2B | 位置任意，可多条 | `system` |
 
-在上表对应的旧角色验收中，只有三个DeepSeek模型接受`developer`作为`system`别名；
-其余四个拒绝——
+只有三个 DeepSeek 模型把 `developer` 当作 `system` 的别名接受。其余四个一律拒绝——
 Qwen3.8-27B 报 `Unexpected message role.`，Qwen3.8-Flash-Next、GLM-5.3-Flash 和
 MiniCPM5-2B 报反序列化错误，并指出是第几条消息：
 
@@ -150,26 +137,19 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 **所有模型都能接受的写法**：一条 `system` 消息、放在数组下标 `0`、角色名写 `system`。
 
-MiniCPM-V4.7使用常规对话消息；需要系统指令时采用一条首位`system`。
-本次未认证更宽松的system布局或developer角色。
-
 ## 结构化输出与工具
 
-旧模型页分别记录了以下能力的验收范围：
+每个对话模型都支持：
 
 - `response_format: {"type": "json_object"}`
 - `tools` + `tool_choice` 的函数调用
 
-两款MiniCPM-V4.7已通过`json_object`、auto/required/指定函数、工具结果回填和工具SSE测试；
-严格`json_schema`目前返回400。
-
-**共享网关不透传`parallel_tool_calls`。** HTTP成功不表示该控制已生效，`false`不能保证只返回
-一个调用；这与模型后端本身支持什么是两回事。
+`parallel_tool_calls` 参数各模型都接受，但一轮返回多个 `tool_calls` 属于模型自主行为，
+不要在设计上依赖它。
 
 ## 图像输入
 
-支持图片的模型使用`content`数组中的`image_url`内容块。下表计数依具体输入图片而变，
-不是固定每图价格：
+四个模型收图，`content` 数组里放 `image_url` 内容块即可：
 
 | 模型 | 单图计量 |
 |---|---|
@@ -177,11 +157,9 @@ MiniCPM-V4.7使用常规对话消息；需要系统指令时采用一条首位`s
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`，示例值 202 |
 | Qwen3.8-Flash-Next | `usage.prompt_tokens_details.image_tokens`，示例值 144 |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`，示例值 72 |
-| MiniCPM-V-4.7-1B | `usage.prompt_tokens_details.image_tokens`；默认16x下，280×280纯色PNG样例为64 |
-| MiniCPM-V-4.7-35B-A3B | `usage.prompt_tokens_details.image_tokens`；相同默认配置样例为64 |
 
 :::caution[Qwen3.8-27B 的图片计数多嵌了一层]
-上表其余行报`prompt_tokens_details.image_tokens`，Qwen3.8-27B 报的是
+四个里有三个报 `prompt_tokens_details.image_tokens`，Qwen3.8-27B 报的是
 `prompt_tokens_details.multimodal_tokens.image`。跨模型统计图片用量的代码两种都要读。
 :::
 
@@ -198,20 +176,19 @@ MiniCPM-V4.7使用常规对话消息；需要系统指令时采用一条首位`s
 }
 ```
 
-发送图片前以所选模型页和当前目录确认能力，上表不是全部模态的完整清单。
-MiniCPM-V4.7支持多个图片块，但共享端点不接受`video_url`，也不透传4x处理参数。
-要从 PDF 或扫描件里取文字，用
+要发图请先确认目标模型在上表里——其余对话模型是纯文本的。要从 PDF 或扫描件里取文字，用
 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/)：返回 Markdown，按页计费。
 
 ## 想用一套代码打所有模型
 
-跨模型客户端应注意：
+所有对话模型都接受的写法：
 
 - 一条 `system` 消息，放在下标 `0`，角色名写 `system`
-- 按模型选择思考控制；MiniCPM-V4.7用`chat_template_kwargs.enable_thinking`，不要强制传effort档位
+- `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400；
+  **也别用 `xhigh`**，GLM-5.3-Flash 会 422）
 - 思考文本从 `choices[0].message.reasoning` 读
-- 思考token读取实际返回的已说明usage字段，不重复相加
-- 只有支持的模型才使用`response_format: {"type": "json_object"}`；两款V4.7已实测通过
+- 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 不给）
+- 要 JSON 用 `response_format: {"type": "json_object"}`
 - `content` 只放文本；要发图先确认模型支持，并注意 Qwen3.8-27B 的计量字段不同
 - `max_tokens` 按目标模型的窗口算，从 131,072 到 1,048,576 差了 8 倍
 
@@ -219,9 +196,9 @@ MiniCPM-V4.7支持多个图片块，但共享端点不接受`video_url`，也不
 
 | | |
 |---|---|
-| 常用请求字段 | `temperature`、`max_tokens`、`top_p`、`stream`、`response_format`、`tools`、`tool_choice`；具体能力依模型而定 |
-| 共享端点不透传 | `parallel_tool_calls`、`mm_processor_kwargs`；其它被过滤的参数见聊天API参考 |
-| 开启思考的写法 | 按模型：支持时使用effort控制；MiniCPM-V4.7使用`chat_template_kwargs.enable_thinking` |
+| 接受的参数 | `temperature`、`max_tokens`、`top_p`、`stream`、`response_format`、`tools`、`tool_choice`、`parallel_tool_calls`、`reasoning_effort` |
+| 会被静默丢弃 | `stop`、`seed`、`logit_bias`、`logprobs`、`top_logprobs`、`top_k`、`min_p`、`repetition_penalty` |
+| 开启思考的写法 | 只有 `reasoning_effort`（或等价的 `reasoning.effort`）|
 | 上报的分词器 | `GPT` |
 | 稳定性 | `experimental` |
 
