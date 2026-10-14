@@ -1,6 +1,6 @@
 ---
 title: MiniCPM-V-4.7-1B
-description: OpenBMB 小型视觉语言模型接口文档——文本、图像、工具调用、JSON 与可选思考。
+description: OpenBMB 的小型视觉语言模型——稠密 Qwen3.5 骨干、BF16 权重与可选思考。
 sidebar:
   order: 10
 ---
@@ -11,66 +11,165 @@ sidebar:
   <span class="rc-auth">model: <code>MiniCPM-V-4.7-1B</code></span>
 </div>
 
-## 关于模型
+## 关于这个模型
 
-本页说明 **MiniCPM-V-4.7-1B 在共享模型 API 上的调用方式**。服务使用
-[OpenBMB 官方权重](https://huggingface.co/openbmb/MiniCPM-V-4.7-1B)，是采用稠密语言骨干的
-视觉语言模型，不是纯文本的 [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/)。
-同系列的大型 MoE 版本见 [MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-35b-a3b/)。
+这里提供的是 **[OpenBMB/MiniCPM-V-4.7-1B](https://huggingface.co/openbmb/MiniCPM-V-4.7-1B)**
+官方权重，采用稠密 Qwen3.5 语言骨干，接受文本和图像，默认直接回答，需要显式开启思考。
+它不是独立提供的纯文本 MiniCPM5-2B；同系列的大型 MoE 版本见
+[MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-35b-a3b/)。
 
-:::note[适用范围：中国区共享 API，2026-10-13 验证]
-示例使用 `https://developer.amd.com.cn/radeon/api/v1`。当前可用模型和价格以
-[`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准；存在文档不等于模型始终在线。
-本页不代表其它区域或独占端点具备相同配置和行为。
-:::
+### 架构
+
+取自官方权重固定版本的
+[`config.json`](https://huggingface.co/openbmb/MiniCPM-V-4.7-1B/raw/984a89aafcd5160164f4f0d04b4be0f4eec03cb8/config.json)。
+下表的层数与注意力维度来自 `text_config`：
+
+| | |
+|---|---|
+| 架构 | `MiniCPMV4_7ForConditionalGeneration`，`model_type = minicpmv4_7` |
+| 语言骨干 | 稠密 Qwen3.5，`model_type = qwen3_5_text` |
+| 层数 | 24 —— **18 层线性注意力 + 6 层全注意力**；每第 4 层为全注意力 |
+| 隐藏维度 | 1,024 |
+| 全注意力 | 8 个 Q 头、2 个 KV 头；头维度 **256** |
+| 线性注意力 | 16 个 key 头、16 个 value 头；key/value 头维度均为 128，卷积核大小为 4 |
+| 中间维度 | 3,584 |
+| 词表 | 248,094 |
+| 原生上下文 | 262,144 |
+| 精度 | `bfloat16` —— **未量化权重** |
+
+独立的 `vision_config` 描述视觉塔：
+
+| | |
+|---|---|
+| 模型类型 | `minicpmv4_7_vision` |
+| 层数 / 隐藏维度 / 头数 | 27 / 1,152 / 16 |
+| 中间维度 | 4,304 |
+| patch 大小 | 14 |
+| 配置图像尺寸 | 980，不代表上传图片的尺寸上限 |
+
+外层配置通过 `downsample_mode = 16x` 指定默认视觉压缩。
 
 ## 本端点上的行为
 
+:::note[中国区共享 API —— 2026-10-13 验证]
+以下服务行为适用于 `https://developer.amd.com.cn/radeon/api/v1`，不代表其它区域或独占部署。
+当前可用状态和价格以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准。
+:::
+
 ### 概览
 
-| 项目 | 值 |
+| | |
 |---|---|
-| API Base URL | `https://developer.amd.com.cn/radeon/api/v1` |
-| 请求中的准确 `model` | `MiniCPM-V-4.7-1B` |
-| 鉴权 | `Authorization: Bearer <YOUR_API_KEY>`，使用控制台中的 Model API Key |
-| 输入 / 输出 | 文本、图片 / 文本、JSON 或结构化工具调用 |
-| 上下文窗口 | **262,144 tokens**，输入与生成输出共用 |
-| 配置的输出上限 | **32,768 tokens**，同时受剩余上下文预算约束 |
-| 思考 | 默认关闭；通过 `chat_template_kwargs.enable_thinking=true` 开启 |
-| 推理引擎 / 权重精度 | SGLang / BF16 |
+| 上下文长度 | 262,144 token |
+| 输入模态 | 文本、图像 |
+| 流式 | ✅ |
+| 工具调用 | ✅ —— 包括工具结果回填与流式调用 |
+| JSON 输出 | ✅ `json_object`；本模型在此部署上不支持严格 `json_schema` |
+| 思考 | ✅ —— **默认关闭，需要显式开启** |
+| 推理引擎 | SGLang |
+| 稳定性 | 目录标签尚未核实，以当前模型目录为准 |
 
-系统提示、历史对话、工具定义、聊天模板和视觉 tokens 都占上下文；思考也占生成预算。
-应为回答预留空间，不能提交 256K 输入后再额外生成输出。当前已配置完整窗口，但**尚未完成
-完整 256K 公网端到端验收**；大请求还可能受入口、超时及[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)约束。
+### `messages`
 
-### 计量价格
+使用常规的 `user` / `assistant` 对话；需要系统指令时，使用一条置于首位的 `system`。
+本模型尚未验证多条或非首位 `system` 消息，以及 `developer` 角色。
+图片与文本部件放在同一条用户消息的 `content` 数组中。
 
-2026-10-13 验证的平台计量价：
+### 思考
 
-| 输入 | 输出 | 缓存命中输入 | 单位 |
-|---:|---:|---:|---|
-| 0.035 | 0.07 | 0.0007 | USD / 百万 tokens |
+思考**默认关闭**。开启时，在请求顶层传入：
 
-这是用量/额度记账单价，不表示每个请求都会产生现金扣款。实时价格读取模型目录，实际用量在中国区
-控制台查看。[Usage](/radeon-cloud-docs/zh-cn/api/usage/)可作为响应格式参考，其中全球区主机的示例
-不是中国区用量查询入口。不要根据共享 API 的名称推断计量价格为零。
+```json
+{"chat_template_kwargs": {"enable_thinking": true}}
+```
 
-### 文本调用
+Python OpenAI SDK 使用 `extra_body={"chat_template_kwargs": {"enable_thinking": True}}`。
+显式关闭时将 `enable_thinking` 设为 `false`。本模型尚未确立 `reasoning_effort` 档位
+或独立思考 token 预算的支持契约。
 
-模型 ID 不加 `openbmb/` 前缀。将 `RADEON_API_KEY` 设置为环境变量，不要把真实密钥提交到代码中。
+| | |
+|---|---|
+| 非流式思考文本 | `choices[].message.reasoning` |
+| SSE 思考文本 | `choices[].delta.reasoning` |
+| 最终回答 | `choices[].message.content`；SSE 为 `choices[].delta.content` |
+| 独立思考 token 数（如有） | `usage.completion_tokens_details.reasoning_tokens` 或 `usage.reasoning_tokens` |
 
-| 参数 | 类型 | | 说明 |
-|---|---|---|---|
-| `model` | string | <span class="rc-req">必填</span> | 上文列出的准确模型ID |
-| `messages` | array | <span class="rc-req">必填</span> | 对话消息及图片内容块 |
-| `max_tokens` | integer | <span class="rc-opt">选填</span> | 包括思考在内的生成预算 |
-| `temperature` | number | <span class="rc-opt">选填</span> | 采样温度 |
-| `stream` | boolean | <span class="rc-opt">选填</span> | 开启SSE，默认`false` |
-| `stream_options.include_usage` | boolean | <span class="rc-opt">选填</span> | 请求流式最终usage |
-| `tools` | array | <span class="rc-opt">选填</span> | 函数定义 |
-| `tool_choice` | string或object | <span class="rc-opt">选填</span> | auto、required、none或指定函数 |
-| `response_format` | object | <span class="rc-opt">选填</span> | `{"type":"json_object"}`；严格Schema不可用 |
-| `chat_template_kwargs.enable_thinking` | boolean | <span class="rc-opt">选填</span> | 默认`false`；SDK通过`extra_body`传入 |
+读取 **`reasoning`，不是 `reasoning_content`**，并与最终答案分开保存。文本字段缺失或为 null
+是合法情况。流式请求使用 `stream: true`；通过 `stream_options: {"include_usage": true}`
+请求最终用量，并处理 `choices: []` 的纯 usage 分片。用量计数沿用返回值，不要将两个思考
+计数字段相加，也不要再次加进总数；字段缺失表示未提供，不代表一定为零。
+思考 SSE 已通过测试；非流式字段名遵循网关契约，但该轮没有单独复验非流式思考。
+
+### 图像输入
+
+单图与两图请求已通过功能测试。使用 `image_url` 内容部件：
+
+```json
+{
+  "role": "user",
+  "content": [
+    {"type": "image_url", "image_url": {"url": "data:image/png;base64,<BASE64_PNG>"}},
+    {"type": "text", "text": "描述这张图片，并抄写其中可见的文字。"}
+  ]
+}
+```
+
+将 `<BASE64_PNG>` 替换为图片的 base64 数据，MIME 类型应与文件格式一致。
+多图时按问题引用顺序重复添加 `image_url` 部件。这不代表无限图片数量或 OCR 准确率保证。
+图像用量由 `usage.prompt_tokens_details.image_tokens` 报告；视觉 tokens 占用上下文，
+base64 也会增加请求体大小。
+
+服务使用 **16x** 视觉压缩。`mm_processor_kwargs`（包括 `downsample_mode="4x"`）
+**不透传**，传入该参数不会改变压缩配置。
+
+### 工具
+
+`tools` 搭配 `tool_choice="auto"`、`"required"` 或指定函数均已通过测试，工具结果回填和
+流式工具调用也已验证。模型只提出调用请求，由应用执行工具；执行前校验工具名与参数，
+先将包含 `tool_calls` 的 assistant 消息追加到对话，再将各项结果以 `role: "tool"` 消息
+回填，保留各自对应的 `tool_call_id`，然后请求最终回答。
+
+仅在 `finish_reason="tool_calls"` 且调用完整时执行工具。流式响应需按 choice 和 tool-call
+的 index 累加 `delta.tool_calls`，再解析完整的参数 JSON。回填后的最终回答也需检查
+`finish_reason`，不能把 `length` 当作正常完成。
+`parallel_tool_calls` **不透传**，因此 `false` 不能保证一轮只有一个调用。应用需处理实际
+返回的全部调用，必要时自行串行执行。
+
+### 结构化输出
+
+| `response_format` | 本模型在当前部署上的结果 |
+|---|---|
+| `{"type":"json_object"}` | ✅ —— 在提示词中要求 JSON，并解析 `choices[0].message.content` |
+| `{"type":"json_schema","json_schema":{...}}` | ❌ —— `MiniCPM-V-4.7-1B` 在此部署上返回 400 |
+
+JSON 对象模式和工具参数 JSON 不等于响应受到严格 Schema 约束。解析前先确认响应完整，
+再由应用校验必需字段与类型。这是本款 MiniCPM 部署的限制，不代表共享 API 的所有模型。
+
+### 限制
+
+| | |
+|---|---|
+| 上下文窗口 | 262,144 token，**输入与生成输出合并计算** |
+| 配置的输出上限 | 32,768 token，同时受剩余上下文约束 |
+| 输入 | 文本、图像；这里的 `video_url` 返回 400，音频未验证 |
+| JSON 输出 | `json_object`；本模型在这里不支持严格 `json_schema` |
+| 思考开关 | `chat_template_kwargs.enable_thinking` |
+| 请求覆盖 | `parallel_tool_calls` 与 `mm_processor_kwargs` 不透传 |
+
+:::caution[配置窗口不等于已完成满窗口验收]
+系统提示、历史对话、工具定义、聊天模板和图像都占上下文；思考也占输出预算，不能提交
+256K 输入后再额外生成输出。完整 256K 公网端到端请求尚未完成验收。
+长 Agent 循环、思考与结构化输出组合，以及本模型的 Anthropic/Responses 兼容性也尚未验证。
+:::
+
+普通文本或图片回答，以及工具执行后的最终回答，应在 `finish_reason="stop"` 后才视为完整。
+SSE 需检查结束时的 choice；`length` 或缺少结束原因均不能默认为成功完成。
+大请求还可能受入口、超时及[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)约束。
+
+### 示例
+
+使用准确的模型 ID，不加 `openbmb/` 前缀。将控制台中的 Model API Key 设置为环境变量
+`RADEON_API_KEY`，不要把真实密钥提交到代码中。
 
 ```bash
 curl --fail-with-body https://developer.amd.com.cn/radeon/api/v1/chat/completions \
@@ -78,180 +177,12 @@ curl --fail-with-body https://developer.amd.com.cn/radeon/api/v1/chat/completion
   -H "Content-Type: application/json" \
   -d '{
     "model": "MiniCPM-V-4.7-1B",
-    "messages": [{"role": "user", "content": "计算17加25，只回复数字。"}],
+    "messages": [{"role": "user", "content": "计算 17 加 25，只回复数字。"}],
     "temperature": 0,
     "max_tokens": 64
   }'
 ```
 
-答案从 `choices[0].message.content` 读取，token 计数从 `usage` 读取。
-对话使用常规的 `user` / `assistant` 消息；需要系统指令时，使用一条置于首位的 `system`。
-本页没有验证更宽松的 system 排列或 developer 角色写法。
-
-### 单图与多图
-
-安装 Python OpenAI SDK 后，可将本地 PNG 编码成 base64 data URL：
-
-```python
-import base64
-import os
-from pathlib import Path
-from openai import OpenAI
-
-client = OpenAI(base_url="https://developer.amd.com.cn/radeon/api/v1",
-                api_key=os.environ["RADEON_API_KEY"])
-encoded = base64.b64encode(Path("image.png").read_bytes()).decode("ascii")
-result = client.chat.completions.create(
-    model="MiniCPM-V-4.7-1B",
-    messages=[{"role": "user", "content": [
-        {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{encoded}"}},
-        {"type": "text", "text": "描述这张图片，并抄写其中可见的文字。"},
-    ]}],
-    max_tokens=256,
-)
-print(result.choices[0].message.content)
-```
-
-多图时，在同一个 `content` 数组中按问题引用的顺序放入多个 `image_url` 内容块，再附文本问题。
-单图及两图按序理解已通过功能测试；这不代表无限图片数量或 OCR 准确率保证。data URL 的 MIME
-类型应与文件格式匹配。base64 会增加请求体大小，解码后的视觉 tokens 也占上下文。
-
-共享端点使用默认 **16x** 视觉压缩配置；**不透传** `mm_processor_kwargs` 请求覆盖，
-包括 `downsample_mode="4x"`。不要传入该参数后期待分辨率或 token 用量发生变化。
-
-### 工具调用
-
-`tools` 搭配 `tool_choice="auto"`、`"required"` 或指定函数均通过功能测试。
-模型只提出调用请求，**由客户端执行工具**。下面是一次完整回填：
-
-```python
-import json
-import os
-from openai import OpenAI
-
-client = OpenAI(base_url="https://developer.amd.com.cn/radeon/api/v1",
-                api_key=os.environ["RADEON_API_KEY"])
-model = "MiniCPM-V-4.7-1B"
-tools = [{"type": "function", "function": {
-    "name": "add_numbers", "description": "将两个整数相加。",
-    "parameters": {"type": "object", "properties": {
-        "a": {"type": "integer"}, "b": {"type": "integer"}},
-        "required": ["a", "b"], "additionalProperties": False},
-}}]
-messages = [{"role": "user", "content": "请调用add_numbers计算17加25。"}]
-first = client.chat.completions.create(
-    model=model, messages=messages, tools=tools,
-    tool_choice={"type": "function", "function": {"name": "add_numbers"}},
-    temperature=0, max_tokens=256,
-)
-if first.choices[0].finish_reason != "tool_calls":
-  raise RuntimeError("工具调用未正常生成完毕，不执行可能残缺的调用。")
-message = first.choices[0].message
-calls = message.tool_calls or []
-if not calls:
-    raise RuntimeError("未返回工具调用，请检查finish_reason和响应内容。")
-messages.append({"role": "assistant", "content": message.content, "tool_calls": [
-    {"id": call.id, "type": "function", "function": {
-        "name": call.function.name, "arguments": call.function.arguments}}
-    for call in calls
-]})
-for call in calls:
-    args = json.loads(call.function.arguments)
-    if (call.function.name != "add_numbers" or not isinstance(args, dict)
-            or set(args) != {"a", "b"}
-            or any(type(args[k]) is not int for k in ("a", "b"))):
-        raise ValueError("工具名或参数不符合预期")
-    messages.append({"role": "tool", "tool_call_id": call.id,
-                     "content": json.dumps({"sum": args["a"] + args["b"]})})
-final = client.chat.completions.create(
-    model=model, messages=messages, tools=tools, tool_choice="none", max_tokens=64,
-)
-print(final.choices[0].message.content)
-```
-
-执行前验证工具名和参数，回填时保留对应的 `tool_call_id`。工具结果回填和流式工具调用已通过测试。
-接收工具 SSE 时，按 choice 与 tool-call 的 index 累加 `delta.tool_calls`，等参数字符串完整后再解析 JSON。
-
-当前不透传 `parallel_tool_calls`，因此 `false` **不能保证一轮只有一个调用**。
-客户端需处理实际返回的全部调用；如业务不允许并发，可在客户端串行执行。
-
-### JSON 输出
-
-支持普通 JSON 对象模式：
-
-```bash
-curl --fail-with-body https://developer.amd.com.cn/radeon/api/v1/chat/completions \
-  -H "Authorization: Bearer $RADEON_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "MiniCPM-V-4.7-1B",
-    "messages": [{"role": "user", "content": "输出JSON对象，value为整数42，label为字符串ok。"}],
-    "response_format": {"type": "json_object"},
-    "temperature": 0,
-    "max_tokens": 128
-  }'
-```
-
-将 `choices[0].message.content` 解析为 JSON。**当前共享端点不支持严格
-`response_format.type="json_schema"`，请求会返回400。** JSON对象模式和工具参数能解析为JSON，
-都不等于响应受到严格Schema约束；应用应自行校验必需字段和类型。
-
-### 思考与流式
-
-本模型**默认关闭思考**。Python SDK 通过 `extra_body` 传入专用开关，在 HTTP 请求中对应
-顶层 `chat_template_kwargs` 字段：
-
-```python
-import os
-from openai import OpenAI
-
-client = OpenAI(base_url="https://developer.amd.com.cn/radeon/api/v1",
-                api_key=os.environ["RADEON_API_KEY"])
-thinking_parts, answer_parts = [], []
-finish_reason, usage = None, None
-stream = client.chat.completions.create(
-    model="MiniCPM-V-4.7-1B",
-    messages=[{"role": "user", "content": "解方程x+y=23、x-y=7，给出x和y。"}],
-    extra_body={"chat_template_kwargs": {"enable_thinking": True}},
-    stream=True, stream_options={"include_usage": True}, max_tokens=512,
-)
-for chunk in stream:
-  if chunk.usage is not None:
-    usage = chunk.usage
-  for choice in chunk.choices:
-    if choice.finish_reason is not None:
-      finish_reason = choice.finish_reason
-    thought = getattr(choice.delta, "reasoning", None)
-    if isinstance(thought, str) and thought:
-      thinking_parts.append(thought)
-    if isinstance(choice.delta.content, str) and choice.delta.content:
-      answer_parts.append(choice.delta.content)
-if finish_reason != "stop":
-  raise RuntimeError(f"回答未正常完成：finish_reason={finish_reason!r}")
-print("".join(answer_parts))  # thinking_parts单独保存，不拼入最终答案。
-if usage is not None:
-  print(usage.model_dump(exclude_none=True))
-```
-
-显式关闭时将 `enable_thinking` 设为 `false`。尚未为本模型确立 `reasoning_effort` 档位
-或思考 token 定额的支持契约，不要直接照搬其它模型的参数。
-
-| 响应方式 | 思考文本 | 最终回答 |
-|---|---|---|
-| 非流式 | `choices[].message.reasoning` | `choices[].message.content` |
-| SSE | `choices[].delta.reasoning` | `choices[].delta.content` |
-
-读取 `reasoning`，不是 `reasoning_content`；文本字段缺失/null及`choices: []`的usage分片都是合法情况。
-思考SSE和普通文本/工具SSE已测试；非流式字段名遵循网关契约，该轮未单独进行非流式思考推理复验。
-`usage`计数沿用响应原值。独立思考计数可能位于`usage.reasoning_tokens`或
-`usage.completion_tokens_details.reasoning_tokens`；不要将两者相加，也不要再加进总计数。
-两者均缺失表示未提供独立计数，不代表一定为零。
-`finish_reason="length"` 表示生成预算用尽，不应把残缺答案或未完成的工具参数JSON当作完整结果。
-
-### 限制与尚未验证的路径
-
-- **视频**：共享聊天端点不接受 `video_url`（400）；支持图片不等于视频已开放。音频输入未在本端点/模型上验证。
-- **严格JSON Schema、parallel控制、4x覆盖**：当前不可用，见上文。
-- 完整256K请求、长Agent循环、思考与结构化输出组合，以及本模型的Anthropic/Responses兼容性未完成该项验收。
-- 401是鉴权问题，429是额度/限流，5xx是服务或上游错误；均不能证明不支持的参数已被应用。
-  参阅[错误](/radeon-cloud-docs/zh-cn/api/errors/)和[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
+检查 `finish_reason` 后读取 `choices[0].message.content`，token 计数从 `usage` 读取。
+2026-10-13 核实的计量价为每百万 tokens：**输入 $0.035 / 输出 $0.07 / 缓存命中输入 $0.0007**。
+这是用量/额度记账单价，不代表自动现金扣款；实时价格看模型目录，实际用量看中国区控制台。
