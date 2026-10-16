@@ -87,6 +87,10 @@ export default defineConfig({
           ],
         },
         {
+          label: 'RCC CLI',
+          items: [{ slug: 'rcc/overview' }],
+        },
+        {
           label: 'API Reference',
           translations: { 'zh-CN': 'API 参考' },
           items: [
