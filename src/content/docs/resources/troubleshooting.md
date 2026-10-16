@@ -7,13 +7,13 @@ sidebar:
 
 ## Instances
 
-### The launch never reaches ready
+### The instance never becomes ready
 
 Watch `status` and `message` while polling. A large image being pulled for the first time, or a vLLM instance downloading weights, legitimately takes several minutes.
 
 If it sits in `pending` far longer than that, the cluster may not have capacity for the GPU count you asked for. Try 1 GPU. If it reaches `failed`, the `reason` and `detail` fields carry the scheduling error.
 
-### The launch was rejected outright
+### The launch is rejected
 
 `Each user can only have one active instance` — destroy the existing one first. `Insufficient credits` — your balance is below the GPU count requested. `Invalid image selected` — the image was disabled or removed from the catalog since you created the template.
 
@@ -60,11 +60,11 @@ You've hit a rate limit. The `code` field names which one; `Retry-After` says ho
 
 Sustained `429`s mean your workload is bigger than the shared allowance, and the fix is a [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) rather than more retries.
 
-### A model that used to work now 404s
+### A model that used to work returns 404
 
 The shared catalog changes as models are added and retired. Resolve names at runtime with [`GET /v1/models`](/radeon-cloud-docs/api/models/) instead of hard-coding them.
 
-### My dedicated endpoint doesn't respond
+### A dedicated endpoint doesn't respond
 
 Confirm the serve command binds correctly — `--host 0.0.0.0 --port 8000` is what the platform routes to, and binding to `127.0.0.1` leaves the endpoint unreachable while the instance looks healthy.
 

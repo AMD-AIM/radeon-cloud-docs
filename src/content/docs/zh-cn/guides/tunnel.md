@@ -1,5 +1,5 @@
 ---
-title: 暴露服务
+title: 对外暴露服务
 description: 用 rc-tunnel 给 notebook 里运行的 HTTP 服务分配一个公网 URL。
 sidebar:
   order: 7

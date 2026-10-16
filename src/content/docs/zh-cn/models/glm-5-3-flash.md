@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>GLM-5.3-Flash</code></span>
 </div>
 
-## 关于这个模型
+## 模型简介
 
 这里跑的权重是 **GLM-5.3-Flash**，Z.AI 的 GLM-5.3 系列里偏速度的一款——
 稀疏 MoE 模型，回答前先思考，而且不用你开也会思考。
@@ -45,7 +45,7 @@ token id，也就是说这个发布版本是多模态的。但本部署只提供
 发图会得到什么，见[图像输入](#图像输入)。
 :::
 
-## 在这个端点上
+## 在 Radeon Cloud 上的行为
 
 ### 一览
 

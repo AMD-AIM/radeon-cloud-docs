@@ -5,7 +5,7 @@ sidebar:
   order: 4
 ---
 
-The main inference endpoint on the **Public Free Model APIs**. It follows OpenAI's chat
+The main inference endpoint on the **shared model APIs**. It follows OpenAI's chat
 completions schema. A [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) serves
 the same path from your own vLLM or SGLang, and none of the request filtering below applies
 there.

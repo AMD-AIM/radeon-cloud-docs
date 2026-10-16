@@ -107,7 +107,7 @@ Returns `success: false` with `"No active instance found"` if there was nothing 
 
 Data is deleted with the instance unless the template used persistent storage.
 
-## A launch-and-wait loop
+## Example: launch and wait
 
 ```python
 import time, requests

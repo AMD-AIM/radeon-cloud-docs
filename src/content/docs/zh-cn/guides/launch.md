@@ -25,7 +25,7 @@ sidebar:
 
 **同时只能有一个实例。** 每个账号只能有一个活跃实例。启动新的之前要先销毁当前那个。
 
-**额度会提前检查。** 你的额度至少要不少于申请的 GPU 数量。见[额度](/radeon-cloud-docs/zh-cn/guides/credits/)。
+**积分会提前检查。** 你的积分至少要不少于申请的 GPU 数量。见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
 
 **GPU 数量只能是 1、2 或 4。** 其他值会被拒绝。
 

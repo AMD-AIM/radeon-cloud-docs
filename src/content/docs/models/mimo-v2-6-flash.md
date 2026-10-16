@@ -46,7 +46,7 @@ Only the **9 global layers** keep a full KV cache. The other 39 keep 128 tokens 
 this shape would need — which is how a 1M window fits at all.
 :::
 
-## On this endpoint
+## On Radeon Cloud
 
 ### At a glance
 

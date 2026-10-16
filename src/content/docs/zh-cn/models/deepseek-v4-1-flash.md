@@ -40,7 +40,7 @@ sidebar:
 | 推理引擎 | SGLang |
 | 稳定性 | `experimental` |
 
-## 思考
+## 思考模式
 
 不传 `reasoning_effort` 时直接作答，不走思考。
 

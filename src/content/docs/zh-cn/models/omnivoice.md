@@ -2,7 +2,7 @@
 title: OmniVoice
 description: 语音合成——把文本转成音频文件，走 OpenAI 兼容的语音端点。
 sidebar:
-  order: 11
+  order: 13
 ---
 
 <div class="rc-endpoint">

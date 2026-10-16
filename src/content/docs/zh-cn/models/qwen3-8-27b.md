@@ -37,7 +37,7 @@ sidebar:
 | 推理引擎 | vLLM |
 | 稳定性 | `experimental` |
 
-## 思考
+## 思考模式
 
 不主动调低就一直开着；不传 `reasoning_effort` 时落到 `xhigh`。
 

@@ -2,7 +2,7 @@
 title: Clef
 description: 决策模型——针对一个情境回答带类型的问题并给出概率，走独立端点。
 sidebar:
-  order: 12
+  order: 14
 ---
 
 <div class="rc-endpoint">

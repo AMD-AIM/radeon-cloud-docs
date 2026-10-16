@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>DeepSeek-V4-Flash-Vision-Exp</code></span>
 </div>
 
-## What this is
+## About the model
 
 A vision tower bolted onto the [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/)
 weights; the `Exp` in the name is *experimental*. **It is the only model on this endpoint that has
@@ -49,7 +49,7 @@ The vision tower (same `config.json`, expressed as flat `vision_*` keys rather t
 `vision_max_n_token = 384` is a hard ceiling: a larger image is compressed to 384 tokens, so very
 high-resolution inputs do not cost linearly more — and do not carry more detail either.
 
-## On this endpoint
+## On Radeon Cloud
 
 ### At a glance
 

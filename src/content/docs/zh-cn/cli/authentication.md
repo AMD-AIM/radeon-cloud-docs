@@ -1,8 +1,8 @@
 ---
-title: 登录与账户
-description: 用 Radeon Cloud CLI 登录、在多个账户之间切换，以及安全地保管凭证。
+title: 登录与账号
+description: 用 Radeon Cloud CLI 登录、在多个账号之间切换，以及安全地保管凭证。
 sidebar:
-  label: 登录与账户
+  label: 登录与账号
 ---
 
 ## 登录
@@ -31,57 +31,57 @@ rcc auth status
 rcc doctor
 ```
 
-`rcc auth status` 显示当前账户的令牌状态，加 `--all` 检查所有已保存的账户。`rcc doctor` 检查
+`rcc auth status` 显示当前账号的令牌状态，加 `--all` 检查所有已保存的账号。`rcc doctor` 检查
 本地配置、服务连通性、令牌是否有效，以及当前服务端开放了哪些 CLI 功能。
 
-## 多个账户
+## 多个账号
 
-CLI 可以保存多个账户，每个账户有一个你自己起的本地名称：
+CLI 可以保存多个账号，每个账号有一个你自己起的本地名称：
 
 ```bash
 rcc account register personal   # 登录并保存为 personal
-rcc account list                # 列出已保存的账户
-rcc account current             # 当前默认账户
-rcc account use work            # 把 work 设为默认账户
+rcc account list                # 列出已保存的账号
+rcc account current             # 当前默认账号
+rcc account use work            # 把 work 设为默认账号
 ```
 
-只想让某一条命令用别的账户，在命令前加 `-A`（`--account`），默认账户不变：
+只想让某一条命令用别的账号，在命令前加 `-A`（`--account`），默认账号不变：
 
 ```bash
 rcc -A personal status
 rcc -A work instance status
 ```
 
-保存了多个账户时，删除实例这类操作建议总是显式加 `-A`，免得删到另一个账户的实例：
+保存了多个账号时，删除实例这类操作建议总是显式加 `-A`，免得删到另一个账号的实例：
 
 ```bash
 rcc -A work instance delete --yes
 ```
 
-不再需要某个账户时：
+不再需要某个账号时：
 
 ```bash
 rcc account remove personal --revoke --yes
 ```
 
-`--revoke` 会先让它的令牌失效，再删除本地记录。删除账户记录不会影响云端的实例。
+`--revoke` 会先让它的令牌失效，再删除本地记录。删除账号记录不会影响云端的实例。
 
 ## 退出登录
 
 ```bash
-rcc auth logout         # 当前账户
-rcc auth logout --all   # 所有已保存的账户
+rcc auth logout         # 当前账号
+rcc auth logout --all   # 所有已保存的账号
 ```
 
 退出登录会让这台设备上的令牌失效，并删除对应的本地记录。它**不会**：
 
-- 停止或删除实例（实例会继续消耗额度，请先单独删除）
+- 停止或删除实例（实例会继续消耗积分，请先单独删除）
 - 退出浏览器里的 Radeon Cloud 登录
 - 影响其他设备上的登录
 
 ## 凭证与安全
 
-CLI 登录后保存的是以 `rcc_` 开头的令牌，只能用来管理账户和实例；调用模型 API 用的是以 `rc-`
+CLI 登录后保存的是以 `rcc_` 开头的令牌，只能用来管理账号和实例；调用模型 API 用的是以 `rc-`
 开头的 API Key，两者不是同一种凭证。
 
 - 令牌和一次性授权链接都属于敏感信息，不要贴到日志、工单或聊天里。

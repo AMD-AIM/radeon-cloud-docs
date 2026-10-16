@@ -1,7 +1,8 @@
 ---
-title: 模型总览
-description: 免费共享模型 API 上各模型分别接受什么、返回什么。
+title: 模型目录
+description: 共享模型 API 上各模型支持的输入和返回的内容。
 sidebar:
+  label: 总览
   order: 1
 ---
 
@@ -93,7 +94,7 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 确认当前发布的是哪几个模型，再对照上表。
 :::
 
-## 思考行为
+## 思考模式
 
 | 模型 | 不传 `reasoning_effort` 时 | `usage.reasoning_tokens`（顶层）|
 |---|:---:|:---:|
@@ -119,7 +120,7 @@ Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照�
 要么调大 `max_tokens`，要么传 `reasoning_effort: "low"`。
 :::
 
-## `messages` 怎么写
+## 编写 `messages`
 
 | 模型 | `system` 消息 | 角色名 |
 |---|---|---|
@@ -156,7 +157,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 `parallel_tool_calls` 参数各模型都接受，但一轮返回多个 `tool_calls` 属于模型自主行为，
 不要在设计上依赖它。
 
-## 图像输入
+## 图片输入
 
 四个模型收图，`content` 数组里放 `image_url` 内容块即可：
 
@@ -188,7 +189,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 要发图请先确认目标模型在上表里——其余对话模型是纯文本的。要从 PDF 或扫描件里取文字，用
 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/)：返回 Markdown，按页计费。
 
-## 想用一套代码打所有模型
+## 用一套代码调用所有模型
 
 所有对话模型都接受的写法：
 
@@ -201,7 +202,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 - `content` 只放文本；要发图先确认模型支持，并注意 Qwen3.8-27B 的计量字段不同
 - `max_tokens` 按目标模型的窗口算，从 131,072 到 1,048,576 差了 8 倍
 
-## 所有模型共通的部分
+## 所有模型的共同点
 
 | | |
 |---|---|
@@ -212,5 +213,5 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 | 稳定性 | `experimental` |
 
 不在接受列表里的参数，会在请求到达推理后端之前被剔除——不报错，也不生效。确实需要这些参数，
-请用[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)，它会把请求体原样透传给
+请用[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)，它会把请求体原样透传给
 vLLM 或 SGLang。

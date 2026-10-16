@@ -74,7 +74,7 @@ Token counts split into `prompt_tokens` and `completion_tokens`; some models als
 The numbers above are an example. Your actual limits are whatever this endpoint returns for your key — read them rather than assuming, since they differ between accounts and change over time.
 :::
 
-## Using it
+## Monitoring usage
 
 Poll this before a large batch job to confirm there's headroom, or watch `daily_cost_remaining_usd` in a dashboard so a job doesn't stop halfway through the night. Once the daily allowance is exhausted, requests are rejected until `daily_reset_at`.
 

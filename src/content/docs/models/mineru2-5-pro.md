@@ -2,7 +2,7 @@
 title: MinerU2.5-Pro
 description: Document OCR — turns a PDF or an image into Markdown, on its own endpoint.
 sidebar:
-  order: 10
+  order: 12
 ---
 
 <div class="rc-endpoint">

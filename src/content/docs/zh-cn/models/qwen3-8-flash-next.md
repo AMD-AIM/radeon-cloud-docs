@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>Qwen3.8-Flash-Next</code></span>
 </div>
 
-## 官方介绍
+## 模型简介
 
 这里跑的权重是 **Qwen3.8-Flash-Next-FP8**，即 Qwen3.8-Flash-Next 的 FP8 量化版本，采用块大小 128 的
 细粒度 FP8。Qwen 称其指标与未量化的原版几乎一致。
@@ -62,7 +62,7 @@ Qwen 把类型标为 *Causal Language Model with Vision Encoder*，仓库也打�
 见[图像输入](#图像输入)。
 :::
 
-## 本端点上的行为
+## 在 Radeon Cloud 上的行为
 
 ### 概览
 
@@ -80,7 +80,7 @@ Qwen 把类型标为 *Causal Language Model with Vision Encoder*，仓库也打�
 
 :::caution[`system` 只能放一条，且必须在第一位]
 模型自带的 Jinja chat template 把这条检查写在 `tokenizer_config.json` 里，不是网关加的规则——
-用同一份权重跑[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)也一样。
+用同一份权重跑[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)也一样。
 
 ```json
 "messages": [

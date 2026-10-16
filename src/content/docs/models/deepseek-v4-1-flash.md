@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>DeepSeek-V4.1-Flash</code></span>
 </div>
 
-## Specification
+## Specifications
 
 | | |
 |---|---|

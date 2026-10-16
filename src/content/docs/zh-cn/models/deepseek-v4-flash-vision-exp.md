@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>DeepSeek-V4-Flash-Vision-Exp</code></span>
 </div>
 
-## 这是什么
+## 模型简介
 
 在 [DeepSeek-V4-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash/) 的权重上接了一座视觉塔，
 名字里的 `Exp` 就是 experimental。**它是本端点上唯一既有 100 万上下文、又能读图的模型。**
@@ -46,7 +46,7 @@ sidebar:
 `vision_max_n_token = 384` 是个硬上限：再大的图也会被压到 384 个 token，所以超高分辨率的图不会
 线性地更贵，但细节也不会更多。
 
-## 本端点上的行为
+## 在 Radeon Cloud 上的行为
 
 ### 概览
 

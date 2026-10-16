@@ -5,7 +5,7 @@ sidebar:
   order: 3
 ---
 
-Returns the **Public Free Model APIs** catalog, with the pricing and capability metadata for
+Returns the **shared model API** catalog, with the pricing and capability metadata for
 each entry. A dedicated endpoint serves only the model you launched it with, and answers this
 path from vLLM or SGLang instead — see
 [Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/).

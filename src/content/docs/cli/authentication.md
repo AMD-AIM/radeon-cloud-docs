@@ -80,7 +80,7 @@ rcc auth logout --all   # every saved account
 
 Signing out invalidates the token on this device and removes the local record. It does **not**:
 
-- stop or delete an instance (it keeps consuming Credits — delete it separately)
+- stop or delete an instance (it keeps consuming credits, so delete it separately)
 - sign you out of Radeon Cloud in your browser
 - affect sign-ins on other devices
 

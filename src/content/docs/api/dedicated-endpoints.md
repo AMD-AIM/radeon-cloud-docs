@@ -31,7 +31,7 @@ Launch the template. Model weights are downloaded on first start, so a large mod
 
 Step-by-step instructions with screenshots are in [Model APIs](/radeon-cloud-docs/guides/model-apis/#dedicated-endpoints).
 
-## Calling it
+## Calling the endpoint
 
 Identical to a shared endpoint, with your own base URL and the model name you served:
 
@@ -56,7 +56,7 @@ client = OpenAI(
 
 The `model` value must match what you passed to `vllm serve`, not a name from the shared catalog.
 
-## What's available
+## Available endpoints
 
 Requests are forwarded to vLLM or SGLang with the routing prefix stripped, so the endpoint surface is whatever your server implements. For vLLM that typically includes:
 

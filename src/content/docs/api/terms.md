@@ -17,7 +17,7 @@ provided as is.
 
 By requesting an API key and calling these endpoints, you accept what follows.
 
-## What it is for
+## Intended use
 
 Evaluate the models, prototype against them, and decide whether AMD accelerators
 fit your work. Typical uses are evaluation, experimentation, learning, demos,
@@ -40,7 +40,7 @@ Concretely:
 If your work depends on the endpoint being up, run it somewhere with a
 commercial agreement behind it.
 
-## The models are the upstream originals
+## Models are unmodified upstream weights
 
 Models are served from their **published upstream weights**, unmodified, running
 on AMD accelerators. We do not fine-tune them, distill them, or substitute a

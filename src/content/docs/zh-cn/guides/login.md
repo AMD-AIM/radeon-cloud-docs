@@ -24,7 +24,7 @@ sidebar:
 
 还没有账号的话，在登录页点 **注册账号**，或者在[计划首页](https://developer.amd.com.cn/)点 **免费注册**。
 
-登录开发者计划后，中国站也就登录好了，控制台右上角会显示你的名字。换[额度](/radeon-cloud-docs/zh-cn/guides/credits/)用的开发者积分也存在这个账号里。
+登录开发者计划后，中国站也就登录好了，控制台右上角会显示你的名字。用来兑换 Radeon Cloud [积分](/radeon-cloud-docs/zh-cn/guides/credits/)的开发者积分也存在这个账号里。
 
 ## 全球站
 
@@ -36,7 +36,7 @@ sidebar:
 
 ## 登录之后
 
-点右上角的头像，选 **Profile**。这个页面管所有东西：模板、正在运行的实例、SSH key、API key，还有额度余额。
+点右上角的头像，选 **Profile**。这个页面集中管理模板、正在运行的实例、SSH 密钥、API Key 和积分余额。
 
 ![从头像菜单打开 Profile](../../../../assets/guide/click-profile.png)
 

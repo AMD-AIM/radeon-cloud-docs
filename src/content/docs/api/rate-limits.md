@@ -8,7 +8,7 @@ sidebar:
 Limits exist so shared capacity stays usable, so they land almost entirely on the free shared
 endpoints. There are four groups, applied independently.
 
-## Public Free Model APIs
+## Shared model APIs
 
 Each request goes through two checks, and it has to pass both. First the platform decides whether to admit the request. Then the gateway counts it against your account's limits.
 
@@ -50,7 +50,7 @@ anything:
 
 Listing models doesn't consume a concurrency slot, though it does count toward the per-minute limits.
 
-### When you're limited
+### When a request is limited
 
 `429` with a `Retry-After` header. The body depends on which tier refused you.
 
@@ -104,7 +104,7 @@ same request, they use different `code` values for the same condition, and the p
 is nested under `detail`.
 :::
 
-## Dedicated Model APIs
+## Dedicated model APIs
 
 None of the above applies. A dedicated endpoint has no gateway in front of it: the proxy checks
 that the key matches the instance and the port, then forwards. There is no per-minute limit, no
@@ -125,7 +125,7 @@ Exceeding it returns `429` with `Retry-After`.
 
 Sign-in attempts and new account creation are rate limited per IP. Relevant only if you're driving the console, not the API.
 
-## Handling limits well
+## Handling rate limits
 
 Honour `Retry-After` rather than picking your own interval, and back off exponentially with jitter on top — a fleet of clients that all retry after exactly 60 seconds recreates the spike that caused the limit.
 

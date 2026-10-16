@@ -5,7 +5,7 @@ sidebar:
   order: 5
 ---
 
-The **Public Free Model APIs** are also reachable through Anthropic's Messages API, so a client
+The **shared model APIs** are also reachable through Anthropic's Messages API, so a client
 built against Claude — Claude Code, the `anthropic` SDK, anything speaking that protocol —
 works by changing the base URL and the key.
 

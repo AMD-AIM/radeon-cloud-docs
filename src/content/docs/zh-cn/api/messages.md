@@ -5,9 +5,9 @@ sidebar:
   order: 5
 ---
 
-**Public Free Model APIs** 也能通过 Anthropic 的 Messages API 访问，所以照着 Claude 写的客户端——Claude Code、`anthropic` SDK、任何讲这套协议的东西——改掉基础 URL 和密钥就能用。
+**共享模型 API** 也能通过 Anthropic 的 Messages API 访问，所以照着 Claude 写的客户端——Claude Code、`anthropic` SDK、任何讲这套协议的东西——改掉基础 URL 和密钥就能用。
 
-这套接口属于共享模型前面那层网关。[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)是你自己的 vLLM 或 SGLang，那两个都不讲 Anthropic 协议，所以 `/v1/messages` 在那边是 `404`。
+这套接口属于共享模型前面那层网关。[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)是你自己的 vLLM 或 SGLang，那两个都不讲 Anthropic 协议，所以 `/v1/messages` 在那边是 `404`。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>

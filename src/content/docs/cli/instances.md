@@ -9,11 +9,11 @@ Each account has one current instance, and every `rcc instance` command acts on 
 instance ID to pass. To work with another account's instance, switch accounts with `-A` (see
 [Sign-in and accounts](/radeon-cloud-docs/cli/authentication/)).
 
-## Check Credits and available resources
+## Check credits and available resources
 
 ```bash
-rcc status           # account, Credits and instance at a glance
-rcc credits status   # Credits balance
+rcc status           # account, credits and instance at a glance
+rcc credits status   # credit balance
 rcc catalog list     # environments, resource pools and templates you may use
 ```
 

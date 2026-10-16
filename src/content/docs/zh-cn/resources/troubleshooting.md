@@ -7,21 +7,21 @@ sidebar:
 
 ## 实例
 
-### 启动一直到不了 ready
+### 启动后一直没有就绪
 
 轮询的时候盯着 `status` 和 `message`。第一次拉一个大镜像，或者 vLLM 实例在下载权重，本来就要好几分钟。
 
 如果卡在 `pending` 的时间远超这个量级，可能是集群没有你要的那个 GPU 数量的容量。试试 1 张卡。如果变成 `failed`，`reason` 和 `detail` 字段里有调度错误。
 
-### 启动直接被拒
+### 启动请求被拒绝
 
 `Each user can only have one active instance`——先销毁已有的那个。`Insufficient credits`——余额低于请求的 GPU 数量。`Invalid image selected`——自你创建模板以来，这个镜像被禁用或从目录里移除了。
 
-### 实例自己停了
+### 实例自动停止了
 
 实例有最长生命周期，也有闲置超时。碰到任一条都会被关掉。长任务应该把检查点写到持久化存储，这样一次关停不至于让整轮跑白费。
 
-### 我的文件没了
+### 文件丢失
 
 除非模板用了 **Persistent (PVC)** 存储，否则一切都随实例删掉。在模板上把存储设成持久化再重新启动——这个设置没法加到已经存在的实例上。
 
@@ -46,25 +46,25 @@ ssh -i ~/.ssh/id_ed25519 <user>@<host> -p <port>
 
 记住，实例启动之后才添加的公钥不会装进这个实例。重新启动。
 
-## Model API
+## 模型 API
 
-### 每个请求都 401
+### 所有请求都返回 401
 
 检查请求头是不是严格的 `Authorization: Bearer rc-...`。然后检查密钥是不是当前的——轮换密钥会立刻作废上一把，所以还揣着旧值的服务在重新部署之前会一直失败。
 
-如果你的账户还没过审，根本不会签发密钥。
+如果你的账号还没过审，根本不会签发密钥。
 
 ### 429
 
 你撞到限流了。`code` 字段说的是哪一道；`Retry-After` 说要等多久。见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
 
-持续的 `429` 说明你的负载超出了共享额度，解法是[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)，而不是多重试几次。
+持续的 `429` 说明你的负载超出了共享配额，解法是[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)，而不是多重试几次。
 
-### 一个原本能用的模型现在 404 了
+### 原本可用的模型返回 404
 
 共享目录会随模型上下架而变化。用 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 在运行时解析名字，别写死。
 
-### 我的独占端点不响应
+### 专属端点没有响应
 
 确认启动命令绑对了——平台路由的是 `--host 0.0.0.0 --port 8000`，绑到 `127.0.0.1` 会让端点连不上，而实例看起来一切正常。
 
@@ -76,7 +76,7 @@ ssh -i ~/.ssh/id_ed25519 <user>@<host> -p <port>
 
 ## GPU
 
-### rocm-smi 什么都不显示，或者 PyTorch 看不到 GPU
+### rocm-smi 没有输出，或 PyTorch 检测不到 GPU
 
 ```bash
 rocm-smi
@@ -103,15 +103,15 @@ export HSA_OVERRIDE_GFX_VERSION=11.0.0
 
 如果本地服务正常、状态也健康，公网 URL 还是不通，把完整域名、notebook 的创建时间和出问题的时间发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。不要发送配置文件或密钥。
 
-## 额度和优惠码
+## 积分和优惠码
 
 ### 优惠码兑换不了
 
-请粘贴完整的优惠码。开发者计划发的优惠码是一长串加密字符，只复制一部分会兑换失败。优惠码自兑换之日起 30 天内有效，每张只能用一次。另外要确认你登录的是想充值的那个站点，额度不能跨站转移。详见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/#兑换失败怎么办)。
+请粘贴完整的优惠码。开发者计划发的优惠码是一长串加密字符，只复制一部分会兑换失败。优惠码自兑换之日起 30 天内有效，每张只能用一次。另外要确认你登录的是想充值的那个站点，积分不能跨站转移。详见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/#兑换失败怎么办)。
 
-### `DP-` 开头的码没有加上额度
+### `DP-` 开头的码没有加上积分
 
-`DP-XXXX-XXXX-XXXX` 兑换的是开发者积分，不是额度。先在[积分券码页](https://developer.amd.com.cn/points/devpoints)兑换成积分，再到[兑取算力](https://developer.amd.com.cn/points/redeem)把积分换成优惠码。
+`DP-XXXX-XXXX-XXXX` 兑换的是开发者积分，不是 Radeon Cloud 积分。先在[积分券码页](https://developer.amd.com.cn/points/devpoints)兑换成开发者积分，再到[兑取算力](https://developer.amd.com.cn/points/redeem)把开发者积分换成优惠码。
 
 ## 仍然无法解决
 

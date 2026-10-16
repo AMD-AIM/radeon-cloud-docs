@@ -25,7 +25,9 @@ Node 20 or newer.
 ```
 src/
   content/docs/          English pages
-    guides/              user guide
+    guides/              getting started, GPU instance and model API guides
+    models/              model catalog (one page per shared model)
+    cli/                 Radeon Cloud CLI
     api/                 API reference
     resources/           troubleshooting, FAQ
     zh-cn/               Chinese pages, mirroring the same tree
@@ -58,6 +60,38 @@ Internal links are absolute and include the base path and locale:
 ```
 
 Adding a page means creating both files and adding its slug to the `sidebar` array in `astro.config.mjs`.
+
+### Style
+
+- The docs describe the **new console design**. Name buttons and fields exactly as the UI shows them, in bold. Chinese pages use the Chinese UI labels and English pages use the English ones (see `static/redesign/locales/{en,zh}.json` in the product repo).
+- Open each page with one or two sentences that say what the reader will get done.
+- Task pages get verb titles (Launch an instance / 启动实例); concept pages get noun titles. No casual or rhetorical headings.
+- Steps are numbered, one action per step.
+- Short sentences, one idea each. Avoid chaining clauses with dashes. No asides or editorializing.
+- Write each language natively; don't translate sentence by sentence.
+- Values that depend on the account or change over time (sizes, images, resource pools, prices) are described as such, with a way to look them up.
+
+### Terminology
+
+| English | 中文 | Notes |
+|---|---|---|
+| AMD Radeon Cloud / Radeon Cloud | AMD Radeon Cloud / Radeon Cloud | Full name on first mention per page |
+| China site / Global site | 中国站 / 全球站 | |
+| instance | 实例 | Not "container" or "machine" |
+| Deploy type: Notebook / Model API | 部署类型：Notebook / 模型 API | As in the UI |
+| image | 镜像 | |
+| size | 规格 | |
+| resource pool | 资源池 | |
+| workspace storage: temporary / persistent `/workspace` | 工作区存储：临时工作区 / 持久化 `/workspace` | Don't say PVC |
+| credits | 积分 | Matches the Chinese UI |
+| developer points | 开发者积分 | AMD AI Developer Program only; never shorten to 积分 |
+| shared model API | 共享模型 API | Not "Public Free" |
+| dedicated model API, dedicated endpoint | 专属模型 API、专属端点 | Not 独占 |
+| API key | API Key | |
+| CLI token | CLI 令牌 | Starts with `rcc_` |
+| account | 账号 | Use 账户 only when quoting a UI label |
+| Gallery | 模板库 | As in the Chinese UI |
+| Token Factory | Token Factory | Not translated |
 
 ### API endpoint signatures
 

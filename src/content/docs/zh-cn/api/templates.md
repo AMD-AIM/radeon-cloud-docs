@@ -12,7 +12,7 @@ sidebar:
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/api/profile/templates</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 返回你的模板，以及你可以选的容器镜像。
@@ -42,7 +42,7 @@ sidebar:
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/api/profile/templates</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 | 参数 | 类型 | | 说明 |
@@ -84,7 +84,7 @@ curl -X POST https://radeon-global.anruicloud.com/api/profile/templates \
 <div class="rc-endpoint">
   <span class="rc-method" data-m="PUT">PUT</span>
   <span class="rc-path">/api/profile/templates/<b>{template_id}</b></span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 请求体和创建时一样。模板不存在或者不是你的，返回 `404`。
@@ -96,7 +96,7 @@ curl -X POST https://radeon-global.anruicloud.com/api/profile/templates \
 <div class="rc-endpoint">
   <span class="rc-method" data-m="DELETE">DELETE</span>
   <span class="rc-path">/api/profile/templates/<b>{template_id}</b></span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 ```json
@@ -110,13 +110,13 @@ curl -X POST https://radeon-global.anruicloud.com/api/profile/templates \
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/api/templates/<b>{template_id}</b>/launch</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 | 参数 | 类型 | | 说明 |
 |---|---|---|---|
 | `gpu_count` | integer | <span class="rc-opt">选填</span> | `1`、`2` 或 `4`。默认 `1`。 |
-| `launch_verification_token` | string | <span class="rc-opt">选填</span> | 仅在账户开启了启动验证时需要。 |
+| `launch_verification_token` | string | <span class="rc-opt">选填</span> | 仅在账号开启了启动验证时需要。 |
 
 返回和 [`POST /api/notebook/request`](/radeon-cloud-docs/zh-cn/api/instances/#启动实例) 一样的状态对象。之后轮询 `GET /api/notebook/status`。
 

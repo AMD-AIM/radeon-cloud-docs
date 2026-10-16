@@ -46,7 +46,7 @@ token ids, so the release is multimodal. This deployment serves text only. See
 [Image input](#image-input) for what an image request actually returns.
 :::
 
-## On this endpoint
+## On Radeon Cloud
 
 ### At a glance
 

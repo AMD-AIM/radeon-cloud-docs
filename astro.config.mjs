@@ -61,30 +61,40 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: 'Start here',
-          translations: { 'zh-CN': '从这里开始' },
-          items: [{ slug: 'introduction' }, { slug: 'quickstart' }],
-        },
-        {
-          label: 'Guides',
-          translations: { 'zh-CN': '使用指南' },
+          label: 'Get started',
+          translations: { 'zh-CN': '开始使用' },
           items: [
+            { slug: 'introduction' },
+            { slug: 'quickstart' },
             { slug: 'guides/login' },
             { slug: 'guides/developer-program' },
-            {
-              label: 'GPU instances',
-              translations: { 'zh-CN': 'GPU 实例' },
-              items: [
-                { slug: 'guides/templates' },
-                { slug: 'guides/launch' },
-                { slug: 'guides/jupyterlab' },
-                { slug: 'guides/ssh' },
-                { slug: 'guides/tunnel' },
-                { slug: 'guides/destroy' },
-              ],
-            },
-            { slug: 'guides/model-apis' },
             { slug: 'guides/credits' },
+          ],
+        },
+        {
+          label: 'GPU instances',
+          translations: { 'zh-CN': 'GPU 实例' },
+          items: [
+            { slug: 'guides/templates' },
+            { slug: 'guides/launch' },
+            { slug: 'guides/jupyterlab' },
+            { slug: 'guides/ssh' },
+            { slug: 'guides/tunnel' },
+            { slug: 'guides/destroy' },
+          ],
+        },
+        {
+          label: 'Model APIs',
+          translations: { 'zh-CN': '模型 API' },
+          items: [
+            { slug: 'guides/model-apis' },
+            { slug: 'api/dedicated-endpoints' },
+            {
+              label: 'Model catalog',
+              translations: { 'zh-CN': '模型目录' },
+              collapsed: true,
+              autogenerate: { directory: 'models' },
+            },
           ],
         },
         {
@@ -98,15 +108,14 @@ export default defineConfig({
           ],
         },
         {
-          label: 'API Reference',
+          label: 'API reference',
           translations: { 'zh-CN': 'API 参考' },
           items: [
             { slug: 'api/overview' },
             { slug: 'api/authentication' },
-            { slug: 'api/terms' },
             {
-              label: 'Public Free Model APIs',
-              translations: { 'zh-CN': '免费共享模型 API' },
+              label: 'OpenAI-compatible API',
+              translations: { 'zh-CN': 'OpenAI 兼容接口' },
               items: [
                 { slug: 'api/models' },
                 { slug: 'api/chat-completions' },
@@ -115,30 +124,16 @@ export default defineConfig({
               ],
             },
             {
-              label: 'Model reference',
-              translations: { 'zh-CN': '模型参考' },
-              autogenerate: { directory: 'models' },
-            },
-            {
-              label: 'Dedicated Model APIs',
-              translations: { 'zh-CN': '独占模型 API' },
-              items: [{ slug: 'api/dedicated-endpoints' }],
-            },
-            {
               label: 'Platform API',
-              translations: { 'zh-CN': '平台 API' },
+              translations: { 'zh-CN': '平台接口' },
               items: [
                 { slug: 'api/instances' },
                 { slug: 'api/templates' },
                 { slug: 'api/account' },
               ],
             },
-            {
-              label: 'Limits and errors',
-              translations: { 'zh-CN': '限流与错误' },
-              collapsed: true,
-              items: [{ slug: 'api/rate-limits' }, { slug: 'api/errors' }],
-            },
+            { slug: 'api/rate-limits' },
+            { slug: 'api/errors' },
           ],
         },
         {
@@ -147,6 +142,7 @@ export default defineConfig({
           items: [
             { slug: 'resources/troubleshooting' },
             { slug: 'resources/faq' },
+            { slug: 'api/terms' },
           ],
         },
       ],

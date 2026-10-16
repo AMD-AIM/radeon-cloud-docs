@@ -83,7 +83,7 @@ A model name that isn't in the catalog is rejected by the gateway with `400` and
 itself raises, such as a prompt over the context limit, are passed through from the serving
 backend with its own status and message.
 
-**Dedicated Model API** errors are none of the above. There is no gateway on that path, so once
+**Dedicated model API** errors are none of the above. There is no gateway on that path, so once
 the proxy has admitted the request the body you get back is whatever vLLM or SGLang produced,
 verbatim. A `403` from the proxy means the key, the instance or the port didn't match; a `503`
 means the instance is still starting. Everything else is your server talking.
@@ -100,7 +100,7 @@ means the instance is still starting. Everything else is your server talking.
 
 **`403 {"code": "account_not_verified"}`** — the account is still under review. The body carries a `redirect` to the review page. Free model APIs stay available in the meantime.
 
-**`403 You do not have access to this instance`** — the instance belongs to someone else, or you're using a bearer key against the instance proxy, which requires a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/#what-each-endpoint-accepts).
+**`403 You do not have access to this instance`** — the instance belongs to someone else, or you're using a bearer key against the instance proxy, which requires a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/#credentials-by-endpoint).
 
 **`502 Model gateway is unavailable`** — the gateway is down or unreachable. Retry with backoff; if it persists across several minutes, it's an outage rather than something on your side.
 
