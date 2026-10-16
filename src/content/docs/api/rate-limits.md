@@ -10,7 +10,7 @@ endpoints. There are four groups, applied independently.
 
 ## Public Free Model APIs
 
-Two tiers sit in the path, and a request has to pass both. The platform admits the request, then the gateway meters it against your account.
+Each request goes through two checks, and it has to pass both. First the platform decides whether to admit the request. Then the gateway counts it against your account's limits.
 
 ### Platform admission
 

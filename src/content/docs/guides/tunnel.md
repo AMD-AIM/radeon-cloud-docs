@@ -77,7 +77,7 @@ Work through it in this order:
 
 1. **Local `curl` fails.** Your application isn't listening on that port. Nothing to do with the tunnel — fix the service first.
 2. **`status` shows FRPC not running.** Read `rc-tunnel logs`.
-3. **Status is healthy but the public URL fails.** Send operations the full domain, when the notebook was created, and when the failure happened. Don't send config files or keys.
+3. **Status is healthy but the public URL fails.** Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the full domain, when the notebook was created, and when the failure happened. Don't send config files or keys.
 
 ## Stop
 

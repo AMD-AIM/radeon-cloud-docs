@@ -5,25 +5,26 @@ sidebar:
   order: 1
 ---
 
-The two [regional sites](/radeon-cloud-docs/introduction/#two-sites-one-platform) sign you in differently. Pick the one for your region — accounts don't carry across.
+The [China site and the Global site](/radeon-cloud-docs/introduction/#china-site-and-global-site) have separate accounts and different sign-in methods. Use the one for your region.
 
 ## China site
 
-Open [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) and click **Login** in the top-right corner.
+The China site uses your [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) account. You can sign in at [developer.amd.com.cn](https://developer.amd.com.cn/), or click **Login** in the top-right corner of [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/). Either way, you end up on the same program login page.
 
 ![The China site, with Login in the top-right corner](../../../assets/guide/cn-login.png)
 
-This takes you to the AMD AI Developer Program sign-in, which is shared across AMD's China developer services — the same account works for the [points program](https://developer.amd.com.cn/points/redeem) that funds your [credits](/radeon-cloud-docs/guides/credits/).
+The login page has two tabs:
+
+- **验证码登录 / Verification Code Login**: enter your mobile number or email, click **发送验证码 / Send Code**, and type in the code. You may need to pass a slider captcha first. After a code is sent, the button counts down before you can request another.
+- **密码登录 / Password Login**: for accounts that already have a password.
+
+Below the form, you can also sign in with a ModelScope (魔搭), CSDN, or GitHub account.
 
 ![The AMD AI Developer Program sign-in form](../../../assets/guide/cn-login-form.png)
 
-You have several ways in:
+If you don't have an account yet, click **注册账号 / Create Account** on the login page, or **免费注册** on the [program home page](https://developer.amd.com.cn/).
 
-- **Verification code** — enter a mobile number or email address, click **Send Code**, then enter the code you receive.
-- **Password** — switch to the **Password Login** tab if you've already set one.
-- **ModelScope, CSDN, or GitHub** — sign in with an existing account from one of these.
-
-No account yet? Click **Create Account**.
+Once you're signed in to the program, you're signed in to the China site too. Your name shows in the top-right corner of the console. The same account holds the developer points that you exchange for [credits](/radeon-cloud-docs/guides/credits/).
 
 ## Global site
 

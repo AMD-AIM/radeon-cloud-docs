@@ -16,6 +16,12 @@ No. One active instance per account. Destroy the current one to launch another.
 **How many GPUs can I get?**
 1, 2, or 4.
 
+**How do I get credits on the China site?**
+Exchange AMD AI Developer Program points for a coupon at [兑取算力](https://developer.amd.com.cn/points/redeem), then paste it in **Profile** → **Redeem Credits**. 1 point buys 1 hour, up to 20 points a day. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
+
+**Who do I contact?**
+Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn). [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#still-stuck) lists what to include.
+
 ## Cost
 
 **What spends credits?**

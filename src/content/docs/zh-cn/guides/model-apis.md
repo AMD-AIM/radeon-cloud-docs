@@ -7,7 +7,7 @@ sidebar:
 
 AMD Radeon Cloud 通过兼容 OpenAI 的 HTTP API 提供模型服务。任何能连 OpenAI 的客户端，改一下 base URL 和 key 就能用：`curl`、`openai` SDK、LangChain、Cherry Studio。
 
-两个选择，区别在于 GPU 是谁的。
+有两种方式可选，区别在于模型跑在谁的 GPU 上。
 
 ## 免费共享端点
 

@@ -9,18 +9,18 @@ Credits pay for GPU instances. The free shared [model APIs](/radeon-cloud-docs/g
 
 ## Points and credits
 
-Two different currencies, and they're easy to confuse.
+These are two separate balances, and they're easy to mix up.
 
-**Points** are earned in the [AMD AI Developer Program](https://developer.amd.com.cn/points/redeem) by taking part in developer activities. They're a program-wide currency and aren't tied to AMD Radeon Cloud.
+**Points** (开发者积分) belong to the [AMD AI Developer Program](https://developer.amd.com.cn/), and the program home page shows your balance. Event codes like `DP-XXXX-XXXX-XXXX` add points, not credits.
 
-**Credits** are what AMD Radeon Cloud spends to run GPU instances. They only exist inside the platform.
+**Credits** are what the platform spends on GPU instances. **Profile** shows them as **Credits Available**.
 
-Points become credits in two steps:
+On the China site, you turn points into credits like this:
 
-1. Redeem points for a coupon code at [developer.amd.com.cn/points/redeem](https://developer.amd.com.cn/points/redeem).
-2. Redeem that coupon in your AMD Radeon Cloud **Profile**, which adds credits to your balance.
+1. Exchange points for a coupon at [兑取算力](https://developer.amd.com.cn/points/redeem). 1 point buys 1 hour, and you can exchange up to 20 points a day.
+2. Paste the coupon in **Profile** → **Redeem Credits**.
 
-Coupons from hackathons and workshops work the same way at step 2 — you just skip step 1, because the code was issued to you directly.
+[AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) walks through each screen. If a hackathon or workshop gives you a coupon directly, skip step 1.
 
 ## How they're spent
 
@@ -34,9 +34,11 @@ Your balance is shown in **Profile**. It's also returned by `GET /api/me` if you
 
 ## Redeem a coupon
 
-Whether the code came from the Developer Program or from an event, redeem it the same way: open **Profile** and enter it. Credits are added to your balance immediately.
+Open **Profile** and click **Redeem Credits**. Paste the whole coupon into **Coupon Code** (the hint says "Paste your encrypted coupon here"), then click **Redeem**.
 
-Each code can be used once, and some are bound to a specific account. If redemption fails, check that you're signed in as the account the code was issued to — and, if you have accounts on both the China and Global sites, that you're on the right one. Credits belong to a single site and don't transfer.
+A coupon from the developer program is a long encrypted string, not a short code. It works once and expires 30 days after you get it. It isn't tied to your name, so treat it like cash.
+
+Credits belong to the site where you redeem them and can't be moved. If you have accounts on both sites, check which one you're signed in to before you redeem. If redemption still fails, see [If redemption fails](/radeon-cloud-docs/guides/developer-program/#if-redemption-fails).
 
 ## Model API spend
 

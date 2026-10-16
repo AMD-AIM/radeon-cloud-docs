@@ -77,7 +77,7 @@ curl --fail http://127.0.0.1:8081/
 
 1. **本地 `curl` 就失败。** 你的应用根本没在那个端口上监听。和隧道无关，先修服务。
 2. **`status` 显示 FRPC 没在跑。** 看 `rc-tunnel logs`。
-3. **状态正常但公网 URL 访问不了。** 把完整域名、notebook 的创建时间和故障发生时间发给运维。别发配置文件或密钥。
+3. **状态正常但公网 URL 访问不了。** 把完整域名、notebook 的创建时间和故障发生时间发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。不要发送配置文件或密钥。
 
 ## 停止
 

@@ -101,8 +101,25 @@ export HSA_OVERRIDE_GFX_VERSION=11.0.0
 
 从服务本身往外一层层查。在 notebook 里 `curl --fail http://127.0.0.1:<port>/`——如果这一步就失败，问题在你的应用，不在隧道。然后 `rc-tunnel status`，没跑起来就 `rc-tunnel logs --lines 100`。
 
-如果本地服务正常、状态也健康，公网 URL 还是不通，把完整域名、notebook 的创建时间和故障时间发给运维。别发配置文件或密钥。
+如果本地服务正常、状态也健康，公网 URL 还是不通，把完整域名、notebook 的创建时间和出问题的时间发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。不要发送配置文件或密钥。
 
-## 还是搞不定
+## 额度和优惠码
 
-去 [hackathon 仓库](https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07)开一个 issue，写清楚你跑了什么、预期是什么，以及完整的错误文本。
+### 优惠码兑换不了
+
+请粘贴完整的优惠码。开发者计划发的优惠码是一长串加密字符，只复制一部分会兑换失败。优惠码自兑换之日起 30 天内有效，每张只能用一次。另外要确认你登录的是想充值的那个站点，额度不能跨站转移。详见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/#兑换失败怎么办)。
+
+### `DP-` 开头的码没有加上额度
+
+`DP-XXXX-XXXX-XXXX` 兑换的是开发者积分，不是额度。先在[积分券码页](https://developer.amd.com.cn/points/devpoints)兑换成积分，再到[兑取算力](https://developer.amd.com.cn/points/redeem)把积分换成优惠码。
+
+## 仍然无法解决
+
+发邮件到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)，写清楚：
+
+- 站点（中国站或全球站）和账号邮箱
+- 你执行了什么命令或点了什么，以及期望的结果
+- 完整的报错原文和出错时间
+- 如果和实例有关，附上实例 ID 和模板名称
+
+不要附上 API Key、`rcc_` 令牌、SSH 私钥或 JupyterLab 一次性链接。优惠码只在邮件内容和这张码有关时才提供。

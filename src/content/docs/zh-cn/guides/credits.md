@@ -9,18 +9,18 @@ sidebar:
 
 ## 积分和额度
 
-两种不同的「货币」，容易混。
+积分和额度是两笔独立的余额，很容易搞混。
 
-**积分（Points）** 在 [AMD AI 开发者计划](https://developer.amd.com.cn/points/redeem) 里通过参与开发者活动获得。它是整个开发者计划通用的，不专属于 AMD Radeon Cloud。
+**开发者积分** 属于 [AMD AI 开发者计划](https://developer.amd.com.cn/)，余额显示在计划首页。活动发的 `DP-XXXX-XXXX-XXXX` 兑换码加的是积分，不是额度。
 
-**额度（Credits）** 是 AMD Radeon Cloud 用来跑 GPU 实例的，只在平台内部存在。
+**额度** 是平台运行 GPU 实例时消耗的，在 **Profile** 里显示为 **Credits Available**。
 
-积分变成额度分两步：
+在中国站，积分换成额度分两步：
 
-1. 在 [developer.amd.com.cn/points/redeem](https://developer.amd.com.cn/points/redeem) 用积分兑换出优惠码。
-2. 在 AMD Radeon Cloud 的 **Profile** 里兑换这个优惠码，额度就加到余额上了。
+1. 在[兑取算力](https://developer.amd.com.cn/points/redeem)用积分换一张优惠码。1 积分换 1 小时，每天最多换 20 积分。
+2. 在 **Profile** → **Redeem Credits** 里粘贴这张优惠码。
 
-黑客松和工作坊发的优惠码在第 2 步用法一样，只是不用做第 1 步 —— 码是直接发给你的。
+每一步具体怎么操作，见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/)。黑客松或工作坊直接发给你的优惠码，跳过第 1 步即可。
 
 ## 怎么消耗
 
@@ -34,9 +34,11 @@ sidebar:
 
 ## 兑换优惠码
 
-不管码是来自开发者计划还是活动，兑换方式都一样：打开 **Profile** 输入即可。额度立即加到余额上。
+打开 **Profile**，点 **Redeem Credits**。把整串优惠码粘贴到 **Coupon Code** 输入框（提示文字是 “Paste your encrypted coupon here”），点 **Redeem**。
 
-每个码只能用一次，有些还绑定了特定账号。兑换失败时，检查一下你登录的是不是发码时指定的那个账号 —— 如果你在中国站和全球站都有账号，还要确认用的是对的那个。额度归属于单个站点，不能跨站转移。
+开发者计划发的优惠码是一长串加密字符，不是短码。每张只能用一次，自兑换之日起 30 天内有效。优惠码不记名，请像保管现金一样保管它。
+
+额度只属于兑换它的站点，不能转移。中国站和全球站都有账号的话，兑换前先确认登录的是哪个站。还是兑换失败，见[兑换失败怎么办](/radeon-cloud-docs/zh-cn/guides/developer-program/#兑换失败怎么办)。
 
 ## 模型 API 的消耗
 

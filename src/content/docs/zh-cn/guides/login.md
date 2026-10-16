@@ -5,25 +5,26 @@ sidebar:
   order: 1
 ---
 
-两个[区域站点](/radeon-cloud-docs/zh-cn/introduction/#两个站点同一个平台)的登录方式不同。选你所在区域的那个 —— 账号不互通。
+[中国站和全球站](/radeon-cloud-docs/zh-cn/introduction/#中国站和全球站)的账号互不相通，登录方式也不同。按你所在的地区选择。
 
 ## 中国站
 
-打开 [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/)，点右上角的 **Login**。
+中国站使用 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 的账号。可以先在 [developer.amd.com.cn](https://developer.amd.com.cn/) 登录，也可以在 [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) 右上角点 **Login**。两种方式进入的是同一个开发者计划登录页。
 
 ![中国站，右上角是 Login 按钮](../../../../assets/guide/cn-login.png)
 
-这会跳转到 AMD AI 开发者计划的登录页，这套账号在 AMD 的中国开发者服务里通用 —— 给你[额度](/radeon-cloud-docs/zh-cn/guides/credits/)充值的[积分计划](https://developer.amd.com.cn/points/redeem)用的也是同一个账号。
+登录页有两个页签：
+
+- **验证码登录**：填手机号或邮箱，点 **发送验证码**，再填收到的验证码。发送前可能要先拖动滑块完成验证。验证码发出后按钮会倒计时，倒计时结束前不能重新发送。
+- **密码登录**：适用于已经设置过密码的账号。
+
+表单下方还可以用魔搭、CSDN 或 GitHub 账号登录。
 
 ![AMD AI 开发者计划登录表单](../../../../assets/guide/cn-login-form.png)
 
-有几种登录方式：
+还没有账号的话，在登录页点 **注册账号**，或者在[计划首页](https://developer.amd.com.cn/)点 **免费注册**。
 
-- **验证码登录** —— 输入手机号或电子邮箱，点**发送验证码**，再填收到的验证码。
-- **密码登录** —— 已经设过密码的话，切到**密码登录**页签。
-- **ModelScope、CSDN 或 GitHub** —— 用这几个平台的现有账号登录。
-
-还没有账号？点**注册账号**。
+登录开发者计划后，中国站也就登录好了，控制台右上角会显示你的名字。换[额度](/radeon-cloud-docs/zh-cn/guides/credits/)用的开发者积分也存在这个账号里。
 
 ## 全球站
 

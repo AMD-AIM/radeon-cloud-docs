@@ -1,71 +1,70 @@
 ---
 title: What is AMD Radeon Cloud
-description: An overview of the AMD Radeon Cloud platform — the two regional sites, GPU instances, model APIs, and how the pieces fit together.
+description: An overview of AMD Radeon Cloud — the China and Global sites, GPU instances, model APIs, and how they fit together.
 sidebar:
   label: Introduction
   order: 1
 ---
 
-AMD Radeon Cloud gives you an AMD Radeon GPU on demand. You pick an environment, launch it, and work in it from your browser or over SSH. The GPUs run ROCm, so the PyTorch, vLLM, and SGLang stacks you already use work without modification.
+AMD Radeon Cloud gives you an AMD Radeon GPU on demand. Pick an environment, launch it, and work in it from your browser or over SSH. The GPUs run ROCm, so your PyTorch, vLLM, and SGLang code runs without changes.
 
-## Two sites, one platform
+## China site and Global site
 
-AMD Radeon Cloud is reachable through two regional entry points. They're the same platform, deployed separately to serve different regions.
+AMD Radeon Cloud has two sites. They offer the same platform, but each runs separately for its own region.
 
-| Site | Address |
-|---|---|
-| **China** | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) |
-| **Global** | [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
+| Site | Address | Account |
+|---|---|---|
+| **China** | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) | [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) |
+| **Global** | [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) | Email sign-in |
 
-Pick the one for your region and stay on it. Accounts, credits, API keys, templates, and instances belong to the site you created them on — they don't carry across. An API key issued by one site won't authenticate against the other, so the base URLs in your code have to match the site you signed up on.
+Pick the site for your region and stick with it. Accounts, credits, API keys, templates, and instances all stay on the site where you created them. An API key from one site won't work on the other, so the base URL in your code must match the site you signed up on.
 
-Throughout these docs, examples use whichever site's URL is most common for that feature. Substitute your own site's address if you're on the other one.
+Examples in these docs use whichever site is more common for that feature. If you're on the other site, swap in its address.
 
-## What the platform does
+## What you can do
 
-Two distinct things, and it's worth knowing which one you need before you start.
+The platform offers two things. Work out which one you need before you start.
 
-## GPU instances
+### GPU instances
 
-An **instance** is a container running on a Radeon GPU node, launched from a **template** you define. The template records the container image, how much GPU you want, how much disk, and what should run on startup. Launching the same template again gives you the same environment.
+An **instance** is a container on a Radeon GPU node, launched from a **template** you define. A template records the container image, the number of GPUs, the disk size, and what runs at startup. Launch the same template again and you get the same environment.
 
-Instances are interactive. You reach them through JupyterLab in the browser or through SSH from your terminal, and you use them the way you'd use any Linux box with a GPU attached — install packages, download weights, train, and profile.
+Instances are interactive. Open them in JupyterLab in your browser or connect over SSH, then use them like any Linux machine with a GPU: install packages, download weights, train, and profile.
 
-Instances consume credits while they run, so you destroy them when you're done. If you want files to survive that, set the template's storage to **Persistent (PVC)**.
+Instances spend credits while they run, so destroy them when you're done. To keep your files after that, set the template's storage to **Persistent (PVC)**.
 
-Credits come from the [AMD AI Developer Program](https://developer.amd.com.cn/points/redeem) — see [Credits](/radeon-cloud-docs/guides/credits/).
+On the China site, you get credits by exchanging AMD AI Developer Program points. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) and [Credits](/radeon-cloud-docs/guides/credits/).
 
-You can manage instances from the web console or with
-[Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) (`rcc`), which also shows your Credits and the
-resources available to you, and covers JupyterLab, SSH, status, logs and scripting from a terminal.
+You can manage instances in the web console or with [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) (`rcc`). From the terminal, the CLI also shows your credits and the resources you can use, opens JupyterLab and SSH, shows status and logs, and is easy to script.
 
-## Model APIs
+### Model APIs
 
-A **model API** is an HTTP endpoint that speaks the OpenAI protocol. Any client that can talk to OpenAI — `curl`, the `openai` Python SDK, LangChain, Cherry Studio — can talk to AMD Radeon Cloud by changing the base URL and the API key.
+A **model API** is an HTTP endpoint that speaks the OpenAI API. Any OpenAI client — `curl`, the `openai` Python SDK, LangChain, Cherry Studio — can use AMD Radeon Cloud once you change the base URL and the API key.
 
 There are two kinds:
 
-**Shared endpoints** are free and always on. You don't launch anything and you don't spend credits. Grab an API key from the Token Factory and start making requests. Models are chosen by the platform and rotate over time.
+**Shared endpoints** are free and always available. There's nothing to launch and no credits to spend. Get an API key from the Token Factory and start sending requests. The platform chooses the models and changes them from time to time.
 
-**Dedicated endpoints** are yours. You launch a template with a deploy type of vLLM or SGLang, and the platform routes a URL to the server running inside your instance. You choose the model, and you pay for the instance while it runs.
+**Dedicated endpoints** are yours alone. Launch a template with a vLLM or SGLang deploy type, and the platform gives you a URL for the server inside your instance. You choose the model, and the instance spends credits while it runs.
 
 ## Which one do you need
 
-If you're training, fine-tuning, exploring in a notebook, or need a shell, you want an **instance**.
+For training, fine-tuning, notebook exploration, or a shell, use an **instance**.
 
-If you're building an application that calls an LLM, you want a **model API** — start with the free shared endpoints, and move to a dedicated one when you need a specific model or predictable throughput.
+For an application that calls an LLM, use a **model API**. Start with the free shared endpoints, and move to a dedicated one when you need a particular model or steady throughput.
 
-They compose. A common pattern is to launch an instance, serve a model on it with vLLM, and call it from an application running elsewhere.
+You can use both together. A common setup is to serve a model with vLLM on an instance and call it from an application running somewhere else.
 
-## Where things live
+## Quick links
 
-| | |
+| What | Where |
 |---|---|
-| Console — templates, instances, credits | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) or [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
-| Radeon Cloud CLI — accounts, Credits, resources, instances | [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) |
-| Token Factory — API keys, model catalog | [developer.amd.com.cn/radeon/modelapis](https://developer.amd.com.cn/radeon/modelapis) |
-| AMD AI Developer Program — earn and redeem points | [developer.amd.com.cn/points/redeem](https://developer.amd.com.cn/points/redeem) |
+| Console: templates, instances, credits | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) or [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
+| Radeon Cloud CLI: accounts, credits, resources, instances | [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) |
+| Token Factory: API keys, model catalog | [developer.amd.com.cn/radeon/modelapis](https://developer.amd.com.cn/radeon/modelapis) |
+| AMD AI Developer Program: points and coupons (China site) | [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) |
+| Support | [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) |
 
 ## Next
 
-Follow the [quickstart](/radeon-cloud-docs/quickstart/) to get an instance running and make your first API call.
+Follow the [quickstart](/radeon-cloud-docs/quickstart/) to launch an instance and make your first API call.

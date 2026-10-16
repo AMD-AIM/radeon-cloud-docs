@@ -6,7 +6,7 @@ sidebar:
   order: 2
 ---
 
-Two things to try. They're independent — do either one first.
+This page covers two separate tasks: calling a model API and launching a GPU instance. Neither depends on the other, so start with whichever you need.
 
 ## Call a model API
 

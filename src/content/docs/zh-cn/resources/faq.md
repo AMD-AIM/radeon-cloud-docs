@@ -16,6 +16,12 @@ sidebar:
 **能拿到几张 GPU？**
 1、2 或 4 张。
 
+**中国站的额度怎么获得？**
+在[兑取算力](https://developer.amd.com.cn/points/redeem)用 AMD AI 开发者计划的积分换一张优惠码，再到 **Profile** → **Redeem Credits** 里粘贴。1 积分换 1 小时，每天最多换 20 积分。见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/)。
+
+**遇到问题找谁？**
+发邮件到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。邮件里要写哪些信息，见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#仍然无法解决)。
+
 ## 花费
 
 **什么会消耗额度？**

@@ -101,8 +101,25 @@ If it reports a missing identity directory or `FRP_BROKER_URL`, the notebook was
 
 Work outward from the service. `curl --fail http://127.0.0.1:<port>/` inside the notebook — if that fails, the problem is your application, not the tunnel. Then `rc-tunnel status`, and `rc-tunnel logs --lines 100` if it isn't running.
 
-If the local service is fine and status is healthy but the public URL still fails, send operations the full domain, the notebook's creation time, and the failure time. Don't send config files or keys.
+If the local service works and status is healthy but the public URL still fails, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the full domain, when the notebook was created, and when the failure happened. Don't send config files or keys.
+
+## Credits and coupons
+
+### A coupon won't redeem
+
+Paste the whole string. A coupon from the developer program is long and encrypted, and a partial copy fails. Coupons expire 30 days after you exchange points for them, and each one works once. Make sure you're on the site you want the credits on, because credits don't move between sites. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/#if-redemption-fails).
+
+### A `DP-` code didn't add credits
+
+`DP-XXXX-XXXX-XXXX` codes add developer points, not credits. Redeem them on the [point-code page](https://developer.amd.com.cn/points/devpoints), then exchange the points for a coupon on [兑取算力](https://developer.amd.com.cn/points/redeem).
 
 ## Still stuck
 
-Open an issue on the [hackathon repository](https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07) with what you ran, what you expected, and the exact error text.
+Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) and include:
+
+- the site (China or Global) and the account email
+- what you ran or clicked, and what you expected to happen
+- the exact error text, plus the time it happened
+- for an instance, the instance ID and template name
+
+Don't include API keys, `rcc_` tokens, private SSH keys, or one-time JupyterLab links. Send a coupon string only when the email is about that coupon.

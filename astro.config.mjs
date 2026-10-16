@@ -44,9 +44,9 @@ export default defineConfig({
       },
       social: [
         {
-          icon: 'github',
-          label: 'GitHub',
-          href: 'https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07',
+          icon: 'email',
+          label: 'member-service@mail.developer.amd.com.cn',
+          href: 'mailto:member-service@mail.developer.amd.com.cn',
         },
       ],
       editLink: {
@@ -70,6 +70,7 @@ export default defineConfig({
           translations: { 'zh-CN': '使用指南' },
           items: [
             { slug: 'guides/login' },
+            { slug: 'guides/developer-program' },
             {
               label: 'GPU instances',
               translations: { 'zh-CN': 'GPU 实例' },
