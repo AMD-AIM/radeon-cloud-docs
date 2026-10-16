@@ -36,9 +36,18 @@ sidebar:
 
 ## 登录之后
 
-点右上角的头像，选 **Profile**。这个页面集中管理模板、正在运行的实例、SSH 密钥、API Key 和积分余额。
+控制台登录后进入 **首页**，在这里启动实例。顶部的标签页可以切换到 **模板库** 和 **Token Factory**。
 
-![从头像菜单打开 Profile](../../../../assets/guide/click-profile.png)
+点右上角的账号，可以看到：
+
+- 积分余额
+- **积分与用量**：积分、兑换优惠码、模型 API 用量，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)
+- **设置**：SSH 密钥、语言、外观、AMDAI 账号绑定，以及切换到经典版界面
+- **退出登录**
+
+页头还有切换语言（**EN** / **中**）和浅色、深色主题的按钮。
+
+如果你的控制台里看到的是 **Profile** 页面，说明你在用经典版界面，见[经典版界面](/radeon-cloud-docs/zh-cn/resources/classic-ui/)。
 
 ## 如果账号需要审核
 
