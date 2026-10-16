@@ -26,6 +26,8 @@ description: 在设置里添加 SSH 密钥，等待 SSH 就绪，然后从自己
 
 添加后，列表里会显示密钥的指纹、添加日期和最近使用时间。每台电脑可以各添加一把。
 
+![设置页的 SSH 密钥区域，已添加一把密钥](../../../../assets/guide/zh/settings-ssh-keys.png)
+
 :::danger[只粘贴 .pub 文件]
 公钥以 `ssh-ed25519` 或 `ssh-rsa` 开头，来自扩展名为 `.pub` 的文件。不要粘贴私钥。
 :::

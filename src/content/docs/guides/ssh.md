@@ -26,6 +26,8 @@ SSH lets you use the instance from your own terminal and editor. Every instance 
 
 The key is listed with its fingerprint, the date it was added and when it was last used. You can add one key for each computer you use.
 
+![The SSH keys section of Settings with one key added](../../../assets/guide/en/settings-ssh-keys.png)
+
 :::danger[Paste only the .pub file]
 A public key starts with `ssh-ed25519` or `ssh-rsa` and comes from the file ending in `.pub`. Never paste the private key.
 :::

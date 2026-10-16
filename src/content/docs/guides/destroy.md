@@ -11,6 +11,8 @@ A running instance spends credits whether you use it or not. Destroy it when you
 2. Click **Destroy instance**.
 3. The confirmation names the instance, its GPUs and how long it has been up, and reminds you that temporary workspace data is deleted and persistent workspace data is kept. Check that it's the right instance and click **Destroy**.
 
+![The Destroy this instance? confirmation on the instance card](../../../assets/guide/en/destroy-confirm.png)
+
 The card shows **Destroying instance**. When it's gone, the launch form comes back and credits stop.
 
 If you need anything that isn't under a persistent `/workspace`, save it first. See [Keep your data](/radeon-cloud-docs/guides/storage/).
