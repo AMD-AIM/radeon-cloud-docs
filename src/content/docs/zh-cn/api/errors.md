@@ -26,7 +26,7 @@ sidebar:
 { "detail": "Each user can only have one active instance" }
 ```
 
-Public Free 模型 API 的错误来自两个地方，形状不一样。
+共享模型 API 的错误来自两个地方，格式不一样。
 
 **网关**抛的错——密钥无效、模型不存在、网关侧限流——用 OpenAI 的形状，现成的 OpenAI 错误处理代码不用改就能用：
 
@@ -79,21 +79,23 @@ OpenAI SDK 去顶层读 `error.type`，平台抛的错它找不到。两种都�
 
 目录里没有的模型名由网关直接拒掉，返回 `400` 和 `Requested model <名字> not supported`，请求根本到不了后端。模型自己抛的错，比如 prompt 超过上下文上限，会带着服务后端自己的状态码和消息透传出来。
 
-**专属模型 API** 的错误不属于上面任何一种。那条路上没有网关，代理放行之后你拿到的就是 vLLM 或 SGLang 原样吐出来的东西。代理回 `403` 说明密钥、实例或端口对不上；`503` 说明实例还在启动。其余都是你自己那台服务器在说话。
+**专属模型 API** 的错误不属于上面任何一种。那条路上没有网关，代理放行之后你拿到的就是 vLLM 原样吐出来的东西。代理回 `403` 说明密钥、实例或端口对不上；`503` 说明实例还在启动。其余都是你自己那台服务器在说话。
 
 ## 常见情形
 
 **`400 Each user can only have one active instance`**——先销毁当前实例。[`DELETE /api/notebook/current`](/radeon-cloud-docs/zh-cn/api/instances/#销毁实例)。
 
-**`400 Insufficient credits`**——你的余额低于请求的 GPU 数量。兑换优惠码，或者少要几张卡。
+**`400 Insufficient credits`**——积分不够所选规格运行 1 小时。[兑换优惠码](/radeon-cloud-docs/zh-cn/guides/credits/#兑换优惠码)，或者换一个更小的规格。
 
-**`400 GPU count must be 1, 2, or 4`**——别的值分配不出来。
+**`400 Invalid image selected`**——镜像不在目录里，或者已被禁用。请从 **首页** 的 **镜像** 列表里选择。
 
-**`400 Invalid image selected`**——镜像不在目录里，或者已被禁用。用 [`GET /api/profile/templates`](/radeon-cloud-docs/zh-cn/api/templates/#列出模板) 列出可用镜像。
+**`401 Login required`**——这个接口需要浏览器会话，但请求里发的是 API Key。要在脚本里管理实例，请用 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/automation/)。
 
-**`403 {"code": "account_not_verified"}`**——账号还在审核中。响应体里带一个指向审核页面的 `redirect`。等待期间免费的模型 API 照常可用。
+**`403 resource_selection_not_assigned`**——资源池或规格没有分配给你的账号。请从 **首页** 的 **规格** 和 **资源池** 里选择。
 
-**`403 You do not have access to this instance`**——实例是别人的，或者你在用 Bearer 密钥访问实例代理，而它要求浏览器会话。见[认证](/radeon-cloud-docs/zh-cn/api/authentication/#各端点接受的凭证)。
+**`403 {"code": "account_not_verified"}`**——账号还在审核中。响应体里带一个指向审核页面的 `redirect`。
+
+**`403 You do not have access to this instance`**——实例是别人的，或者你在用 Bearer 密钥访问实例代理，而它要求浏览器会话。见[认证](/radeon-cloud-docs/zh-cn/api/authentication/#各接口接受的凭证)。
 
 **`502 Model gateway is unavailable`**——网关挂了或者连不上。退避后重试；如果持续好几分钟，那是一次故障，不是你这边的问题。
 
@@ -101,7 +103,7 @@ OpenAI SDK 去顶层读 `error.type`，平台抛的错它找不到。两种都�
 
 ## 排查清单
 
-确认你调的基础 URL 对——共享端点和专属端点是不同的主机和路径，而且专属 URL 每次重新启动都会变。
+确认你调的基础 URL 对——共享端点和专属端点是不同的主机和路径，而且重新启动后专属端点的 base URL 可能会变，请重新从实例卡片复制。
 
 确认密钥确实发出去了，而且是以 `Authorization: Bearer rc-...` 的形式。漏掉这个头和密钥无效都会得到 `401`。
 

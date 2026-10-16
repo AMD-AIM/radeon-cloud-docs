@@ -10,7 +10,7 @@ AMD Radeon Cloud gives you an AMD Radeon GPU on demand. Pick an image and a size
 
 ## China site and Global site
 
-AMD Radeon Cloud has two sites. They offer the same platform, but each runs separately for its own region.
+AMD Radeon Cloud has two sites, each run separately for its own region. Both offer GPU instances; the shared model APIs and Token Factory are on the China site only.
 
 | Site | Address | Account |
 |---|---|---|
@@ -37,7 +37,7 @@ Manage instances in the web console or from a terminal with [Radeon Cloud CLI](/
 
 A **model API** speaks the OpenAI API, so any OpenAI client, such as `curl`, the `openai` Python SDK, LangChain or Cherry Studio, works once you change the base URL and the API key. There are two kinds:
 
-- **Shared model APIs** are free and always on. Get an API key from Token Factory and start sending requests. The platform chooses the models and changes them from time to time. See [Call the shared models](/radeon-cloud-docs/guides/shared-models/).
+- **Shared model APIs** are free and always on, on the China site. Get an API key from Token Factory and start sending requests. The platform chooses the models and changes them from time to time. See [Call the shared models](/radeon-cloud-docs/guides/shared-models/).
 - **Dedicated model APIs** serve a model of your choice on your own instance. Launch with **Deploy type** set to **Model API**, and the console gives you a base URL and an API key. The instance spends credits while it runs. See [Deploy a dedicated model API](/radeon-cloud-docs/guides/dedicated-models/).
 
 ## Which one do you need

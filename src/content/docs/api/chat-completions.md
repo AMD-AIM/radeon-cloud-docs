@@ -7,7 +7,7 @@ sidebar:
 
 The main inference endpoint on the **shared model APIs**. It follows OpenAI's chat
 completions schema. A [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) serves
-the same path from your own vLLM or SGLang, and none of the request filtering below applies
+the same path from your own vLLM, and none of the request filtering below applies
 there.
 
 <div class="rc-endpoint">
@@ -142,7 +142,7 @@ That includes some parameters an OpenAI or vLLM client would reasonably expect t
 `stop`, `seed`, `logit_bias`, `logprobs`, `top_logprobs`, `top_k`, `min_p`, and
 `repetition_penalty`. If you need any of them, run a
 [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/), which passes your body
-straight to vLLM or SGLang.
+straight to vLLM.
 :::
 
 ## Example

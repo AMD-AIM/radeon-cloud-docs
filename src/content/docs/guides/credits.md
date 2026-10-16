@@ -48,4 +48,4 @@ The shared model APIs don't spend credits. They have their own daily usage cap, 
 - **By model**: requests and usage per model.
 - **Recent requests**: the last 24 hours, in your local time zone.
 
-The same numbers are available from [`GET /api/profile/model-usage`](/radeon-cloud-docs/api/usage/).
+To read the same numbers with your API key, call [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).

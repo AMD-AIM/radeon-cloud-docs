@@ -50,4 +50,4 @@ Radeon Cloud 用 **积分** 支付 GPU 实例的费用（英文界面叫 Credits
 - **按模型**：每个模型的请求数和用量。
 - **最近请求**：最近 24 小时的请求，按你所在时区显示。
 
-同样的数据也可以通过 [`GET /api/profile/model-usage`](/radeon-cloud-docs/zh-cn/api/usage/) 获取。
+也可以用 API Key 调用 [`GET /v1/usage`](/radeon-cloud-docs/zh-cn/api/usage/) 读取同样的数据。
