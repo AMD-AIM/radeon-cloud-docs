@@ -52,8 +52,8 @@ print(response.choices[0].message.content)
 
 ## 启动一个 GPU 实例
 
-你可以通过网页控制台启动实例，也可以使用 Radeon Cloud 命令行工具
-[RCC](/radeon-cloud-docs/zh-cn/cli/overview/)。
+你可以通过网页控制台启动实例，也可以使用命令行工具
+[Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/)（`rcc`）。
 
 ### 使用网页控制台
 
@@ -62,9 +62,9 @@ print(response.choices[0].message.content)
 3. 在模板那一行点 **Launch**。
 4. 当弹窗显示 **Your workspace is ready (100%)** 时，点 **Open Notebook** 进 [JupyterLab](/radeon-cloud-docs/zh-cn/guides/jupyterlab/)，或者用 [SSH](/radeon-cloud-docs/zh-cn/guides/ssh/) 连过去。
 
-### 使用 RCC CLI
+### 使用 Radeon Cloud CLI
 
-安装 RCC、登录、查看当前账户获准使用的资源，然后创建实例：
+安装 CLI、登录、查看你的账户可以使用哪些资源，然后创建实例：
 
 ```bash
 python3 -m pip install amd-oneclick-sdk
@@ -76,8 +76,8 @@ rcc instance create
 rcc instance open
 ```
 
-在交互式终端中，RCC 会引导你选择 Catalog 资源。SSH、状态、日志、自动化和账户管理见
-[RCC](/radeon-cloud-docs/zh-cn/cli/overview/)。
+在终端里运行 `rcc instance create`，它会一步步让你选择环境和资源。SSH、状态、日志、脚本和多账户见
+[Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/)。
 
 在实例里的终端确认 GPU 可见：
 

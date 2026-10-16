@@ -87,7 +87,7 @@ export default defineConfig({
           ],
         },
         {
-          label: 'RCC CLI',
+          label: 'Radeon Cloud CLI',
           items: [
             { slug: 'cli/overview' },
             { slug: 'cli/install' },
