@@ -5,14 +5,14 @@ sidebar:
   label: 管理 GPU 实例
 ---
 
-每个账户有一个“当前实例”，`rcc instance` 下的命令都作用于它，不需要填实例 ID。要同时操作别的账户，
-用 `-A` 切换账户（见[登录与账户](/radeon-cloud-docs/zh-cn/cli/authentication/)）。
+每个账号有一个“当前实例”，`rcc instance` 下的命令都作用于它，不需要填实例 ID。要同时操作别的账号，
+用 `-A` 切换账号（见[登录与账号](/radeon-cloud-docs/zh-cn/cli/authentication/)）。
 
-## 查看额度和可用资源
+## 查看积分和可用资源
 
 ```bash
-rcc status           # 账户、额度和实例状态一览
-rcc credits status   # 额度余额
+rcc status           # 账号、积分和实例状态一览
+rcc credits status   # 积分余额
 rcc catalog list     # 你可以使用的环境、资源池和资源模板
 ```
 
@@ -26,11 +26,11 @@ rcc catalog show ID
 rcc catalog search 关键词
 ```
 
-出现在列表里只表示你的账户有权申请这项资源，不会预留 GPU，也不保证此刻有空闲容量。
+出现在列表里只表示你的账号有权申请这项资源，不会预留 GPU，也不保证此刻有空闲容量。
 
 ## 添加 SSH 密钥
 
-第一次创建带 SSH 的实例之前，先为当前账户登记一把 SSH 密钥：
+第一次创建带 SSH 的实例之前，先为当前账号登记一把 SSH 密钥：
 
 ```bash
 rcc instance add-key
@@ -109,13 +109,13 @@ JupyterLab 链接只能用一次，而且很快过期。它属于敏感信息，
 ## 查看状态和日志
 
 ```bash
-rcc instance list             # 当前实例（加 --all 列出每个已保存账户的实例）
+rcc instance list             # 当前实例（加 --all 列出每个已保存账号的实例）
 rcc instance status           # 当前状态
 rcc instance status --watch   # 持续刷新，默认每 3 秒一次
 rcc instance logs             # 启动事件和容器日志
 ```
 
-只能查看当前登录账户自己的实例。
+只能查看当前登录账号自己的实例。
 
 ## 删除实例
 

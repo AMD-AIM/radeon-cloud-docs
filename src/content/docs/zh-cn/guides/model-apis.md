@@ -11,13 +11,13 @@ AMD Radeon Cloud 通过兼容 OpenAI 的 HTTP API 提供模型服务。任何能
 
 ## 免费共享端点
 
-共享端点常驻在线，不花钱。不用启动实例，也不消耗额度。有哪些模型可用由平台决定。
+共享端点常驻在线，不花钱。不用启动实例，也不消耗积分。有哪些模型可用由平台决定。
 
 打开 [Token Factory](https://developer.amd.com.cn/radeon/modelapis) 并登录。
 
 ![Token Factory 的模型目录](../../../../assets/guide/modelapi-tokenfactory.png)
 
-在 **Public Free Model APIs** 下挑一个模型。详情弹窗里有 base URL、模型名、你的 API key，还有一条可以直接跑的 curl 命令。
+在 **Public Free Model APIs** 下挑一个模型。详情弹窗里有 base URL、模型名、你的 API Key，还有一条可以直接跑的 curl 命令。
 
 ![免费模型的详情弹窗](../../../../assets/guide/modelapi-free-detail.png)
 
@@ -34,7 +34,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 
 ## 专属端点
 
-专属端点把模型跑在你自己的实例上，模型和服务配置都由你定。实例运行期间会一直消耗额度。
+专属端点把模型跑在你自己的实例上，模型和服务配置都由你定。实例运行期间会一直消耗积分。
 
 1. 在[控制台](https://radeon-global.anruicloud.com/)里进 **Profile → Add Template**。
 2. 把 **Deploy Type** 设成 **vLLM Model API**，然后写 serve 命令。
@@ -49,7 +49,7 @@ vllm serve Qwen/Qwen2.5-7B-Instruct --host 0.0.0.0 --port 8000
 平台把公网端点路由到容器内的 8000 端口。服务如果绑到别处，端点就够不着它。
 :::
 
-3. 保存，然后 **Launch** 这个模板。实例就绪后，弹窗会给出形如 `https://<host>/spaces/<instance-id>/8000/v1` 的 **Base URL**，以及模型名和 API key。
+3. 保存，然后 **Launch** 这个模板。实例就绪后，弹窗会给出形如 `https://<host>/spaces/<instance-id>/8000/v1` 的 **Base URL**，以及模型名和 API Key。
 
 用法和共享端点完全一样，只是换成这个 base URL：
 

@@ -1,16 +1,16 @@
 ---
 title: 用量和配额
-description: 查看你的 Model API 消耗和今天剩下的额度。
+description: 查看你的模型 API 消耗和今天剩余的配额。
 sidebar:
   order: 6
 ---
 
-报告你的密钥在共享 Model API 上花了多少，以及今天还剩多少。
+报告你的密钥在共享模型 API 上花了多少，以及今天还剩多少。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/api/profile/model-usage</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 ## 请求
@@ -57,7 +57,7 @@ curl "https://radeon-global.anruicloud.com/api/profile/model-usage?include_recen
 
 | 字段 | 说明 |
 |---|---|
-| `status` | 正常是 `ok`。账户还没有 API 密钥时是 `not_configured`；用量服务连不上时是 `not_available`。 |
+| `status` | 正常是 `ok`。账号还没有 API Key时是 `not_configured`；用量服务连不上时是 `not_available`。 |
 | `rpm_limit` | 这个密钥每分钟允许的请求数。 |
 | `daily_cost_limit_usd` | 每日花费上限。 |
 | `daily_cost_used_usd` | 当前周期内已花掉的。 |
@@ -70,15 +70,15 @@ curl "https://radeon-global.anruicloud.com/api/profile/model-usage?include_recen
 
 token 计数拆成 `prompt_tokens` 和 `completion_tokens`；有些模型还会报 `reasoning_tokens`。费用单位是美元。
 
-:::note[配额是按账户算的]
-上面的数字只是示例。你实际的限额就是这个端点针对你的密钥返回的值——去读它，别去猜，因为不同账户不一样，而且会随时间变化。
+:::note[配额是按账号算的]
+上面的数字只是示例。你实际的限额就是这个端点针对你的密钥返回的值——去读它，别去猜，因为不同账号不一样，而且会随时间变化。
 :::
 
-## 怎么用
+## 监控用量
 
-跑大批量任务前先查一下，确认还有余量；或者在仪表盘上盯着 `daily_cost_remaining_usd`，免得任务跑到半夜断在中途。每日额度一旦用完，请求会被拒绝，直到 `daily_reset_at`。
+跑大批量任务前先查一下，确认还有余量；或者在仪表盘上盯着 `daily_cost_remaining_usd`，免得任务跑到半夜断在中途。每日配额一旦用完，请求会被拒绝，直到 `daily_reset_at`。
 
-GPU 实例的额度是单独统计的，不出现在这里——见[账户](/radeon-cloud-docs/zh-cn/api/account/)。
+GPU 实例消耗的积分单独统计，不出现在这里——见[账号](/radeon-cloud-docs/zh-cn/api/account/)。
 
 ## 错误
 

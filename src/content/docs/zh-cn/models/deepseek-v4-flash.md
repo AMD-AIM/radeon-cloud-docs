@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>DeepSeek-V4-Flash</code></span>
 </div>
 
-## 官方介绍
+## 模型简介
 
 这里跑的权重是 **DeepSeek-V4-Flash-0731**，DeepSeek 对 DeepSeek-V4-Flash 的正式发布版，取代此前的
 预览版。官方把它定位为智能体（agentic）模型：在其模型卡公布的基准上，尽管激活参数量小得多，仍胜过
@@ -48,7 +48,7 @@ Context Intelligence*（[arXiv:2606.19348](https://arxiv.org/abs/2606.19348)）�
 见 [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/)。
 :::
 
-## 本端点上的行为
+## 在 Radeon Cloud 上的行为
 
 ### 概览
 

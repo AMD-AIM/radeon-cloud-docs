@@ -1,5 +1,5 @@
 ---
-title: 在 JupyterLab 里工作
+title: 在 JupyterLab 中工作
 description: 使用实例自带的浏览器版 JupyterLab 环境。
 sidebar:
   order: 4

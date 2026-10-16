@@ -2,7 +2,7 @@
 title: OmniVoice
 description: Text-to-speech — turns text into an audio file, on the OpenAI-compatible speech endpoint.
 sidebar:
-  order: 11
+  order: 13
 ---
 
 <div class="rc-endpoint">

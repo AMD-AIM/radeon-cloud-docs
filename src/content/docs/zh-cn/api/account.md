@@ -1,6 +1,6 @@
 ---
-title: 账户
-description: 个人资料、额度、API 密钥和 SSH 密钥。
+title: 账号
+description: 个人资料、积分、API Key 和 SSH 密钥。
 sidebar:
   order: 10
 ---
@@ -10,7 +10,7 @@ sidebar:
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/api/me</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 ```json
@@ -29,13 +29,13 @@ sidebar:
 | 字段 | 说明 |
 |---|---|
 | `credits` | 可用于启动实例的余额。 |
-| `verified` | 账户是否已过审。未通过验证的账户不能启动实例，也拿不到 API 密钥。 |
+| `verified` | 账号是否已过审。未通过验证的账号不能启动实例，也拿不到 API Key。 |
 | `is_editor` | 你是否可以公开发布模板。 |
-| `provider` | 账户的登录方式。 |
-| `api_token` | 你当前的 API 密钥。 |
+| `provider` | 账号的登录方式。 |
+| `api_token` | 你当前的 API Key。 |
 | `ssh_public_key` | 安装进实例的公钥，或者 `null`。 |
 
-:::caution[这个响应里带着你的 API 密钥]
+:::caution[这个响应里带着你的 API Key]
 别把它写进日志，也别让一个外人能访问的服务把它返回出去。
 :::
 
@@ -44,7 +44,7 @@ sidebar:
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/api/profile/ssh-key</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 | 参数 | 类型 | | 说明 |
@@ -62,12 +62,12 @@ curl -X POST https://radeon-global.anruicloud.com/api/profile/ssh-key \
 
 新公钥对之后启动的实例生效，对已经在跑的实例无效。
 
-## 轮换 API 密钥
+## 轮换 API Key
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/api/profile/api-token</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 签发新密钥并立刻吊销旧的。见[认证](/radeon-cloud-docs/zh-cn/api/authentication/#轮换密钥)。
@@ -77,7 +77,7 @@ curl -X POST https://radeon-global.anruicloud.com/api/profile/ssh-key \
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/api/credits/redeem</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 | 参数 | 类型 | | 说明 |
@@ -88,8 +88,8 @@ curl -X POST https://radeon-global.anruicloud.com/api/profile/ssh-key \
 { "credits_added": 50, "credits": 74 }
 ```
 
-码无效、已兑换过，或者是发给别的账户的，返回 `400`。兑换通道当前关闭时返回 `503`。
+码无效、已兑换过，或者是发给别的账号的，返回 `400`。兑换通道当前关闭时返回 `503`。
 
-## Model API 用量
+## 模型 API 用量
 
-共享 Model API 的消耗和配额是单独统计的——见[用量和配额](/radeon-cloud-docs/zh-cn/api/usage/)。额度和 Model API 花费是两笔独立的预算。
+共享模型 API 的消耗和配额单独统计，见[用量和配额](/radeon-cloud-docs/zh-cn/api/usage/)。积分和模型 API 的消耗是两笔独立的预算。

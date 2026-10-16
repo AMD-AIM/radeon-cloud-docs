@@ -49,7 +49,7 @@ The separate `vision_config` describes the vision tower:
 
 The outer configuration sets the default visual compression to `downsample_mode = 16x`.
 
-## On this endpoint
+## On Radeon Cloud
 
 :::note[China shared API — verified 2026-10-13]
 These service behaviours apply to `https://developer.amd.com.cn/radeon/api/v1`, not every

@@ -10,9 +10,9 @@ sidebar:
 
 ## 调用模型 API
 
-最快的入门路径。不用实例，不花额度。
+最快的入门路径。不用实例，不花积分。
 
-打开 [Token Factory](https://developer.amd.com.cn/radeon/modelapis) 登录，在 **Public Free Model APIs** 下随便挑一个模型。详情弹窗里就有你的 API key，复制下来。
+打开 [Token Factory](https://developer.amd.com.cn/radeon/modelapis) 登录，在 **Public Free Model APIs** 下随便挑一个模型。详情弹窗里就有你的 API Key，复制下来。
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
@@ -64,7 +64,7 @@ print(response.choices[0].message.content)
 
 ### 使用 Radeon Cloud CLI
 
-安装 CLI、登录、查看你的账户可以使用哪些资源，然后创建实例：
+安装 CLI、登录、查看你的账号可以使用哪些资源，然后创建实例：
 
 ```bash
 python3 -m pip install amd-oneclick-sdk
@@ -76,7 +76,7 @@ rcc instance create
 rcc instance open
 ```
 
-在终端里运行 `rcc instance create`，它会一步步让你选择环境和资源。SSH、状态、日志、脚本和多账户见
+在终端里运行 `rcc instance create`，它会一步步让你选择环境和资源。SSH、状态、日志、脚本和多账号见
 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/)。
 
 在实例里的终端确认 GPU 可见：
@@ -87,7 +87,7 @@ rocm-smi
 
 你应该能看到列出了一块或多块 Radeon GPU。
 
-:::caution[实例运行期间会一直扣额度]
+:::caution[实例运行期间会一直扣积分]
 用完之后，去 **Profile → Active Instance** 销毁实例，或运行
 `rcc instance delete --yes`。见[销毁实例](/radeon-cloud-docs/zh-cn/guides/destroy/)。
 :::

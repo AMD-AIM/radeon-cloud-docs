@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>MiniCPM5-2B</code></span>
 </div>
 
-## Specification
+## Specifications
 
 The weights served here are **`openbmb/MiniCPM5-2B`**, read from the `config.json` shipped with
 them:
@@ -30,7 +30,7 @@ them:
 The only dense (non-MoE) model on this endpoint, and the only unquantised one. Its 131,072-token
 context is the shortest here.
 
-## On this endpoint
+## On Radeon Cloud
 
 ### At a glance
 

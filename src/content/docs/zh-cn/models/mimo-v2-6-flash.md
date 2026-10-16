@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>MiMo-V2.6-Flash</code></span>
 </div>
 
-## 关于这个模型
+## 模型简介
 
 这里提供的权重是 **MiMo-V2.6-Flash**，小米 MiMo-V2.6 系列里侧重效率的那一档 ——
 一个稀疏 MoE 模型，在同一个端点上接受文本、图像、视频和音频，并且默认先思考再回答。
@@ -45,7 +45,7 @@ sidebar:
 1M 窗口能放得下就是靠这个。
 :::
 
-## 这个端点的行为
+## 在 Radeon Cloud 上的行为
 
 ### 概览
 

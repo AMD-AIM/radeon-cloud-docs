@@ -1,7 +1,8 @@
 ---
-title: Model reference
-description: What each model on the free shared model API accepts and returns.
+title: Model catalog
+description: What each model on the shared model APIs accepts and returns.
 sidebar:
+  label: Overview
   order: 1
 ---
 
@@ -98,7 +99,7 @@ accept `xhigh` and `max` and `high`, and they are not interchangeable. To pick p
 against the table above.
 :::
 
-## Thinking behaviour
+## Thinking
 
 | Model | With `reasoning_effort` omitted | `usage.reasoning_tokens` (top level) |
 |---|:---:|:---:|
@@ -198,7 +199,7 @@ Check the table above before sending images; the remaining chat models are text-
 out of a PDF or a scan, use [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) — it returns
 Markdown and is billed per page.
 
-## Writing one client for every model
+## One client for every model
 
 The shape every chat model here accepts:
 
@@ -213,7 +214,7 @@ The shape every chat model here accepts:
 - size `max_tokens` against the target model's window — they span 131,072 to 1,048,576, an
   eightfold difference
 
-## True for every model
+## Common to every model
 
 | | |
 |---|---|

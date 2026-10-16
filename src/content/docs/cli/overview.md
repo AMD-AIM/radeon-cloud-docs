@@ -6,7 +6,7 @@ sidebar:
 ---
 
 Radeon Cloud CLI is the command-line tool for Radeon Cloud; the command is `rcc`. From a terminal you
-can check your Credits and the resources available to you, create a GPU instance, open JupyterLab,
+can check your credits and the resources available to you, create a GPU instance, open JupyterLab,
 connect over SSH, follow its status and logs, and delete it when you are done. Results can be
 printed as JSON for scripts.
 
@@ -40,7 +40,7 @@ rcc doctor
 without a browser, run `rcc auth login --no-browser` and open the printed link on another device.
 `rcc doctor` checks the installation, your sign-in and the connection to the service.
 
-### 3. Check Credits and available resources
+### 3. Check credits and available resources
 
 ```bash
 rcc credits status
@@ -69,11 +69,11 @@ rcc instance delete --yes
 rcc instance status
 ```
 
-A running instance keeps consuming [Credits](/radeon-cloud-docs/guides/credits/). Delete it when
+A running instance keeps consuming [credits](/radeon-cloud-docs/guides/credits/). Delete it when
 you have finished, and check `rcc instance status` until no running instance is left.
 
 :::caution[Signing out does not stop an instance]
-`rcc auth logout` only signs this device out. The instance keeps running and keeps consuming Credits.
+`rcc auth logout` only signs this device out. The instance keeps running and keeps consuming credits.
 :::
 
 ## The CLI token is not an API key

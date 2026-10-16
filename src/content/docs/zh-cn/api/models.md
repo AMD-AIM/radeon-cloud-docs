@@ -5,7 +5,7 @@ sidebar:
   order: 3
 ---
 
-返回 **Public Free Model APIs** 的模型目录，以及每个条目的价格和能力元信息。独占端点只服务你启动它时指定的那个模型，这条路径由 vLLM 或 SGLang 自己应答——见[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
+返回 **共享模型 API** 的模型目录，以及每个条目的价格和能力元信息。专属端点只服务你启动它时指定的那个模型，这条路径由 vLLM 或 SGLang 自己应答——见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
@@ -93,20 +93,20 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
 | `context_length` | 上下文窗口上限，单位 token。 |
 | `supported_parameters` | 这个模型接受的请求参数。完整 schema 见[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)。 |
 | `json_output`、`structured_outputs` | 是否认 `response_format`。 |
-| `free` | 调用是否按零成本计入你的每日额度。 |
+| `free` | 调用是否按零成本计入你的每日配额。 |
 | `stability` | `stable`、`beta`、`unstable` 或 `experimental`。 |
 
 :::caution[这不是 OpenAI 的 model 对象]
 指望 `data[].object == "model"` 或者读 `owned_by` 的客户端会找不到这些字段。
-Model API 其他地方都跟着 OpenAI 的 schema 走，唯独这个端点不是。
+模型 API 其他地方都跟着 OpenAI 的 schema 走，唯独这个端点不是。
 :::
 
 ## 说明
 
 模型目录是会变的。模型会陆续上架和下架，所以运行时去解析列表，别把名字写死，也要处理昨天还能用的模型今天没了的情况。
 
-目录对所有密钥都一样——它不按账户区分。
+目录对所有密钥都一样——它不按账号区分。
 
-这个端点不占用你的并发额度，但每分钟限流仍然适用。调它很便宜，不过还是把结果缓存几分钟，别每次补全前都调一遍。
+这个端点不占用你的并发配额，但每分钟限流仍然适用。调它很便宜，不过还是把结果缓存几分钟，别每次补全前都调一遍。
 
 [Token Factory](https://developer.amd.com.cn/radeon/modelapis) 里每个模型卡片上渲染的就是这同一份元信息。

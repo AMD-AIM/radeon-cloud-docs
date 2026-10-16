@@ -82,6 +82,6 @@ pipx upgrade amd-oneclick-sdk                       # pipx 安装的
 python3 -m pip uninstall amd-oneclick-sdk
 ```
 
-卸载不会删除 `~/.radeon-cloud` 目录。里面保存着你的账户、登录令牌，以及 CLI 生成的 SSH 密钥。
+卸载不会删除 `~/.radeon-cloud` 目录。里面保存着你的账号、登录令牌，以及 CLI 生成的 SSH 密钥。
 要彻底清理，先运行 `rcc auth logout --all` 让所有已保存的令牌失效，再删除这个目录。删除之前，
 确认里面没有你还要用的 SSH 私钥。

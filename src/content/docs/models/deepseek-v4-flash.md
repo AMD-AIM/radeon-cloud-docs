@@ -53,7 +53,7 @@ in a Python `encoding/` folder instead. That is why this model has no opinion ab
 model does ship one.
 :::
 
-## On this endpoint
+## On Radeon Cloud
 
 ### At a glance
 

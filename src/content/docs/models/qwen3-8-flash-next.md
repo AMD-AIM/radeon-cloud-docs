@@ -66,7 +66,7 @@ Qwen lists the type as *Causal Language Model with Vision Encoder*, and the repo
 `image-text-to-text`. See [Image input](#image-input).
 :::
 
-## On this endpoint
+## On Radeon Cloud
 
 ### At a glance
 

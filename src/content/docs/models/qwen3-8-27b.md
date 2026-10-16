@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>Qwen3.8-27B</code></span>
 </div>
 
-## Specification
+## Specifications
 
 | | |
 |---|---|

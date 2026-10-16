@@ -28,7 +28,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
   -H "Authorization: Bearer $RADEON_API_KEY"
 ```
 
-The **Public Free Model APIs** also accept the same key in the `x-api-key` header, which is how
+The **shared model APIs** also accept the same key in the `x-api-key` header, which is how
 Anthropic SDKs authenticate. Use it together with `anthropic-version` when calling
 [`/v1/messages`](/radeon-cloud-docs/api/messages/):
 
@@ -75,12 +75,12 @@ Signing in through the console sets a signed session cookie. You can't create on
 
 Sessions are invalidated when you sign out, when the upstream identity provider's token expires, or when sessions are revoked administratively.
 
-## What each endpoint accepts
+## Credentials by endpoint
 
 | Endpoint group | API key | Session |
 |---|---|---|
-| Public Free Model APIs | Yes | Yes |
-| Dedicated Model APIs | Yes | Yes |
+| Shared model APIs | Yes | Yes |
+| Dedicated model APIs | Yes | Yes |
 | Instances, templates, account | Yes | Yes |
 | Instance proxy (`/instances/...`) | No | **Session only** |
 
@@ -88,7 +88,7 @@ The instance proxy is the one exception. JupyterLab and other interactive apps a
 
 For a dedicated model endpoint under `/spaces/...`, a bearer key works, but only your own key against your own instance, and only on the port that instance actually serves.
 
-## Failures
+## Authentication errors
 
 `401` means the credential is missing, malformed, or unrecognised.
 

@@ -5,14 +5,14 @@ sidebar:
   order: 8
 ---
 
-每个账户同时只能有一个活跃实例。下面这些端点负责启动它、轮询它、拆掉它。
+每个账号同时只能有一个活跃实例。下面这些端点负责启动它、轮询它、拆掉它。
 
 ## 启动实例
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/api/notebook/request</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 分配一开始就返回——它不等实例就绪。轮询[状态](#查看状态)直到 `ready` 为 `true`。
@@ -24,7 +24,7 @@ sidebar:
 | `gpu_count` | integer | <span class="rc-opt">选填</span> | `1`、`2` 或 `4`。默认 `1`。 |
 | `disk_size_gb` | integer | <span class="rc-opt">选填</span> | 从 100 GB 起，上限随 GPU 数量而定：1 卡 100，2 卡 150，4 卡 200。 |
 | `resource_profile` | string | <span class="rc-opt">选填</span> | 具名的 CPU 与内存配置。默认 `auto`。 |
-| `launch_verification_token` | string | <span class="rc-opt">选填</span> | 仅在账户开启了启动验证时需要。 |
+| `launch_verification_token` | string | <span class="rc-opt">选填</span> | 仅在账号开启了启动验证时需要。 |
 
 ```bash
 curl -X POST https://radeon-global.anruicloud.com/api/notebook/request \
@@ -41,17 +41,17 @@ curl -X POST https://radeon-global.anruicloud.com/api/notebook/request \
 }
 ```
 
-以下情况返回 `400` 拒绝：GPU 数量不是 1、2 或 4；磁盘大小超出允许范围；镜像或实例类型未知或已禁用；你已经有一个活跃实例；或者你的额度余额低于请求的 GPU 数量。
+以下情况返回 `400` 拒绝：GPU 数量不是 1、2 或 4；磁盘大小超出允许范围；镜像或实例类型未知或已禁用；你已经有一个活跃实例；或者你的积分余额低于请求的 GPU 数量。
 
 ## 查看状态
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/api/notebook/status</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
-无参数——它报告调用方账户的实例。
+无参数——它报告调用方账号的实例。
 
 ```json
 {
@@ -83,7 +83,7 @@ curl -X POST https://radeon-global.anruicloud.com/api/notebook/request \
 | `url` | 在浏览器里打开实例的地址。需要会话 cookie。 |
 | `phase`、`reason`、`detail` | 更底层的调度状态。启动卡住时有用。 |
 | `ssh_host`、`ssh_port`、`ssh_username`、`ssh_command` | 容器跑起来之后填充，前提是模板开了 SSH。 |
-| `api_base_url`、`api_key`、`api_model` | 只有已就绪的 `vllm` 和 `sglang` 实例才填充。[独占端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)的 URL 就是从这儿来的。 |
+| `api_base_url`、`api_key`、`api_model` | 只有已就绪的 `vllm` 和 `sglang` 实例才填充。[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)的 URL 就是从这儿来的。 |
 
 每隔几秒轮询一次。冷启动拉大镜像，或者 vLLM 实例下载权重，都可能要好几分钟。
 
@@ -92,7 +92,7 @@ curl -X POST https://radeon-global.anruicloud.com/api/notebook/request \
 <div class="rc-endpoint">
   <span class="rc-method" data-m="DELETE">DELETE</span>
   <span class="rc-path">/api/notebook/current</span>
-  <span class="rc-auth">会话或 API 密钥</span>
+  <span class="rc-auth">会话或 API Key</span>
 </div>
 
 ```json
@@ -107,7 +107,7 @@ curl -X POST https://radeon-global.anruicloud.com/api/notebook/request \
 
 除非模板用了持久化存储，否则数据会随实例一起删掉。
 
-## 一个启动并等待的循环
+## 示例：启动并等待就绪
 
 ```python
 import time, requests
@@ -129,4 +129,4 @@ while True:
     time.sleep(5)
 ```
 
-一定要在 `finally` 里销毁。脚本崩了却留着实例在跑，额度就一直在烧。
+一定要在 `finally` 里销毁。脚本崩了却留着实例在跑，积分就会一直消耗。

@@ -11,7 +11,7 @@ sidebar:
   <span class="rc-auth">model: <code>MiniCPM-V-4.7-35B-A3B</code></span>
 </div>
 
-## 关于这个模型
+## 模型简介
 
 这里提供的是 **[OpenBMB/MiniCPM-V-4.7-35B-A3B](https://huggingface.co/openbmb/MiniCPM-V-4.7-35B-A3B)**
 官方权重，V4.7 系列中总参数 35B、每 token 约激活 3B 的 MoE 视觉语言模型，采用 Qwen3.5-MoE
@@ -51,10 +51,10 @@ sidebar:
 
 外层配置通过 `downsample_mode = 16x` 指定默认视觉压缩。
 
-## 本端点上的行为
+## 在 Radeon Cloud 上的行为
 
 :::note[中国区共享 API —— 2026-10-13 验证]
-以下服务行为适用于 `https://developer.amd.com.cn/radeon/api/v1`，不代表其它区域或独占部署。
+以下服务行为适用于 `https://developer.amd.com.cn/radeon/api/v1`，不代表其它区域或专属部署。
 当前可用状态和价格以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准。
 :::
 
@@ -170,7 +170,7 @@ SSE 需检查结束时的 choice；`length` 或缺少结束原因均不能默认
 
 ### 示例
 
-使用准确的模型 ID，不加 `openbmb/` 前缀。将控制台中的 Model API Key 设置为环境变量
+使用准确的模型 ID，不加 `openbmb/` 前缀。将控制台中的 API Key 设置为环境变量
 `RADEON_API_KEY`，不要把真实密钥提交到代码中。
 
 ```bash
@@ -187,4 +187,4 @@ curl --fail-with-body https://developer.amd.com.cn/radeon/api/v1/chat/completion
 
 检查 `finish_reason` 后读取 `choices[0].message.content`，token 计数从 `usage` 读取。
 2026-10-13 核实的计量价为每百万 tokens：**输入 $0.035 / 输出 $0.07 / 缓存命中输入 $0.0007**。
-这是用量/额度记账单价，不代表自动现金扣款；实时价格看模型目录，实际用量看中国区控制台。
+这是用量记账单价，不代表自动现金扣款；实时价格看模型目录，实际用量看中国区控制台。
