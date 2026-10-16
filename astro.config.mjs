@@ -87,6 +87,16 @@ export default defineConfig({
           ],
         },
         {
+          label: 'RCC CLI',
+          items: [
+            { slug: 'cli/overview' },
+            { slug: 'cli/install' },
+            { slug: 'cli/authentication' },
+            { slug: 'cli/instances' },
+            { slug: 'cli/automation' },
+          ],
+        },
+        {
           label: 'API Reference',
           translations: { 'zh-CN': 'API 参考' },
           items: [
