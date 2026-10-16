@@ -9,15 +9,18 @@ sidebar:
 每个模型一页，对应 `https://developer.amd.com.cn/radeon/api/v1` 上提供的模型。
 
 当前有哪些模型以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准 ——
-这里有页面并不代表该模型当前在线。除以下三个各走自己的端点外，其余都在 `/v1/chat/completions` 上应答：
+这里有页面并不代表该模型当前在线。除以下五个各走自己的端点外，其余都在 `/v1/chat/completions` 上应答：
 [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/)（文档 OCR）、
-[OmniVoice](/radeon-cloud-docs/zh-cn/models/omnivoice/)（语音合成）和
-[Clef](/radeon-cloud-docs/zh-cn/models/clef/)（决策）。
+[OmniVoice](/radeon-cloud-docs/zh-cn/models/omnivoice/)（语音合成），以及
+[Clef](/radeon-cloud-docs/zh-cn/models/clef/)、[d3](/radeon-cloud-docs/zh-cn/models/d3/) 和
+[d3-flash](/radeon-cloud-docs/zh-cn/models/d3-flash/)（决策）。
 
 :::note[最后更新：2026-10-16]
 模型换了推理引擎，行为就可能跟着变。
 
-**新增：[OmniVoice](/radeon-cloud-docs/zh-cn/models/omnivoice/) 和 [Clef](/radeon-cloud-docs/zh-cn/models/clef/)。**
+**新增：[OmniVoice](/radeon-cloud-docs/zh-cn/models/omnivoice/)、[Clef](/radeon-cloud-docs/zh-cn/models/clef/)，
+以及 vLLM Semantic Router 的决策模型 [d3](/radeon-cloud-docs/zh-cn/models/d3/) 和
+[d3-flash](/radeon-cloud-docs/zh-cn/models/d3-flash/)。**
 
 **MiniCPM5-1B 已不再对外提供**，其说明页已移除。
 同体量级由 [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) 提供。
@@ -39,13 +42,15 @@ sidebar:
 [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 是表中唯一还收**音频**输入的模型，
 也是唯一支持严格 `json_schema` 的模型。
 
-以下三个模型不在此表，下面的参数对它们不适用：
+以下五个模型不在此表，下面的参数对它们不适用：
 
 | 模型 | 端点 | 输入 | 返回 | 计费单位 |
 |---|---|---|---|---|
 | [MinerU2.5-Pro](/radeon-cloud-docs/zh-cn/models/mineru2-5-pro/) | `POST /v1/ocr` | PDF 或图片 | Markdown | 页 |
 | [OmniVoice](/radeon-cloud-docs/zh-cn/models/omnivoice/) | `POST /v1/audio/speech` | 文本，最多 4,096 个字符 | 音频文件 | 输入字符 |
 | [Clef](/radeon-cloud-docs/zh-cn/models/clef/) | `POST /v1/systemone` | 情境、可选图片、带类型的问题 | 每个答案的概率 | 输入 token |
+| [d3](/radeon-cloud-docs/zh-cn/models/d3/) | `POST /v1/systemone` | 情境、可选图片和视频、带类型的问题 | 每个答案的概率 | 输入 token |
+| [d3-flash](/radeon-cloud-docs/zh-cn/models/d3-flash/) | `POST /v1/systemone` | 情境、可选图片和视频、带类型的问题 | 每个答案的概率 | 输入 token |
 
 ## `reasoning_effort` 支持的取值
 
