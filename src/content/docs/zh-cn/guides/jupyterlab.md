@@ -1,52 +1,47 @@
 ---
 title: 在 JupyterLab 中工作
-description: 使用实例自带的浏览器版 JupyterLab 环境。
-sidebar:
-  order: 4
+description: 打开实例上的 JupyterLab，检查 GPU，管理文件。
 ---
 
-实例就绪后，点 **Open Notebook**。
+Notebook 实例运行的是 JupyterLab：一个在浏览器里使用的开发环境，包含 Notebook、终端和文件浏览器。
 
-![就绪弹窗里的 Open Notebook 按钮](../../../../assets/guide/open-notebook.png)
+## 打开 JupyterLab
 
-JupyterLab 会在新标签页打开。这是进入实例的默认方式，在浏览器里就有一整套开发环境。
-
-![JupyterLab 工作区](../../../../assets/guide/jupyterlab.png)
-
-## 里面有什么
-
-**终端** —— 一个真正的 Linux shell。点顶部的 `+`，再点 **Terminal**，或者用 Launcher 里的 Terminal 卡片。用它装包、下权重、起服务。
-
-**Notebook** —— 代码和输出混排的 `.ipynb` 文档，做交互式探索的常规方式。
-
-**文件浏览器** —— 左侧那个面板。用上传按钮（`↑`）把自己的 notebook 和数据传进来。
+启动弹窗显示 **实例已就绪** 时，或者在 **首页** 的实例卡片上，点 **打开 Notebook**。JupyterLab 会在新标签页打开。
 
 ## 检查 GPU
 
-在终端里：
+打开终端（**File → New → Terminal**，或者 Launcher 里的 **Terminal**），运行：
 
 ```bash
 rocm-smi
 ```
 
-这会列出挂给实例的 Radeon GPU，以及显存占用和温度。确认 PyTorch 能看到它们：
+它会列出实例挂载的 Radeon GPU，以及显存占用和温度。确认 PyTorch 能使用 GPU：
 
 ```bash
 python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
 ```
 
-在 ROCm 版本的 PyTorch 上，仍然用 CUDA 那套 API 名字 —— `torch.cuda.is_available()` 返回 `True` 就说明 ROCm 正常。
+ROCm 版 PyTorch 沿用 `torch.cuda` 这套接口名称，输出 `True` 就说明 ROCm 工作正常。
 
-## 让任务活下去
+## 管理文件
 
-终端一关，长任务就死了。用后台方式启动：
+- 左侧的文件浏览器显示实例里的文件。把文件拖进去，或者用上传按钮，就能导入 Notebook 和数据。
+- 要下载文件，右键文件选 **Download**。
+- 需要保留的内容请放在 `/workspace` 下，并用持久化存储启动实例，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
+
+## 运行长任务
+
+在 Notebook 单元格里启动的任务，会随内核停止而停止。长时间运行的任务，请在终端里启动，并把输出写到文件：
 
 ```bash
-nohup python train.py > train.log 2>&1 &
+nohup python train.py > /workspace/train.log 2>&1 &
+tail -f /workspace/train.log
 ```
 
-只有模板用了 **Persistent (PVC)** 存储，文件才能在实例销毁后留下来。否则先把需要的东西下载走。
+实例有最长运行时长，长时间没有活动也会被回收，所以请边跑边把检查点保存到 `/workspace`。
 
-## 对外暴露服务
+## 访问 Web 应用
 
-想让 notebook 里跑的 HTTP 服务能从公网访问 —— 比如一个 Gradio 应用，或者你正在开发的 API —— 见[暴露服务](/radeon-cloud-docs/zh-cn/guides/tunnel/)。
+要让实例里运行的 Web 服务（比如 Gradio 应用，或者正在开发的 API）能从公网访问，见[对外暴露服务](/radeon-cloud-docs/zh-cn/guides/tunnel/)。

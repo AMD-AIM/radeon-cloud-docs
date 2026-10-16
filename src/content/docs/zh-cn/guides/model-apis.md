@@ -36,28 +36,30 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 
 专属端点把模型跑在你自己的实例上，模型和服务配置都由你定。实例运行期间会一直消耗积分。
 
-1. 在[控制台](https://radeon-global.anruicloud.com/)里进 **Profile → Add Template**。
-2. 把 **Deploy Type** 设成 **vLLM Model API**，然后写 serve 命令。
+1. 在 **首页** 把 **部署类型** 设为 **模型 API**。
+2. 在 **模型** 里选一个公共模板，模型、规格和 vLLM 启动命令都已经设好。要部署其他模型，点 **自定义模型**，然后填写：
+   - **模型名称**：客户端在 `model` 字段里传的名字。
+   - **模型来源**：权重来自哪里，选 **Hugging Face（镜像）** 或 **ModelScope**。
+   - **vLLM 启动命令**：启动服务的命令，例如：
 
-![专属模型 API 的模板表单](../../../../assets/guide/modelapi-dedicated-template.png)
+     ```bash
+     vllm serve Qwen/Qwen2.5-0.5B-Instruct --host 0.0.0.0 --port 8000 --served-model-name Qwen2.5-0.5B-Instruct
+     ```
 
-```bash
-vllm serve Qwen/Qwen2.5-7B-Instruct --host 0.0.0.0 --port 8000
-```
+3. 选一个显存够用的 **规格**，点 **启动实例**。
+4. 实例就绪后，**兼容 OpenAI 的接口** 卡片会显示 **Base URL**、**模型** 和你的 **API Key**，并附一条可以直接运行的 curl 命令。
 
 :::caution[务必保留 `--host 0.0.0.0 --port 8000`]
-平台把公网端点路由到容器内的 8000 端口。服务如果绑到别处，端点就够不着它。
+平台把端点路由到容器内的 8000 端口，服务绑定到其他地址或端口时，端点无法访问到它。`--served-model-name` 要和 **模型名称** 一致。
 :::
 
-3. 保存，然后 **Launch** 这个模板。实例就绪后，弹窗会给出形如 `https://<host>/spaces/<instance-id>/8000/v1` 的 **Base URL**，以及模型名和 API Key。
-
-用法和共享端点完全一样，只是换成这个 base URL：
+调用方式和共享端点相同，把 base URL 换成卡片上的地址：
 
 ```bash
-curl https://<host>/spaces/<instance-id>/8000/v1/chat/completions \
+curl <base-url>/chat/completions \
   -H "Authorization: Bearer $RADEON_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"Qwen/Qwen2.5-7B-Instruct","messages":[{"role":"user","content":"Hello"}]}'
+  -d '{"model":"Qwen2.5-0.5B-Instruct","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
 因为请求是直接打到 vLLM 或 SGLang 上的，那个服务暴露什么，专属端点就暴露什么 —— 通常除了 chat 之外还有 completions 和 embeddings。

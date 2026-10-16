@@ -31,7 +31,7 @@ An **instance** is a container on a Radeon GPU node, launched from a **template*
 
 Instances are interactive. Open them in JupyterLab in your browser or connect over SSH, then use them like any Linux machine with a GPU: install packages, download weights, train, and profile.
 
-Instances spend credits while they run, so destroy them when you're done. To keep your files after that, set the template's storage to **Persistent (PVC)**.
+Instances spend credits while they run, so destroy them when you're done. To keep your files after that, launch with **Persistent /workspace** storage. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
 On the China site, you get credits by exchanging AMD AI Developer Program points. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) and [Credits](/radeon-cloud-docs/guides/credits/).
 

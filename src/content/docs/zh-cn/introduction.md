@@ -31,7 +31,7 @@ AMD Radeon Cloud 有两个站点。两个站点功能相同，但各自独立部
 
 实例支持交互式使用。可以在浏览器里通过 JupyterLab 打开，也可以通过 SSH 连接，用法和一台带 GPU 的 Linux 机器一样：装软件包、下载权重、训练、做性能分析。
 
-实例运行期间会消耗积分，用完请及时销毁。如果希望销毁后文件还在，把模板的存储设为 **Persistent (PVC)**。
+实例运行期间会消耗积分，用完请及时销毁。如果希望销毁后文件还在，启动时选择 **持久化 /workspace**，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
 
 在中国站，积分用 AMD AI 开发者计划的开发者积分兑换获得。见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 和[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
 

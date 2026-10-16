@@ -1,31 +1,31 @@
 ---
 title: 销毁实例
-description: 关掉实例，停止消耗积分。
-sidebar:
-  order: 9
+description: 删除实例以停止消耗积分，以及销毁后文件会怎样。
 ---
 
-实例只要在跑就一直扣积分，不管你用不用。用完就销毁它。
+实例只要在运行，不管有没有在用，都会消耗积分。用完请及时销毁。
 
-去 Profile 里的 **Active Instance**，点 **Destroy Instance**。
+## 在首页销毁
 
-![Destroy Instance 按钮](../../../../assets/guide/destroy.png)
+1. 打开 **首页**，实例卡片上显示着正在运行的实例。
+2. 点 **销毁实例**。
+3. 确认框会显示实例名称、GPU 数量和已运行时长，并提醒你临时工作区的数据会被删除、持久化工作区的数据会保留。确认是要销毁的实例后，点 **销毁**。
 
-:::caution[先检查你的文件]
-除非模板用了 **Persistent (PVC)** 存储，否则实例里的一切会随它一起删掉。销毁之前先把需要的东西下载走，或者推到仓库里。
-:::
+卡片会显示 **正在销毁实例**。销毁完成后，启动表单重新出现，积分停止消耗。
 
-实例很快就没了，积分停止消耗，你可以启动新的了 —— 记住每个账号同时只能有一个活跃实例。
+不在持久化 `/workspace` 里的内容，如果还需要，请先保存，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
 
-## 实例也会自己停
+如果卡片显示 **销毁耗时超出预期。请刷新页面或联系支持。**，先刷新页面。几分钟后实例仍然存在，请把时间和实例名称发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。
 
-实例有最长生存时间和空闲超时，两者都按实例类型配置。碰到任何一个，实例都会被自动关掉。把这当成兜底手段而不是计划：一个跑到一半撞上生存上限的实例，活儿白干了，之前花掉的积分也回不来。
+## 实例会被自动停止的情况
 
-## 用脚本销毁
+实例达到最长运行时长、长时间没有活动，或者积分用完时，平台也会停止它。不要依赖这些限制替你关闭实例：之前消耗的积分不会退回，被中途打断的任务也会丢失尚未保存的结果。
 
-```bash
-curl -X DELETE https://radeon-global.anruicloud.com/api/notebook/current \
-  -H "Cookie: <session>"
-```
+## 退出登录不会停止实例
 
-完整 API 见[实例](/radeon-cloud-docs/zh-cn/api/instances/)。
+退出控制台、关闭浏览器或退出 CLI 登录，实例都会继续运行。
+
+## 用 CLI 或 API 销毁
+
+- CLI：`rcc instance delete --yes`，见[管理 GPU 实例](/radeon-cloud-docs/zh-cn/cli/instances/)。
+- API：见[实例](/radeon-cloud-docs/zh-cn/api/instances/#销毁实例)。

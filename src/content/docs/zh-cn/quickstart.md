@@ -57,10 +57,13 @@ print(response.choices[0].message.content)
 
 ### 使用网页控制台
 
-1. 在 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) 登录 —— 见[登录](/radeon-cloud-docs/zh-cn/guides/login/)。
-2. 打开 **Profile**，在 **My Templates** 下创建一个模板。填一个标题和一个容器镜像。想让文件留下来就把存储设成 **Persistent (PVC)**。见[创建模板](/radeon-cloud-docs/zh-cn/guides/templates/)。
-3. 在模板那一行点 **Launch**。
-4. 当弹窗显示 **Your workspace is ready (100%)** 时，点 **Open Notebook** 进 [JupyterLab](/radeon-cloud-docs/zh-cn/guides/jupyterlab/)，或者用 [SSH](/radeon-cloud-docs/zh-cn/guides/ssh/) 连过去。
+1. 登录你所在站点的控制台，见[登录](/radeon-cloud-docs/zh-cn/guides/login/)。
+2. 在 **首页**，**部署类型** 保持 **Notebook**，**镜像** 保持 **AMD OneClick Base**。
+3. 如果希望实例销毁后文件还在，打开 **自定义**，把 **工作区存储** 设为 **持久化 /workspace**，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
+4. 点 **启动实例**。
+5. 弹窗显示 **实例已就绪** 后，点 **打开 Notebook** 进入 [JupyterLab](/radeon-cloud-docs/zh-cn/guides/jupyterlab/)，或者通过 [SSH](/radeon-cloud-docs/zh-cn/guides/ssh/) 连接。
+
+每个选项的含义，以及启动失败时怎么办，见[启动实例](/radeon-cloud-docs/zh-cn/guides/launch/)。
 
 ### 使用 Radeon Cloud CLI
 
@@ -88,6 +91,6 @@ rocm-smi
 你应该能看到列出了一块或多块 Radeon GPU。
 
 :::caution[实例运行期间会一直扣积分]
-用完之后，去 **Profile → Active Instance** 销毁实例，或运行
+用完之后，在 **首页** 点 **销毁实例**，或运行
 `rcc instance delete --yes`。见[销毁实例](/radeon-cloud-docs/zh-cn/guides/destroy/)。
 :::
