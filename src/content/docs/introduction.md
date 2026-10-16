@@ -35,6 +35,11 @@ Instances consume credits while they run, so you destroy them when you're done. 
 
 Credits come from the [AMD AI Developer Program](https://developer.amd.com.cn/points/redeem) — see [Credits](/radeon-cloud-docs/guides/credits/).
 
+You can manage instances from the web console or with
+[RCC](/radeon-cloud-docs/cli/overview/), the Radeon Cloud command-line interface. RCC
+also shows your Credits and approved Catalog resources, and supports JupyterLab,
+SSH, status, logs, and automation from a terminal.
+
 ## Model APIs
 
 A **model API** is an HTTP endpoint that speaks the OpenAI protocol. Any client that can talk to OpenAI — `curl`, the `openai` Python SDK, LangChain, Cherry Studio — can talk to AMD Radeon Cloud by changing the base URL and the API key.
@@ -58,6 +63,7 @@ They compose. A common pattern is to launch an instance, serve a model on it wit
 | | |
 |---|---|
 | Console — templates, instances, credits | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) or [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
+| RCC CLI — accounts, Credits, Catalog, instances | [RCC](/radeon-cloud-docs/cli/overview/) |
 | Token Factory — API keys, model catalog | [developer.amd.com.cn/radeon/modelapis](https://developer.amd.com.cn/radeon/modelapis) |
 | AMD AI Developer Program — earn and redeem points | [developer.amd.com.cn/points/redeem](https://developer.amd.com.cn/points/redeem) |
 
