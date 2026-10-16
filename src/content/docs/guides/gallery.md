@@ -7,9 +7,9 @@ The **Gallery** collects notebooks that are ready to run on Radeon Cloud, such a
 
 ## Find a notebook
 
-Open **Gallery** in the console. Search by title, tag or topic; the count next to the search box shows how many notebooks match.
+Open **Gallery** in the console. Notebooks are grouped by category, such as workshops, courses and LLM demos. Each card shows the notebook's title and description, the notebook file it opens, its tags and the number of GPUs it uses.
 
-Click **Preview** to read a notebook before you launch it.
+Search by title, tag or topic; the count next to the search box shows how many notebooks match. Click **Preview** to read a notebook before you launch it.
 
 ## Launch it
 
