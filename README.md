@@ -25,7 +25,9 @@ Node 20 or newer.
 ```
 src/
   content/docs/          English pages
-    guides/              user guide
+    guides/              getting started, GPU instance and model API guides
+    models/              model catalog (one page per shared model)
+    cli/                 Radeon Cloud CLI
     api/                 API reference
     resources/           troubleshooting, FAQ
     zh-cn/               Chinese pages, mirroring the same tree
