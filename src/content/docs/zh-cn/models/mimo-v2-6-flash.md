@@ -1,6 +1,6 @@
 ---
 title: MiMo-V2.6-Flash
-description: 小米的全模态稀疏 MoE 模型 —— 这里唯一接受音频输入的端点，也是唯一滑动窗口只有 128 token 的模型。
+description: 小米的全模态稀疏 MoE 模型：这里唯一接受音频输入的端点，也是唯一滑动窗口只有 128 token 的模型。
 sidebar:
   order: 8
 ---

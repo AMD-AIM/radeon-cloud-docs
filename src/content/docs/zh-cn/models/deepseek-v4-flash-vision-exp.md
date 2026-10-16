@@ -1,6 +1,6 @@
 ---
 title: DeepSeek-V4-Flash-Vision-Exp
-description: DeepSeek-V4-Flash 的视觉实验版——多了一座视觉塔，其余行为与文本版一致。
+description: DeepSeek-V4-Flash 的视觉实验版：多了一座视觉塔，其余行为与文本版一致。
 sidebar:
   order: 3
 ---

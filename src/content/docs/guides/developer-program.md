@@ -16,7 +16,7 @@ The program is free, and you don't need any AMD hardware to join. Once you're si
 |---|---|---|
 | An event point code, like `DP-XXXX-XXXX-XXXX` | [开发者积分补给站](https://developer.amd.com.cn/points/devpoints) | Developer points |
 | Developer points | [兑取算力](https://developer.amd.com.cn/points/redeem) | A long coupon string |
-| The coupon string | China site **Profile** → **Redeem Credits** | Radeon Cloud credits |
+| The coupon string | China site **Credits & Usage** → **Redeem credits** | Radeon Cloud credits |
 
 ## Create an account and sign in
 

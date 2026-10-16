@@ -5,12 +5,12 @@ sidebar:
   order: 3
 ---
 
-返回 **共享模型 API** 的模型目录，以及每个条目的价格和能力元信息。专属端点只服务你启动它时指定的那个模型，这条路径由 vLLM 自己应答——见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
+返回 **共享模型 API** 的模型目录，以及每个条目的价格和能力元信息。专属端点只服务你启动它时指定的那个模型，这个路径由 vLLM 自己响应，见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/v1/models</span>
-  <span class="rc-auth">Bearer 密钥或会话</span>
+  <span class="rc-auth">API Key 或会话</span>
 </div>
 
 也可以通过 `/api/v1/models` 访问。
@@ -105,7 +105,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
 
 模型目录是会变的。模型会陆续上架和下架，所以运行时去解析列表，别把名字写死，也要处理昨天还能用的模型今天没了的情况。
 
-目录对所有密钥都一样——它不按账号区分。
+模型列表对所有 API Key 都一样，不按账号区分。
 
 这个端点不占用你的并发配额，但每分钟限流仍然适用。调它很便宜，不过还是把结果缓存几分钟，别每次补全前都调一遍。
 

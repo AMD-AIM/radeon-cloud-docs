@@ -72,4 +72,4 @@ curl <base-url>/chat/completions \
 - 确认启动命令里有 `--host 0.0.0.0 --port 8000`。
 - 确认 `model` 字段和 **模型名称** 一致。
 
-见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#专属端点没有响应)。
+见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#专属模型-api-没有响应)。

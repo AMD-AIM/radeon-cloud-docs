@@ -72,4 +72,4 @@ The endpoint works only while the instance runs. Destroy the instance when you'r
 - Check that the command has `--host 0.0.0.0 --port 8000`.
 - Check that the `model` field matches **Model name**.
 
-See [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#a-dedicated-endpoint-doesnt-respond).
+See [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#a-dedicated-model-api-doesnt-respond).

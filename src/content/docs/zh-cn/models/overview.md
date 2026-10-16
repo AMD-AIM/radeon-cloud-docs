@@ -116,7 +116,7 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 
 token 数用 **`usage.completion_tokens_details.reasoning_tokens`**，除
 [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) 外每个模型都给——那一个
-压根不返回 `completion_tokens_details` 对象，所以它的思考 token 无法与其余输出分开统计，
+完全不返回 `completion_tokens_details` 对象，所以它的思考 token 无法与其余输出分开统计，
 但仍然计入 `usage.completion_tokens`，也仍然计费。
 
 :::caution[两个 Qwen 模型和 GLM-5.3-Flash 默认就在思考，而且思考要花 `max_tokens`]

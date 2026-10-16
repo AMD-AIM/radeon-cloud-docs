@@ -1,6 +1,6 @@
 ---
 title: Chat completions
-description: Generate a model response from a conversation — OpenAI-compatible.
+description: Generate a model response from a conversation with the OpenAI-compatible endpoint.
 sidebar:
   order: 4
 ---
@@ -13,17 +13,17 @@ there.
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/v1/chat/completions</span>
-  <span class="rc-auth">Bearer key or session</span>
+  <span class="rc-auth">API key or session</span>
 </div>
 
-Also reachable at `/api/v1/chat/completions` — the two paths are the same endpoint.
+Also reachable at `/api/v1/chat/completions`. The two paths are the same endpoint.
 
 ## Request
 
 | Parameter | Type | | Description |
 |---|---|---|---|
 | `model` | string | <span class="rc-req">Required</span> | Model to run. Must be one returned by [`GET /v1/models`](/radeon-cloud-docs/api/models/). |
-| `messages` | array | <span class="rc-req">Required</span> | Conversation so far. Each item has a `role` (`system`, `user`, `assistant`, or `tool`) and `content`. **Where a `system` message may sit differs per model — see below.** |
+| `messages` | array | <span class="rc-req">Required</span> | Conversation so far. Each item has a `role` (`system`, `user`, `assistant`, or `tool`) and `content`. **Where a `system` message may sit differs per model; see below.** |
 | `stream` | boolean | <span class="rc-opt">Optional</span> | Stream the response as server-sent events. Defaults to `false`. |
 | `temperature` | number | <span class="rc-opt">Optional</span> | Sampling temperature. Higher is more random. |
 | `top_p` | number | <span class="rc-opt">Optional</span> | Nucleus sampling threshold. |
@@ -33,12 +33,12 @@ Also reachable at `/api/v1/chat/completions` — the two paths are the same endp
 | `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` or a `json_schema`, on models where `json_output` is true. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
 | `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
-| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model — see the table below; `low` and `medium` work everywhere. **Whether omitting it disables thinking also varies per model.** |
+| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model (see the table below); `low` and `medium` work everywhere. **Whether omitting it disables thinking also varies per model.** |
 | `reasoning.effort` | string | <span class="rc-opt">Optional</span> | Same thing, unified form. Cannot be combined with `reasoning_effort`. |
 
 :::caution[`messages`: roles and system-message placement differ per model]
-The accepted `role` set is `system`, `user`, `assistant`, `tool`. **`developer` — the role newer
-OpenAI SDKs emit in place of `system` — is not accepted by every model**, and neither is a `system`
+The accepted `role` set is `system`, `user`, `assistant`, `tool`. **`developer`, the role newer
+OpenAI SDKs send in place of `system`, is not accepted by every model**, and neither is a `system`
 message anywhere other than first.
 
 | `messages` shape | Accepted by |
@@ -52,7 +52,7 @@ message anywhere other than first.
 ]
 ```
 
-Some models are more permissive than that — per-model detail is on the
+Some models are more permissive than that. Per-model detail is on the
 [model reference pages](/radeon-cloud-docs/models/overview/).
 :::
 
@@ -70,7 +70,7 @@ to enable thinking.
 
 The thinking text comes back in `choices[0].message.reasoning` (not `reasoning_content`). For the
 token count use **`usage.completion_tokens_details.reasoning_tokens`**, which every model reports
-except Qwen3.8-27B — that one omits `completion_tokens_details`, and its thinking tokens are
+except Qwen3.8-27B. That model omits `completion_tokens_details`, and its thinking tokens are
 counted in `usage.completion_tokens` instead. The top-level `usage.reasoning_tokens` is only
 emitted by some models, so do not rely on it.
 
@@ -81,8 +81,8 @@ emitted by some models, so do not rely on it.
 | DeepSeek-V4-Flash | Does not think (`reasoning` empty, `reasoning_tokens` 0) |
 | DeepSeek-V4-Flash-Vision-Exp | Does not think |
 | DeepSeek-V4.1-Flash | Does not think |
-| Qwen3.8-Flash-Next | **Still thinks** — the default tier is `xhigh`, the longest one |
-| Qwen3.8-27B | **Still thinks** — the default tier is `xhigh` |
+| Qwen3.8-Flash-Next | **Still thinks**; the default tier is `xhigh`, the longest one |
+| Qwen3.8-27B | **Still thinks**; the default tier is `xhigh` |
 | GLM-5.3-Flash | **Still thinks** |
 | MiniCPM5-2B | Does not think |
 
@@ -99,15 +99,15 @@ and GLM-5.3-Flash think less.
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
-| MiniCPM5-2B | not applicable — answers directly |
+| MiniCPM5-2B | Not applicable; answers directly |
 
-For one code path across all models, **stick to `low` and `medium`** — those are the only two
+For one code path across all models, **stick to `low` and `medium`**. Those are the only two
 every model accepts. The name of the top tier is not portable, and the two spellings are mutually
 exclusive: Qwen3.8-27B returns 400 for `high`, while GLM-5.3-Flash returns 422 for `xhigh`. The
 full matrix is in the [model reference](/radeon-cloud-docs/models/overview/).
 :::
 
-:::danger[Do not use `thinking` — it has no effect]
+:::danger[Don't use `thinking`]
 Some clients (Anthropic-flavored ones in particular) send
 `thinking: {"type": "enabled", "budget_tokens": N}` to enable thinking. **This endpoint does not
 support it**, and the serving backend has no notion of a token budget for thinking either.
@@ -135,8 +135,8 @@ If you must speak Anthropic, the working control on
 
 :::caution[Unlisted parameters are dropped, not forwarded]
 The request is validated against the schema above and then **rebuilt field by field** before it
-reaches the serving backend. Anything outside the accepted set is removed silently — no error,
-no effect.
+reaches the serving backend. Anything outside the accepted set is removed silently, with no error
+and no effect.
 
 That includes some parameters an OpenAI or vLLM client would reasonably expect to work:
 `stop`, `seed`, `logit_bias`, `logprobs`, `top_logprobs`, `top_k`, `min_p`, and
@@ -225,9 +225,9 @@ A non-streaming request can take up to 10 minutes before the platform gives up. 
 
 ## Errors
 
-`401` invalid key. `429` rate limited — see [Rate limits](/radeon-cloud-docs/api/rate-limits/). `502` or `503` the backend is unreachable or saturated; retry with backoff.
+`401` means the key is invalid. `429` means you're rate limited; see [Rate limits](/radeon-cloud-docs/api/rate-limits/). `502` or `503` means the backend is unreachable or saturated; retry with backoff.
 
 A model name that isn't in the catalog is rejected by the gateway with `400` and
-`Requested model <name> not supported` — the request never reaches a backend. Errors the model
+`Requested model <name> not supported`, and the request never reaches a backend. Errors the model
 itself raises, such as a context-length overflow, are passed through with the backend's own
 status and message. See [Errors](/radeon-cloud-docs/api/errors/) for the response shapes.

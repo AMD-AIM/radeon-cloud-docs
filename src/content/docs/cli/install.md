@@ -85,5 +85,5 @@ python3 -m pip uninstall amd-oneclick-sdk
 
 Uninstalling leaves `~/.radeon-cloud` in place. It holds your saved accounts, their sign-in tokens
 and any SSH keys the CLI generated. To remove everything, first run `rcc auth logout --all` so the
-saved tokens stop working, then delete the directory — after making sure it holds no SSH private
-key you still need.
+saved tokens stop working. Then make sure the directory holds no SSH private key you still need,
+and delete it.

@@ -1,6 +1,6 @@
 ---
 title: Qwen3.8-27B
-description: Qwen's 27B dense vision-language model — context, thinking tiers, image input and message rules.
+description: "Qwen's 27B dense vision-language model: context, thinking tiers, image input and message rules."
 sidebar:
   order: 6
 ---

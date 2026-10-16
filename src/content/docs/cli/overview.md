@@ -13,7 +13,7 @@ printed as JSON for scripts.
 :::note[Before you begin]
 - A Radeon Cloud account
 - Python 3.9 or newer
-- A browser that can reach the Radeon Cloud sign-in page — it does not have to be on the same machine
+- A browser that can reach the Radeon Cloud sign-in page, on this machine or another one
 - For SSH, `ssh` and `ssh-keygen`
 :::
 

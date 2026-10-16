@@ -1,6 +1,6 @@
 ---
 title: Scripting and automation
-description: Use Radeon Cloud CLI in scripts — JSON output, exit codes, retrying after a timeout, and shell completion.
+description: Use Radeon Cloud CLI in scripts with JSON output, exit codes, safe retries and shell completion.
 sidebar:
   label: Scripting and automation
 ---
@@ -17,12 +17,12 @@ rcc --quiet --output json instance status
 
 - `json` writes one JSON document to standard output when the command finishes. `--json` is short
   for it.
-- `ndjson` writes one JSON object per line — one per event and one per result — which suits
+- `ndjson` writes one JSON object per line, one for each event and each result, which suits
   commands that keep producing output, such as `--watch`.
 - Progress and diagnostics always go to standard error, so they never mix with the result on
   standard output. `--quiet` turns progress off.
 - Tokens, passwords, private keys and similar fields are hidden in the output. The one-time
-  JupyterLab link printed by `rcc instance open --print` is not — keep it out of your logs.
+  JupyterLab link printed by `rcc instance open --print` isn't, so keep it out of your logs.
 
 When troubleshooting, add `-v` (repeatable: `-vv` says more), or `--debug` for a full traceback of
 an unexpected local error.

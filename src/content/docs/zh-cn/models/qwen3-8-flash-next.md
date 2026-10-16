@@ -1,6 +1,6 @@
 ---
 title: Qwen3.8-Flash-Next
-description: Qwen 对 Qwen4 架构的预览版——官方规格，以及它在本端点上强制的两条规则。
+description: Qwen 对 Qwen4 架构的预览版：官方规格，以及它在本端点上强制的两条规则。
 sidebar:
   order: 5
 ---

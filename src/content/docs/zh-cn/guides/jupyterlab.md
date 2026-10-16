@@ -52,7 +52,7 @@ nohup python train.py > /workspace/train.log 2>&1 &
 tail -f /workspace/train.log
 ```
 
-实例有最长运行时长，长时间没有活动也会被回收，所以请边跑边把检查点保存到 `/workspace`。
+积分用完或超过 **超时回收** 时长时，实例会被删除，所以请边跑边把检查点保存到持久化的 `/workspace`。
 
 ## 访问 Web 应用
 

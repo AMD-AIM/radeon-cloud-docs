@@ -52,7 +52,7 @@ nohup python train.py > /workspace/train.log 2>&1 &
 tail -f /workspace/train.log
 ```
 
-Instances have a maximum lifetime and are reclaimed after a period with no activity, so save checkpoints to `/workspace` as you go.
+An instance can be deleted when your credits run out or when its **Auto-reclaim** time passes, so save checkpoints to a persistent `/workspace` as you go.
 
 ## Reach a web app
 

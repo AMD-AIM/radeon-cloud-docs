@@ -11,7 +11,7 @@ sidebar:
 |---|---|---|
 | `400` | The request was rejected. Invalid parameter, an instance already running, or too few credits. | Read `detail` and fix the request. Retrying won't help. |
 | `401` | Missing, malformed, or unrecognised credential. | Check the `Authorization` header. Rotate the key if it may have been revoked. |
-| `403` | Authenticated, but not permitted. | See below — the cause varies. |
+| `403` | Authenticated, but not permitted. | The cause varies; see below. |
 | `404` | No such template or instance, or a Model API path that isn't served. | Confirm the identifier. A model name that isn't in the catalog is a `400`, not a `404`. |
 | `409` | A conflicting state, such as email verification being required first. | Follow the `code` in the body. |
 | `429` | Rate limited. | Wait for `Retry-After`, then back off. See [Rate limits](/radeon-cloud-docs/api/rate-limits/). |
@@ -28,7 +28,7 @@ Platform API errors use FastAPI's shape:
 
 Shared model API errors come from two places, and the shapes differ.
 
-Errors raised by the **gateway** — an invalid key, an unknown model, a gateway-side rate limit — use OpenAI's shape, so existing OpenAI error handling works unchanged:
+Errors raised by the **gateway**, such as an invalid key, an unknown model or a gateway-side rate limit, use OpenAI's shape, so existing OpenAI error handling works unchanged:
 
 ```json
 {
@@ -53,7 +53,7 @@ On `/v1/messages` and `/v1/messages/count_tokens` the same errors use Anthropic'
 }
 ```
 
-Errors raised by the **platform** in front of the gateway — credential rejection, admission control, gateway unreachable — are wrapped in `detail` like every other Platform API error:
+Errors raised by the **platform** in front of the gateway, such as a rejected credential, admission control or an unreachable gateway, are wrapped in `detail` like every other Platform API error:
 
 ```json
 { "detail": "Invalid bearer token" }
@@ -90,27 +90,27 @@ means the instance is still starting. Everything else is your server talking.
 
 ## Common cases
 
-**`400 Each user can only have one active instance`** — destroy the current instance first. [`DELETE /api/notebook/current`](/radeon-cloud-docs/api/instances/#destroy-the-instance).
+**`400 Each user can only have one active instance`**: Destroy the current instance first. See [`DELETE /api/notebook/current`](/radeon-cloud-docs/api/instances/#destroy-the-instance).
 
-**`400 Insufficient credits`** — your balance doesn't cover one hour on the chosen size. [Redeem a coupon](/radeon-cloud-docs/guides/credits/#redeem-a-coupon) or choose a smaller size.
+**`400 Insufficient credits`**: Your balance doesn't cover one hour on the chosen size. [Redeem a coupon](/radeon-cloud-docs/guides/credits/#redeem-a-coupon) or choose a smaller size.
 
-**`400 Invalid image selected`** — the image isn't in the catalog or has been disabled. Pick one from the **Image** list on **Home**.
+**`400 Invalid image selected`**: The image isn't in the catalog or has been disabled. Pick one from the **Image** list on **Home**.
 
-**`401 Login required`** — the endpoint takes a browser session, and an API key was sent instead. Use [Radeon Cloud CLI](/radeon-cloud-docs/cli/automation/) to script instances.
+**`401 Login required`**: The endpoint takes a browser session, and an API key was sent instead. Use [Radeon Cloud CLI](/radeon-cloud-docs/cli/automation/) to script instances.
 
-**`403 resource_selection_not_assigned`** — the resource pool or size isn't assigned to your account. Choose one listed under **Size** and **Resource pool** on **Home**.
+**`403 resource_selection_not_assigned`**: The resource pool or size isn't assigned to your account. Choose one listed under **Size** and **Resource pool** on **Home**.
 
-**`403 {"code": "account_not_verified"}`** — the account is still under review. The body carries a `redirect` to the review page.
+**`403 {"code": "account_not_verified"}`**: The account is still under review. The body carries a `redirect` to the review page.
 
-**`403 You do not have access to this instance`** — the instance belongs to someone else, or you're using a bearer key against the instance proxy, which requires a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/#credentials-by-endpoint).
+**`403 You do not have access to this instance`**: The instance belongs to someone else, or you're using a bearer key against the instance proxy, which requires a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/#credentials-by-endpoint).
 
-**`502 Model gateway is unavailable`** — the gateway is down or unreachable. Retry with backoff; if it persists across several minutes, it's an outage rather than something on your side.
+**`502 Model gateway is unavailable`**: The gateway is down or unreachable. Retry with backoff; if it persists across several minutes, it's an outage rather than something on your side.
 
-**`503 Model gateway connection pool exhausted`** — too many requests in flight platform-wide. `Retry-After` is short, usually 5 seconds.
+**`503 Model gateway connection pool exhausted`**: Too many requests in flight platform-wide. `Retry-After` is short, usually 5 seconds.
 
 ## Debugging checklist
 
-Confirm you're calling the right base URL — the shared and dedicated endpoints are different hosts and paths, and a dedicated base URL can change when you relaunch. Copy it from the instance card again.
+Confirm you're calling the right base URL. The shared and dedicated model APIs use different hosts and paths, and a dedicated base URL can change when you relaunch. Copy it from the instance card again.
 
 Confirm the key is being sent, and sent as `Authorization: Bearer rc-...`. A missing header and an invalid key both produce `401`.
 

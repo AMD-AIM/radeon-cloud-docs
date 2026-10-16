@@ -1,6 +1,6 @@
 ---
 title: DeepSeek-V4-Flash-Vision-Exp
-description: The vision variant of DeepSeek-V4-Flash — one extra vision tower, otherwise the same behaviour as the text model.
+description: "The vision variant of DeepSeek-V4-Flash: one extra vision tower, otherwise the same behaviour as the text model."
 sidebar:
   order: 3
 ---

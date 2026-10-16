@@ -1,6 +1,6 @@
 ---
 title: How instances work
-description: What an instance is made of — deploy type, image, size, storage — and how it is billed.
+description: What an instance is made of (deploy type, image, size and storage) and how it is billed.
 ---
 
 An instance is a container with an AMD Radeon GPU attached. You start it from **Home** in the console, choose what runs in it and how large it is, and it runs until you destroy it or a platform limit stops it.
@@ -36,7 +36,7 @@ You need enough credits to launch, and the instance is deleted when your credits
 
 ## Limits that stop an instance
 
-An instance has a maximum lifetime, and an instance that shows no activity for a while is reclaimed. The platform sets both limits. Save results to a persistent `/workspace` as you go, so a stop does not cost you the work.
+An instance is deleted automatically when your credits run out, and, if the launch form showed **Auto-reclaim**, once that time has passed since it became ready. Save results to a persistent `/workspace` as you go, so a stop doesn't cost you the work.
 
 ## SSH is always on
 

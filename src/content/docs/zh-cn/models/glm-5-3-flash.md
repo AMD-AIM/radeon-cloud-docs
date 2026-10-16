@@ -1,6 +1,6 @@
 ---
 title: GLM-5.3-Flash
-description: 智谱 Z.AI 的稀疏 MoE 推理模型——默认就思考，而最高档的拼法和这里其他模型都不一样。
+description: 智谱 Z.AI 的稀疏 MoE 推理模型：默认就思考，而最高档的拼法和这里其他模型都不一样。
 sidebar:
   order: 7
 ---
