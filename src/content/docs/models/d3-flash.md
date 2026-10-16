@@ -18,9 +18,9 @@ d3-flash does not write text: it answers typed questions with a probability for 
 
 d3-flash is the 9B model of Decision 3.0, the decision models of
 [vLLM Semantic Router](https://huggingface.co/vllm-sr), built on Qwen3.5-9B. It takes the same
-requests and returns the same replies as [d3](/radeon-cloud-docs/models/d3/), about seven times
-faster on this deployment and a little less accurate. Read the d3 page for the request fields,
-question types, response and errors; only the differences are listed here.
+requests and returns the same replies as [d3](/radeon-cloud-docs/models/d3/), with the same
+32,768-token input limit, about three times faster on this deployment and a little less accurate.
+Read the d3 page for the request fields, question types, response and errors.
 
 ## At a glance
 
