@@ -9,11 +9,15 @@ One page per model, for the models served at `https://developer.amd.com.cn/radeo
 
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth for what is available —
 a page existing here does not guarantee the model is currently published. All of them answer on
-`/v1/chat/completions` except [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/), which is
-document OCR and has its own endpoint.
+`/v1/chat/completions` except three, which each have their own endpoint:
+[MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) (document OCR),
+[OmniVoice](/radeon-cloud-docs/models/omnivoice/) (text-to-speech) and
+[Clef](/radeon-cloud-docs/models/clef/) (decisions).
 
-:::note[Last updated 2026-09-23]
+:::note[Last updated 2026-10-16]
 Behaviour can change when a model moves to a different inference engine.
+
+**New: [OmniVoice](/radeon-cloud-docs/models/omnivoice/) and [Clef](/radeon-cloud-docs/models/clef/).**
 
 **MiniCPM5-1B is no longer published.** Its page has been removed;
 [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) serves the same size class.
@@ -35,9 +39,13 @@ Behaviour can change when a model moves to a different inference engine.
 [MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) is the only model here that also
 accepts **audio** input, and the only one that accepts a strict `json_schema`.
 
-[MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) is not in this table: it takes a PDF or
-an image on `POST /v1/ocr`, returns Markdown, and is billed per page. The parameters below do not
-apply to it.
+Three models are not in this table, and the parameters below do not apply to them:
+
+| Model | Endpoint | Takes | Returns | Billed per |
+|---|---|---|---|---|
+| [MinerU2.5-Pro](/radeon-cloud-docs/models/mineru2-5-pro/) | `POST /v1/ocr` | a PDF or an image | Markdown | page |
+| [OmniVoice](/radeon-cloud-docs/models/omnivoice/) | `POST /v1/audio/speech` | text, up to 4,096 characters | an audio file | input character |
+| [Clef](/radeon-cloud-docs/models/clef/) | `POST /v1/systemone` | a state, optional images, typed questions | a probability for every answer | input token |
 
 ## Supported `reasoning_effort` values
 
