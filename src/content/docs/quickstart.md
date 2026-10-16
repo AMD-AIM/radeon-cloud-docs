@@ -53,7 +53,7 @@ Full details in the [API reference](/radeon-cloud-docs/api/overview/).
 ## Launch a GPU instance
 
 You can launch an instance from the web console or with
-[RCC](/radeon-cloud-docs/cli/overview/), the Radeon Cloud command-line interface.
+[Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) (`rcc`).
 
 ### Use the web console
 
@@ -62,10 +62,9 @@ You can launch an instance from the web console or with
 3. Click **Launch** on the template row.
 4. When the dialog reads **Your workspace is ready (100%)**, click **Open Notebook** for [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/), or connect over [SSH](/radeon-cloud-docs/guides/ssh/).
 
-### Use RCC CLI
+### Use Radeon Cloud CLI
 
-Install RCC, sign in, inspect the resources approved for your account, and
-launch an instance:
+Install the CLI, sign in, see which resources your account may use, and launch an instance:
 
 ```bash
 python3 -m pip install amd-oneclick-sdk
@@ -77,9 +76,9 @@ rcc instance create
 rcc instance open
 ```
 
-RCC guides you through the Catalog choices in an interactive terminal. See
-[RCC](/radeon-cloud-docs/cli/overview/) for SSH, status, logs, automation, and account
-management.
+In an interactive terminal, `rcc instance create` walks you through choosing an environment and
+resources. See [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) for SSH, status, logs, scripting
+and multiple accounts.
 
 Confirm the GPU is visible from a terminal inside the instance:
 

@@ -35,9 +35,9 @@ AMD Radeon Cloud 有两个区域入口，是同一个平台面向不同地区的
 
 额度来自 [AMD AI 开发者计划](https://developer.amd.com.cn/points/redeem) —— 见[额度](/radeon-cloud-docs/zh-cn/guides/credits/)。
 
-你可以通过网页控制台管理实例，也可以使用 Radeon Cloud 命令行工具
-[RCC](/radeon-cloud-docs/zh-cn/cli/overview/)。RCC 还可以从终端查看 Credits 和已批准的
-Catalog 资源，并支持打开 JupyterLab、SSH 连接、查看状态与日志以及自动化操作。
+你可以通过网页控制台管理实例，也可以使用命令行工具
+[Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/)（`rcc`）。它还能在终端里查看额度和可用资源，
+打开 JupyterLab、SSH 登录、查看状态和日志，也方便写进脚本。
 
 ## 模型 API
 
@@ -62,7 +62,7 @@ Catalog 资源，并支持打开 JupyterLab、SSH 连接、查看状态与日志
 | | |
 |---|---|
 | 控制台 —— 模板、实例、额度 | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) 或 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
-| RCC CLI —— 账户、Credits、Catalog、实例 | [RCC](/radeon-cloud-docs/zh-cn/cli/overview/) |
+| Radeon Cloud CLI —— 账户、额度、可用资源、实例 | [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/) |
 | Token Factory —— API key、模型目录 | [developer.amd.com.cn/radeon/modelapis](https://developer.amd.com.cn/radeon/modelapis) |
 | AMD AI 开发者计划 —— 赚取和兑换积分 | [developer.amd.com.cn/points/redeem](https://developer.amd.com.cn/points/redeem) |
 
