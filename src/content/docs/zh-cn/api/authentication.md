@@ -42,7 +42,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/messages \
 
 ### 获取 API Key
 
-你第一次打开 [Token Factory](https://developer.amd.com.cn/radeon/modelapis) 或启动实例时，密钥会自动签发。它显示在模型详情对话框和你的 Profile 页面上。
+你第一次打开 [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) 或启动实例时，API Key 会自动签发。它显示在 Token Factory 顶部的 **您的 API 密钥** 卡片上，以及每个模型的详情对话框里。
 
 待审核的账号不会签发密钥。如果你找不到自己的密钥，先看看账号是否已经过审。
 

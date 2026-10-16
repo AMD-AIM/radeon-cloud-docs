@@ -45,7 +45,7 @@ only — Platform API endpoints and dedicated endpoints ignore it.
 
 ### Getting a key
 
-Your key is issued automatically the first time you open the [Token Factory](https://developer.amd.com.cn/radeon/modelapis) or launch an instance. It's shown in the model detail dialog and on your Profile page.
+Your key is issued automatically the first time you open [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) or launch an instance. It's shown on the **Your API key** card at the top of Token Factory and in each model's detail dialog.
 
 Accounts pending verification aren't issued a key. If yours is missing, check whether your account has completed review.
 

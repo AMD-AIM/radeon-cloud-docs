@@ -42,4 +42,4 @@ sidebar:
 
 ## 如果账号需要审核
 
-有些账号在能启动实例之前要先过审核。看到相关提示的话，你仍然可以浏览控制台、使用[免费的共享模型 API](/radeon-cloud-docs/zh-cn/guides/model-apis/) —— 审核通过后就能启动 GPU 实例了。
+有些账号在能启动实例之前要先过审核。看到相关提示的话，你仍然可以浏览控制台、使用[免费的共享模型 API](/radeon-cloud-docs/zh-cn/guides/shared-models/) —— 审核通过后就能启动 GPU 实例了。

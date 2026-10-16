@@ -88,7 +88,7 @@ Confirm the serve command binds correctly — `--host 0.0.0.0 --port 8000` is wh
 
 Confirm the model finished loading. Check the instance logs from a JupyterLab terminal.
 
-Confirm you're using the current base URL. Every relaunch produces a new instance ID and therefore a new URL.
+Confirm you're using the base URL and API key from the current instance card. They can change when you launch again.
 
 Confirm the `model` field matches what you passed to `vllm serve`, not a name from the shared catalog.
 

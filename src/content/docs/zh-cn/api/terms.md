@@ -72,7 +72,7 @@ sidebar:
 - 通过提示词指示模型谎报自己是哪个模型、由哪家提供。
 - 汇集多个账号或 Key，为一个群体放大可用容量。
 
-任何人都可以在 [Token Factory](https://developer.amd.com.cn/radeon/modelapis)
+任何人都可以在 [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory)
 免费注册、直接使用这些端点。**没有理由为访问它向任何第三方付费，我们也没有授权任何
 第三方销售它。**
 

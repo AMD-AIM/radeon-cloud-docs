@@ -32,7 +32,7 @@ The list depends on your account, and it also contains images made for specific 
 | Develop, explore, or run most PyTorch code | **AMD OneClick Base** |
 | Use the stock ROCm PyTorch environment | An image with **rocm-pytorch** in its name |
 | Follow a course, workshop or tutorial | The image its instructions name |
-| Serve a model through Model API | Nothing here; the Model API form picks its own runtime. See [Model APIs](/radeon-cloud-docs/guides/model-apis/). |
+| Serve a model through Model API | Nothing here; the Model API form picks its own runtime. See [Deploy a dedicated model API](/radeon-cloud-docs/guides/dedicated-models/). |
 
 Avoid images with no description unless an instruction tells you to use them.
 

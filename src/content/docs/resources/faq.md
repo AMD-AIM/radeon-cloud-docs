@@ -8,7 +8,7 @@ sidebar:
 ## Getting started
 
 **Do I need to launch an instance to use a model API?**
-No. The shared endpoints are free and always on — get a key from the [Token Factory](https://developer.amd.com.cn/radeon/modelapis) and start calling. Instances are only needed when you want a shell, a notebook, or a model the catalog doesn't offer.
+No. The shared endpoints are free and always on — get a key from the [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) and start calling. Instances are only needed when you want a shell, a notebook, or a model the catalog doesn't offer.
 
 **Can I run more than one instance?**
 No. One active instance per account. Destroy the current one to launch another.
@@ -78,4 +78,4 @@ Most often the account is still under review — `GET /api/me` shows `verified`.
 Yes. See [Instances](/radeon-cloud-docs/api/instances/) for a launch-and-poll example. Always destroy in a `finally` block so a crash doesn't leave an instance billing.
 
 **Does the endpoint URL stay the same across relaunches?**
-No. Each launch produces a new instance ID and a new base URL. Treat it as configuration to be read, not a constant.
+Don't rely on it. The base URL and key can change when you launch again, so read them from the instance card after each launch and keep them in configuration, not in code.

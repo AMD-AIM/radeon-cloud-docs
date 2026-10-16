@@ -61,7 +61,7 @@ You can use both together. A common setup is to serve a model with vLLM on an in
 |---|---|
 | Console: templates, instances, credits | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) or [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
 | Radeon Cloud CLI: accounts, credits, resources, instances | [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) |
-| Token Factory: API keys, model catalog | [developer.amd.com.cn/radeon/modelapis](https://developer.amd.com.cn/radeon/modelapis) |
+| Token Factory: API keys, model catalog | [developer.amd.com.cn/radeon/tokenfactory](https://developer.amd.com.cn/radeon/tokenfactory) |
 | AMD AI Developer Program: points and coupons (China site) | [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) |
 | Support | [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) |
 

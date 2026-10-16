@@ -61,7 +61,7 @@ AMD Radeon Cloud 有两个站点。两个站点功能相同，但各自独立部
 |---|---|
 | 控制台：模板、实例、积分 | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) 或 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
 | Radeon Cloud CLI：账号、积分、可用资源、实例 | [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/) |
-| Token Factory：API Key、模型目录 | [developer.amd.com.cn/radeon/modelapis](https://developer.amd.com.cn/radeon/modelapis) |
+| Token Factory：API Key、模型目录 | [developer.amd.com.cn/radeon/tokenfactory](https://developer.amd.com.cn/radeon/tokenfactory) |
 | AMD AI 开发者计划：开发者积分和优惠码（中国站） | [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) |
 | 联系支持 | [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) |
 

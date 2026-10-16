@@ -109,4 +109,4 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
 
 这个端点不占用你的并发配额，但每分钟限流仍然适用。调它很便宜，不过还是把结果缓存几分钟，别每次补全前都调一遍。
 
-[Token Factory](https://developer.amd.com.cn/radeon/modelapis) 里每个模型卡片上渲染的就是这同一份元信息。
+[Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) 里每个模型卡片上渲染的就是这同一份元信息。

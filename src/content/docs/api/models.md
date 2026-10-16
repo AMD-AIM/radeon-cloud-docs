@@ -113,4 +113,4 @@ The catalog is the same for every key — it is not scoped to your account.
 
 This endpoint doesn't count against your concurrency allowance, though the per-minute rate limit still applies. It's cheap to call, but cache the result for a few minutes rather than calling it before every completion.
 
-The same metadata is rendered on each model's card in the [Token Factory](https://developer.amd.com.cn/radeon/modelapis).
+The same metadata is rendered on each model's card in the [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory).

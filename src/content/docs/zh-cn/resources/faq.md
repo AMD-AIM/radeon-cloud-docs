@@ -8,7 +8,7 @@ sidebar:
 ## 入门
 
 **用模型 API 需要先启动实例吗？**
-不需要。共享端点免费且一直在线——去 [Token Factory](https://developer.amd.com.cn/radeon/modelapis) 拿个密钥就能调。只有当你要一个 shell、一个 notebook，或者目录里没有的模型时，才需要实例。
+不需要。共享端点免费且一直在线——去 [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) 拿个密钥就能调。只有当你要一个 shell、一个 notebook，或者目录里没有的模型时，才需要实例。
 
 **能同时跑多个实例吗？**
 不能。每个账号一个活跃实例。要启动新的，先销毁当前那个。
@@ -78,4 +78,4 @@ ROCm 实现了同一套 PyTorch API 面，`torch.cuda.*` 调用在 ROCm 版本�
 可以。[实例](/radeon-cloud-docs/zh-cn/api/instances/)里有一个启动加轮询的例子。一定要在 `finally` 里销毁，免得崩溃之后留一个实例在那儿计费。
 
 **端点 URL 在重新启动之后还一样吗？**
-不一样。每次启动都会产生新的实例 ID 和新的基础 URL。把它当成需要读取的配置，别当常量。
+不要依赖它不变。重新启动后，接口地址和 API Key 可能会变。每次启动后从实例卡片上读取，放在配置里，不要写死在代码中。

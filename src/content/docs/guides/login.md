@@ -42,4 +42,4 @@ Click your avatar in the top-right corner and choose **Profile**. This page is w
 
 ## If your account needs review
 
-Some accounts are held for verification before they can launch instances. If you see a notice to that effect, you can still browse the console and use the [free shared model APIs](/radeon-cloud-docs/guides/model-apis/) — launching a GPU instance unlocks once the review completes.
+Some accounts are held for verification before they can launch instances. If you see a notice to that effect, you can still browse the console and use the [free shared model APIs](/radeon-cloud-docs/guides/shared-models/) — launching a GPU instance unlocks once the review completes.

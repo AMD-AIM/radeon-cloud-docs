@@ -12,7 +12,7 @@ This page covers two separate tasks: calling a model API and launching a GPU ins
 
 The fastest way in. No instance, no credits.
 
-Open the [Token Factory](https://developer.amd.com.cn/radeon/modelapis), sign in, and pick any model under **Public Free Model APIs**. The detail dialog shows your API key. Copy it.
+Open [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) and sign in. The **Your API key** card at the top shows your key; click **Copy**. See [Call the shared models](/radeon-cloud-docs/guides/shared-models/).
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \

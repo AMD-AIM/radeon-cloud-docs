@@ -12,7 +12,7 @@ sidebar:
 
 最快的入门路径。不用实例，不花积分。
 
-打开 [Token Factory](https://developer.amd.com.cn/radeon/modelapis) 登录，在 **Public Free Model APIs** 下随便挑一个模型。详情弹窗里就有你的 API Key，复制下来。
+打开 [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) 并登录，顶部的 **您的 API 密钥** 卡片里就是你的 API Key，点 **复制**。见[调用共享模型](/radeon-cloud-docs/zh-cn/guides/shared-models/)。
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
