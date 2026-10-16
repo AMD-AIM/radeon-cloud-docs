@@ -7,7 +7,19 @@ The image decides what software is in your instance: ROCm, Python, PyTorch and t
 
 ## Start with AMD OneClick Base
 
-**AMD OneClick Base** is the default, described in the form as **Default ROCm Jupyter/OpenCode image**. It has the ROCm stack, JupyterLab and OpenCode, and it is the image the platform maintains for general work. Use it unless you have a reason to pick something else.
+**AMD OneClick Base** is the default, described in the form as **Default ROCm Jupyter/OpenCode image**. It is the image the platform maintains for general work. Use it unless you have a reason to pick something else.
+
+In October 2026 it contained:
+
+| Component | Version |
+|---|---|
+| OS | Ubuntu 24.04 |
+| Python | 3.12, in a virtual environment at `/opt/venv` |
+| PyTorch | 2.9.1, built for ROCm 7.2 |
+| JupyterLab | 4.5 |
+| Other tools | OpenCode, `rocm-smi` |
+
+The image is updated from time to time, so check the versions in your own instance (see below).
 
 ## Read the image list
 

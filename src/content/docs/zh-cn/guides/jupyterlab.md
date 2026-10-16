@@ -7,7 +7,9 @@ Notebook 实例运行的是 JupyterLab：一个在浏览器里使用的开发环
 
 ## 打开 JupyterLab
 
-启动弹窗显示 **实例已就绪** 时，或者在 **首页** 的实例卡片上，点 **打开 Notebook**。JupyterLab 会在新标签页打开。
+启动弹窗显示 **实例已就绪** 时，或者在 **首页** 的实例卡片上，点 **打开 Notebook**。JupyterLab 会在新标签页打开，默认位于 `/workspace` 目录。
+
+右上角有两个 Radeon Cloud 提供的按钮：**Help**，以及用于销毁实例的 **Delete instance**，见[销毁实例](/radeon-cloud-docs/zh-cn/guides/destroy/#在-jupyterlab-里销毁)。
 
 ## 检查 GPU
 
@@ -24,6 +26,16 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_coun
 ```
 
 ROCm 版 PyTorch 沿用 `torch.cuda` 这套接口名称，输出 `True` 就说明 ROCm 工作正常。
+
+查看显存大小：
+
+```bash
+rocm-smi --showmeminfo vram
+```
+
+## CPU 和内存限制
+
+CPU 和内存上限由启动时选的规格决定，例如 16 核、55 GB。`nproc` 这类命令显示的是整台节点的核数，而不是你的上限。工具需要设置线程数或 worker 数时，请按规格里的核数来设，不要按 `nproc` 的结果。
 
 ## 管理文件
 

@@ -34,13 +34,19 @@ description: 在设置里添加 SSH 密钥，等待 SSH 就绪，然后从自己
 
 ## 等待 SSH 就绪
 
-SSH 会比实例稍晚一点启动。配置期间，实例卡片显示 **正在配置 SSH — 请稍后再连接**，此时 JupyterLab 已经可以使用。
+SSH 会比实例稍晚一点就绪：镜像里没有 SSH 服务端时，平台会在启动后自动安装并配置。配置期间，实例卡片显示 **正在配置 SSH — 请稍后再连接**，此时 JupyterLab 已经可以使用。
 
 SSH 就绪后，卡片上会显示 SSH 命令。
 
 ## 连接
 
-从实例卡片复制命令，在终端里运行。第一次连接时输入 `yes` 接受主机密钥。
+点实例卡片上命令旁边的 **复制**，在终端里运行。命令格式如下：
+
+```bash
+ssh root@<host> -p <port>
+```
+
+登录用户是 `root`。第一次连接时输入 `yes` 接受主机密钥。
 
 如果用的不是默认密钥，加上 `-i` 和私钥路径。
 
@@ -61,7 +67,7 @@ ssh-keygen -R "[<host>]:<port>"
 用 `scp` 或 `rsync`，主机、端口和用户与 SSH 命令相同，例如：
 
 ```bash
-scp -P <port> results.tar.gz <user>@<host>:/workspace/
+scp -P <port> results.tar.gz root@<host>:/workspace/
 ```
 
 ## 用 CLI 连接

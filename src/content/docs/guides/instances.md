@@ -30,7 +30,7 @@ Each account runs one instance at a time. While it runs, **Home** shows the inst
 
 ## Billing
 
-A running instance spends credits every hour. The rate is shown on the size you pick, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**. The instance card on **Home** shows how long the instance has been up and how many credits it has used.
+A running instance spends credits every hour. The rate is shown on the size you pick, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**. The first hour is charged as soon as the instance starts. The instance card on **Home** shows how long the instance has been up and how many credits it has used.
 
 You need enough credits to launch, and the instance is deleted when your credits run out. See [Credits](/radeon-cloud-docs/guides/credits/).
 

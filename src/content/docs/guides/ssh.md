@@ -34,13 +34,19 @@ Keys apply to instances launched after you add them. An instance that is already
 
 ## Wait for SSH
 
-SSH starts a little after the instance. While it is being set up, the instance card shows **Setting up SSH — do not connect yet**. JupyterLab already works at this point.
+SSH starts a little after the instance, because the platform installs and configures the SSH server when the image doesn't include one. While it is being set up, the instance card shows **Setting up SSH — do not connect yet**. JupyterLab already works at this point.
 
 When SSH is ready, the card shows the SSH command.
 
 ## Connect
 
-Copy the command from the instance card and run it in your terminal. The first time you connect, type `yes` to accept the host key.
+Click **Copy** next to the command on the instance card and run it in your terminal. It has this form:
+
+```bash
+ssh root@<host> -p <port>
+```
+
+You log in as `root`. The first time you connect, type `yes` to accept the host key.
 
 If your key isn't the default one, add `-i` and the path to the private key.
 
@@ -61,7 +67,7 @@ If the card shows **SSH could not be set up**, SSH isn't reachable on this insta
 Use `scp` or `rsync` with the same host, port and user as the SSH command, for example:
 
 ```bash
-scp -P <port> results.tar.gz <user>@<host>:/workspace/
+scp -P <port> results.tar.gz root@<host>:/workspace/
 ```
 
 ## Connect from the CLI

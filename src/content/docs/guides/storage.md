@@ -12,7 +12,7 @@ Whether your files survive depends on the **Workspace storage** you pick at laun
 | **Temporary workspace (local storage)** | Fast local disk on the node. Everything is deleted when the instance is destroyed. This is the default. |
 | **Persistent /workspace** | Everything under `/workspace` is kept and appears again in your next instance that also uses persistent storage. |
 
-Only `/workspace` is kept. Packages installed into the system Python, files in your home directory and anything else outside `/workspace` are gone when the instance is destroyed.
+Only `/workspace` is kept. Packages you install with `pip`, files in your home directory and anything else outside `/workspace` are gone when the instance is destroyed. New instances start in `/workspace`.
 
 To pick persistent storage, turn on **Customize** in the launch form and set **Workspace storage** to **Persistent /workspace**.
 
@@ -26,14 +26,13 @@ The 25 GB and 100 GB options are two separate volumes. Files saved with one don'
 
 - Code, notebooks, configuration and results.
 - Training checkpoints, saved at regular intervals.
-- A virtual environment, if you install many packages:
+- A `requirements.txt` listing the extra packages you need. Packages don't carry over between instances, so reinstall them after each launch:
 
   ```bash
-  python -m venv --system-site-packages /workspace/venv
-  source /workspace/venv/bin/activate
+  pip install -r /workspace/requirements.txt
   ```
 
-  `--system-site-packages` keeps the image's ROCm build of PyTorch visible inside the environment.
+  Leave `torch` out of the file, so the image's ROCm build stays in place.
 
 Large datasets and model weights fill 25 GB quickly. Check usage with `du -sh /workspace/*` and `df -h /workspace`.
 

@@ -15,6 +15,16 @@ description: 删除实例以停止消耗积分，以及销毁后文件会怎样�
 
 不在持久化 `/workspace` 里的内容，如果还需要，请先保存，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
 
+销毁通常几秒钟就能完成。
+
+## 在 JupyterLab 里销毁
+
+JupyterLab 右上角有一个 **Delete instance** 按钮。点击后，在确认框里点 **Destroy**。确认框里同样会提醒临时数据和持久化数据的区别。
+
+销毁后 JupyterLab 标签页不会自动关闭，但已经无法使用，直接关掉即可。**首页** 会显示没有正在运行的实例。
+
+## 销毁耗时过长
+
 如果卡片显示 **销毁耗时超出预期。请刷新页面或联系支持。**，先刷新页面。几分钟后实例仍然存在，请把时间和实例名称发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。
 
 ## 实例会被自动停止的情况

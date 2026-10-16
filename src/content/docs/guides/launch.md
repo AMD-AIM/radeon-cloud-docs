@@ -45,7 +45,7 @@ After you click **Launch instance**, the **Launching your instance** dialog move
 - **Continue in background** closes the dialog. The launch keeps going, and **Home** shows the instance when it is ready.
 - **Cancel launch** stops the launch.
 
-The first launch of an image on a node takes longer, because the node has to download the image.
+When a node is free, the instance is usually ready in under a minute. The first launch of an image on a node takes longer, because the node has to download the image.
 
 ## When it's ready
 

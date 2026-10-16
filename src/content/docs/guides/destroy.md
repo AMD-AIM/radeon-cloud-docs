@@ -15,6 +15,16 @@ The card shows **Destroying instance**. When it's gone, the launch form comes ba
 
 If you need anything that isn't under a persistent `/workspace`, save it first. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
+Destroying usually takes a few seconds.
+
+## Destroy from JupyterLab
+
+JupyterLab has a **Delete instance** button in its top-right corner. Click it, then click **Destroy** in the confirmation. The confirmation carries the same reminder about temporary and persistent data.
+
+The JupyterLab tab stays open afterwards but no longer works. Close it; **Home** shows that no instance is running.
+
+## If destroying takes too long
+
 If the card shows **Destroy is taking longer than expected**, refresh the page. If the instance is still there after a few minutes, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the time and the instance name.
 
 ## Instances that stop on their own

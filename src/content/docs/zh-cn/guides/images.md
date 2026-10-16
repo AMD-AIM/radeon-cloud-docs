@@ -7,7 +7,19 @@ description: 该从哪个镜像开始、怎么看镜像列表，以及怎么确�
 
 ## 从 AMD OneClick Base 开始
 
-**AMD OneClick Base** 是默认镜像，表单里的说明是 **Default ROCm Jupyter/OpenCode image**。它包含 ROCm 软件栈、JupyterLab 和 OpenCode，由平台维护，适合日常开发。没有特别理由的话，就用它。
+**AMD OneClick Base** 是默认镜像，表单里的说明是 **Default ROCm Jupyter/OpenCode image**。它由平台维护，适合日常开发。没有特别理由的话，就用它。
+
+2026 年 10 月时它包含：
+
+| 组件 | 版本 |
+|---|---|
+| 操作系统 | Ubuntu 24.04 |
+| Python | 3.12，位于 `/opt/venv` 虚拟环境中 |
+| PyTorch | 2.9.1，基于 ROCm 7.2 构建 |
+| JupyterLab | 4.5 |
+| 其他工具 | OpenCode、`rocm-smi` |
+
+镜像会不定期更新，请以你实例里的实际版本为准（查看方法见下文）。
 
 ## 怎么看镜像列表
 

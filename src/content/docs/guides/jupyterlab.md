@@ -7,7 +7,9 @@ Notebook instances run JupyterLab, a development environment in your browser wit
 
 ## Open JupyterLab
 
-Click **Open notebook**, either in the launch dialog when it reads **Your instance is ready** or on the instance card on **Home**. JupyterLab opens in a new tab.
+Click **Open notebook**, either in the launch dialog when it reads **Your instance is ready** or on the instance card on **Home**. JupyterLab opens in a new tab, in `/workspace`.
+
+Two buttons in the top-right corner come from Radeon Cloud: **Help**, and **Delete instance**, which destroys the instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/#destroy-from-jupyterlab).
 
 ## Check the GPU
 
@@ -24,6 +26,16 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_coun
 ```
 
 ROCm builds of PyTorch keep the `torch.cuda` API names, so `True` here means ROCm is working.
+
+To see how much GPU memory you have:
+
+```bash
+rocm-smi --showmeminfo vram
+```
+
+## CPU and memory limits
+
+The size you launched sets the CPU and memory limits, for example 16 cores and 55 GB. Commands such as `nproc` show every core on the node, not your limit. When a tool asks for a thread or worker count, base it on the cores in your size, not on `nproc`.
 
 ## Work with files
 

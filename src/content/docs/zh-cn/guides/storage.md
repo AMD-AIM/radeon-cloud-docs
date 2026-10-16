@@ -12,7 +12,7 @@ description: 临时工作区与持久化工作区、只读挂载在 /models 的�
 | **临时工作区（本地高速存储）** | 使用节点上的本地高速磁盘。实例销毁时，数据全部删除。这是默认选项。 |
 | **持久化 /workspace** | `/workspace` 下的全部内容都会保留，下次启动同样使用持久化存储的实例时还能看到。 |
 
-只有 `/workspace` 会保留。装进系统 Python 的包、主目录里的文件，以及 `/workspace` 之外的其他内容，都会随实例删除。
+只有 `/workspace` 会保留。用 `pip` 安装的包、主目录里的文件，以及 `/workspace` 之外的其他内容，都会随实例删除。新实例启动后默认就在 `/workspace` 目录下。
 
 要使用持久化存储，在启动表单里打开 **自定义**，把 **工作区存储** 设为 **持久化 /workspace**。
 
@@ -26,14 +26,13 @@ description: 临时工作区与持久化工作区、只读挂载在 /models 的�
 
 - 代码、Notebook、配置文件和结果。
 - 定期保存的训练检查点。
-- 如果要装很多包，可以在 `/workspace` 里建虚拟环境：
+- 一份 `requirements.txt`，列出你额外需要的包。安装的包不会带到下一个实例，每次启动后重新安装一遍：
 
   ```bash
-  python -m venv --system-site-packages /workspace/venv
-  source /workspace/venv/bin/activate
+  pip install -r /workspace/requirements.txt
   ```
 
-  `--system-site-packages` 让虚拟环境里仍然能用镜像自带的 ROCm 版 PyTorch。
+  文件里不要写 `torch`，以免覆盖镜像自带的 ROCm 版 PyTorch。
 
 大数据集和模型权重很快就能占满 25 GB。用 `du -sh /workspace/*` 和 `df -h /workspace` 查看占用情况。
 
