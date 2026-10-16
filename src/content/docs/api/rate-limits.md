@@ -28,7 +28,10 @@ Two tiers sit in the path, and a request has to pass both. The platform admits t
 | Limit | Scope | Typical value |
 |---|---|---|
 | Requests per minute | Per account | 20, on a 60-second sliding window |
-| Spend cap | Per account | A rolling period that starts at your first billed request and resets when it expires — not a fixed midnight boundary |
+| Spend cap | Per account | Spend is summed over the calendar day in Beijing time and resets at 00:00 UTC+8 |
+
+Chat, speech (`/v1/audio/speech`) and decision (`/v1/systemone`) requests all count against the same
+per-minute window and the same spend cap.
 
 :::tip[Your quota is on every response]
 Every successful call carries the current counters as headers, so you rarely need to poll
