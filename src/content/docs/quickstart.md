@@ -57,10 +57,13 @@ You can launch an instance from the web console or with
 
 ### Use the web console
 
-1. Sign in at [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) — see [Sign in](/radeon-cloud-docs/guides/login/).
-2. Open **Profile** and create a template under **My Templates**. Give it a title and a container image. Set storage to **Persistent (PVC)** if you want files to survive. See [Create a template](/radeon-cloud-docs/guides/templates/).
-3. Click **Launch** on the template row.
-4. When the dialog reads **Your workspace is ready (100%)**, click **Open Notebook** for [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/), or connect over [SSH](/radeon-cloud-docs/guides/ssh/).
+1. Sign in to the console for your site. See [Sign in](/radeon-cloud-docs/guides/login/).
+2. On **Home**, keep **Deploy type** at **Notebook** and **Image** at **AMD OneClick Base**.
+3. To keep your files after the instance is gone, turn on **Customize** and set **Workspace storage** to **Persistent /workspace**. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+4. Click **Launch instance**.
+5. When the dialog reads **Your instance is ready**, click **Open notebook** for [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/), or connect over [SSH](/radeon-cloud-docs/guides/ssh/).
+
+See [Launch an instance](/radeon-cloud-docs/guides/launch/) for every option and for what to do if the launch fails.
 
 ### Use Radeon Cloud CLI
 
@@ -89,7 +92,7 @@ rocm-smi
 You should see one or more Radeon GPUs listed.
 
 :::caution[Instances spend credits while they run]
-When you're finished, destroy the instance from **Profile → Active Instance**
+When you're finished, click **Destroy instance** on **Home**
 or run `rcc instance delete --yes`. See
 [Destroy an instance](/radeon-cloud-docs/guides/destroy/).
 :::

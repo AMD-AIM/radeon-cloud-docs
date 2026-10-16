@@ -14,7 +14,7 @@ No. The shared endpoints are free and always on — get a key from the [Token Fa
 No. One active instance per account. Destroy the current one to launch another.
 
 **How many GPUs can I get?**
-1, 2, or 4.
+It depends on the sizes assigned to your account. The **Size** field in the launch form lists them, and `rcc catalog list` shows the same list.
 
 **How do I get credits on the China site?**
 Exchange AMD AI Developer Program points for a coupon at [兑取算力](https://developer.amd.com.cn/points/redeem), then paste it in **Profile** → **Redeem Credits**. 1 point buys 1 hour, up to 20 points a day. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
@@ -36,13 +36,13 @@ No, they're separate budgets. Shared model APIs have their own daily cap, visibl
 ## Storage
 
 **Do my files survive?**
-Only if the template used **Persistent (PVC)** storage. Otherwise everything goes with the instance.
+Only files under `/workspace`, and only if you launched with **Persistent /workspace** storage. Otherwise everything goes with the instance. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
 **Can I add persistent storage to a running instance?**
-No. It's a template setting. Create or edit the template, then relaunch.
+No. Storage is chosen at launch. Destroy the instance and launch again with **Persistent /workspace**.
 
-**How much disk can I have?**
-From 100 GB up to a ceiling that scales with GPU count — 100 GB for 1 GPU, 150 for 2, 200 for 4.
+**How much persistent storage do I get?**
+25 GB. Some accounts can choose 100 GB. The two are separate volumes, so files saved with one don't show up with the other.
 
 ## Models and compatibility
 

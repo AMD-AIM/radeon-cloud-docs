@@ -36,28 +36,30 @@ Shared endpoints support **chat completions** and **listing models**. Requests a
 
 A dedicated endpoint runs the model on your own instance, so you choose the model and the serving configuration. It uses credits for as long as the instance is up.
 
-1. Go to **Profile → Add Template** in the [console](https://radeon-global.anruicloud.com/).
-2. Set **Deploy Type** to **vLLM Model API**, then write the serve command.
+1. On **Home**, set **Deploy type** to **Model API**.
+2. Under **Model**, pick a public template. It fixes the model, the size and the vLLM command for you. To serve another model, click **Custom Model** and fill in:
+   - **Model name**: the name clients send in the `model` field.
+   - **Model source**: **Hugging Face (mirror)** or **ModelScope**, wherever the weights come from.
+   - **vLLM Command**: the serve command, for example:
 
-![The dedicated model API template form](../../../assets/guide/modelapi-dedicated-template.png)
+     ```bash
+     vllm serve Qwen/Qwen2.5-0.5B-Instruct --host 0.0.0.0 --port 8000 --served-model-name Qwen2.5-0.5B-Instruct
+     ```
 
-```bash
-vllm serve Qwen/Qwen2.5-7B-Instruct --host 0.0.0.0 --port 8000
-```
+3. Choose a **Size** with enough GPU memory for the model, then click **Launch instance**.
+4. When the instance is ready, the **OpenAI-compatible endpoint** card shows the **Base URL**, the **Model** and your **API key**, with a ready-to-run curl command.
 
 :::caution[Keep `--host 0.0.0.0 --port 8000`]
-The platform routes the public endpoint to port 8000 inside the container. If the server binds anywhere else, the endpoint won't reach it.
+The platform routes the endpoint to port 8000 inside the container. If the server binds anywhere else, the endpoint won't reach it. Keep `--served-model-name` equal to **Model name**.
 :::
 
-3. Save, then **Launch** the template. When the instance is ready, the dialog shows a **Base URL** of the form `https://<host>/spaces/<instance-id>/8000/v1`, plus the model name and API key.
-
-Call it exactly like a shared endpoint, with that base URL:
+Call it like a shared endpoint, with the base URL from the card:
 
 ```bash
-curl https://<host>/spaces/<instance-id>/8000/v1/chat/completions \
+curl <base-url>/chat/completions \
   -H "Authorization: Bearer $RADEON_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"Qwen/Qwen2.5-7B-Instruct","messages":[{"role":"user","content":"Hello"}]}'
+  -d '{"model":"Qwen2.5-0.5B-Instruct","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
 Because the request goes straight to vLLM or SGLang, a dedicated endpoint exposes whatever that server exposes — typically completions and embeddings in addition to chat.

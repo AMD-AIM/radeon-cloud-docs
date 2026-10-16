@@ -12,6 +12,10 @@ export default defineConfig({
   site: SITE,
   base: BASE,
   trailingSlash: 'always',
+  redirects: {
+    '/guides/templates/': `${BASE}/guides/launch/`,
+    '/zh-cn/guides/templates/': `${BASE}/zh-cn/guides/launch/`,
+  },
   integrations: [
     starlight({
       title: {
@@ -75,10 +79,13 @@ export default defineConfig({
           label: 'GPU instances',
           translations: { 'zh-CN': 'GPU 实例' },
           items: [
-            { slug: 'guides/templates' },
+            { slug: 'guides/instances' },
             { slug: 'guides/launch' },
+            { slug: 'guides/images' },
+            { slug: 'guides/storage' },
             { slug: 'guides/jupyterlab' },
             { slug: 'guides/ssh' },
+            { slug: 'guides/gallery' },
             { slug: 'guides/tunnel' },
             { slug: 'guides/destroy' },
           ],
@@ -142,6 +149,7 @@ export default defineConfig({
           items: [
             { slug: 'resources/troubleshooting' },
             { slug: 'resources/faq' },
+            { slug: 'resources/classic-ui' },
             { slug: 'api/terms' },
           ],
         },

@@ -1,61 +1,77 @@
 ---
 title: Connect over SSH
-description: Reach your instance from your own terminal.
-sidebar:
-  order: 5
+description: Add an SSH key in Settings, wait for SSH to come up, and connect from your own terminal.
 ---
 
-SSH gives you your instance in your own terminal, with your own editor, dotfiles, and tooling. It takes two pieces of setup: a public key on your account, and SSH enabled on the template.
+SSH lets you use the instance from your own terminal and editor. Every instance launched from the console has SSH. You only need to add your public key once.
 
 ## Add your public key
 
-Generate a key pair locally if you don't already have one. This works on macOS, Linux, and Windows PowerShell:
+1. If you don't have a key pair yet, create one. This works on macOS, Linux and Windows PowerShell:
 
-```bash
-ssh-keygen -t ed25519 -C "your_email@example.com"
-```
+   ```bash
+   ssh-keygen -t ed25519 -C "laptop"
+   ```
 
-That writes `~/.ssh/id_ed25519` (private) and `~/.ssh/id_ed25519.pub` (public).
+   It writes the private key to `~/.ssh/id_ed25519` and the public key to `~/.ssh/id_ed25519.pub`.
 
-Copy the public key and paste it into the **SSH Public Key** box on your Profile page, then click **Save Key**.
+2. Print the public key and copy it:
 
-```bash
-cat ~/.ssh/id_ed25519.pub
-```
+   ```bash
+   cat ~/.ssh/id_ed25519.pub
+   ```
 
-![Adding an SSH public key in Profile](../../../assets/guide/ssh-key.png)
+3. In the console, open **Settings** and click **New SSH key**.
+4. Enter a **Title** such as the computer's name, paste the key into **Key**, and click **New SSH key** in the dialog.
 
-:::danger[Paste the `.pub` file only]
-The public key ends in `.pub` and starts with `ssh-ed25519` or `ssh-rsa`. Never paste the private key — anyone holding it can act as you.
+The key is listed with its fingerprint, the date it was added and when it was last used. You can add one key for each computer you use.
+
+![The SSH keys section of Settings with one key added](../../../assets/guide/en/settings-ssh-keys.png)
+
+:::danger[Paste only the .pub file]
+A public key starts with `ssh-ed25519` or `ssh-rsa` and comes from the file ending in `.pub`. Never paste the private key.
 :::
 
-## Enable SSH on the template
+Keys apply to instances launched after you add them. An instance that is already running keeps the keys it started with.
 
-When [creating a template](/radeon-cloud-docs/guides/templates/), turn on **SSH Access (advanced)** before saving. Only instances launched from SSH-enabled templates are reachable this way, and the setting can't be added to a running instance.
+## Wait for SSH
 
-![The SSH Access toggle in the template form](../../../assets/guide/ssh-access.png)
+SSH starts a little after the instance, because the platform installs and configures the SSH server when the image doesn't include one. While it is being set up, the instance card shows **Setting up SSH — do not connect yet**. JupyterLab already works at this point.
+
+When SSH is ready, the card shows the SSH command.
 
 ## Connect
 
-After the instance starts, the ready dialog — and **Active Instance** in your Profile — shows the connection details: a copy-ready command, plus host, port, and username.
-
-![SSH connection details for a running instance](../../../assets/guide/ssh-connect.png)
+Click **Copy** next to the command on the instance card and run it in your terminal. It has this form:
 
 ```bash
-ssh <user>@<host> -p <port>
+ssh root@<host> -p <port>
 ```
 
-Substitute the values shown on the page. On first connect, type `yes` to accept the host fingerprint.
+You log in as `root`. The first time you connect, type `yes` to accept the host key.
 
-## If the connection is refused
+If your key isn't the default one, add `-i` and the path to the private key.
 
-Some images don't ship an SSH server. Open a JupyterLab terminal and start one:
+### "Remote host identification has changed"
+
+A new instance can reuse a host and port that an earlier instance had, with a new host key. If `ssh` warns that the host key has changed, remove the old entry with the command shown on the instance card, then connect again:
 
 ```bash
-sudo apt update
-sudo apt install -y openssh-server
-mkdir -p /run/sshd
-/usr/sbin/sshd
+ssh-keygen -R "[<host>]:<port>"
 ```
 
-Then retry the connection from your local terminal.
+### SSH could not be set up
+
+If the card shows **SSH could not be set up**, SSH isn't reachable on this instance, but JupyterLab is unaffected. Work in JupyterLab, or destroy the instance and launch again.
+
+## Copy files
+
+Use `scp` or `rsync` with the same host, port and user as the SSH command, for example:
+
+```bash
+scp -P <port> results.tar.gz root@<host>:/workspace/
+```
+
+## Connect from the CLI
+
+`rcc instance ssh` connects without copying the command. See [Manage GPU instances](/radeon-cloud-docs/cli/instances/).

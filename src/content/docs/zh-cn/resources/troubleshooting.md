@@ -7,29 +7,43 @@ sidebar:
 
 ## 实例
 
+### 提示 “No matching Node has enough free CPU, memory, and GPUs for this launch”
+
+所选资源池里的节点都满了，启动弹窗会显示 **启动失败** 和这条提示。此时不会创建实例，也不会消耗积分。
+
+1. 在启动表单里打开 **自定义**，如果账号有多个 **资源池**，换一个。
+2. 或者选更小的 **规格**。
+3. 或者稍后再试。
+
+如果账号只有一个资源池且反复失败，请把尝试的时间发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。
+
 ### 启动后一直没有就绪
 
-轮询的时候盯着 `status` 和 `message`。第一次拉一个大镜像，或者 vLLM 实例在下载权重，本来就要好几分钟。
+在启动弹窗里点 **查看日志**。某个镜像在节点上第一次启动，或者模型 API 实例下载模型权重时，可能需要几分钟。
 
-如果卡在 `pending` 的时间远超这个量级，可能是集群没有你要的那个 GPU 数量的容量。试试 1 张卡。如果变成 `failed`，`reason` 和 `detail` 字段里有调度错误。
+如果弹窗显示 **等待空闲 GPU**，说明启动正在排队，要等节点空出位置。可以继续等待，也可以取消后换更小的规格或其他资源池。如果显示 **镜像拉取失败**，先重试，仍然失败就换一个镜像。
 
 ### 启动请求被拒绝
 
-`Each user can only have one active instance`——先销毁已有的那个。`Insufficient credits`——余额低于请求的 GPU 数量。`Invalid image selected`——自你创建模板以来，这个镜像被禁用或从目录里移除了。
+提示 **您已有一个正在运行的实例。** 说明账号下已有实例，先销毁它。积分低于所选规格每小时的消耗时，启动会被拒绝，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。如果控制台加载不到你的规格和资源池，会提示 **资源目录不可用，请重试。**，刷新页面即可。
 
 ### 实例自动停止了
 
-实例有最长生命周期，也有闲置超时。碰到任一条都会被关掉。长任务应该把检查点写到持久化存储，这样一次关停不至于让整轮跑白费。
+实例有最长运行时长，长时间没有活动会被回收，积分用完时也会被删除。请把检查点保存到持久化的 `/workspace`，这样实例停止时不会白跑一场。
 
 ### 文件丢失
 
-除非模板用了 **Persistent (PVC)** 存储，否则一切都随实例删掉。在模板上把存储设成持久化再重新启动——这个设置没法加到已经存在的实例上。
+只有 `/workspace` 下的文件会保留，而且实例启动时要选择 **持久化 /workspace**。25 GB 和 100 GB 是两块独立的存储，也请确认这次启动用的容量和上次一样。运行中的实例不能修改存储设置。见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
 
 ## SSH
 
 ### 连接被拒
 
-依次检查三件事。模板上开了 **SSH Access (advanced)** 吗？这项事后加不上。你用的主机和端口是不是从当前实例详情里取的，而不是上一次会话的旧值——两者每次启动都会变。镜像里有 SSH 服务端吗？没有的话，从 JupyterLab 终端起一个：
+依次检查：
+
+1. 实例卡片是否还显示 **正在配置 SSH — 请稍后再连接**？等它显示出 SSH 命令再连接。
+2. 用的是不是当前实例卡片上的命令？主机和端口每次启动都会变。
+3. 卡片是否显示 **SSH 配置失败**？这说明这个实例没有可用的 SSH。确实需要的话，在 JupyterLab 终端里启动 SSH 服务：
 
 ```bash
 sudo apt update && sudo apt install -y openssh-server
@@ -38,13 +52,17 @@ mkdir -p /run/sshd && /usr/sbin/sshd
 
 ### Permission denied (publickey)
 
-你 Profile 上的公钥和你提供的私钥对不上。先确认登记的是哪一把，然后明确指定用哪把：
+**设置 → SSH 密钥** 里没有和你所用私钥匹配的公钥。先核对列表，再明确指定要用的私钥：
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 <user>@<host> -p <port>
+ssh -i ~/.ssh/id_ed25519 -p <port> <user>@<host>
 ```
 
-记住，实例启动之后才添加的公钥不会装进这个实例。重新启动。
+实例启动之后才添加的公钥不会装进这个实例。销毁实例后重新启动。
+
+### 提示 “Remote host identification has changed”
+
+新实例可能沿用之前实例的主机和端口，但主机密钥是新的。用实例卡片上的 `ssh-keygen -R` 命令删掉旧记录，再重新连接。
 
 ## 模型 API
 

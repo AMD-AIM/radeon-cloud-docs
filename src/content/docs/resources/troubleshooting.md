@@ -7,29 +7,43 @@ sidebar:
 
 ## Instances
 
+### "No matching Node has enough free CPU, memory, and GPUs for this launch"
+
+The launch dialog shows **Launch failed** with this message when every node in the selected resource pool is busy. No instance is created and no credits are spent.
+
+1. Turn on **Customize** in the launch form and pick another **Resource pool**, if your account has more than one.
+2. Or choose a smaller **Size**.
+3. Or try again later.
+
+If your account has only one pool and the launch keeps failing, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the time of the attempts.
+
 ### The instance never becomes ready
 
-Watch `status` and `message` while polling. A large image being pulled for the first time, or a vLLM instance downloading weights, legitimately takes several minutes.
+Open **View logs** in the launch dialog. The first launch of an image on a node, or a Model API instance downloading model weights, can take several minutes.
 
-If it sits in `pending` far longer than that, the cluster may not have capacity for the GPU count you asked for. Try 1 GPU. If it reaches `failed`, the `reason` and `detail` fields carry the scheduling error.
+If the dialog shows **Waiting for a free GPU**, the launch is queued until a node has room. Keep waiting, or cancel and choose a smaller size or another pool. If it shows **Image pull failed**, try again, then pick another image.
 
 ### The launch is rejected
 
-`Each user can only have one active instance` — destroy the existing one first. `Insufficient credits` — your balance is below the GPU count requested. `Invalid image selected` — the image was disabled or removed from the catalog since you created the template.
+**You already have an instance running.** means your account has an instance; destroy it first. If your credits are below the hourly rate of the size you picked, the launch is refused; see [Credits](/radeon-cloud-docs/guides/credits/). If the console can't load your sizes and pools, it shows **Resource catalog is unavailable. Try again.**; refresh the page.
 
 ### The instance stopped by itself
 
-Instances have a maximum lifetime and an idle timeout. Reaching either shuts the instance down. Long jobs should checkpoint to persistent storage so a shutdown doesn't cost you the run.
+Instances have a maximum lifetime, are reclaimed after a period with no activity, and are deleted when your credits run out. Save checkpoints to a persistent `/workspace` so a stop doesn't cost you the run.
 
 ### My files are gone
 
-Unless the template used **Persistent (PVC)** storage, everything is deleted with the instance. Set storage to persistent on the template and relaunch — the setting can't be added to an instance that already exists.
+Only files under `/workspace` are kept, and only when the instance was launched with **Persistent /workspace** storage. The 25 GB and 100 GB options are separate volumes, so also check that you launched with the same capacity as before. Storage can't be changed on a running instance. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
 ## SSH
 
 ### Connection refused
 
-Check three things in order. Was **SSH Access (advanced)** enabled on the template? It can't be added afterwards. Are you using the host and port from the instance details rather than a previous session's values — both change on every launch. Does the image include an SSH server? If not, start one from a JupyterLab terminal:
+Check these in order:
+
+1. Does the instance card still say **Setting up SSH — do not connect yet**? Wait until it shows the SSH command.
+2. Are you using the command from the current instance card? The host and port change with every launch.
+3. Does the card say **SSH could not be set up**? Then SSH isn't available on this instance. If you need it, start an SSH server from a JupyterLab terminal:
 
 ```bash
 sudo apt update && sudo apt install -y openssh-server
@@ -38,13 +52,17 @@ mkdir -p /run/sshd && /usr/sbin/sshd
 
 ### Permission denied (publickey)
 
-The public key on your Profile doesn't match the private key you're offering. Confirm what's registered, then be explicit about which key to use:
+None of the keys in **Settings → SSH keys** matches the private key you're offering. Check the list, then say which key to use:
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 <user>@<host> -p <port>
+ssh -i ~/.ssh/id_ed25519 -p <port> <user>@<host>
 ```
 
-Remember that a key added after the instance launched isn't installed in it. Relaunch.
+A key added after the instance launched isn't installed in it. Destroy the instance and launch again.
+
+### "Remote host identification has changed"
+
+A new instance can reuse an earlier instance's host and port with a new host key. Remove the old entry with the `ssh-keygen -R` command shown on the instance card, then connect again.
 
 ## Model APIs
 

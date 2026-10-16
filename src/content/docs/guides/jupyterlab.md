@@ -1,52 +1,59 @@
 ---
 title: Work in JupyterLab
-description: Use the browser-based JupyterLab environment attached to your instance.
-sidebar:
-  order: 4
+description: Open JupyterLab on your instance, check the GPU, and work with files.
 ---
 
-When the instance is ready, click **Open Notebook**.
+Notebook instances run JupyterLab, a development environment in your browser with notebooks, terminals and a file browser.
 
-![The Open Notebook button in the ready dialog](../../../assets/guide/open-notebook.png)
+## Open JupyterLab
 
-JupyterLab opens in a new tab. This is the default way into an instance and gives you a full development environment in the browser.
+Click **Open notebook**, either in the launch dialog when it reads **Your instance is ready** or on the instance card on **Home**. JupyterLab opens in a new tab, in `/workspace`.
 
-![The JupyterLab workspace](../../../assets/guide/jupyterlab.png)
-
-## What's in there
-
-**Terminal** — a real Linux shell. Click `+` at the top, then **Terminal**, or use the Terminal tile in the Launcher. Use it to install packages, download weights, and start services.
-
-**Notebooks** — `.ipynb` documents mixing code and output, the usual way to explore interactively.
-
-**File browser** — the panel on the left. Use the upload button (`↑`) to bring in your own notebooks and data.
+Two buttons in the top-right corner come from Radeon Cloud: **Help**, and **Delete instance**, which destroys the instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/#destroy-from-jupyterlab).
 
 ## Check the GPU
 
-From a terminal:
+Open a terminal (**File → New → Terminal**, or the **Terminal** tile in the Launcher) and run:
 
 ```bash
 rocm-smi
 ```
 
-This lists the Radeon GPUs attached to the instance along with memory use and temperature. To confirm PyTorch sees them:
+It lists the Radeon GPUs attached to the instance with their memory use and temperature. To check that PyTorch can use them:
 
 ```bash
 python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
 ```
 
-On ROCm builds of PyTorch, the CUDA API names are the ones to use — `torch.cuda.is_available()` returning `True` means ROCm is working.
+ROCm builds of PyTorch keep the `torch.cuda` API names, so `True` here means ROCm is working.
 
-## Keeping work alive
-
-Long jobs die if the terminal closes. Launch them detached:
+To see how much GPU memory you have:
 
 ```bash
-nohup python train.py > train.log 2>&1 &
+rocm-smi --showmeminfo vram
 ```
 
-Files only survive the instance being destroyed if the template used **Persistent (PVC)** storage. Otherwise, download anything you need first.
+## CPU and memory limits
 
-## Exposing a service
+The size you launched sets the CPU and memory limits, for example 16 cores and 55 GB. Commands such as `nproc` show every core on the node, not your limit. When a tool asks for a thread or worker count, base it on the cores in your size, not on `nproc`.
 
-To make an HTTP service running inside the notebook reachable from the internet — a Gradio app, an API you're developing — see [Expose a service](/radeon-cloud-docs/guides/tunnel/).
+## Work with files
+
+- The file browser on the left shows the instance's files. Drag files onto it, or use the upload button, to bring in notebooks and data.
+- To download a file, right-click it and choose **Download**.
+- Save anything you want to keep under `/workspace`, and launch with persistent storage. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+
+## Run long jobs
+
+A job started in a notebook cell stops when its kernel stops. For long runs, start the job from a terminal and write its output to a file:
+
+```bash
+nohup python train.py > /workspace/train.log 2>&1 &
+tail -f /workspace/train.log
+```
+
+Instances have a maximum lifetime and are reclaimed after a period with no activity, so save checkpoints to `/workspace` as you go.
+
+## Reach a web app
+
+To make a web service running in the instance reachable from the internet, such as a Gradio app or an API you're building, see [Expose a service](/radeon-cloud-docs/guides/tunnel/).
