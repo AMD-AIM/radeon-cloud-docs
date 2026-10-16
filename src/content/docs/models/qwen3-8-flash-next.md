@@ -1,6 +1,6 @@
 ---
 title: Qwen3.8-Flash-Next
-description: Qwen's preview of the Qwen4 architecture — what the vendor ships, and the two rules it enforces on this endpoint.
+description: "Qwen's preview of the Qwen4 architecture: what the vendor ships, and the two rules it enforces on this endpoint."
 sidebar:
   order: 5
 ---

@@ -6,8 +6,8 @@ sidebar:
 ---
 
 The **shared model APIs** are also reachable through Anthropic's Messages API, so a client
-built against Claude — Claude Code, the `anthropic` SDK, anything speaking that protocol —
-works by changing the base URL and the key.
+built for Claude, such as Claude Code or the `anthropic` SDK, works once you change the base URL
+and the key.
 
 This surface belongs to the gateway in front of the shared models. A
 [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) is your own vLLM
@@ -16,7 +16,7 @@ server, so whether `/v1/messages` works there depends on the vLLM version it run
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/v1/messages</span>
-  <span class="rc-auth">Bearer key or x-api-key</span>
+  <span class="rc-auth">API key (Bearer or x-api-key)</span>
 </div>
 
 Also reachable at `/api/v1/messages`.
@@ -34,10 +34,10 @@ name. `claude-3-5-sonnet-20241022` is not served here and will be rejected with 
 | `messages` | array | <span class="rc-req">Required</span> | Conversation so far, in Anthropic's block format. |
 | `max_tokens` | integer | <span class="rc-req">Required</span> | Cap on tokens generated. Anthropic requires this; so does the gateway. |
 | `system` | string or array | <span class="rc-opt">Optional</span> | System prompt, as a string or as an array of text blocks. |
-| `temperature` | number | <span class="rc-opt">Optional</span> | Sampling temperature, `0` to `1`. Anthropic's range, not OpenAI's — `1.5` is rejected with `400`. |
+| `temperature` | number | <span class="rc-opt">Optional</span> | Sampling temperature, `0` to `1`. This is Anthropic's range, not OpenAI's, so `1.5` is rejected with `400`. |
 | `stream` | boolean | <span class="rc-opt">Optional</span> | Stream the response as server-sent events. Defaults to `false`. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
-| `thinking` | object | <span class="rc-opt">Optional</span> | Extended-thinking configuration. Mapped onto the reasoning controls the backend understands. **The `budget_tokens` form is currently rejected** — see below. |
+| `thinking` | object | <span class="rc-opt">Optional</span> | Extended-thinking configuration. Mapped onto the reasoning controls the backend understands. **The `budget_tokens` form is currently rejected**; see below. |
 | `output_config` | object | <span class="rc-opt">Optional</span> | `effort` controls adaptive reasoning depth on models that support it. Accepted tiers vary per model; `low` and `medium` work everywhere. |
 | `metadata` | object | <span class="rc-opt">Optional</span> | `user_id` is used for sticky routing. Claude Code puts its session id here. |
 
@@ -48,7 +48,7 @@ against the set above and rebuilt before it reaches the backend. `top_p`, `top_k
 :::
 
 :::danger[Budget-based extended thinking is rejected]
-`thinking: {"type": "enabled", "budget_tokens": N}` — what Claude Code sends by default — is
+`thinking: {"type": "enabled", "budget_tokens": N}`, which Claude Code sends by default, is
 mapped onto `reasoning.max_tokens`. None of the models currently served **support a token budget
 for thinking**, so the request returns 400:
 
@@ -153,7 +153,7 @@ Reasoning models emit `thinking` blocks in `content` alongside the `text` ones.
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/v1/messages/count_tokens</span>
-  <span class="rc-auth">Bearer key or x-api-key</span>
+  <span class="rc-auth">API key (Bearer or x-api-key)</span>
 </div>
 
 Anthropic SDKs call this before sending, to size a request. Takes the same body as
@@ -168,7 +168,7 @@ Anthropic SDKs call this before sending, to size a request. Takes the same body 
 :::caution[This is an estimate]
 The count comes from the gateway's own tokenizer, not from the model that will serve the
 request. It will not match the `usage.input_tokens` you get back from `/v1/messages`, and it
-is not Anthropic's counter either. Use it for sizing, not for billing — the authoritative
+is not Anthropic's counter either. Use it for sizing, not for billing. The authoritative
 numbers are in the `usage` block of the actual response.
 :::
 
@@ -186,8 +186,8 @@ Errors on both paths use Anthropic's envelope, so SDK error handling works uncha
 }
 ```
 
-Refusals from the platform in front of the gateway — an invalid key, admission control — are
-wrapped in `detail` instead. See [Errors](/radeon-cloud-docs/api/errors/).
+Refusals from the platform in front of the gateway, such as an invalid key or admission control,
+are wrapped in `detail` instead. See [Errors](/radeon-cloud-docs/api/errors/).
 
 Rate limits are shared with `/v1/chat/completions`: both land on the same backend capacity and
 count against the same per-key gates. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).

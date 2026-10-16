@@ -1,6 +1,6 @@
 ---
 title: MiMo-V2.6-Flash
-description: Xiaomi's omnimodal sparse MoE model — the only endpoint here that takes audio, and the only one whose sliding-window layers are just 128 tokens wide.
+description: "Xiaomi's omnimodal sparse MoE model: the only endpoint here that takes audio, and the only one whose sliding-window layers are just 128 tokens wide."
 sidebar:
   order: 8
 ---

@@ -5,8 +5,8 @@ sidebar:
   order: 11
 ---
 
-Limits exist so shared capacity stays usable, so they land almost entirely on the free shared
-endpoints. There are four groups, applied independently.
+Limits keep shared capacity usable, so they apply almost entirely to the shared model APIs. There
+are four groups, each applied on its own.
 
 ## Shared model APIs
 
@@ -81,7 +81,7 @@ The `code` tells you which gate you hit:
 | `process_concurrency_rate_limit_exceeded` | The serving process is saturated. |
 | `global_concurrency_rate_limit_exceeded` | The platform is at capacity. |
 
-Per-minute limits return `Retry-After: 60`. Concurrency limits return `Retry-After: 1` — those clear as soon as your in-flight requests finish.
+Per-minute limits return `Retry-After: 60`. Concurrency limits return `Retry-After: 1`, because they clear as soon as your in-flight requests finish.
 
 Gateway metering returns an OpenAI-shaped error at the top level, with the generic `rate_limit_exceeded` code rather than a per-gate one, and a `Retry-After` computed from the window:
 
@@ -129,7 +129,7 @@ Sign-in attempts and new account creation are rate limited per IP. Relevant only
 
 ## Handling rate limits
 
-Honour `Retry-After` rather than picking your own interval, and back off exponentially with jitter on top — a fleet of clients that all retry after exactly 60 seconds recreates the spike that caused the limit.
+Honour `Retry-After` rather than picking your own interval, and add exponential backoff with jitter on top. Clients that all retry after exactly 60 seconds recreate the spike that caused the limit.
 
 Cap concurrency on your side to match the per-key allowance instead of firing requests and catching `429`s. A semaphore of 8 is simpler and faster than a retry loop.
 
@@ -149,6 +149,6 @@ def call_with_retry(payload, attempts=5):
     raise RuntimeError("rate limited after retries")
 ```
 
-If you consistently need more headroom than the free shared endpoints allow, that's the signal
-to move to a [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/), where the only
-limit is what your instance can serve.
+If you consistently need more than the shared allowance, move to a
+[dedicated model API](/radeon-cloud-docs/guides/dedicated-models/), where the only limit is what
+your instance can serve.

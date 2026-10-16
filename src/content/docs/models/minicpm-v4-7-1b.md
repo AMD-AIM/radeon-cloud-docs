@@ -1,6 +1,6 @@
 ---
 title: MiniCPM-V-4.7-1B
-description: OpenBMB's small vision-language model — a dense Qwen3.5 backbone, BF16 weights and optional thinking.
+description: "OpenBMB's small vision-language model: a dense Qwen3.5 backbone, BF16 weights and optional thinking."
 sidebar:
   order: 10
 ---

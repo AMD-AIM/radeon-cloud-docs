@@ -16,7 +16,7 @@ sidebar:
 - Only notebooks created after the feature was enabled can use it. Older pods need to be destroyed and recreated.
 
 :::danger[The URL is public]
-Anyone who has the URL can reach the service. The tunnel adds no authentication — your application has to enforce its own. Don't expose an unauthenticated admin page or a notebook server.
+Anyone who has the URL can reach the service. The tunnel adds no authentication, so your application has to enforce its own. Don't expose an unauthenticated admin page or a notebook server.
 :::
 
 ## Install
@@ -75,7 +75,7 @@ curl --fail http://127.0.0.1:8081/
 
 Work through it in this order:
 
-1. **Local `curl` fails.** Your application isn't listening on that port. Nothing to do with the tunnel — fix the service first.
+1. **Local `curl` fails.** Your application isn't listening on that port. The tunnel isn't the cause; fix the service first.
 2. **`status` shows FRPC not running.** Read `rc-tunnel logs`.
 3. **Status is healthy but the public URL fails.** Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the full domain, when the notebook was created, and when the failure happened. Don't send config files or keys.
 
@@ -91,4 +91,4 @@ The public URL stops working immediately, and the domain prefix is frozen for 24
 
 TCP, UDP, SSH, and database ports. Custom full domains.
 
-Don't edit `~/.local/state/rc-tunnel/frpc.toml` by hand, and don't copy that directory to another pod or share it — it holds your tunnel identity. After recreating a notebook, install and expose again.
+Don't edit `~/.local/state/rc-tunnel/frpc.toml` by hand, and don't copy that directory to another instance or share it. It holds your tunnel identity. After recreating a notebook, install and expose again.

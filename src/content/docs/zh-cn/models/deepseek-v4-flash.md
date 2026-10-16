@@ -1,6 +1,6 @@
 ---
 title: DeepSeek-V4-Flash
-description: DeepSeek 的百万 token 智能体模型——官方规格，以及它在本端点上的实际行为。
+description: DeepSeek 的百万 token 智能体模型：官方规格，以及它在本端点上的实际行为。
 sidebar:
   order: 2
 ---

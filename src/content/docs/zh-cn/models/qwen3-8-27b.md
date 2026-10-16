@@ -1,6 +1,6 @@
 ---
 title: Qwen3.8-27B
-description: 通义 27B 稠密视觉语言模型——上下文、思考档位、图片输入与消息规则。
+description: 通义 27B 稠密视觉语言模型：上下文、思考档位、图片输入与消息规则。
 sidebar:
   order: 6
 ---

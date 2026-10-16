@@ -1,6 +1,6 @@
 ---
 title: MiniCPM-V-4.7-1B
-description: OpenBMB 的小型视觉语言模型——稠密 Qwen3.5 骨干、BF16 权重与可选思考。
+description: OpenBMB 的小型视觉语言模型：稠密 Qwen3.5 骨干、BF16 权重与可选思考。
 sidebar:
   order: 10
 ---

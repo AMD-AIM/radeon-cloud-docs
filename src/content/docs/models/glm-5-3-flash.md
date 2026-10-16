@@ -1,6 +1,6 @@
 ---
 title: GLM-5.3-Flash
-description: Z.AI's sparse MoE reasoning model — thinking is on by default, and its top effort tier is spelled differently from every other model here.
+description: "Z.AI's sparse MoE reasoning model: thinking is on by default, and its top effort tier is spelled differently from every other model here."
 sidebar:
   order: 7
 ---

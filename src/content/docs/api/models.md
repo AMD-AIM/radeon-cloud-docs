@@ -7,13 +7,13 @@ sidebar:
 
 Returns the **shared model API** catalog, with the pricing and capability metadata for
 each entry. A dedicated endpoint serves only the model you launched it with, and answers this
-path from vLLM instead — see
+path from vLLM instead. See
 [Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/).
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/v1/models</span>
-  <span class="rc-auth">Bearer key or session</span>
+  <span class="rc-auth">API key or session</span>
 </div>
 
 Also reachable at `/api/v1/models`.
@@ -30,7 +30,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
 ## Response
 
 The envelope is a bare `{ "data": [...] }`. There is no `object` field, and entries carry richer
-metadata than OpenAI's model object does — no `owned_by`, no `created`.
+metadata than OpenAI's model object, without `owned_by` or `created`.
 
 ```json
 {
@@ -109,7 +109,7 @@ Everything else about the Model API follows OpenAI's schema; this endpoint does 
 
 The catalog changes. Models are added and retired over time, so resolve the list at runtime rather than hard-coding names, and handle the case where a model you used yesterday has gone.
 
-The catalog is the same for every key — it is not scoped to your account.
+The catalog is the same for every key. It isn't scoped to your account.
 
 This endpoint doesn't count against your concurrency allowance, though the per-minute rate limit still applies. It's cheap to call, but cache the result for a few minutes rather than calling it before every completion.
 

@@ -1,6 +1,6 @@
 ---
 title: MiniCPM-V-4.7-35B-A3B
-description: OpenBMB's 35B sparse vision-language model — a Qwen3.5-MoE backbone, BF16 weights and optional thinking.
+description: "OpenBMB's 35B sparse vision-language model: a Qwen3.5-MoE backbone, BF16 weights and optional thinking."
 sidebar:
   order: 11
 ---
