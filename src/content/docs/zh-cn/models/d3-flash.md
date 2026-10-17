@@ -18,7 +18,7 @@ d3-flash 不写文字：它回答带类型的问题，并给出每个选项的�
 
 d3-flash 是 [vLLM Semantic Router](https://huggingface.co/vllm-sr) 的决策模型系列 Decision 3.0
 中的 9B 模型，基于 Qwen3.5-9B。它接受的请求、返回的响应都和 [d3](/radeon-cloud-docs/zh-cn/models/d3/)
-相同，在本部署上快约七倍，准确率略低。请求字段、问题类型、响应和错误请看 d3 页面，这里只列出差异。
+相同，输入上限同为 32,768 token，在本部署上快约三倍，准确率略低。请求字段、问题类型、响应和错误请看 d3 页面。
 
 ## 概览
 
