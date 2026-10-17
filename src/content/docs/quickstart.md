@@ -6,7 +6,9 @@ sidebar:
   order: 2
 ---
 
-This page covers two separate tasks: calling a model API and launching a GPU instance. Neither depends on the other, so start with whichever you need. The examples use the China site; on the Global site, use its address instead.
+This page covers two separate tasks: calling a model API and launching a GPU instance. Neither depends on the other, so start with whichever you need.
+
+The shared model APIs are on the China site only. Instances are available on both sites; the examples use the China site's address.
 
 ## Call a model API
 

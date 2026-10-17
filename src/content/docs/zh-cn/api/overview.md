@@ -1,66 +1,72 @@
 ---
 title: API 概览
-description: 基础 URL、约定，以及 AMD Radeon Cloud API 提供了什么。
+description: 基础 URL、凭证，以及 AMD Radeon Cloud API 各部分的作用。
 sidebar:
   order: 1
 ---
 
-AMD Radeon Cloud API 分成两半，在脑子里分开看会清楚很多。
+AMD Radeon Cloud API 分为三部分：
 
-**模型 API** 负责推理，分为两种：**共享模型 API** 和 **专属模型 API**。两者共用一把密钥和一套 HTTP 形状，此外几乎没有共同点——主机不同、关卡不同、错误体也不同——所以本参考把它们分开写，每一页都会写明讲的是哪一种。
-
-**平台接口** 管理模板、实例和账号。控制台调的就是它，你也可以自己驱动它，把启动和销毁写成脚本。
+- **模型 API** 负责推理，分为 **共享模型 API** 和 **专属模型 API**。两者都兼容 OpenAI API，但运行在不同的主机上，限制和错误响应也不同。本参考的每一页都会写明讲的是哪一种。
+- **CLI 接口** 是 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/) 调用的接口。要在脚本里管理实例，请用 CLI。
+- **平台接口** 服务于网页控制台，包括实例、模板和账号，只接受浏览器会话。
 
 ## 基础 URL
 
-| 接口 | 基础 URL |
+| API | 基础 URL |
 |---|---|
-| 共享模型 API | `https://developer.amd.com.cn/radeon/api/v1` |
-| 专属模型 API | `https://<host>/spaces/<instance-id>/<port>/v1` |
-| 平台接口 | `https://radeon-global.anruicloud.com` |
+| 共享模型 API | `https://developer.amd.com.cn/radeon/api/v1`（仅中国站） |
+| 专属模型 API | 显示在实例卡片上，例如 `https://developer.amd.com.cn/radeon/spaces/<instance-id>/8000/v1` |
+| 平台接口 | `https://developer.amd.com.cn/radeon` 或 `https://radeon-global.anruicloud.com` |
 
-专属的基础 URL 在实例启动时生成，会显示在启动对话框和 **Active Instance** 里。别自己拼——端口取决于服务栈（vLLM 是 8000，SGLang 是 30000）。
+共享模型 API 和 Token Factory 只在中国站提供。
 
-:::note[部署环境不止一套]
-AMD Radeon Cloud 背后有多个主机名。上面这些是撰写时的公开地址；始终优先用控制台给你的基础 URL，而不是写死的字符串。
+专属模型 API 就绪后，实例卡片上会显示它的 base URL 和 API Key。请直接从卡片复制，不要自己拼接 URL。
+
+:::note[以控制台显示的为准]
+以上是撰写本文时的公开地址。如果控制台或 Token Factory 显示的 base URL 不同，请以显示的为准。
 :::
+
+## 凭证
+
+模型 API 使用 API Key，CLI 使用自己的 `rcc_` 令牌，平台接口使用浏览器会话，见[认证](/radeon-cloud-docs/zh-cn/api/authentication/)。
 
 ## 约定
 
-请求和响应都是 JSON，`Content-Type: application/json`。时间戳是 ISO 8601。出错时返回非 2xx 状态和一个 JSON 体——见[错误](/radeon-cloud-docs/zh-cn/api/errors/)。
+请求和响应都是 JSON，`Content-Type: application/json`。时间戳使用 ISO 8601。出错时返回非 2xx 状态码和 JSON 响应体，见[错误](/radeon-cloud-docs/zh-cn/api/errors/)。
 
 ## 共享模型 API
 
-始终在线，不用启动实例，也不消耗积分。上哪些模型由 AMD 决定。四个操作：
+随时可用，无需启动任何东西，也不消耗积分。提供哪些模型由 AMD 决定。主要接口：
 
-- [`POST /v1/chat/completions`](/radeon-cloud-docs/zh-cn/api/chat-completions/) —— 兼容 OpenAI
-- [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/)
-- [`POST /v1/messages`](/radeon-cloud-docs/zh-cn/api/messages/) —— 兼容 Anthropic，供 Claude Code 这类客户端使用
-- [`POST /v1/messages/count_tokens`](/radeon-cloud-docs/zh-cn/api/messages/#计算-token) —— 这类客户端发起的 token 计数预检
+- [`POST /v1/chat/completions`](/radeon-cloud-docs/zh-cn/api/chat-completions/)：兼容 OpenAI 的聊天补全接口
+- [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/)：可调用的模型
+- [`POST /v1/messages`](/radeon-cloud-docs/zh-cn/api/messages/)：兼容 Anthropic，供 Claude Code 等客户端使用
+- [`POST /v1/messages/count_tokens`](/radeon-cloud-docs/zh-cn/api/messages/#计算-token)：这些客户端发请求前先调用的 token 计数接口
+- [`GET /v1/usage`](/radeon-cloud-docs/zh-cn/api/usage/)：你的用量和今天剩余的额度
 
-每条路径同样可以用 `/api/v1/...` 访问，两种写法是同一个端点。
+有些模型使用 `/v1` 下的其他路径，例如语音合成用 `/v1/audio/speech`，文档解析用 `/v1/ocr`。[模型目录](/radeon-cloud-docs/zh-cn/models/overview/)里每个模型的页面都会列出它使用的路径。没有任何模型提供的路径返回 `404`。
 
-旧版 completions、embeddings、图像、音频、rerank 以及 `/v1/responses` 这里**不提供**，会返回 `404`。
+所有路径加不加 `/api` 前缀都可以：`/api/v1/models` 和 `/v1/models` 是同一个接口。
 
-这些请求要过一层网关。请求体先按一组固定字段校验、再重建，然后才送往服务后端——所以这组字段之外的参数是被丢掉而不是被转发的，接受的字段清单见[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)。按 API Key 计算的限流、并发配额和消耗上限都会生效，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
+请求会经过网关，网关只保留固定的一组字段，不在其中的参数会被丢弃，不会转发。字段列表见[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)。每个 API Key 有频率限制、并发配额和每日用量上限，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
 
 ## 专属模型 API
 
-运行在你自己启动的实例上的 vLLM 或 SGLang，实例运行期间消耗你的积分。模型和服务参数都由你定。
+在用 **部署类型 → 模型 API** 启动的实例上运行的 vLLM。模型和启动参数由你决定，实例运行期间消耗积分。
 
-请求会剥掉路由前缀后原样转发给你的服务器，所以那台服务器实现了什么就有什么——通常包括 `/v1/completions` 和 `/v1/embeddings`，也没有共享端点那套参数过滤。这条路上没有网关，所以共享端点的限流、共享目录和共享错误体统统不适用。
+除了去掉路由前缀，请求会原样转发给你的服务。vLLM 提供的接口都能用，通常包括 `/v1/completions` 和 `/v1/embeddings`。前面没有网关，所以共享模型 API 的限流、模型列表和错误格式都不适用。
 
 见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
 
-## 平台接口提供的功能
+## 平台接口
 
-| 范围 | 参考 |
+| 用途 | 参考 |
 |---|---|
-| 启动、查看、销毁实例 | [实例](/radeon-cloud-docs/zh-cn/api/instances/) |
-| 创建和管理模板 | [模板](/radeon-cloud-docs/zh-cn/api/templates/) |
-| 资料、API Key、SSH 密钥、积分 | [账号](/radeon-cloud-docs/zh-cn/api/account/) |
-| 模型 API 用量和配额 | [用量](/radeon-cloud-docs/zh-cn/api/usage/) |
+| 启动、查看和销毁实例 | [实例](/radeon-cloud-docs/zh-cn/api/instances/) |
+| 模板库和模型 API 模板 | [模板](/radeon-cloud-docs/zh-cn/api/templates/) |
+| 个人资料、可用资源、SSH 密钥、优惠码 | [账号](/radeon-cloud-docs/zh-cn/api/account/) |
 
 ## 下一步
 
-接着读[认证](/radeon-cloud-docs/zh-cn/api/authentication/)——两半的认证方式不同，这一点比这套 API 里的任何其他东西都更容易把人绊倒。
+接下来请阅读[认证](/radeon-cloud-docs/zh-cn/api/authentication/)。用错凭证是最常见的出错原因。

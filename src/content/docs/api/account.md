@@ -1,16 +1,20 @@
 ---
 title: Account
-description: Profile, credits, API key, and SSH key.
+description: Profile, SSH keys, coupons and the resources your account can use.
 sidebar:
   order: 10
 ---
+
+These endpoints serve the console's account menu, **Settings** and **Credits & Usage**. They accept only a browser session. Paths are relative to your site's console address.
+
+To read your balance from a script, use `rcc credits status`. See [Radeon Cloud CLI](/radeon-cloud-docs/cli/instances/).
 
 ## Get your profile
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/api/me</span>
-  <span class="rc-auth">Session or API key</span>
+  <span class="rc-auth">Session</span>
 </div>
 
 ```json
@@ -21,75 +25,82 @@ sidebar:
   "verified": true,
   "is_editor": false,
   "provider": "email",
-  "api_token": "rc-4f8a19c7e02b6d3a5c81f70e9b2d4a6c38e5b1907f2c4d8a",
-  "ssh_public_key": "ssh-ed25519 AAAAC3Nz... you@example.com"
+  "api_token": "rc-...",
+  "ssh_public_key": "ssh-ed25519 AAAAC3Nz... laptop"
 }
 ```
 
 | Field | Description |
 |---|---|
-| `credits` | Balance available for launching instances. |
-| `verified` | Whether the account has cleared review. Unverified accounts can't launch instances or hold an API key. |
-| `is_editor` | Whether you can publish templates publicly. |
+| `credits` | Your credit balance. |
+| `verified` | Whether the account has been approved. Accounts under review can't launch instances or get an API key. |
+| `is_editor` | Whether you can publish templates to everyone. |
 | `provider` | How the account signs in. |
-| `api_token` | Your current API key. |
-| `ssh_public_key` | The key installed into instances, or `null`. |
+| `api_token` | Your API key. |
+| `ssh_public_key` | Your SSH public keys, one per line, or empty. |
 
 :::caution[This response contains your API key]
-Don't log it, and don't return it from a service that others can reach.
+Don't log it, and don't pass it on to anything others can read.
 :::
 
-## Set your SSH public key
+## List the resources you can use
 
 <div class="rc-endpoint">
-  <span class="rc-method" data-m="POST">POST</span>
-  <span class="rc-path">/api/profile/ssh-key</span>
-  <span class="rc-auth">Session or API key</span>
+  <span class="rc-method" data-m="GET">GET</span>
+  <span class="rc-path">/api/me/resource-labels</span>
+  <span class="rc-auth">Session</span>
 </div>
 
-| Parameter | Type | | Description |
-|---|---|---|---|
-| `ssh_public_key` | string | <span class="rc-req">Required</span> | An OpenSSH public key on a single line. Pass an empty string to remove it. |
+Returns the resource pools (`"category": "resource-pool"`) and sizes (`"category": "resource-template"`) assigned to your account. These are the choices under **Size** and **Resource pool** on **Home**. See [Choose resources](/radeon-cloud-docs/api/instances/#choose-resources).
 
-```bash
-curl -X POST https://radeon-global.anruicloud.com/api/profile/ssh-key \
-  -H "Authorization: Bearer $RADEON_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d "{\"ssh_public_key\": \"$(cat ~/.ssh/id_ed25519.pub)\"}"
+Being listed means you may launch on it. It doesn't mean a GPU is free right now.
+
+## SSH keys
+
+Each account can hold up to 10 SSH public keys. Every key can connect to instances launched after it was added.
+
+| Method | Path | Does |
+|---|---|---|
+| `GET` | `/api/profile/ssh-keys` | Lists your keys. |
+| `POST` | `/api/profile/ssh-keys` | Adds one key. |
+| `DELETE` | `/api/profile/ssh-keys/{id}` | Deletes one key. `id` comes from the list. |
+
+To add a key, send its title and the public key:
+
+```json
+{ "title": "Laptop", "key": "ssh-ed25519 AAAAC3Nz..." }
 ```
 
-The key must start with a recognised type — `ssh-ed25519`, `ssh-rsa`, `ecdsa-sha2-`, `ssh-dss`, or an `sk-` hardware variant — fit on one line, and stay under 8192 characters. Anything else is rejected with `400`.
+The list returns each key's `id`, `title`, `type` and `fingerprint`, not the key itself. The fingerprint is in the same `SHA256:...` form that `ssh-keygen -lf ~/.ssh/id_ed25519.pub` prints.
 
-The new key applies to instances launched afterwards, not to one already running.
+Adding a key that's already on the account returns `409`. Something that isn't an OpenSSH public key returns `400`.
 
-## Rotate your API key
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="POST">POST</span>
-  <span class="rc-path">/api/profile/api-token</span>
-  <span class="rc-auth">Session or API key</span>
-</div>
-
-Issues a new key and revokes the old one immediately. See [Authentication](/radeon-cloud-docs/api/authentication/#rotating-a-key).
+`POST /api/profile/ssh-key` (singular), used by the classic interface, replaces all your keys with the ones you send, one per line.
 
 ## Redeem a coupon
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
-  <span class="rc-path">/api/credits/redeem</span>
-  <span class="rc-auth">Session or API key</span>
+  <span class="rc-path">/api/profile/redeem</span>
+  <span class="rc-auth">Session</span>
 </div>
 
-| Parameter | Type | | Description |
+| Field | Type | | Description |
 |---|---|---|---|
-| `coupon` | string | <span class="rc-req">Required</span> | The coupon code you were issued. |
+| `code` | string | <span class="rc-req">Required</span> | The whole coupon string. |
 
 ```json
 { "credits_added": 50, "credits": 74 }
 ```
 
-`400` if the code is invalid, already redeemed, or issued to a different account. `503` if redemption is currently closed.
+`400` means the code is invalid, already used or issued to another account. `503` means redemption is closed at the moment.
+
+The classic interface calls `POST /api/credits/redeem` with the same coupon in a `coupon` field. Both do the same thing.
+
+## API key
+
+The API key is shown and regenerated in [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory). See [Authentication](/radeon-cloud-docs/api/authentication/#api-keys).
 
 ## Model API usage
 
-Consumption and quota for the shared model APIs are reported separately — see [Usage and quota](/radeon-cloud-docs/api/usage/). Credits and model API spend are distinct budgets.
+Usage of the shared model APIs is counted separately from credits. See [Usage and quota](/radeon-cloud-docs/api/usage/).

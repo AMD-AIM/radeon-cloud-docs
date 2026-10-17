@@ -10,8 +10,8 @@ built against Claude — Claude Code, the `anthropic` SDK, anything speaking tha
 works by changing the base URL and the key.
 
 This surface belongs to the gateway in front of the shared models. A
-[dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) is your own vLLM or SGLang,
-neither of which speaks the Anthropic protocol, so `/v1/messages` is a `404` there.
+[dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) is your own vLLM
+server, so whether `/v1/messages` works there depends on the vLLM version it runs.
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>

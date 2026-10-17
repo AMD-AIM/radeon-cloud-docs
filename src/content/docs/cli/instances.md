@@ -73,6 +73,12 @@ rcc instance create \
 | `--pod-type` | a `resource_pool` entry |
 | `--resource-template` | a `resource_template` entry |
 
+By default the instance gets a temporary workspace that is deleted with it. To keep `/workspace` after
+the instance is deleted, add `--use-pvc`. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+
+The CLI creates notebook instances. To deploy a model API, use the console. See
+[Deploy a dedicated model API](/radeon-cloud-docs/guides/dedicated-models/).
+
 By default the CLI waits until the instance is ready. Add `--no-wait` to return as soon as the
 request is accepted, then follow the progress:
 

@@ -1,133 +1,92 @@
 ---
 title: Templates
-description: Create, update, and launch templates through the API.
+description: The endpoints behind the Gallery and the Model API templates.
 sidebar:
   order: 9
 ---
 
-Templates hold the configuration an instance launches from. See [Create a template](/radeon-cloud-docs/guides/templates/) for what the fields mean in practice.
+A template stores a launch configuration: an image, an instance type, a startup command and, optionally, a fixed resource pool and size. The [Gallery](/radeon-cloud-docs/guides/gallery/) and the ready-made Model API templates on **Home** are templates.
 
-## List templates
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="GET">GET</span>
-  <span class="rc-path">/api/profile/templates</span>
-  <span class="rc-auth">Session or API key</span>
-</div>
-
-Returns your templates and the container images you can choose from.
-
-```json
-{
-  "templates": [
-    {
-      "id": 87,
-      "title": "ROCm PyTorch dev",
-      "slug": "rocm-pytorch-dev",
-      "image": "rocm/pytorch:latest",
-      "instance_type": "jupyter",
-      "ssh_enabled": true,
-      "enabled": false,
-      "sort_order": 0
-    }
-  ],
-  "images": [
-    { "name": "ROCm PyTorch", "image": "rocm/pytorch:latest", "enabled": true }
-  ]
-}
-```
-
-## Create a template
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="POST">POST</span>
-  <span class="rc-path">/api/profile/templates</span>
-  <span class="rc-auth">Session or API key</span>
-</div>
-
-| Parameter | Type | | Description |
-|---|---|---|---|
-| `title` | string | <span class="rc-req">Required</span> | Display name. |
-| `image` | string | <span class="rc-req">Required</span> | Container image, from the catalog. |
-| `instance_type` | string | <span class="rc-opt">Optional</span> | `jupyter`, `gradio`, `streamlit`, `comfyui`, `vllm`, `sglang`, `custom`. |
-| `description` | string | <span class="rc-opt">Optional</span> | Longer description. |
-| `slug` | string | <span class="rc-opt">Optional</span> | URL-friendly identifier. |
-| `category` | string | <span class="rc-opt">Optional</span> | Grouping label. |
-| `tags` | array | <span class="rc-opt">Optional</span> | Free-form tags. |
-| `repo_url` | string | <span class="rc-opt">Optional</span> | Git repository cloned on start. |
-| `branch` | string | <span class="rc-opt">Optional</span> | Branch to check out. Defaults to `main`. |
-| `notebook_path` | string | <span class="rc-opt">Optional</span> | Notebook to open on start. |
-| `start_command` | string | <span class="rc-opt">Optional</span> | Command run at startup. Required for `vllm` and `sglang`. |
-| `app_port` | integer | <span class="rc-opt">Optional</span> | Port the app serves on. Must be one the platform routes: `7860` Gradio, `8501` Streamlit, `8188` ComfyUI, `8000` vLLM, `30000` SGLang. |
-| `ssh_enabled` | boolean | <span class="rc-opt">Optional</span> | Allow SSH into instances from this template. Defaults to `false`. |
-| `cover_url` | string | <span class="rc-opt">Optional</span> | Cover image URL. |
-| `sort_order` | integer | <span class="rc-opt">Optional</span> | Position in your list. |
-| `enabled` | boolean | <span class="rc-opt">Optional</span> | Publish publicly. Requires editor permission; forced to `false` otherwise. |
-
-```bash
-curl -X POST https://radeon-global.anruicloud.com/api/profile/templates \
-  -H "Authorization: Bearer $RADEON_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Qwen 7B on vLLM",
-    "image": "rocm/vllm:latest",
-    "instance_type": "vllm",
-    "start_command": "vllm serve Qwen/Qwen2.5-7B-Instruct --host 0.0.0.0 --port 8000",
-    "app_port": 8000
-  }'
-```
-
-An `app_port` outside the routable set is rejected with `400`.
-
-## Update a template
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="PUT">PUT</span>
-  <span class="rc-path">/api/profile/templates/<b>{template_id}</b></span>
-  <span class="rc-auth">Session or API key</span>
-</div>
-
-Same body as creation. `404` if the template doesn't exist or isn't yours.
-
-Changes apply to future launches. A running instance keeps the configuration it started with.
-
-## Delete a template
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="DELETE">DELETE</span>
-  <span class="rc-path">/api/profile/templates/<b>{template_id}</b></span>
-  <span class="rc-auth">Session or API key</span>
-</div>
-
-```json
-{ "success": true }
-```
-
-Deleting a template doesn't affect an instance already running from it.
-
-## Launch a template
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="POST">POST</span>
-  <span class="rc-path">/api/templates/<b>{template_id}</b>/launch</span>
-  <span class="rc-auth">Session or API key</span>
-</div>
-
-| Parameter | Type | | Description |
-|---|---|---|---|
-| `gpu_count` | integer | <span class="rc-opt">Optional</span> | `1`, `2`, or `4`. Defaults to `1`. |
-| `launch_verification_token` | string | <span class="rc-opt">Optional</span> | Required only when the account has launch verification enabled. |
-
-Returns the same status object as [`POST /api/notebook/request`](/radeon-cloud-docs/api/instances/#launch-an-instance). Poll `GET /api/notebook/status` from there.
-
-Launches are rate limited to roughly one per minute, three per ten minutes, and five per hour. Exceeding that returns `429` with a `Retry-After` header.
+Except for browsing public templates, these endpoints accept only a browser session. Paths are relative to your site's console address.
 
 ## Browse public templates
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/api/templates</span>
-  <span class="rc-auth">None; more with a credential</span>
+  <span class="rc-auth">None, API key or session</span>
 </div>
 
-Returns published templates. Authenticated callers also see their own private ones. Useful for finding a starting point without creating anything.
+Returns published templates. With an API key or a session, it also returns your own private templates.
+
+## List Model API templates
+
+<div class="rc-endpoint">
+  <span class="rc-method" data-m="GET">GET</span>
+  <span class="rc-path">/api/inference/templates</span>
+  <span class="rc-auth">Session</span>
+</div>
+
+Returns the public vLLM templates that **Deploy type → Model API** offers, each with the command it runs and the size it needs.
+
+```json
+{
+  "templates": [
+    {
+      "id": 412,
+      "title": "MiniCPM5-1B",
+      "description": "...",
+      "model_source": "modelscope",
+      "start_command": "vllm serve OpenBMB/MiniCPM5-1B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-1B",
+      "pod_type": "one-click",
+      "resource_template": "resource-16c55g1u",
+      "gpu_count": 1
+    }
+  ]
+}
+```
+
+## Launch a template
+
+<div class="rc-endpoint">
+  <span class="rc-method" data-m="POST">POST</span>
+  <span class="rc-path">/api/templates/<b>{template_id}</b>/launch</span>
+  <span class="rc-auth">Session</span>
+</div>
+
+The console sends an empty body. A template with a fixed pool and size launches on that size.
+
+| Field | Type | | Description |
+|---|---|---|---|
+| `gpu_count` | integer | <span class="rc-opt">Optional</span> | Only for templates without a fixed size. Defaults to `1`. |
+| `ssh_enabled` | boolean | <span class="rc-opt">Optional</span> | Turn on SSH for this launch. |
+
+Only `jupyter` and `vllm` templates can be launched. The response and the follow-up calls are the same as for any other launch: poll [`GET /api/notebook/status`](/radeon-cloud-docs/api/instances/#check-status), or `GET /api/inference/current` for a `vllm` template.
+
+Launches are rate limited per IP address. Going over returns `429` with a `Retry-After` header.
+
+## Manage your templates
+
+| Method | Path | Does |
+|---|---|---|
+| `GET` | `/api/profile/templates` | Lists your templates and the images you can pick. |
+| `POST` | `/api/profile/templates` | Creates a template. |
+| `PUT` | `/api/profile/templates/{template_id}` | Replaces a template. Same body as creating. |
+| `DELETE` | `/api/profile/templates/{template_id}` | Deletes a template. |
+
+The main fields:
+
+| Field | Type | | Description |
+|---|---|---|---|
+| `title` | string | <span class="rc-req">Required</span> | Display name. |
+| `image` | string | <span class="rc-req">Required</span> | An image from the catalog. |
+| `instance_type` | string | <span class="rc-opt">Optional</span> | `jupyter` or `vllm`. Other types can be saved but can't be launched. |
+| `start_command` | string | <span class="rc-opt">Optional</span> | Command run at startup. Required for `vllm`. |
+| `model_source` | string | <span class="rc-opt">Optional</span> | `huggingface` or `modelscope`, for `vllm`. |
+| `pod_type`, `resource_template` | string | <span class="rc-opt">Optional</span> | A fixed pool and size. Send both or neither. |
+| `use_pvc` | boolean | <span class="rc-opt">Optional</span> | Launch with your persistent `/workspace`. |
+| `description`, `category`, `tags`, `cover_url` | | <span class="rc-opt">Optional</span> | How the template appears in the Gallery. |
+| `repo_url`, `branch`, `notebook_path` | string | <span class="rc-opt">Optional</span> | A Git repository to clone and a notebook to open on start. |
+| `enabled` | boolean | <span class="rc-opt">Optional</span> | Publish to everyone. Only editors can publish; for everyone else it's forced to `false`. |
+
+Changing or deleting a template doesn't affect an instance already running from it.

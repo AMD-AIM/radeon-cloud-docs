@@ -1,26 +1,26 @@
 ---
 title: Usage and quota
-description: Check your model API consumption and remaining daily allowance.
+description: Check your shared model API usage and what's left of today's allowance.
 sidebar:
   order: 6
 ---
 
-Reports what your key has spent against the shared model APIs, and what's left today.
+Reports how much of the shared model APIs you've used, and what's left of today's allowance. This is the same data as **Credits & Usage** in the console.
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
-  <span class="rc-path">/api/profile/model-usage</span>
-  <span class="rc-auth">Session or API key</span>
+  <span class="rc-path">/v1/usage</span>
+  <span class="rc-auth">API key</span>
 </div>
 
 ## Request
 
 | Parameter | Type | | Description |
 |---|---|---|---|
-| `include_recent` | boolean | <span class="rc-opt">Optional</span> | Include a list of recent individual calls. Defaults to `false`. |
+| `include_recent` | boolean | <span class="rc-opt">Optional</span> | Include recent individual requests. Defaults to `false`. |
 
 ```bash
-curl "https://radeon-global.anruicloud.com/api/profile/model-usage?include_recent=true" \
+curl "https://developer.amd.com.cn/radeon/api/v1/usage?include_recent=true" \
   -H "Authorization: Bearer $RADEON_API_KEY"
 ```
 
@@ -28,7 +28,6 @@ curl "https://radeon-global.anruicloud.com/api/profile/model-usage?include_recen
 
 ```json
 {
-  "status": "ok",
   "rpm_limit": 30,
   "daily_cost_limit_usd": 10,
   "daily_cost_used_usd": 1.8412,
@@ -57,29 +56,29 @@ curl "https://radeon-global.anruicloud.com/api/profile/model-usage?include_recen
 
 | Field | Description |
 |---|---|
-| `status` | `ok` normally. `not_configured` if the account has no API key yet; `not_available` if the usage service can't be reached. |
-| `rpm_limit` | Requests per minute allowed for this key. |
-| `daily_cost_limit_usd` | Daily spend ceiling. |
-| `daily_cost_used_usd` | Spent so far in the current window. |
-| `daily_cost_remaining_usd` | What's left before requests start being rejected. |
-| `daily_reset_timezone` | Timezone the daily window is anchored to — `Asia/Shanghai`. |
-| `daily_reset_at` | When the current window rolls over. |
-| `today`, `last_30_days`, `all_time` | Aggregates over each period. |
-| `by_model` | The same aggregates broken down per model. |
-| `recent` | Individual recent calls. Empty unless `include_recent=true`. |
+| `rpm_limit` | Requests per minute allowed for your key. |
+| `daily_cost_limit_usd` | Today's usage cap. |
+| `daily_cost_used_usd` | Used so far today. |
+| `daily_cost_remaining_usd` | What's left before requests are refused. |
+| `daily_reset_timezone`, `daily_reset_at` | When the daily allowance resets: 00:00 Beijing time. |
+| `today`, `last_30_days`, `all_time` | Totals for each period. |
+| `by_model` | The same totals per model. |
+| `recent` | Recent individual requests. Empty unless `include_recent=true`. |
 
-Token counts split into `prompt_tokens` and `completion_tokens`; some models also report `reasoning_tokens`. Costs are USD.
+Usage and cost values are in model API points (pts), the unit shown on **Credits & Usage**. The field names end in `_usd`, but you aren't charged money, and these points have nothing to do with your credits.
 
-:::note[Quota values are per account]
-The numbers above are an example. Your actual limits are whatever this endpoint returns for your key — read them rather than assuming, since they differ between accounts and change over time.
+Token counts are split into `prompt_tokens` and `completion_tokens`. Some models also report `reasoning_tokens`.
+
+:::note[Limits differ between accounts]
+The numbers above are an example. Read your own limits from this endpoint rather than assuming them, because they differ between accounts and change over time.
 :::
 
-## Monitoring usage
+## Monitor usage
 
-Poll this before a large batch job to confirm there's headroom, or watch `daily_cost_remaining_usd` in a dashboard so a job doesn't stop halfway through the night. Once the daily allowance is exhausted, requests are rejected until `daily_reset_at`.
+Check before a large batch job that there's enough left, or watch `daily_cost_remaining_usd` so a job doesn't stop halfway. Once the allowance is used up, requests are refused until `daily_reset_at`.
 
-Credits for GPU instances are tracked separately and don't appear here — see [Account](/radeon-cloud-docs/api/account/).
+Every model API response also carries the current counters as headers. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
 
-## Errors
+## From the console
 
-`502` means the usage service is unreachable; the aggregate fields come back zeroed with a `status` explaining why. Treat a `502` as "unknown", not as "zero usage".
+The **Credits & Usage** page reads the same data from `GET /api/profile/model-usage`, which takes a browser session instead of an API key. It adds a `status` field: `ok`, `not_configured` if the account has no API key yet, or `not_available` if there's no usage data. A `502` from it means the usage service can't be reached; treat that as unknown, not as zero usage.

@@ -10,7 +10,7 @@ AMD Radeon Cloud 按需提供 AMD Radeon GPU。选好镜像和规格后启动，
 
 ## 中国站和全球站
 
-AMD Radeon Cloud 有两个站点。两个站点功能相同，但各自独立部署，分别服务不同地区。
+AMD Radeon Cloud 有两个站点，各自独立部署，分别服务不同地区。两个站点都提供 GPU 实例；共享模型 API 和 Token Factory 只在中国站提供。
 
 | 站点 | 地址 | 账号 |
 |---|---|---|
@@ -37,7 +37,7 @@ AMD Radeon Cloud 有两个站点。两个站点功能相同，但各自独立部
 
 **模型 API** 兼容 OpenAI API。`curl`、`openai` Python SDK、LangChain、Cherry Studio 等 OpenAI 客户端，只要换掉 base URL 和 API Key 就能调用。模型 API 分两种：
 
-- **共享模型 API**：免费，随时可用。在 Token Factory 获取 API Key 后就能发请求。模型由平台选定，会不定期调整。见[调用共享模型](/radeon-cloud-docs/zh-cn/guides/shared-models/)。
+- **共享模型 API**：免费，随时可用，仅限中国站。在 Token Factory 获取 API Key 后就能发请求。模型由平台选定，会不定期调整。见[调用共享模型](/radeon-cloud-docs/zh-cn/guides/shared-models/)。
 - **专属模型 API**：在你自己的实例上运行你选的模型。启动时把 **部署类型** 设为 **模型 API**，控制台会给出 base URL 和 API Key。实例运行期间消耗积分。见[部署专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。
 
 ## 该选哪一种

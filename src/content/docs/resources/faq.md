@@ -53,7 +53,7 @@ ROCm implements the same PyTorch API surface, and `torch.cuda.*` calls work on R
 It changes. Call [`GET /v1/models`](/radeon-cloud-docs/api/models/) rather than hard-coding names.
 
 **Can I serve any model on a dedicated endpoint?**
-Anything vLLM or SGLang supports and that fits in the GPU memory you've allocated. Downloads happen on first start, so large models take a few minutes to become callable.
+Anything vLLM supports and that fits in the GPU memory you've allocated. Downloads happen on first start, so large models take a few minutes to become callable.
 
 **Does streaming work?**
 Yes, `stream: true` on chat completions. Responses aren't buffered by the platform.

@@ -1,133 +1,92 @@
 ---
 title: 模板
-description: 通过 API 创建、更新和启动模板。
+description: 模板库和模型 API 模板背后的接口。
 sidebar:
   order: 9
 ---
 
-模板保存实例启动所依据的配置。这些字段在实际用起来是什么意思，见[创建模板](/radeon-cloud-docs/zh-cn/guides/templates/)。
+模板保存一套启动配置：镜像、实例类型、启动命令，也可以固定资源池和规格。[模板库](/radeon-cloud-docs/zh-cn/guides/gallery/)里的条目和 **首页** 上现成的模型 API 模板都是模板。
 
-## 列出模板
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="GET">GET</span>
-  <span class="rc-path">/api/profile/templates</span>
-  <span class="rc-auth">会话或 API Key</span>
-</div>
-
-返回你的模板，以及你可以选的容器镜像。
-
-```json
-{
-  "templates": [
-    {
-      "id": 87,
-      "title": "ROCm PyTorch dev",
-      "slug": "rocm-pytorch-dev",
-      "image": "rocm/pytorch:latest",
-      "instance_type": "jupyter",
-      "ssh_enabled": true,
-      "enabled": false,
-      "sort_order": 0
-    }
-  ],
-  "images": [
-    { "name": "ROCm PyTorch", "image": "rocm/pytorch:latest", "enabled": true }
-  ]
-}
-```
-
-## 创建模板
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="POST">POST</span>
-  <span class="rc-path">/api/profile/templates</span>
-  <span class="rc-auth">会话或 API Key</span>
-</div>
-
-| 参数 | 类型 | | 说明 |
-|---|---|---|---|
-| `title` | string | <span class="rc-req">必填</span> | 显示名称。 |
-| `image` | string | <span class="rc-req">必填</span> | 容器镜像，从目录里选。 |
-| `instance_type` | string | <span class="rc-opt">选填</span> | `jupyter`、`gradio`、`streamlit`、`comfyui`、`vllm`、`sglang`、`custom`。 |
-| `description` | string | <span class="rc-opt">选填</span> | 更长的描述。 |
-| `slug` | string | <span class="rc-opt">选填</span> | 适合放进 URL 的标识符。 |
-| `category` | string | <span class="rc-opt">选填</span> | 分组标签。 |
-| `tags` | array | <span class="rc-opt">选填</span> | 自由填写的标签。 |
-| `repo_url` | string | <span class="rc-opt">选填</span> | 启动时克隆的 Git 仓库。 |
-| `branch` | string | <span class="rc-opt">选填</span> | 要检出的分支。默认 `main`。 |
-| `notebook_path` | string | <span class="rc-opt">选填</span> | 启动时打开的 notebook。 |
-| `start_command` | string | <span class="rc-opt">选填</span> | 启动时执行的命令。`vllm` 和 `sglang` 必填。 |
-| `app_port` | integer | <span class="rc-opt">选填</span> | 应用服务的端口。必须是平台会路由的那几个：Gradio `7860`、Streamlit `8501`、ComfyUI `8188`、vLLM `8000`、SGLang `30000`。 |
-| `ssh_enabled` | boolean | <span class="rc-opt">选填</span> | 允许 SSH 进入由此模板启动的实例。默认 `false`。 |
-| `cover_url` | string | <span class="rc-opt">选填</span> | 封面图 URL。 |
-| `sort_order` | integer | <span class="rc-opt">选填</span> | 在你列表里的位置。 |
-| `enabled` | boolean | <span class="rc-opt">选填</span> | 公开发布。需要编辑权限，否则强制为 `false`。 |
-
-```bash
-curl -X POST https://radeon-global.anruicloud.com/api/profile/templates \
-  -H "Authorization: Bearer $RADEON_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Qwen 7B on vLLM",
-    "image": "rocm/vllm:latest",
-    "instance_type": "vllm",
-    "start_command": "vllm serve Qwen/Qwen2.5-7B-Instruct --host 0.0.0.0 --port 8000",
-    "app_port": 8000
-  }'
-```
-
-`app_port` 不在可路由的集合里会被 `400` 拒绝。
-
-## 更新模板
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="PUT">PUT</span>
-  <span class="rc-path">/api/profile/templates/<b>{template_id}</b></span>
-  <span class="rc-auth">会话或 API Key</span>
-</div>
-
-请求体和创建时一样。模板不存在或者不是你的，返回 `404`。
-
-改动对之后的启动生效。已经在跑的实例仍用它启动时的配置。
-
-## 删除模板
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="DELETE">DELETE</span>
-  <span class="rc-path">/api/profile/templates/<b>{template_id}</b></span>
-  <span class="rc-auth">会话或 API Key</span>
-</div>
-
-```json
-{ "success": true }
-```
-
-删掉模板不影响已经从它启动的实例。
-
-## 启动模板
-
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="POST">POST</span>
-  <span class="rc-path">/api/templates/<b>{template_id}</b>/launch</span>
-  <span class="rc-auth">会话或 API Key</span>
-</div>
-
-| 参数 | 类型 | | 说明 |
-|---|---|---|---|
-| `gpu_count` | integer | <span class="rc-opt">选填</span> | `1`、`2` 或 `4`。默认 `1`。 |
-| `launch_verification_token` | string | <span class="rc-opt">选填</span> | 仅在账号开启了启动验证时需要。 |
-
-返回和 [`POST /api/notebook/request`](/radeon-cloud-docs/zh-cn/api/instances/#启动实例) 一样的状态对象。之后轮询 `GET /api/notebook/status`。
-
-启动有限流，大致是每分钟一次、每十分钟三次、每小时五次。超了返回 `429`，并带 `Retry-After` 头。
+除了浏览公开模板，这些接口都只接受浏览器会话。路径相对于你所在站点的控制台地址。
 
 ## 浏览公开模板
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/api/templates</span>
-  <span class="rc-auth">无需凭据；带凭据能看到更多</span>
+  <span class="rc-auth">无需凭证，或 API Key、会话</span>
 </div>
 
-返回已发布的模板。带认证的调用方还能看到自己的私有模板。想找个起点又不想先建东西时很好用。
+返回已发布的模板。带 API Key 或会话时，还会返回你自己的私有模板。
+
+## 列出模型 API 模板
+
+<div class="rc-endpoint">
+  <span class="rc-method" data-m="GET">GET</span>
+  <span class="rc-path">/api/inference/templates</span>
+  <span class="rc-auth">会话</span>
+</div>
+
+返回 **部署类型 → 模型 API** 下提供的公开 vLLM 模板，每个模板都带有它运行的命令和需要的规格。
+
+```json
+{
+  "templates": [
+    {
+      "id": 412,
+      "title": "MiniCPM5-1B",
+      "description": "...",
+      "model_source": "modelscope",
+      "start_command": "vllm serve OpenBMB/MiniCPM5-1B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-1B",
+      "pod_type": "one-click",
+      "resource_template": "resource-16c55g1u",
+      "gpu_count": 1
+    }
+  ]
+}
+```
+
+## 启动模板
+
+<div class="rc-endpoint">
+  <span class="rc-method" data-m="POST">POST</span>
+  <span class="rc-path">/api/templates/<b>{template_id}</b>/launch</span>
+  <span class="rc-auth">会话</span>
+</div>
+
+控制台发送空请求体。固定了资源池和规格的模板，按它自己的规格启动。
+
+| 字段 | 类型 | | 说明 |
+|---|---|---|---|
+| `gpu_count` | integer | <span class="rc-opt">可选</span> | 只对没有固定规格的模板有效，默认 `1`。 |
+| `ssh_enabled` | boolean | <span class="rc-opt">可选</span> | 这次启动是否开启 SSH。 |
+
+只有 `jupyter` 和 `vllm` 类型的模板可以启动。返回值和后续调用与其他启动方式相同：轮询 [`GET /api/notebook/status`](/radeon-cloud-docs/zh-cn/api/instances/#查看状态)；`vllm` 模板则轮询 `GET /api/inference/current`。
+
+启动按 IP 地址限流，超出后返回 `429`，并带有 `Retry-After` 响应头。
+
+## 管理自己的模板
+
+| 方法 | 路径 | 作用 |
+|---|---|---|
+| `GET` | `/api/profile/templates` | 列出你的模板和可选的镜像。 |
+| `POST` | `/api/profile/templates` | 创建模板。 |
+| `PUT` | `/api/profile/templates/{template_id}` | 替换模板，请求体和创建时相同。 |
+| `DELETE` | `/api/profile/templates/{template_id}` | 删除模板。 |
+
+主要字段：
+
+| 字段 | 类型 | | 说明 |
+|---|---|---|---|
+| `title` | string | <span class="rc-req">必填</span> | 显示名称。 |
+| `image` | string | <span class="rc-req">必填</span> | 镜像目录中的镜像。 |
+| `instance_type` | string | <span class="rc-opt">可选</span> | `jupyter` 或 `vllm`。其他类型可以保存，但无法启动。 |
+| `start_command` | string | <span class="rc-opt">可选</span> | 启动时运行的命令。`vllm` 必填。 |
+| `model_source` | string | <span class="rc-opt">可选</span> | `huggingface` 或 `modelscope`，用于 `vllm`。 |
+| `pod_type`、`resource_template` | string | <span class="rc-opt">可选</span> | 固定的资源池和规格。两个都发或都不发。 |
+| `use_pvc` | boolean | <span class="rc-opt">可选</span> | 启动时挂载持久化 `/workspace`。 |
+| `description`、`category`、`tags`、`cover_url` | | <span class="rc-opt">可选</span> | 模板在模板库里的展示方式。 |
+| `repo_url`、`branch`、`notebook_path` | string | <span class="rc-opt">可选</span> | 启动时克隆的 Git 仓库和要打开的 notebook。 |
+| `enabled` | boolean | <span class="rc-opt">可选</span> | 公开发布。只有编辑者可以发布，其他人的模板会被强制设为 `false`。 |
+
+修改或删除模板，不影响已经用它启动、正在运行的实例。
