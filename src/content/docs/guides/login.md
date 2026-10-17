@@ -36,10 +36,19 @@ Enter your email address and the six-digit code sent to it. Codes expire after a
 
 ## After signing in
 
-Click your avatar in the top-right corner and choose **Profile**. This page is where you manage everything: templates, the running instance, your SSH key, your API key, and your credit balance.
+The console opens on **Home**, where you launch instances. The tabs at the top lead to **Gallery** and **Token Factory**.
 
-![Opening Profile from the avatar menu](../../../assets/guide/click-profile.png)
+Click your account in the top-right corner for:
+
+- your credit balance
+- **Credits & Usage**: credits, redeeming coupons, model API usage. See [Credits](/radeon-cloud-docs/guides/credits/).
+- **Settings**: SSH keys, language, appearance, the AMDAI account link and the switch to the classic interface
+- **Sign out**
+
+The header also has buttons for the language (**EN** / **中**) and the light or dark theme.
+
+If your console has a **Profile** page instead, you're on the classic interface. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
 
 ## If your account needs review
 
-Some accounts are held for verification before they can launch instances. If you see a notice to that effect, you can still browse the console and use the [free shared model APIs](/radeon-cloud-docs/guides/model-apis/) — launching a GPU instance unlocks once the review completes.
+Some accounts are held for verification before they can launch instances. If you see a notice to that effect, you can still browse the console and use the [free shared model APIs](/radeon-cloud-docs/guides/shared-models/) — launching a GPU instance unlocks once the review completes.

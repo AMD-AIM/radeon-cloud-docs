@@ -1,45 +1,51 @@
 ---
 title: Credits
-description: How credits are consumed, and how to turn AMD AI Developer Program points into them.
-sidebar:
-  order: 8
+description: How credits pay for instances, how to check and top up your balance, and how model API usage is tracked separately.
 ---
 
-Credits pay for GPU instances. The free shared [model APIs](/radeon-cloud-docs/guides/model-apis/) don't touch them.
+Credits pay for GPU instances. The shared model APIs are free and don't use them.
 
-## Points and credits
+## How credits are spent
 
-These are two separate balances, and they're easy to mix up.
-
-**Points** (开发者积分) belong to the [AMD AI Developer Program](https://developer.amd.com.cn/), and the program home page shows your balance. Event codes like `DP-XXXX-XXXX-XXXX` add points, not credits.
-
-**Credits** are what the platform spends on GPU instances. **Profile** shows them as **Credits Available**.
-
-On the China site, you turn points into credits like this:
-
-1. Exchange points for a coupon at [兑取算力](https://developer.amd.com.cn/points/redeem). 1 point buys 1 hour, and you can exchange up to 20 points a day.
-2. Paste the coupon in **Profile** → **Redeem Credits**.
-
-[AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) walks through each screen. If a hackathon or workshop gives you a coupon directly, skip step 1.
-
-## How they're spent
-
-Credits are consumed while an instance is running, scaling with the number of GPUs attached. Launching is blocked if your balance is below the GPU count you're requesting — a 4-GPU instance needs at least 4 credits to start.
-
-Nothing is consumed while an instance is stopped or destroyed. This is why [destroying an instance](/radeon-cloud-docs/guides/destroy/) when you're done matters: an idle notebook you forgot about still bills.
+- A running instance spends credits every hour. The rate is shown on the size you pick, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**.
+- The first hour is charged as soon as the instance starts.
+- You need at least one hour's worth of credits to launch.
+- When your credits run out, the instance is deleted. Save your work to a persistent `/workspace` before that happens. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+- A destroyed instance spends nothing. [Destroy it](/radeon-cloud-docs/guides/destroy/) when you're done; an idle instance still spends credits.
 
 ## Check your balance
 
-Your balance is shown in **Profile**. It's also returned by `GET /api/me` if you're scripting against the platform — see [Account](/radeon-cloud-docs/api/account/).
+Click your account in the top-right corner of the console. The menu shows your balance, for example **8,167 credits**.
+
+For details, choose **Credits & Usage**. The page shows your balance and how model API usage is going.
+
+The balance is also returned by `GET /api/me`. See [Account](/radeon-cloud-docs/api/account/).
+
+## Get credits
+
+- **China site:** exchange AMD AI Developer Program points for a coupon. 1 point buys 1 hour, up to 20 points a day. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
+- **Events:** hackathons and workshops may hand out coupons directly.
 
 ## Redeem a coupon
 
-Open **Profile** and click **Redeem Credits**. Paste the whole coupon into **Coupon Code** (the hint says "Paste your encrypted coupon here"), then click **Redeem**.
+1. Open **Credits & Usage** from the account menu.
+2. Click **Redeem credits**.
+3. In **Redeem a code**, paste the whole coupon and click **Redeem**.
 
-A coupon from the developer program is a long encrypted string, not a short code. It works once and expires 30 days after you get it. It isn't tied to your name, so treat it like cash.
+The example in the field is `RDN-XXXX-XXXX-XXXX`, but a coupon from the developer program is a long string of letters, digits and symbols. Paste all of it.
 
-Credits belong to the site where you redeem them and can't be moved. If you have accounts on both sites, check which one you're signed in to before you redeem. If redemption still fails, see [If redemption fails](/radeon-cloud-docs/guides/developer-program/#if-redemption-fails).
+When it works, the console shows how many credits were added, and the balance updates right away. **That code is not valid. Check it and try again.** means the coupon is incomplete, expired, already used, or meant for another site. See [If redemption fails](/radeon-cloud-docs/guides/developer-program/#if-redemption-fails).
 
-## Model API spend
+Credits belong to the site where you redeem them and can't be moved between the China and Global sites.
 
-Shared model endpoints have their own daily spend cap, tracked separately from credits and reset daily on Asia/Shanghai time. You can see the current usage and the remaining allowance through [`GET /api/profile/model-usage`](/radeon-cloud-docs/api/usage/).
+## Model API usage
+
+The shared model APIs don't spend credits. They have their own daily usage cap, counted in points (pts), which resets at 00:00 Beijing time (UTC+8).
+
+**Credits & Usage** shows:
+
+- **Daily model cap**: how much of today's cap you have used, and when it resets.
+- **By model**: requests and usage per model.
+- **Recent requests**: the last 24 hours, in your local time zone.
+
+To read the same numbers with your API key, call [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).

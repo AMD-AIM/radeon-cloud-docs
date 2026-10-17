@@ -28,10 +28,10 @@ Each request goes through two checks, and it has to pass both. First the platfor
 | Limit | Scope | Typical value |
 |---|---|---|
 | Requests per minute | Per account | 20, on a 60-second sliding window |
-| Spend cap | Per account | Spend is summed over the calendar day in Beijing time and resets at 00:00 UTC+8 |
+| Daily usage cap | Per account | Counted in model API points (pts) over the calendar day in Beijing time; resets at 00:00 UTC+8 |
 
 Chat, speech (`/v1/audio/speech`) and decision (`/v1/systemone`) requests all count against the same
-per-minute window and the same spend cap.
+per-minute window and the same daily usage cap.
 
 :::tip[Your quota is on every response]
 Every successful call carries the current counters as headers, so you rarely need to poll
@@ -42,10 +42,12 @@ anything:
 | `X-RateLimit-Limit-User-RPM` | Requests per minute allowed for your account. |
 | `X-RateLimit-Remaining-User-RPM` | Requests left in the current minute. |
 | `X-RateLimit-Reset` | Unix time when the per-minute window clears. |
-| `X-RateLimit-Limit-User-Daily-USD` | Spend ceiling for the current period. |
-| `X-RateLimit-Used-User-Daily-USD` | Spent so far in the period. |
+| `X-RateLimit-Limit-User-Daily-USD` | Daily usage cap for the current period. |
+| `X-RateLimit-Used-User-Daily-USD` | Used so far in the period. |
 | `X-RateLimit-Remaining-User-Daily-USD` | What's left before requests start being rejected. |
 | `X-RateLimit-Reset-User-Daily-USD` | Unix time when the period rolls over. |
+
+The `-USD` headers carry model API points, the same numbers as on **Credits & Usage**. You aren't charged money.
 :::
 
 Listing models doesn't consume a concurrency slot, though it does count toward the per-minute limits.
@@ -94,7 +96,7 @@ Gateway metering returns an OpenAI-shaped error at the top level, with the gener
 }
 ```
 
-Exhausting the spend cap produces the same shape with `Daily usage limit exceeded: maximum $N per period for this OneClick user.`, and `Retry-After` set to the seconds remaining in the period.
+Reaching the daily usage cap produces the same shape with `Daily usage limit exceeded: maximum $N per period for this OneClick user.`, and `Retry-After` set to the seconds remaining in the period.
 
 On `/v1/messages` the gateway uses Anthropic's envelope instead: `{"type": "error", "error": {"type": "rate_limit_error", "message": "..."}}`.
 
@@ -108,18 +110,18 @@ is nested under `detail`.
 
 None of the above applies. A dedicated endpoint has no gateway in front of it: the proxy checks
 that the key matches the instance and the port, then forwards. There is no per-minute limit, no
-concurrency allowance and no spend cap on the request path.
+concurrency allowance and no daily usage cap on the request path.
 
-What bounds you instead is the instance itself — vLLM's or SGLang's own queue and
-`--max-running-requests`, and the GPU you launched. Past that, requests queue rather than
+What bounds you instead is the instance itself: vLLM's own queue, settings such as
+`--max-num-seqs`, and the GPU you launched. Past that, requests queue rather than
 return `429`. Credits are consumed for as long as the instance runs, whether or not requests
 arrive.
 
 ## Instance launches
 
-Launching is throttled on a sliding window: roughly one per minute, three per ten minutes, five per hour. This catches retry loops rather than normal use — a person launching an instance to work in will never notice it.
+Launching from a template is limited per IP address over sliding windows of a minute, ten minutes and an hour. The limits catch retry loops; normal use doesn't reach them.
 
-Exceeding it returns `429` with `Retry-After`.
+Going over returns `429` with `Retry-After`. Each account can also have only one instance at a time, so a second launch is refused until the first is destroyed.
 
 ## Sign-in
 

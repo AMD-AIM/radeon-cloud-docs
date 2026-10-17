@@ -32,7 +32,7 @@ description: 该从哪个镜像开始、怎么看镜像列表，以及怎么确�
 | 日常开发、探索，或运行大多数 PyTorch 代码 | **AMD OneClick Base** |
 | 使用原版 ROCm PyTorch 环境 | 名称里带 **rocm-pytorch** 的镜像 |
 | 跟着课程、工作坊或教程操作 | 教程里指定的镜像 |
-| 用模型 API 部署模型 | 不用在这里选，模型 API 表单会自带运行环境。见[模型 API](/radeon-cloud-docs/zh-cn/guides/model-apis/)。 |
+| 用模型 API 部署模型 | 不用在这里选，模型 API 表单会自带运行环境。见[部署专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。 |
 
 没有说明的镜像，除非教程要求，否则不要选。
 

@@ -95,7 +95,8 @@ export default defineConfig({
           translations: { 'zh-CN': '模型 API' },
           items: [
             { slug: 'guides/model-apis' },
-            { slug: 'api/dedicated-endpoints' },
+            { slug: 'guides/shared-models' },
+            { slug: 'guides/dedicated-models' },
             {
               label: 'Model catalog',
               translations: { 'zh-CN': '模型目录' },
@@ -130,6 +131,7 @@ export default defineConfig({
                 { slug: 'api/usage' },
               ],
             },
+            { slug: 'api/dedicated-endpoints' },
             {
               label: 'Platform API',
               translations: { 'zh-CN': '平台接口' },

@@ -1,70 +1,61 @@
 ---
 title: 什么是 AMD Radeon Cloud
-description: AMD Radeon Cloud 概览：中国站和全球站、GPU 实例、模型 API，以及它们之间的关系。
+description: AMD Radeon Cloud 概览：中国站和全球站、GPU 实例和模型 API。
 sidebar:
   label: 平台介绍
   order: 1
 ---
 
-AMD Radeon Cloud 按需提供 AMD Radeon GPU。选好环境、启动实例，就能在浏览器里或通过 SSH 使用。GPU 运行 ROCm，你的 PyTorch、vLLM、SGLang 代码无需修改就能运行。
+AMD Radeon Cloud 按需提供 AMD Radeon GPU。选好镜像和规格后启动，就能在浏览器里或通过 SSH 使用。GPU 运行 ROCm，PyTorch、vLLM、SGLang 代码无需修改就能运行。
 
 ## 中国站和全球站
 
-AMD Radeon Cloud 有两个站点。两个站点功能相同，但各自独立部署，分别服务不同地区。
+AMD Radeon Cloud 有两个站点，各自独立部署，分别服务不同地区。两个站点都提供 GPU 实例；共享模型 API 和 Token Factory 只在中国站提供。
 
 | 站点 | 地址 | 账号 |
 |---|---|---|
 | **中国站** | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) | [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) |
 | **全球站** | [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) | 邮箱登录 |
 
-选好所在地区的站点后就一直用它。账号、积分、API Key、模板和实例都只属于创建它们的站点，两站之间不互通。一个站点签发的 API Key 在另一个站点无法通过认证，所以代码里的 base URL 必须和你注册的站点一致。
+请使用所在地区的站点。账号、积分、API Key 和实例都只属于创建它们的站点。一个站点的 API Key 在另一个站点无法使用，所以代码里的 base URL 必须和你的站点一致。
 
-文档里的示例会选用该功能更常用的那个站点。如果你用的是另一个站点，把地址换成你自己的即可。
+文档示例使用中国站的地址。用全球站时，换成全球站的地址即可。
 
 ## 能做什么
 
-平台提供两类服务。开始之前，先确定你需要哪一类。
-
 ### GPU 实例
 
-**实例** 是在 Radeon GPU 节点上运行的容器，由你定义的 **模板** 启动。模板记录了容器镜像、GPU 数量、磁盘大小，以及启动时要运行的命令。用同一个模板再次启动，得到的是同样的环境。
+**实例** 是一个带一块或多块 Radeon GPU 的容器。启动时选择镜像和规格：镜像决定预装的软件，规格决定 GPU 数量、CPU 核数和内存。见[选择镜像](/radeon-cloud-docs/zh-cn/guides/images/)。
 
-实例支持交互式使用。可以在浏览器里通过 JupyterLab 打开，也可以通过 SSH 连接，用法和一台带 GPU 的 Linux 机器一样：装软件包、下载权重、训练、做性能分析。
+实例可以在 [JupyterLab](/radeon-cloud-docs/zh-cn/guides/jupyterlab/) 里打开，也可以通过 [SSH](/radeon-cloud-docs/zh-cn/guides/ssh/) 连接，用法和一台带 GPU 的 Linux 机器一样：装软件包、下载权重、训练、做性能分析。
 
-实例运行期间会消耗积分，用完请及时销毁。如果希望销毁后文件还在，启动时选择 **持久化 /workspace**，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
+实例运行期间每小时消耗[积分](/radeon-cloud-docs/zh-cn/guides/credits/)，用完请及时[销毁](/radeon-cloud-docs/zh-cn/guides/destroy/)。如果希望销毁后文件还在，启动时选择 **持久化 /workspace**，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。在中国站，积分用 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 的开发者积分兑换。
 
-在中国站，积分用 AMD AI 开发者计划的开发者积分兑换获得。见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 和[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
-
-实例可以在网页控制台管理，也可以用 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/)（`rcc`）管理。在终端里，CLI 还能查看积分和可用资源、打开 JupyterLab、SSH 登录、查看状态和日志，也方便写进脚本。
+实例可以在网页控制台管理，也可以在终端里用 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/)（`rcc`）管理，方便写进脚本。
 
 ### 模型 API
 
-**模型 API** 是兼容 OpenAI API 的 HTTP 端点。任何能调用 OpenAI 的客户端，比如 `curl`、`openai` Python SDK、LangChain、Cherry Studio，只要换掉 base URL 和 API Key，就能调用 AMD Radeon Cloud。
+**模型 API** 兼容 OpenAI API。`curl`、`openai` Python SDK、LangChain、Cherry Studio 等 OpenAI 客户端，只要换掉 base URL 和 API Key 就能调用。模型 API 分两种：
 
-分为两种：
-
-**共享端点** 免费，随时可用。不用启动任何东西，也不消耗积分。在 Token Factory 获取 API Key 后就能发请求。模型由平台选定，会不定期调整。
-
-**专属端点** 只供你自己使用。启动一个部署类型为 vLLM 或 SGLang 的模板，平台会为你实例里的服务分配一个 URL。模型由你选择，实例运行期间消耗积分。
+- **共享模型 API**：免费，随时可用，仅限中国站。在 Token Factory 获取 API Key 后就能发请求。模型由平台选定，会不定期调整。见[调用共享模型](/radeon-cloud-docs/zh-cn/guides/shared-models/)。
+- **专属模型 API**：在你自己的实例上运行你选的模型。启动时把 **部署类型** 设为 **模型 API**，控制台会给出 base URL 和 API Key。实例运行期间消耗积分。见[部署专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。
 
 ## 该选哪一种
 
-训练、微调、在 notebook 里做探索，或者需要一个 shell，选 **实例**。
+训练、微调、用 notebook，或者需要一个 shell，选 **实例**。
 
-开发调用大模型的应用，选 **模型 API**。先用免费的共享端点，需要特定模型或稳定吞吐时，再换成专属端点。
-
-两者也可以搭配使用。常见做法是在实例上用 vLLM 部署模型，再从别处运行的应用里调用它。
+开发调用大模型的应用，选 **模型 API**。先用免费的共享模型 API，需要特定模型或稳定吞吐时，再换成专属模型 API。
 
 ## 常用入口
 
 | 用途 | 入口 |
 |---|---|
-| 控制台：模板、实例、积分 | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) 或 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
-| Radeon Cloud CLI：账号、积分、可用资源、实例 | [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/) |
-| Token Factory：API Key、模型目录 | [developer.amd.com.cn/radeon/modelapis](https://developer.amd.com.cn/radeon/modelapis) |
+| 控制台：实例、积分、设置 | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) 或 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
+| Token Factory：API Key、共享模型 | [developer.amd.com.cn/radeon/tokenfactory](https://developer.amd.com.cn/radeon/tokenfactory) |
+| Radeon Cloud CLI | [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/) |
 | AMD AI 开发者计划：开发者积分和优惠码（中国站） | [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) |
 | 联系支持 | [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) |
 
 ## 下一步
 
-按照[快速上手](/radeon-cloud-docs/zh-cn/quickstart/)启动一个实例，并发出第一个 API 请求。
+按照[快速上手](/radeon-cloud-docs/zh-cn/quickstart/)发出第一个 API 请求，并启动一个实例。

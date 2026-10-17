@@ -88,7 +88,7 @@ whether for money or not.** This includes:
 - Pooling accounts or keys to raise the capacity available to a group.
 
 Anyone can register directly and use these endpoints for free at the
-[Token Factory](https://developer.amd.com.cn/radeon/modelapis). There is no
+[Token Factory](https://developer.amd.com.cn/radeon/tokenfactory). There is no
 reason to pay a third party for access, and no third party is authorised to sell
 it.
 

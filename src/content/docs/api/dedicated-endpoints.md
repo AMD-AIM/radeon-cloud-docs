@@ -1,82 +1,64 @@
 ---
 title: Dedicated endpoints
-description: Serve your own model on your own instance behind an OpenAI-compatible URL.
-sidebar:
-  order: 7
+description: The base URL, authentication, available paths and lifecycle of a dedicated model API.
 ---
 
-A dedicated endpoint runs vLLM or SGLang inside an instance you own, and the platform routes a public URL to it. You choose the model and the serving flags; requests reach your server directly.
+A dedicated endpoint is vLLM running on your own instance, with the platform routing a URL to it. To deploy one, see [Deploy a dedicated model API](/radeon-cloud-docs/guides/dedicated-models/).
 
-## Base URL
+## Base URL and key
+
+When the instance is ready, the **OpenAI-compatible endpoint** card on **Home** shows the **Base URL**, the **Model** name and the **API key** for the endpoint. Use those values; don't assemble the URL yourself.
+
+On the China site the base URL has this form:
 
 ```text
-https://<host>/spaces/<instance-id>/<port>/v1
+https://developer.amd.com.cn/radeon/spaces/<instance-id>/8000/v1
 ```
 
-`<port>` is `8000` for vLLM and `30000` for SGLang. The complete URL appears in the launch dialog and under **Active Instance** — take it from there rather than assembling it.
+Other deployments can use a different form. The card always shows the right one.
 
-## Deploying
-
-Create a template with **Deploy Type** set to **vLLM Model API**, and a serve command:
-
-```bash
-vllm serve Qwen/Qwen2.5-7B-Instruct --host 0.0.0.0 --port 8000
-```
-
-:::caution[The host and port are not optional]
-`--host 0.0.0.0 --port 8000` is what the platform routes to. Binding to `127.0.0.1`, or to another port, leaves the endpoint unreachable even though the instance is healthy.
-:::
-
-Launch the template. Model weights are downloaded on first start, so a large model can take several minutes before the endpoint answers. Until then requests fail — watch the instance logs in JupyterLab if you want to see progress.
-
-Step-by-step instructions with screenshots are in [Model APIs](/radeon-cloud-docs/guides/model-apis/#dedicated-endpoints).
+The endpoint's API key can differ from your shared `rc-` key. Use the key from the card.
 
 ## Calling the endpoint
 
-Identical to a shared endpoint, with your own base URL and the model name you served:
+It works like a shared endpoint, with your own base URL, key and model name:
 
 ```bash
-curl https://<host>/spaces/<instance-id>/8000/v1/chat/completions \
-  -H "Authorization: Bearer $RADEON_API_KEY" \
+curl <base-url>/chat/completions \
+  -H "Authorization: Bearer <api-key>" \
   -H "Content-Type: application/json" \
-  -d '{
-    "model": "Qwen/Qwen2.5-7B-Instruct",
-    "messages": [{"role": "user", "content": "Hello"}]
-  }'
+  -d '{"model":"<model>","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
 ```python
 from openai import OpenAI
 
-client = OpenAI(
-    base_url="https://<host>/spaces/<instance-id>/8000/v1",
-    api_key="rc-...",
-)
+client = OpenAI(base_url="<base-url>", api_key="<api-key>")
 ```
 
-The `model` value must match what you passed to `vllm serve`, not a name from the shared catalog.
+The `model` value must be the name vLLM serves (`--served-model-name`), not a name from the shared catalog.
 
 ## Available endpoints
 
-Requests are forwarded to vLLM or SGLang with the routing prefix stripped, so the endpoint surface is whatever your server implements. For vLLM that typically includes:
+Requests are forwarded to vLLM with the routing prefix removed, so the endpoint offers whatever your vLLM server offers. That usually includes:
 
 | Path | Purpose |
 |---|---|
 | `/v1/models` | The model you served |
 | `/v1/chat/completions` | Chat |
-| `/v1/completions` | Legacy text completion |
+| `/v1/completions` | Text completion |
 | `/v1/embeddings` | Embeddings, for embedding models |
 
-This is wider than the shared endpoints, which are limited to chat completions and model listing. Consult your serving stack's own documentation for the exact set and for version-specific parameters.
+The shared endpoints' request filtering, rate limits and error format don't apply here. Errors come from vLLM itself. See vLLM's documentation for the exact set of paths and parameters in your version.
 
 ## Access control
 
-Your key, your instance. The platform checks three things: the key resolves to the instance's owner, the instance is an API-serving type, and the port matches the one the instance actually serves. A request that fails any of these gets `403`.
+Only the owner of the instance can call the endpoint. A request with the wrong key, or one for an instance that isn't serving a model, gets `403`. While the instance is still starting, requests get `503`.
 
-Your browser session also works, which is how you can open the endpoint in a browser tab while signed in.
-
-There's no way to hand a dedicated endpoint to someone else — issuing a key that a third party can use isn't supported. If you need to expose a service publicly, build it into the instance and use [rc-tunnel](/radeon-cloud-docs/guides/tunnel/) instead, with your own authentication in front.
+You can't share an endpoint with someone else. To make a service public, run it in the instance and use [rc-tunnel](/radeon-cloud-docs/guides/tunnel/) with your own authentication in front.
 
 ## Cost and lifecycle
 
-The endpoint lives exactly as long as the instance. Credits are consumed the whole time, whether or not requests arrive, and the URL stops working the moment the instance is destroyed. A new launch produces a new instance ID and therefore a new base URL — treat it as configuration, not a constant.
+The endpoint exists only while the instance runs. The instance spends credits every hour, whether or not requests arrive, and the endpoint stops working as soon as the instance is destroyed.
+
+The base URL and key can change when you launch again. Read them from the card after each launch, or keep them in configuration rather than in code.

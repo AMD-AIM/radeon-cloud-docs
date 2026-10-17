@@ -1,82 +1,64 @@
 ---
 title: 专属端点
-description: 在你自己的实例上跑你自己的模型，对外是一个兼容 OpenAI 的 URL。
-sidebar:
-  order: 7
+description: 专属模型 API 的接口地址、认证、可用路径和生命周期。
 ---
 
-专属端点是在你自己的实例里跑 vLLM 或 SGLang，平台把一个公网 URL 路由过去。模型和服务参数由你决定，请求直接打到你的服务器。
+专属端点是运行在你自己实例上的 vLLM，平台把一个 URL 路由到它。部署方法见[部署专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。
 
-## 基础 URL
+## 接口地址和 API Key
+
+实例就绪后，**首页** 的 **兼容 OpenAI 的接口** 卡片会显示这个端点的 **接口地址**、**模型** 名称和 **API 密钥**。请直接使用卡片上的值，不要自己拼接 URL。
+
+在中国站，接口地址的格式是：
 
 ```text
-https://<host>/spaces/<instance-id>/<port>/v1
+https://developer.amd.com.cn/radeon/spaces/<instance-id>/8000/v1
 ```
 
-`<port>` 在 vLLM 下是 `8000`，SGLang 下是 `30000`。完整 URL 会出现在启动对话框和 **Active Instance** 里——从那儿复制，别自己拼。
+其他部署可能使用不同的格式，以卡片上显示的为准。
 
-## 部署
+端点的 API Key 可能和你共享模型用的 `rc-` Key 不同，请使用卡片上的 Key。
 
-创建模板时把 **Deploy Type** 设成 **vLLM Model API**，并给一条启动命令：
+## 调用端点
 
-```bash
-vllm serve Qwen/Qwen2.5-7B-Instruct --host 0.0.0.0 --port 8000
-```
-
-:::caution[host 和 port 不是可选项]
-平台路由的就是 `--host 0.0.0.0 --port 8000`。绑到 `127.0.0.1` 或别的端口，实例看起来一切正常，端点却怎么都连不上。
-:::
-
-启动模板。模型权重在首次启动时下载，所以大模型可能要好几分钟端点才会应答。在那之前请求都会失败——想看进度就在 JupyterLab 里翻实例日志。
-
-带截图的分步说明在 [Model APIs](/radeon-cloud-docs/zh-cn/guides/model-apis/#专属端点)。
-
-## 调用
-
-和共享端点完全一样，只是换成你自己的基础 URL 和你部署的模型名：
+调用方式和共享端点相同，换成你自己的接口地址、API Key 和模型名称：
 
 ```bash
-curl https://<host>/spaces/<instance-id>/8000/v1/chat/completions \
-  -H "Authorization: Bearer $RADEON_API_KEY" \
+curl <base-url>/chat/completions \
+  -H "Authorization: Bearer <api-key>" \
   -H "Content-Type: application/json" \
-  -d '{
-    "model": "Qwen/Qwen2.5-7B-Instruct",
-    "messages": [{"role": "user", "content": "Hello"}]
-  }'
+  -d '{"model":"<model>","messages":[{"role":"user","content":"你好"}]}'
 ```
 
 ```python
 from openai import OpenAI
 
-client = OpenAI(
-    base_url="https://<host>/spaces/<instance-id>/8000/v1",
-    api_key="rc-...",
-)
+client = OpenAI(base_url="<base-url>", api_key="<api-key>")
 ```
 
-`model` 的值必须和你传给 `vllm serve` 的一致，不是共享目录里的名字。
+`model` 要填 vLLM 实际提供的名称（`--served-model-name`），不是共享模型目录里的名称。
 
 ## 可用接口
 
-请求会剥掉路由前缀转发给 vLLM 或 SGLang，所以端点提供什么，取决于你的服务器实现了什么。对 vLLM 来说通常包括：
+请求去掉路由前缀后原样转发给 vLLM，所以 vLLM 服务提供什么，端点就有什么。通常包括：
 
 | 路径 | 用途 |
 |---|---|
 | `/v1/models` | 你部署的模型 |
 | `/v1/chat/completions` | 聊天 |
-| `/v1/completions` | 旧版文本补全 |
-| `/v1/embeddings` | 向量化，用于 embedding 模型 |
+| `/v1/completions` | 文本补全 |
+| `/v1/embeddings` | 向量（embedding 模型） |
 
-这比共享端点宽——后者只有聊天补全和模型列表。准确的接口集合和版本相关的参数，查你所用服务栈自己的文档。
+共享端点的请求过滤、限流和错误格式在这里都不适用，错误由 vLLM 自己返回。各版本具体支持哪些路径和参数，见 vLLM 的文档。
 
 ## 访问控制
 
-你的密钥，你的实例。平台检查三件事：密钥解析出的用户是实例的所有者、实例是 API 服务类型、端口和实例实际服务的端口一致。任何一条不满足，返回 `403`。
+只有实例的所有者可以调用端点。API Key 不对，或者实例没有在提供模型服务时，请求返回 `403`；实例还在启动时返回 `503`。
 
-浏览器会话也能用，所以你登录之后可以直接在浏览器标签页里打开端点。
-
-没有办法把专属端点交给别人——签发一个第三方能用的密钥是不支持的。如果你要把服务公开出去，把它做进实例里，用 [rc-tunnel](/radeon-cloud-docs/zh-cn/guides/tunnel/)，并在前面加上你自己的认证。
+专属端点不能分享给他人使用。要把服务公开出去，请在实例里运行它，并用 [rc-tunnel](/radeon-cloud-docs/zh-cn/guides/tunnel/) 暴露，同时在前面加上你自己的认证。
 
 ## 费用和生命周期
 
-端点的寿命和实例完全一致。只要实例在，积分就一直在消耗，不管有没有请求进来；实例一销毁，URL 立刻失效。重新启动会产生新的实例 ID，因而是新的基础 URL——把它当配置读，别当常量。
+端点只在实例运行期间存在。实例每小时都会消耗积分，不管有没有请求；实例一销毁，端点立即失效。
+
+重新启动后，接口地址和 API Key 可能会变化。每次启动后从卡片上读取，或者放在配置里，不要写死在代码中。
