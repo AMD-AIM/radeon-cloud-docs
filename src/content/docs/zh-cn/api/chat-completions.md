@@ -30,7 +30,7 @@ sidebar:
 | `response_format` | object | <span class="rc-opt">选填</span> | `{"type": "json_object"}` 或一个 `json_schema`，适用于 `json_output` 为 true 的模型。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
 | `tool_choice` | string 或 object | <span class="rc-opt">选填</span> | 模型可以或必须调用哪个工具。 |
-| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；`low` 和 `medium` 所有模型都接受。**不传时是否思考也因模型而异。** |
+| `reasoning_effort` | string | <span class="rc-opt">选填</span> | 控制思考长度。取值因模型而异，见下文对照表；已验证档位的模型都接受 `low` 和 `medium`。**不传时是否思考也因模型而异。** |
 | `reasoning.effort` | string | <span class="rc-opt">选填</span> | 同上，统一写法。不能和 `reasoning_effort` 同时用。 |
 
 :::caution[`messages`：角色和 system 位置因模型而异]
@@ -51,7 +51,7 @@ sidebar:
 :::
 
 :::tip[怎么开思考]
-在这个端点上，**开启思考只有 `reasoning_effort`（或等价的 `reasoning.effort`）一种写法**。
+在这个端点上，**大多数模型用 `reasoning_effort`（或等价的 `reasoning.effort`）开启思考**。
 
 ```json
 {
@@ -62,8 +62,9 @@ sidebar:
 ```
 
 思考内容从响应的 `choices[0].message.reasoning` 里取（不是 `reasoning_content`），
-token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取。除 Qwen3.8-27B 外每个模型都有这个字段；Qwen3.8-27B 不返回 `completion_tokens_details`，
+token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取。已验证的模型中除 Qwen3.8-27B 外都有这个字段；Qwen3.8-27B 不返回 `completion_tokens_details`，
 它的思考 token 计入 `usage.completion_tokens`。
+MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 的这些 usage 字段尚未验证。
 顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek 两个模型和 Qwen3.8-Flash-Next 有，MiniCPM5-2B 没有），不要依赖它。
 
 **不传 `reasoning_effort` 不等于不思考**，各模型的默认值不一样：
@@ -78,6 +79,9 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取。除 Qw
 | GLM-5.3-Flash | **照样思考** |
 | MiMo-V2.6-Flash | **照样思考**，传 `none` 也关不掉 |
 | MiniCPM5-2B | 不思考 |
+| MiniCPM-V-4.7-1B | 不思考 |
+| MiniCPM-V-4.7-35B-A3B | 不思考 |
+| Gemma-4-31B-IT | 不思考 |
 
 要确定性地控制，就显式传值；想让两个 Qwen 模型和 GLM-5.3-Flash 少思考，传 `low`。
 
@@ -93,8 +97,24 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取。除 Qw
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | 任何取值都接受，但不起作用 |
 | MiniCPM5-2B | 不适用，直接给出答案 |
+| MiniCPM-V-4.7-1B | 未验证 |
+| MiniCPM-V-4.7-35B-A3B | 未验证 |
+| Gemma-4-31B-IT | 未验证 |
 
-要用同一套代码调用所有模型，**请用 `low` 或 `medium`**，只有这两个值所有模型都接受。
+MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 改用
+`chat_template_kwargs: {"enable_thinking": true}` 开启思考，网关会原样转发这个字段：
+
+```json
+{
+  "model": "Gemma-4-31B-IT",
+  "chat_template_kwargs": { "enable_thinking": true },
+  "messages": [{ "role": "user", "content": "..." }]
+}
+```
+
+这三个模型如何处理 `reasoning_effort` 和 `developer` 角色尚未验证；Gemma-4-31B-IT 上的这个开关也还没有端到端测试过。
+
+要用同一套代码调用所有模型，**请用 `low` 或 `medium`**，表中已验证档位的模型只有这两个值都接受。
 最高档的名字不通用，而且两种写法互斥：Qwen3.8-27B 传 `high` 返回 400，
 GLM-5.3-Flash 传 `xhigh` 返回 422。
 完整对照表见[模型总览](/radeon-cloud-docs/zh-cn/models/overview/)。
