@@ -2,7 +2,7 @@
 title: Clef
 description: "Decision model: answers typed questions about a situation with probabilities, on its own endpoint."
 sidebar:
-  order: 14
+  order: 15
 ---
 
 <div class="rc-endpoint">

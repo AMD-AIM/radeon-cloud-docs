@@ -2,7 +2,7 @@
 title: d3-flash
 description: vLLM Semantic Router 的 9B 决策模型，是 d3 的更快版本，API 相同。
 sidebar:
-  order: 16
+  order: 17
 ---
 
 <div class="rc-endpoint">
