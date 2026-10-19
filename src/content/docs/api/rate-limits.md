@@ -109,7 +109,7 @@ is nested under `detail`.
 ## Model services on instances
 
 None of the above applies. A model service on your instance has no gateway in front of it: the proxy checks
-that the key matches the instance and the port, then forwards. There is no per-minute limit, no
+that the key matches the instance, then forwards. There is no per-minute limit, no
 concurrency allowance and no daily usage cap on the request path.
 
 What bounds you instead is the instance itself: vLLM's own queue, settings such as

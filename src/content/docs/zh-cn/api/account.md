@@ -99,7 +99,7 @@ sidebar:
 
 ## API Key
 
-API Key 在 [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) 查看和重新生成，见[认证](/radeon-cloud-docs/zh-cn/api/authentication/#api-key)。
+API Key 在 [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) 查看。重新生成目前仍要切换到经典版界面，见[轮换 API Key](/radeon-cloud-docs/zh-cn/api/authentication/#轮换-api-key)。
 
 ## Token Factory 用量
 

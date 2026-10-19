@@ -55,7 +55,7 @@ Token Factory's request filtering, rate limits and error format don't apply here
 
 ## Access control
 
-Only the owner of the instance can call the endpoint. A request with the wrong key, or one for an instance that isn't serving a model, gets `403`. While the instance is still starting, requests get `503`.
+Only the owner of the instance can call the endpoint. A request with the wrong key, or one for an instance that isn't serving a model, gets `403`. Until vLLM accepts connections, requests get `502`.
 
 You can't share an endpoint with someone else. To make a service public, run it in the instance and use [rc-tunnel](/radeon-cloud-docs/guides/tunnel/) with your own authentication in front.
 

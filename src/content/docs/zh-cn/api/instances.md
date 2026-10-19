@@ -41,7 +41,7 @@ sidebar:
 | `instance_type` | string | <span class="rc-opt">可选</span> | 只能是 `jupyter`，也是默认值。 |
 | `use_pvc` | boolean | <span class="rc-opt">可选</span> | `true` 表示挂载持久化 `/workspace`。默认 `false`，使用临时工作区。 |
 | `pvc_size` | string | <span class="rc-opt">可选</span> | `25GB` 或 `100GB`，配合 `use_pvc: true` 使用。100 GB 只对部分账号开放。 |
-| `model_mount` | string | <span class="rc-opt">可选</span> | 以只读方式挂载到 `/models` 的模型，ID 来自 `GET /api/models/mountable`。 |
+| `model_mount` | string | <span class="rc-opt">可选</span> | 以只读方式挂载的模型。`GET /api/models/mountable` 列出可用的 ID，以及每个模型的挂载路径 `mount_path`，通常是 `/models`。 |
 | `ssh_enabled` | boolean | <span class="rc-opt">可选</span> | 控制台总是发送 `true`。需要先在 **设置** 里添加 SSH 密钥。 |
 
 ```json
@@ -60,7 +60,7 @@ sidebar:
 以下情况会拒绝启动：
 
 - 你已经有一个实例（`400`，`Each user can only have one active instance`），或者上一个实例还在删除中（`409`）
-- 积分不够所选规格运行 1 小时（`400`，`Insufficient credits`）
+- 积分不够所选规格运行 1 小时（`400`，`Insufficient credits`）。只有全球站会提前检查；在中国站，扣不出某个小时的积分时实例会被删除。
 - `instance_type` 不是 `jupyter`（`400`，`unsupported_deploy_type`）
 - 资源池或规格没有分配给你的账号（`403`，`resource_selection_not_assigned`）
 

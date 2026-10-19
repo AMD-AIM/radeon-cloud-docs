@@ -13,7 +13,7 @@ sidebar:
 | `401` | 凭证缺失、格式错误或无法识别。 | 检查 `Authorization` 请求头。如果 API Key 可能已失效，重新生成一个。 |
 | `403` | 已通过认证，但没有权限。 | 原因有多种，见下文。 |
 | `404` | 模板或实例不存在，或者请求的 Token Factory 路径没有模型提供。 | 确认标识符。模型名不在模型列表里时返回的是 `400`，不是 `404`。 |
-| `409` | 状态冲突，例如需要先完成邮箱验证。 | 按响应体里的 `code` 处理。 |
+| `409` | 状态冲突，例如上一个实例还在删除，或者需要先完成邮箱验证。 | 按响应体里的 `code` 处理，或者稍后重试。 |
 | `429` | 触发限流。 | 等待 `Retry-After` 指定的时间，然后退避重试，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。 |
 | `502` | 上游模型网关或服务后端不可达。 | 通常是暂时的，退避后重试。 |
 | `503` | 容量暂时不足，或功能已关闭。 | 按 `Retry-After` 给出的间隔重试。 |
@@ -77,15 +77,15 @@ OpenAI SDK 只在顶层读取 `error.type`，读不到平台返回的错误。�
 
 模型名不在模型列表里时，网关直接返回 `400` 和 `Requested model <名称> not supported`，请求不会到达后端。模型自身产生的错误，例如 prompt 超出上下文长度，会连同后端的状态码和信息原样返回。
 
-实例上的 **模型服务** 返回的错误不属于以上任何一种。这条路径上没有网关，代理放行后，你收到的就是 vLLM 原样返回的内容。代理返回 `403` 表示 API Key、实例或端口不匹配；返回 `503` 表示实例还在启动。其他错误都来自你自己的服务。
+实例上的 **模型服务** 返回的错误不属于以上任何一种。这条路径上没有网关，代理放行后，你收到的就是 vLLM 原样返回的内容。代理返回 `403` 表示 API Key 和实例不匹配，或者实例没有在提供模型服务；返回 `502` 表示 vLLM 还没开始接受连接。其他错误都来自你自己的服务。
 
 ## 常见情况
 
 **`400 Each user can only have one active instance`**：先销毁当前实例，见 [`DELETE /api/notebook/current`](/radeon-cloud-docs/zh-cn/api/instances/#销毁实例)。
 
-**`400 Insufficient credits`**：积分不够所选规格运行 1 小时。[兑换优惠码](/radeon-cloud-docs/zh-cn/guides/credits/#兑换优惠码)，或者换一个更小的规格。
+**`400 Insufficient credits`**：积分不够所选规格运行 1 小时。[兑换优惠码](/radeon-cloud-docs/zh-cn/guides/credits/#兑换优惠码)，或者换一个更小的规格。只有全球站会在启动前检查余额，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/#积分怎么消耗)。
 
-**`400 Invalid image selected`**：镜像不在镜像目录里，或者已被停用。请从 **首页** 的 **镜像** 列表里选择。
+**`400 {"code": "catalog_image_not_found"}`**：镜像不在你账号可用的镜像目录里，或者已经下线。请从 **首页** 的 **镜像** 列表里选择。在中国站，`china_image_not_remote_ready` 表示这个镜像暂时还不能在中国站启动，请换一个。
 
 **`401 Login required`**：这个接口需要浏览器会话，但请求里发的是 API Key。要在脚本里管理实例，请用 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/automation/)。
 
@@ -93,11 +93,11 @@ OpenAI SDK 只在顶层读取 `error.type`，读不到平台返回的错误。�
 
 **`403 {"code": "account_not_verified"}`**：账号还在审核中。响应体里的 `redirect` 指向审核页面。
 
-**`403 You do not have access to this instance`**：实例属于别人，或者你用 API Key 访问了只接受浏览器会话的实例代理，见[认证](/radeon-cloud-docs/zh-cn/api/authentication/#各接口接受的凭证)。
+**实例地址返回 `403` 或 `404 Instance not found`**：实例属于别人、已经销毁，或者请求里没有浏览器会话。API Key 在这里不起作用。请登录后从 **首页** 打开 JupyterLab，见[认证](/radeon-cloud-docs/zh-cn/api/authentication/#各接口接受的凭证)。
 
 **`502 Model gateway is unavailable`**：网关故障或无法连接。退避后重试；如果持续几分钟都不恢复，说明是平台故障，不是你这边的问题。
 
-**`503 Model gateway connection pool exhausted`**：整个平台同时处理的请求太多。`Retry-After` 很短，通常是 5 秒。
+**`503 Model gateway is busy`**：整个平台同时处理的请求太多。`Retry-After` 很短，默认 5 秒。
 
 ## 排查清单
 

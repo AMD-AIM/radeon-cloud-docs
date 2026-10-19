@@ -41,7 +41,7 @@ For example, `pod_type: "one-click"` with `resource_template: "resource-16c55g1u
 | `instance_type` | string | <span class="rc-opt">Optional</span> | Must be `jupyter`, the default. |
 | `use_pvc` | boolean | <span class="rc-opt">Optional</span> | `true` mounts your persistent `/workspace`. Default `false`, a temporary workspace. |
 | `pvc_size` | string | <span class="rc-opt">Optional</span> | `25GB` or `100GB`, with `use_pvc: true`. 100 GB is offered only to some accounts. |
-| `model_mount` | string | <span class="rc-opt">Optional</span> | A model to mount read-only under `/models`. IDs come from `GET /api/models/mountable`. |
+| `model_mount` | string | <span class="rc-opt">Optional</span> | A model to mount read-only. `GET /api/models/mountable` lists the IDs, each with the `mount_path` it appears at, usually `/models`. |
 | `ssh_enabled` | boolean | <span class="rc-opt">Optional</span> | The console always sends `true`. Requires an SSH key in **Settings**. |
 
 ```json
@@ -60,7 +60,7 @@ The call returns as soon as the launch is accepted; it doesn't wait for the inst
 The launch is refused when:
 
 - you already have an instance (`400`, `Each user can only have one active instance`), or the previous one is still being deleted (`409`)
-- your credits don't cover one hour on the chosen size (`400`, `Insufficient credits`)
+- your credits don't cover one hour on the chosen size (`400`, `Insufficient credits`). Only the Global site checks this up front. On the China site, the instance is deleted once an hour can't be charged.
 - `instance_type` isn't `jupyter` (`400`, `unsupported_deploy_type`)
 - the pool or size isn't assigned to your account (`403`, `resource_selection_not_assigned`)
 

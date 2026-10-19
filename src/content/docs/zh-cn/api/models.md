@@ -89,7 +89,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
 | `name`、`description`、`family`、`aliases` | 展示用的元信息。 |
 | `architecture` | 输入输出模态，以及 tokenizer 家族。 |
 | `providers` | 提供这个模型的后端，每个都带自己的价格和能力标志。 |
-| `pricing` | 每 token 的价格，字符串形式的小数：`prompt`、`completion`，支持前缀缓存的模型还有 `input_cache_read`。按 Token Factory 的 pts 计入每日额度，不会产生费用，见[用量和配额](/radeon-cloud-docs/zh-cn/api/usage/)。 |
+| `pricing` | 每 token 的价格，字符串形式的小数：`prompt`、`completion`，支持前缀缓存的模型还有 `input_cache_read`。按输入字符计费的模型（例如 OmniVoice）把每个字符的价格放在 `prompt` 里。按 Token Factory 的 pts 计入每日额度，不会产生费用，见[用量和配额](/radeon-cloud-docs/zh-cn/api/usage/)。 |
 | `context_length` | 上下文窗口上限，单位 token。 |
 | `supported_parameters` | 这个模型接受的请求参数。完整 schema 见[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)。 |
 | `json_output`、`structured_outputs` | 是否认 `response_format`。 |
