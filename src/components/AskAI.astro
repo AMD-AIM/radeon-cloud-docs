@@ -83,6 +83,8 @@ const t = isZh
 <script>
   const STORE_KEY = 'rc-ask-ai';
   const MAX_HISTORY = 6;
+  // The backend refuses longer turns; a long answer is cut rather than lost.
+  const MAX_TURN_CHARS = 4000;
 
   function escapeHtml(text: string) {
     return text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -224,7 +226,10 @@ const t = isZh
       this.busy = true;
       this.sendButton.disabled = true;
       this.input.value = '';
-      const history = this.turns.slice(-MAX_HISTORY);
+      const history = this.turns.slice(-MAX_HISTORY).map(({ role, content }) => ({
+        role,
+        content: Array.from(content).slice(0, MAX_TURN_CHARS).join(''),
+      }));
       this.addMessage('user', question);
       const answerEl = this.addMessage('assistant', '');
       answerEl.classList.add('ask-ai-pending');
