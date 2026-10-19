@@ -32,7 +32,7 @@ The list depends on your account, and it also contains images made for specific 
 | Develop, explore, or run most PyTorch code | **AMD OneClick Base** |
 | Use the stock ROCm PyTorch environment | **rocm-pytorch** |
 | Follow a course, workshop or tutorial | The image its instructions name |
-| Serve a model through Model API | Nothing here; the Model API form picks its own runtime. See [Deploy a dedicated model API](/radeon-cloud-docs/guides/dedicated-models/). |
+| Serve a model with **Deploy type: Model API** | Nothing here; that form picks its own runtime. See [Serve a model](/radeon-cloud-docs/guides/serve-model/). |
 
 Avoid images with no description unless an instruction tells you to use them.
 
@@ -54,7 +54,7 @@ To follow a course or workshop, launch its notebook from the [Gallery](/radeon-c
 
 | Image | What's in it | Use it for |
 |---|---|---|
-| **Qwen3.8-27B** | vLLM set up to serve Qwen3.8-27B. Needs a 2-GPU size. | Running Qwen3.8-27B yourself in a notebook. To get an endpoint without running vLLM yourself, use [Model API](/radeon-cloud-docs/guides/dedicated-models/) instead. |
+| **Qwen3.8-27B** | vLLM set up to serve Qwen3.8-27B. Needs a 2-GPU size. | Running Qwen3.8-27B yourself in a notebook. To get an endpoint without setting up vLLM yourself, use [Serve a model](/radeon-cloud-docs/guides/serve-model/) instead. |
 
 ### Courses, workshops and events
 

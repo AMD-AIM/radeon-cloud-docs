@@ -11,10 +11,10 @@ const t = isZh
       eyebrow: 'AMD Radeon GPU 云平台',
       forkA: '开发环境',
       forkATitle: '启动一个 GPU 实例',
-      forkADesc: '创建模板、启动实例，用 JupyterLab 或 SSH 进入一台配好 ROCm 的 Radeon GPU 机器。',
-      forkB: 'API',
-      forkBTitle: '调用模型 API',
-      forkBDesc: '共享端点免费可用，或用自己的实例部署专属端点。两者都兼容 OpenAI 协议。',
+      forkADesc: '选好镜像和规格，在 JupyterLab 或 SSH 里使用一台配好 ROCm 的 Radeon GPU。',
+      forkB: 'Token Factory',
+      forkBTitle: '调用托管的模型',
+      forkBDesc: '平台托管的模型，通过兼容 OpenAI 的接口免费调用，复制 API Key 就能发请求。',
       terminal: '你的第一次调用',
     }
   : {
@@ -22,11 +22,11 @@ const t = isZh
       forkA: 'Development',
       forkATitle: 'Launch a GPU instance',
       forkADesc:
-        'Create a template, launch it, and get into a ROCm-ready Radeon GPU machine through JupyterLab or SSH.',
-      forkB: 'API',
-      forkBTitle: 'Call a model API',
+        'Pick an image and a size, then work on a ROCm-ready Radeon GPU in JupyterLab or over SSH.',
+      forkB: 'Token Factory',
+      forkBTitle: 'Call hosted models',
       forkBDesc:
-        'Use the free shared endpoints, or deploy a dedicated one on your own instance. Both speak the OpenAI protocol.',
+        'Models hosted by the platform behind an OpenAI-compatible API. Copy your API key and send a request, free.',
       terminal: 'your first call',
     };
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -83,7 +83,7 @@ const p = (s: string) => `${base}/${isZh ? 'zh-cn/' : ''}${s}`;
       <h3>{t.forkATitle}</h3>
       <p>{t.forkADesc}</p>
     </a>
-    <a class="rc-card" href={p('api/overview/')}>
+    <a class="rc-card" href={p('guides/token-factory/')}>
       <span class="rc-card__tag">{t.forkB}</span>
       <h3>{t.forkBTitle}</h3>
       <p>{t.forkBDesc}</p>

@@ -80,7 +80,7 @@ Qwen 把类型标为 *Causal Language Model with Vision Encoder*，仓库也打�
 
 :::caution[`system` 只能放一条，且必须在第一位]
 模型自带的 Jinja chat template 把这条检查写在 `tokenizer_config.json` 里，不是网关加的规则——
-用同一份权重跑[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)也一样。
+用同一份权重自己部署[模型服务](/radeon-cloud-docs/zh-cn/api/model-services/)也一样。
 
 ```json
 "messages": [

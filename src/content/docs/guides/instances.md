@@ -9,7 +9,7 @@ An instance is a container with an AMD Radeon GPU attached. You start it from **
 
 | Setting | What it decides |
 |---|---|
-| **Deploy type** | **Notebook** gives you JupyterLab and SSH for development. **Model API** serves a model behind an OpenAI-compatible endpoint. |
+| **Deploy type** | **Notebook** gives you JupyterLab and SSH for development. **Model API** serves a model with vLLM behind an OpenAI-compatible endpoint. See [Serve a model](/radeon-cloud-docs/guides/serve-model/). |
 | **Size** | The number of GPUs, CPU cores and memory, and the credits it costs per hour. |
 | **Image** | The software in the container: ROCm, Python, frameworks. See [Choose an image](/radeon-cloud-docs/guides/images/). |
 | **Resource pool** | The group of GPU nodes the instance is scheduled on. |

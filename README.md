@@ -25,8 +25,8 @@ Node 20 or newer.
 ```
 src/
   content/docs/          English pages
-    guides/              getting started, GPU instance and model API guides
-    models/              model catalog (one page per shared model)
+    guides/              getting started, GPU instance and Token Factory guides
+    models/              Token Factory model catalog (one page per model)
     cli/                 Radeon Cloud CLI
     api/                 API reference
     resources/           troubleshooting, FAQ
@@ -85,13 +85,12 @@ Adding a page means creating both files and adding its slug to the `sidebar` arr
 | workspace storage: temporary / persistent `/workspace` | 工作区存储：临时工作区 / 持久化 `/workspace` | Don't say PVC |
 | credits | 积分 | Matches the Chinese UI |
 | developer points | 开发者积分 | AMD AI Developer Program only; never shorten to 积分 |
-| shared model API | 共享模型 API | Not "Public Free" |
-| dedicated model API, dedicated endpoint | 专属模型 API、专属端点 | Not 独占 |
+| Token Factory, Token Factory API | Token Factory、Token Factory API | The hosted models and their API. Not "shared model API" or "Public Free" |
+| model service (on an instance), model service endpoint | 模型服务（自部署模型服务）、模型服务接口 | vLLM on your own instance via **Deploy type: Model API**. Not part of Token Factory. Not "dedicated" / 专属 / 独占 |
 | API key | API Key | |
 | CLI token | CLI 令牌 | Starts with `rcc_` |
 | account | 账号 | Use 账户 only when quoting a UI label |
 | Gallery | 模板库 | As in the Chinese UI |
-| Token Factory | Token Factory | Not translated |
 
 ### API endpoint signatures
 

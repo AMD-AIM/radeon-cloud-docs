@@ -1,13 +1,13 @@
 ---
 title: 限流
-description: 模型 API 调用和实例启动有哪些限制，以及触发后怎么处理。
+description: Token Factory 调用和实例启动有哪些限制，以及触发后怎么处理。
 sidebar:
   order: 11
 ---
 
-限流是为了让共享资源保持可用，所以几乎都作用在共享模型 API 上。下面四组限制各自独立生效。
+限流是为了让共享资源保持可用，所以几乎都作用在 Token Factory 上。下面四组限制各自独立生效。
 
-## 共享模型 API
+## Token Factory
 
 每个请求要依次通过两层检查：平台先决定是否放行，网关再按账号计量。
 
@@ -27,7 +27,7 @@ sidebar:
 | 限制 | 范围 | 典型值 |
 |---|---|---|
 | 每分钟请求数 | 每个账号 | 20，60 秒滑动窗口 |
-| 每日用量上限 | 每个账号 | 以模型 API 的 pts 计量，按北京时间的自然日累计，每天 00:00（UTC+8）重置 |
+| 每日用量上限 | 每个账号 | 以 Token Factory 的 pts 计量，按北京时间的自然日累计，每天 00:00（UTC+8）重置 |
 
 聊天、语音合成（`/v1/audio/speech`）和决策（`/v1/systemone`）请求共用同一个每分钟窗口和同一个每日用量上限。
 
@@ -44,7 +44,7 @@ sidebar:
 | `X-RateLimit-Remaining-User-Daily-USD` | 请求被拒绝之前还剩多少。 |
 | `X-RateLimit-Reset-User-Daily-USD` | 周期重置的 Unix 时间。 |
 
-带 `-USD` 的响应头里是模型 API 的 pts，和 **积分与用量** 页面上的数字相同，不会产生任何费用。
+带 `-USD` 的响应头里是 Token Factory 的 pts，和 **积分与用量** 页面上的数字相同，不会产生任何费用。
 :::
 
 列出模型不占用并发名额，但计入每分钟限制。
@@ -101,9 +101,9 @@ sidebar:
 请根据 `429` 状态码处理，并遵守 `Retry-After`。两个独立的限流器都可能拒绝同一个请求，同一种情况下给出的 `code` 不同，而且平台的错误放在 `detail` 里。
 :::
 
-## 专属模型 API
+## 实例上的模型服务
 
-以上限制都不适用。专属模型 API 前面没有网关：代理只核对 API Key 和实例、端口是否匹配，然后转发。请求路径上没有每分钟限制、并发配额或每日用量上限。
+以上限制都不适用。实例上的模型服务前面没有网关：代理只核对 API Key 和实例、端口是否匹配，然后转发。请求路径上没有每分钟限制、并发配额或每日用量上限。
 
 上限来自实例本身：vLLM 的请求队列、`--max-num-seqs` 等参数，以及你启动的 GPU。超出后请求会排队，而不是返回 `429`。实例运行期间一直消耗积分，不管有没有请求。
 
@@ -139,4 +139,4 @@ def call_with_retry(payload, attempts=5):
     raise RuntimeError("rate limited after retries")
 ```
 
-如果长期需要比共享额度更多的用量，请改用[专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)，那里的唯一限制是你的实例能处理多少请求。
+如果长期需要比 Token Factory 额度更多的用量，请[在自己的实例上部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)，那里的唯一限制是你的实例能处理多少请求。

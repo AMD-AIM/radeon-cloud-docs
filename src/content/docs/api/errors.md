@@ -12,7 +12,7 @@ sidebar:
 | `400` | The request was rejected. Invalid parameter, an instance already running, or too few credits. | Read `detail` and fix the request. Retrying won't help. |
 | `401` | Missing, malformed, or unrecognised credential. | Check the `Authorization` header. Rotate the key if it may have been revoked. |
 | `403` | Authenticated, but not permitted. | The cause varies; see below. |
-| `404` | No such template or instance, or a Model API path that isn't served. | Confirm the identifier. A model name that isn't in the catalog is a `400`, not a `404`. |
+| `404` | No such template or instance, or a Token Factory path that no model serves. | Confirm the identifier. A model name that isn't in the catalog is a `400`, not a `404`. |
 | `409` | A conflicting state, such as email verification being required first. | Follow the `code` in the body. |
 | `429` | Rate limited. | Wait for `Retry-After`, then back off. See [Rate limits](/radeon-cloud-docs/api/rate-limits/). |
 | `502` | The upstream model gateway or serving backend is unreachable. | Transient. Retry with backoff. |
@@ -26,7 +26,7 @@ Platform API errors use FastAPI's shape:
 { "detail": "Each user can only have one active instance" }
 ```
 
-Shared model API errors come from two places, and the shapes differ.
+Token Factory errors come from two places, and the shapes differ.
 
 Errors raised by the **gateway**, such as an invalid key, an unknown model or a gateway-side rate limit, use OpenAI's shape, so existing OpenAI error handling works unchanged:
 
@@ -83,7 +83,7 @@ A model name that isn't in the catalog is rejected by the gateway with `400` and
 itself raises, such as a prompt over the context limit, are passed through from the serving
 backend with its own status and message.
 
-**Dedicated model API** errors are none of the above. There is no gateway on that path, so once
+Errors from a **model service** on your instance are none of the above. There is no gateway on that path, so once
 the proxy has admitted the request the body you get back is whatever vLLM produced,
 verbatim. A `403` from the proxy means the key, the instance or the port didn't match; a `503`
 means the instance is still starting. Everything else is your server talking.
@@ -110,10 +110,10 @@ means the instance is still starting. Everything else is your server talking.
 
 ## Debugging checklist
 
-Confirm you're calling the right base URL. The shared and dedicated model APIs use different hosts and paths, and a dedicated base URL can change when you relaunch. Copy it from the instance card again.
+Confirm you're calling the right base URL. Token Factory and a model service on your instance use different hosts and paths, and a model service's base URL can change when you relaunch. Copy it from the instance card again.
 
 Confirm the key is being sent, and sent as `Authorization: Bearer rc-...`. A missing header and an invalid key both produce `401`.
 
-For a dedicated endpoint, confirm the instance is `ready` and the model has finished loading. vLLM answers the port before weights are loaded, so early requests can fail with backend errors that look like platform problems.
+For a model service, confirm the instance is `ready` and the model has finished loading. vLLM answers the port before weights are loaded, so early requests can fail with backend errors that look like platform problems.
 
-If a call worked yesterday and fails today with `400 Requested model ... not supported`, the shared catalog has probably changed. Re-resolve with [`GET /v1/models`](/radeon-cloud-docs/api/models/).
+If a call worked yesterday and fails today with `400 Requested model ... not supported`, the Token Factory model list has probably changed. Re-resolve with [`GET /v1/models`](/radeon-cloud-docs/api/models/).

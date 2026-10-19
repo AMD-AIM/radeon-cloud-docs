@@ -1,11 +1,11 @@
 ---
 title: 模板
-description: 模板库和模型 API 模板背后的接口。
+description: 模板库和模型服务模板背后的接口。
 sidebar:
   order: 9
 ---
 
-模板保存一套启动配置：镜像、实例类型、启动命令，也可以固定资源池和规格。[模板库](/radeon-cloud-docs/zh-cn/guides/gallery/)里的条目和 **首页** 上现成的模型 API 模板都是模板。
+模板保存一套启动配置：镜像、实例类型、启动命令，也可以固定资源池和规格。[模板库](/radeon-cloud-docs/zh-cn/guides/gallery/)里的条目和 **首页** 上 **部署类型：模型 API** 下现成的模板都是模板。
 
 除了浏览公开模板，这些接口都只接受浏览器会话。路径相对于你所在站点的控制台地址。
 
@@ -19,7 +19,7 @@ sidebar:
 
 返回已发布的模板。带 API Key 或会话时，还会返回你自己的私有模板。
 
-## 列出模型 API 模板
+## 列出模型服务模板
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>

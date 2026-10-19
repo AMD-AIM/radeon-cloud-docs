@@ -1,18 +1,18 @@
 ---
 title: 快速上手
-description: 先完成第一次模型 API 调用，再启动一个 GPU 实例。
+description: 先调用 Token Factory 里的模型，再启动一个 GPU 实例。
 sidebar:
   label: 快速上手
   order: 2
 ---
 
-本页包括两项互不依赖的操作：调用模型 API 和启动 GPU 实例，可以从任意一项开始。
+本页包括两项互不依赖的操作：调用 Token Factory 里的模型和启动 GPU 实例，可以从任意一项开始。
 
-共享模型 API 只在中国站提供。两个站点都可以启动实例，示例使用中国站的地址。
+Token Factory 只在中国站提供。两个站点都可以启动实例，示例使用中国站的地址。
 
-## 调用模型 API
+## 调用 Token Factory 里的模型
 
-调用共享模型不需要实例，也不消耗积分。
+调用 Token Factory 里的模型不需要实例，也不消耗积分。
 
 1. 打开 [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) 并登录，见[登录](/radeon-cloud-docs/zh-cn/guides/login/)。
 2. 在顶部的 **您的 API 密钥** 卡片上，点 API 密钥旁边的 **复制**。
@@ -27,7 +27,7 @@ sidebar:
      -d '{"model":"DeepSeek-V4-Flash","messages":[{"role":"user","content":"用一句话打个招呼。"}]}'
    ```
 
-同一个 API Key 可以调用所有共享模型，换模型只要改 `model`。列出可用模型：
+同一个 API Key 可以调用 Token Factory 里的所有模型，换模型只要改 `model`。列出可用模型：
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/models \
@@ -47,7 +47,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-下一步：用量限制和模型列表见[调用共享模型](/radeon-cloud-docs/zh-cn/guides/shared-models/)，完整接口见 [API 参考](/radeon-cloud-docs/zh-cn/api/overview/)。
+下一步：用量限制和模型列表见 [Token Factory](/radeon-cloud-docs/zh-cn/guides/token-factory/)，完整接口见 [API 参考](/radeon-cloud-docs/zh-cn/api/overview/)。
 
 ## 启动 GPU 实例
 

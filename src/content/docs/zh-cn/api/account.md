@@ -101,6 +101,6 @@ sidebar:
 
 API Key 在 [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) 查看和重新生成，见[认证](/radeon-cloud-docs/zh-cn/api/authentication/#api-key)。
 
-## 模型 API 用量
+## Token Factory 用量
 
-共享模型 API 的用量和积分分开统计，见[用量和配额](/radeon-cloud-docs/zh-cn/api/usage/)。
+Token Factory 的用量和积分分开统计，见[用量和配额](/radeon-cloud-docs/zh-cn/api/usage/)。

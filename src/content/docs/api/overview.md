@@ -5,9 +5,10 @@ sidebar:
   order: 1
 ---
 
-The AMD Radeon Cloud API has three parts:
+The AMD Radeon Cloud API has four parts:
 
-- **Model APIs** run inference. There are two kinds, **shared model APIs** and **dedicated model APIs**. Both speak the OpenAI API, but they run on different hosts, enforce different limits and return different error bodies. Each page in this reference says which one it describes.
+- **The Token Factory API** calls the models hosted in [Token Factory](/radeon-cloud-docs/guides/token-factory/). It's OpenAI-compatible, with an Anthropic-compatible Messages endpoint.
+- **Model service endpoints** reach vLLM running on your own instance, launched with **Deploy type: Model API**. They're also OpenAI-compatible, but run on a different host with different limits and error bodies.
 - **CLI endpoints** are what [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) calls. Use the CLI to script instances.
 - **The Platform API** serves the web console: instances, templates and your account. It accepts only a browser session.
 
@@ -15,13 +16,13 @@ The AMD Radeon Cloud API has three parts:
 
 | API | Base URL |
 |---|---|
-| Shared model APIs | `https://developer.amd.com.cn/radeon/api/v1` (China site only) |
-| Dedicated model APIs | Shown on the instance card, for example `https://jupyter.anruicloud.com/inference/<instance-id>/v1` |
+| Token Factory API | `https://developer.amd.com.cn/radeon/api/v1` (China site only) |
+| Model service endpoints | Shown on the instance card, for example `https://jupyter.anruicloud.com/inference/<instance-id>/v1` |
 | Platform API | `https://developer.amd.com.cn/radeon` or `https://radeon-global.anruicloud.com` |
 
-The shared model APIs and Token Factory are available on the China site only.
+Token Factory is available on the China site only.
 
-A dedicated model API's base URL and key are shown on the instance card once it's ready. Copy them from there instead of building the URL yourself.
+A model service's base URL and key are shown on the instance card once it's ready. Copy them from there instead of building the URL yourself.
 
 :::note[Prefer what the console shows]
 These are the public addresses at the time of writing. If the console or Token Factory shows a different base URL, use that one.
@@ -29,13 +30,13 @@ These are the public addresses at the time of writing. If the console or Token F
 
 ## Credentials
 
-Model APIs take an API key, the CLI uses its own `rcc_` token, and the Platform API takes a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/).
+Token Factory takes your `rc-` API key, a model service takes the `sk-` key on its card, the CLI uses its own `rcc_` token, and the Platform API takes a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/).
 
 ## Conventions
 
 Requests and responses are JSON with `Content-Type: application/json`. Timestamps are ISO 8601. Errors have a non-2xx status and a JSON body. See [Errors](/radeon-cloud-docs/api/errors/).
 
-## Shared model APIs
+## Token Factory API
 
 Always on, nothing to launch, and no credits spent. AMD chooses which models are served. The main operations:
 
@@ -51,20 +52,20 @@ Every path works with and without the `/api` prefix: `/api/v1/models` and `/v1/m
 
 Requests go through a gateway that checks them against a fixed set of fields, so a parameter outside that set is dropped rather than passed on. See [Chat completions](/radeon-cloud-docs/api/chat-completions/) for the list. Per-key rate limits, a concurrency allowance and a daily usage cap apply. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
 
-## Dedicated model APIs
+## Model service endpoints
 
-vLLM running on an instance you launch with **Deploy type → Model API**. You choose the model and the serving flags, and the instance spends credits while it runs.
+vLLM running on an instance you launch with **Deploy type: Model API**. You choose the model and the serving flags, and the instance spends credits while it runs.
 
-Requests are passed to your server unchanged, apart from the routing prefix. Whatever vLLM serves is available, usually including `/v1/completions` and `/v1/embeddings`. There's no gateway in front, so the shared rate limits, model list and error bodies don't apply.
+Requests are passed to your server unchanged, apart from the routing prefix. Whatever vLLM serves is available, usually including `/v1/completions` and `/v1/embeddings`. There's no gateway in front, so Token Factory's rate limits, model list and error bodies don't apply.
 
-See [Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/).
+See [Model service endpoints](/radeon-cloud-docs/api/model-services/).
 
 ## Platform API
 
 | Area | Reference |
 |---|---|
 | Launch, check and destroy instances | [Instances](/radeon-cloud-docs/api/instances/) |
-| Gallery and Model API templates | [Templates](/radeon-cloud-docs/api/templates/) |
+| Gallery and model service templates | [Templates](/radeon-cloud-docs/api/templates/) |
 | Profile, resources, SSH keys, coupons | [Account](/radeon-cloud-docs/api/account/) |
 
 ## Next steps

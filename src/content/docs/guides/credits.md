@@ -1,9 +1,9 @@
 ---
 title: Credits
-description: How credits pay for instances, how to check and top up your balance, and how model API usage is tracked separately.
+description: How credits pay for instances, how to check and top up your balance, and how Token Factory usage is tracked separately.
 ---
 
-Credits pay for GPU instances. The shared model APIs are free and don't use them.
+Credits pay for GPU instances, including model services you run on them. Token Factory is free and doesn't use them.
 
 ## How credits are spent
 
@@ -17,9 +17,9 @@ Credits pay for GPU instances. The shared model APIs are free and don't use them
 
 Click your account in the top-right corner of the console. The menu shows your balance, for example **8,167 credits**.
 
-For details, choose **Credits & Usage**. The page shows your balance and how model API usage is going.
+For details, choose **Credits & Usage**. The page shows your balance and your Token Factory usage.
 
-![Credits & Usage: the credit balance, Redeem credits, and model API usage by model](../../../assets/guide/en/credits-usage.png)
+![Credits & Usage: the credit balance, Redeem credits, and Token Factory usage by model](../../../assets/guide/en/credits-usage.png)
 
 The balance is also returned by `GET /api/me`. See [Account](/radeon-cloud-docs/api/account/).
 
@@ -42,9 +42,9 @@ When it works, the console shows how many credits were added, and the balance up
 
 Credits belong to the site where you redeem them and can't be moved between the China and Global sites.
 
-## Model API usage
+## Token Factory usage
 
-The shared model APIs don't spend credits. They have their own daily usage cap, counted in points (pts), which resets at 00:00 Beijing time (UTC+8).
+Token Factory doesn't spend credits. They have their own daily usage cap, counted in points (pts), which resets at 00:00 Beijing time (UTC+8).
 
 **Credits & Usage** shows:
 

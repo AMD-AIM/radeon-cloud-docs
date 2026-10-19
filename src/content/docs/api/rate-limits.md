@@ -5,10 +5,10 @@ sidebar:
   order: 11
 ---
 
-Limits keep shared capacity usable, so they apply almost entirely to the shared model APIs. There
-are four groups, each applied on its own.
+Limits keep shared capacity usable, so they apply almost entirely to Token Factory. There are
+four groups, each applied on its own.
 
-## Shared model APIs
+## Token Factory
 
 Each request goes through two checks, and it has to pass both. First the platform decides whether to admit the request. Then the gateway counts it against your account's limits.
 
@@ -28,7 +28,7 @@ Each request goes through two checks, and it has to pass both. First the platfor
 | Limit | Scope | Typical value |
 |---|---|---|
 | Requests per minute | Per account | 20, on a 60-second sliding window |
-| Daily usage cap | Per account | Counted in model API points (pts) over the calendar day in Beijing time; resets at 00:00 UTC+8 |
+| Daily usage cap | Per account | Counted in Token Factory points (pts) over the calendar day in Beijing time; resets at 00:00 UTC+8 |
 
 Chat, speech (`/v1/audio/speech`) and decision (`/v1/systemone`) requests all count against the same
 per-minute window and the same daily usage cap.
@@ -47,7 +47,7 @@ anything:
 | `X-RateLimit-Remaining-User-Daily-USD` | What's left before requests start being rejected. |
 | `X-RateLimit-Reset-User-Daily-USD` | Unix time when the period rolls over. |
 
-The `-USD` headers carry model API points, the same numbers as on **Credits & Usage**. You aren't charged money.
+The `-USD` headers carry Token Factory points, the same numbers as on **Credits & Usage**. You aren't charged money.
 :::
 
 Listing models doesn't consume a concurrency slot, though it does count toward the per-minute limits.
@@ -106,9 +106,9 @@ same request, they use different `code` values for the same condition, and the p
 is nested under `detail`.
 :::
 
-## Dedicated model APIs
+## Model services on instances
 
-None of the above applies. A dedicated endpoint has no gateway in front of it: the proxy checks
+None of the above applies. A model service on your instance has no gateway in front of it: the proxy checks
 that the key matches the instance and the port, then forwards. There is no per-minute limit, no
 concurrency allowance and no daily usage cap on the request path.
 
@@ -149,6 +149,6 @@ def call_with_retry(payload, attempts=5):
     raise RuntimeError("rate limited after retries")
 ```
 
-If you consistently need more than the shared allowance, move to a
-[dedicated model API](/radeon-cloud-docs/guides/dedicated-models/), where the only limit is what
-your instance can serve.
+If you consistently need more than the Token Factory allowance,
+[serve the model on your own instance](/radeon-cloud-docs/guides/serve-model/), where the only
+limit is what your instance can serve.

@@ -1,9 +1,11 @@
 ---
-title: 部署专属模型 API
-description: 在自己的实例上用 vLLM 部署模型，并通过兼容 OpenAI 的接口调用。
+title: 部署模型服务
+description: 在自己的 GPU 实例上用 vLLM 部署模型，并通过兼容 OpenAI 的接口调用。
 ---
 
-专属模型 API 在你自己的实例上运行 vLLM。模型和参数由你决定，GPU 不与他人共享，实例运行期间每小时消耗积分。
+在启动表单里选择 **部署类型：模型 API**，启动的实例会运行 vLLM 而不是 JupyterLab，并提供一个兼容 OpenAI 的接口。模型和参数由你决定，GPU 不与他人共享，实例运行期间每小时消耗积分。
+
+这和 [Token Factory](/radeon-cloud-docs/zh-cn/guides/token-factory/) 不是一回事：Token Factory 里的模型由平台免费托管。需要 Token Factory 没有的模型、想自己设置 vLLM 参数，或者需要不与他人共享的吞吐时，才需要自己部署模型服务。
 
 ## 用公共模板启动
 
@@ -52,7 +54,7 @@ vllm serve Qwen/Qwen2.5-0.5B-Instruct --host 0.0.0.0 --port 8000 --served-model-
 
 - **接口地址**：你这个实例的 base URL。
 - **模型**：`model` 字段要填的值。
-- **API 密钥**：这个端点的 API Key，以 `sk-` 开头，每次启动单独生成，不是你的共享 [API Key](/radeon-cloud-docs/zh-cn/guides/shared-models/#获取-api-key)。
+- **API 密钥**：这个端点的 API Key，以 `sk-` 开头，每次启动单独生成，不是你的 Token Factory [API Key](/radeon-cloud-docs/zh-cn/guides/token-factory/#获取-api-key)。
 - **快速开始**：一条可以直接运行的 curl 命令。
 
 ![兼容 OpenAI 的接口卡片：接口地址、模型和 API 密钥](../../../../assets/guide/zh/modelapi-access.png)
@@ -64,7 +66,7 @@ curl <base-url>/chat/completions \
   -d '{"model":"Qwen2.5-0.5B-Instruct","messages":[{"role":"user","content":"你好"}]}'
 ```
 
-请求直接发到 vLLM，所以 vLLM 提供什么接口，端点就有什么接口，比如 `/v1/completions` 和 `/v1/embeddings`。共享模型的限流和请求过滤在这里都不适用。见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
+请求直接发到 vLLM，所以 vLLM 提供什么接口，端点就有什么接口，比如 `/v1/completions` 和 `/v1/embeddings`。Token Factory 的限流和请求过滤在这里都不适用，见[模型服务接口](/radeon-cloud-docs/zh-cn/api/model-services/)。
 
 每次启动后，请从卡片上复制 **接口地址** 和 **API 密钥**，不要把它们写死在代码里。
 
@@ -72,10 +74,10 @@ curl <base-url>/chat/completions \
 
 端点只在实例运行期间可用。用完请销毁实例：在 **首页** 点 **销毁实例**，见[销毁实例](/radeon-cloud-docs/zh-cn/guides/destroy/)。
 
-## 端点没有响应时
+## 服务没有响应时
 
 - 在实例卡片上点 **查看日志**。vLLM 的报错会打印在这里，比如模型装不进显存。
 - 确认启动命令里有 `--host 0.0.0.0 --port 8000`。
 - 确认 `model` 字段和 **模型名称** 一致。
 
-见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#专属模型-api-没有响应)。
+见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#模型服务没有响应)。

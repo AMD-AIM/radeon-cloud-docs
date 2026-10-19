@@ -1,14 +1,14 @@
 ---
 title: List models
-description: Discover which models the free shared endpoints serve.
+description: Discover which models Token Factory serves.
 sidebar:
   order: 3
 ---
 
-Returns the **shared model API** catalog, with the pricing and capability metadata for
-each entry. A dedicated endpoint serves only the model you launched it with, and answers this
-path from vLLM instead. See
-[Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/).
+Returns the **Token Factory** model list, with the pricing and capability metadata for
+each entry. A model service on your instance serves only the model you launched it with, and
+answers this path from vLLM instead. See
+[Model service endpoints](/radeon-cloud-docs/api/model-services/).
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
@@ -93,7 +93,7 @@ Use any `id` from this list as the `model` field in [chat completions](/radeon-c
 | `name`, `description`, `family`, `aliases` | Display metadata. |
 | `architecture` | Input and output modalities, and the tokenizer family. |
 | `providers` | The backends serving this model, each with its own pricing and capability flags. |
-| `pricing` | Price per token as decimal strings: `prompt`, `completion`, and `input_cache_read` where prompt caching applies. Counted against your daily allowance in model API points, not charged as money. See [Usage and quota](/radeon-cloud-docs/api/usage/). |
+| `pricing` | Price per token as decimal strings: `prompt`, `completion`, and `input_cache_read` where prompt caching applies. Counted against your daily allowance in Token Factory points, not charged as money. See [Usage and quota](/radeon-cloud-docs/api/usage/). |
 | `context_length` | Maximum context window in tokens. |
 | `supported_parameters` | Request parameters this model accepts. The full schema is under [chat completions](/radeon-cloud-docs/api/chat-completions/). |
 | `json_output`, `structured_outputs` | Whether `response_format` is honoured. |
@@ -102,7 +102,7 @@ Use any `id` from this list as the `model` field in [chat completions](/radeon-c
 
 :::caution[Not OpenAI's model object]
 Clients that expect `data[].object == "model"` or read `owned_by` will not find those fields.
-Everything else about the Model API follows OpenAI's schema; this endpoint does not.
+Everything else in Token Factory follows OpenAI's schema; this endpoint does not.
 :::
 
 ## Notes

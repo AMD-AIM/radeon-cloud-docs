@@ -71,7 +71,7 @@ rcc instance create \
 
 默认使用临时工作区，实例删除时一起删除。如果希望实例删除后 `/workspace` 还在，加 `--use-pvc`，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
 
-CLI 只能创建 Notebook 实例。要部署模型 API，请使用控制台，见[部署专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。
+CLI 只能创建 Notebook 实例。要部署模型服务，请使用控制台，见[部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。
 
 CLI 默认会等到实例就绪才返回。只想提交请求、马上返回的话加 `--no-wait`，之后再查看进度：
 

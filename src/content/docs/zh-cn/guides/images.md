@@ -32,7 +32,7 @@ description: 该从哪个镜像开始、列表里每个镜像是做什么的，�
 | 日常开发、探索，或运行大多数 PyTorch 代码 | **AMD OneClick Base** |
 | 使用原版 ROCm PyTorch 环境 | **rocm-pytorch** |
 | 跟着课程、工作坊或教程操作 | 教程里指定的镜像 |
-| 用模型 API 部署模型 | 不用在这里选，模型 API 表单会自带运行环境。见[部署专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。 |
+| 用 **部署类型：模型 API** 部署模型 | 不用在这里选，那个表单会自带运行环境，见[部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。 |
 
 没有说明的镜像，除非教程要求，否则不要选。
 
@@ -54,7 +54,7 @@ description: 该从哪个镜像开始、列表里每个镜像是做什么的，�
 
 | 镜像 | 包含什么 | 适合做什么 |
 |---|---|---|
-| **Qwen3.8-27B** | 配置好用于部署 Qwen3.8-27B 的 vLLM，需要 2 卡规格。 | 在 Notebook 里自己运行 Qwen3.8-27B。如果只需要一个可调用的接口、不想自己运行 vLLM，请改用[模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。 |
+| **Qwen3.8-27B** | 配置好用于部署 Qwen3.8-27B 的 vLLM，需要 2 卡规格。 | 在 Notebook 里自己运行 Qwen3.8-27B。如果只需要一个可调用的接口、不想自己配置 vLLM，请改用[部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。 |
 
 ### 课程、工作坊和活动
 

@@ -1,9 +1,9 @@
 ---
-title: 专属端点
-description: 专属模型 API 的接口地址、认证、可用路径和生命周期。
+title: 模型服务接口
+description: 自部署模型服务的接口地址、认证、可用路径和生命周期。
 ---
 
-专属端点是运行在你自己实例上的 vLLM，平台把一个 URL 路由到它。部署方法见[部署专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。
+模型服务是你用 **部署类型：模型 API** 在自己 GPU 实例上运行的 vLLM，平台把一个 URL 路由到它。它不属于 Token Factory。部署方法见[部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。
 
 ## 接口地址和 API Key
 
@@ -17,13 +17,13 @@ https://jupyter.anruicloud.com/inference/<instance-id>/v1
 
 其他部署可能使用不同的格式，以卡片上显示的为准。
 
-API Key 以 `sk-` 开头，每次启动单独生成。它不是你调用共享模型用的 `rc-` Key，请使用卡片上的 Key。
+API Key 以 `sk-` 开头，每次启动单独生成。它不是你调用 Token Factory 用的 `rc-` Key，请使用卡片上的 Key。
 
 卡片的 **快速开始** 里还有一条已经填好这些值的 curl 命令。
 
 ## 调用端点
 
-调用方式和共享端点相同，换成你自己的接口地址、API Key 和模型名称：
+调用方式和 Token Factory 相同，换成你自己的接口地址、API Key 和模型名称：
 
 ```bash
 curl <base-url>/chat/completions \
@@ -38,7 +38,7 @@ from openai import OpenAI
 client = OpenAI(base_url="<base-url>", api_key="<api-key>")
 ```
 
-`model` 要填 vLLM 实际提供的名称（`--served-model-name`），不是共享模型目录里的名称。
+`model` 要填 vLLM 实际提供的名称（`--served-model-name`），不是 Token Factory 里的模型名称。
 
 ## 可用接口
 
@@ -51,13 +51,13 @@ client = OpenAI(base_url="<base-url>", api_key="<api-key>")
 | `/v1/completions` | 文本补全 |
 | `/v1/embeddings` | 向量（embedding 模型） |
 
-共享端点的请求过滤、限流和错误格式在这里都不适用，错误由 vLLM 自己返回。各版本具体支持哪些路径和参数，见 vLLM 的文档。
+Token Factory 的请求过滤、限流和错误格式在这里都不适用，错误由 vLLM 自己返回。各版本具体支持哪些路径和参数，见 vLLM 的文档。
 
 ## 访问控制
 
 只有实例的所有者可以调用端点。API Key 不对，或者实例没有在提供模型服务时，请求返回 `403`；实例还在启动时返回 `503`。
 
-专属端点不能分享给他人使用。要把服务公开出去，请在实例里运行它，并用 [rc-tunnel](/radeon-cloud-docs/zh-cn/guides/tunnel/) 暴露，同时在前面加上你自己的认证。
+模型服务不能分享给他人使用。要把服务公开出去，请在实例里运行它，并用 [rc-tunnel](/radeon-cloud-docs/zh-cn/guides/tunnel/) 暴露，同时在前面加上你自己的认证。
 
 ## 费用和生命周期
 

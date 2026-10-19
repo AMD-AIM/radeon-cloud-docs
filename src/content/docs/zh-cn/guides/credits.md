@@ -1,9 +1,9 @@
 ---
 title: 积分
-description: 积分怎么支付实例费用，怎么查看和充值余额，以及模型 API 用量如何单独统计。
+description: 积分怎么支付实例费用，怎么查看和充值余额，以及 Token Factory 用量如何单独统计。
 ---
 
-Radeon Cloud 用 **积分** 支付 GPU 实例的费用（英文界面叫 Credits）。共享模型 API 免费，不消耗积分。
+Radeon Cloud 用 **积分** 支付 GPU 实例的费用（英文界面叫 Credits）。实例上自己部署的模型服务也算在内。Token Factory 免费，不消耗积分。
 
 积分和 AMD AI 开发者计划的 **开发者积分** 是两回事。开发者积分可以兑换成积分，见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/)。
 
@@ -19,9 +19,9 @@ Radeon Cloud 用 **积分** 支付 GPU 实例的费用（英文界面叫 Credits
 
 点控制台右上角的账号，菜单里会显示余额，例如 **8,167 积分**。
 
-要看详情，选 **积分与用量**。这个页面显示积分余额和模型 API 的用量情况。
+要看详情，选 **积分与用量**。这个页面显示积分余额和 Token Factory 的用量。
 
-![积分与用量页：积分余额、兑换积分按钮和按模型统计的模型 API 用量](../../../../assets/guide/zh/credits-usage.png)
+![积分与用量页：积分余额、兑换积分按钮和按模型统计的 Token Factory 用量](../../../../assets/guide/zh/credits-usage.png)
 
 `GET /api/me` 也会返回余额，见[账号](/radeon-cloud-docs/zh-cn/api/account/)。
 
@@ -44,9 +44,9 @@ Radeon Cloud 用 **积分** 支付 GPU 实例的费用（英文界面叫 Credits
 
 积分只属于兑换它的站点，不能在中国站和全球站之间转移。
 
-## 模型 API 用量
+## Token Factory 用量
 
-共享模型 API 不消耗积分。它有自己的每日用量上限，以 pts 计量，每天北京时间 0 点（UTC+8）重置。
+Token Factory 不消耗积分。它有自己的每日用量上限，以 pts 计量，每天北京时间 0 点（UTC+8）重置。
 
 **积分与用量** 页面显示：
 

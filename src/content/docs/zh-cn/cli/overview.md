@@ -77,7 +77,7 @@ rcc instance status
 ## CLI 令牌和 API Key 是两回事
 
 CLI 登录后保存的是以 `rcc_` 开头的令牌，只用来管理账号和实例。调用
-[模型 API](/radeon-cloud-docs/zh-cn/guides/model-apis/) 用的是以 `rc-` 开头的 API Key。
+[Token Factory](/radeon-cloud-docs/zh-cn/guides/token-factory/) 用的是以 `rc-` 开头的 API Key。
 
 ## 下一步
 

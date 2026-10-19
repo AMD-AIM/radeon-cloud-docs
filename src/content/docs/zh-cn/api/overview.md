@@ -5,9 +5,10 @@ sidebar:
   order: 1
 ---
 
-AMD Radeon Cloud API 分为三部分：
+AMD Radeon Cloud API 分为四部分：
 
-- **模型 API** 负责推理，分为 **共享模型 API** 和 **专属模型 API**。两者都兼容 OpenAI API，但运行在不同的主机上，限制和错误响应也不同。本参考的每一页都会写明讲的是哪一种。
+- **Token Factory API** 用来调用 [Token Factory](/radeon-cloud-docs/zh-cn/guides/token-factory/) 托管的模型，兼容 OpenAI，另有兼容 Anthropic 的 Messages 接口。
+- **模型服务接口** 访问你用 **部署类型：模型 API** 在自己实例上运行的 vLLM。它也兼容 OpenAI，但运行在不同的主机上，限制和错误响应也不同。
 - **CLI 接口** 是 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/) 调用的接口。要在脚本里管理实例，请用 CLI。
 - **平台接口** 服务于网页控制台，包括实例、模板和账号，只接受浏览器会话。
 
@@ -15,13 +16,13 @@ AMD Radeon Cloud API 分为三部分：
 
 | API | 基础 URL |
 |---|---|
-| 共享模型 API | `https://developer.amd.com.cn/radeon/api/v1`（仅中国站） |
-| 专属模型 API | 显示在实例卡片上，例如 `https://jupyter.anruicloud.com/inference/<instance-id>/v1` |
+| Token Factory API | `https://developer.amd.com.cn/radeon/api/v1`（仅中国站） |
+| 模型服务接口 | 显示在实例卡片上，例如 `https://jupyter.anruicloud.com/inference/<instance-id>/v1` |
 | 平台接口 | `https://developer.amd.com.cn/radeon` 或 `https://radeon-global.anruicloud.com` |
 
-共享模型 API 和 Token Factory 只在中国站提供。
+Token Factory 只在中国站提供。
 
-专属模型 API 就绪后，实例卡片上会显示它的 base URL 和 API Key。请直接从卡片复制，不要自己拼接 URL。
+模型服务就绪后，实例卡片上会显示它的 base URL 和 API Key。请直接从卡片复制，不要自己拼接 URL。
 
 :::note[以控制台显示的为准]
 以上是撰写本文时的公开地址。如果控制台或 Token Factory 显示的 base URL 不同，请以显示的为准。
@@ -29,13 +30,13 @@ AMD Radeon Cloud API 分为三部分：
 
 ## 凭证
 
-模型 API 使用 API Key，CLI 使用自己的 `rcc_` 令牌，平台接口使用浏览器会话，见[认证](/radeon-cloud-docs/zh-cn/api/authentication/)。
+Token Factory 使用你的 `rc-` API Key，模型服务使用它卡片上的 `sk-` Key，CLI 使用自己的 `rcc_` 令牌，平台接口使用浏览器会话，见[认证](/radeon-cloud-docs/zh-cn/api/authentication/)。
 
 ## 约定
 
 请求和响应都是 JSON，`Content-Type: application/json`。时间戳使用 ISO 8601。出错时返回非 2xx 状态码和 JSON 响应体，见[错误](/radeon-cloud-docs/zh-cn/api/errors/)。
 
-## 共享模型 API
+## Token Factory API
 
 随时可用，无需启动任何东西，也不消耗积分。提供哪些模型由 AMD 决定。主要接口：
 
@@ -51,20 +52,20 @@ AMD Radeon Cloud API 分为三部分：
 
 请求会经过网关，网关只保留固定的一组字段，不在其中的参数会被丢弃，不会转发。字段列表见[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)。每个 API Key 有频率限制、并发配额和每日用量上限，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
 
-## 专属模型 API
+## 模型服务接口
 
-在用 **部署类型 → 模型 API** 启动的实例上运行的 vLLM。模型和启动参数由你决定，实例运行期间消耗积分。
+在用 **部署类型：模型 API** 启动的实例上运行的 vLLM。模型和启动参数由你决定，实例运行期间消耗积分。
 
-除了去掉路由前缀，请求会原样转发给你的服务。vLLM 提供的接口都能用，通常包括 `/v1/completions` 和 `/v1/embeddings`。前面没有网关，所以共享模型 API 的限流、模型列表和错误格式都不适用。
+除了去掉路由前缀，请求会原样转发给你的服务。vLLM 提供的接口都能用，通常包括 `/v1/completions` 和 `/v1/embeddings`。前面没有网关，所以 Token Factory 的限流、模型列表和错误格式都不适用。
 
-见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
+见[模型服务接口](/radeon-cloud-docs/zh-cn/api/model-services/)。
 
 ## 平台接口
 
 | 用途 | 参考 |
 |---|---|
 | 启动、查看和销毁实例 | [实例](/radeon-cloud-docs/zh-cn/api/instances/) |
-| 模板库和模型 API 模板 | [模板](/radeon-cloud-docs/zh-cn/api/templates/) |
+| 模板库和模型服务模板 | [模板](/radeon-cloud-docs/zh-cn/api/templates/) |
 | 个人资料、可用资源、SSH 密钥、优惠码 | [账号](/radeon-cloud-docs/zh-cn/api/account/) |
 
 ## 下一步

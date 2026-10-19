@@ -1,9 +1,9 @@
 ---
-title: Dedicated endpoints
-description: The base URL, authentication, available paths and lifecycle of a dedicated model API.
+title: Model service endpoints
+description: The base URL, authentication, available paths and lifecycle of a model service on your own instance.
 ---
 
-A dedicated endpoint is vLLM running on your own instance, with the platform routing a URL to it. To deploy one, see [Deploy a dedicated model API](/radeon-cloud-docs/guides/dedicated-models/).
+A model service is vLLM running on your own GPU instance, launched with **Deploy type: Model API**, with the platform routing a URL to it. It isn't part of Token Factory. To deploy one, see [Serve a model](/radeon-cloud-docs/guides/serve-model/).
 
 ## Base URL and key
 
@@ -17,13 +17,13 @@ https://jupyter.anruicloud.com/inference/<instance-id>/v1
 
 Other deployments can use a different form. The card always shows the right one.
 
-The API key starts with `sk-` and is created for each launch. It isn't your shared `rc-` key, so use the key from the card.
+The API key starts with `sk-` and is created for each launch. It isn't your Token Factory `rc-` key, so use the key from the card.
 
 Under **Quickstart**, the card also has a curl command with these values filled in.
 
 ## Calling the endpoint
 
-It works like a shared endpoint, with your own base URL, key and model name:
+It works like Token Factory, with your own base URL, key and model name:
 
 ```bash
 curl <base-url>/chat/completions \
@@ -38,7 +38,7 @@ from openai import OpenAI
 client = OpenAI(base_url="<base-url>", api_key="<api-key>")
 ```
 
-The `model` value must be the name vLLM serves (`--served-model-name`), not a name from the shared catalog.
+The `model` value must be the name vLLM serves (`--served-model-name`), not a name from Token Factory.
 
 ## Available endpoints
 
@@ -51,7 +51,7 @@ Requests are forwarded to vLLM with the routing prefix removed, so the endpoint 
 | `/v1/completions` | Text completion |
 | `/v1/embeddings` | Embeddings, for embedding models |
 
-The shared endpoints' request filtering, rate limits and error format don't apply here. Errors come from vLLM itself. See vLLM's documentation for the exact set of paths and parameters in your version.
+Token Factory's request filtering, rate limits and error format don't apply here. Errors come from vLLM itself. See vLLM's documentation for the exact set of paths and parameters in your version.
 
 ## Access control
 

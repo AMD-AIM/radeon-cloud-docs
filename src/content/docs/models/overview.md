@@ -1,6 +1,6 @@
 ---
 title: Model catalog
-description: What each model on the shared model APIs accepts and returns.
+description: What each model in Token Factory accepts and returns.
 sidebar:
   label: Overview
   order: 1
@@ -230,6 +230,6 @@ The shape every chat model here accepts:
 | Stability | `experimental` |
 
 Parameters outside the accepted list are stripped before the request reaches the inference backend —
-no error, no effect. If you need them, use a
-[dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/), which forwards the request body
-to vLLM or SGLang untouched.
+no error, no effect. If you need them, serve the model
+yourself as a [model service](/radeon-cloud-docs/api/model-services/), which forwards the request body
+to vLLM untouched.
