@@ -7,17 +7,19 @@ A dedicated endpoint is vLLM running on your own instance, with the platform rou
 
 ## Base URL and key
 
-When the instance is ready, the **OpenAI-compatible endpoint** card on **Home** shows the **Base URL**, the **Model** name and the **API key** for the endpoint. Use those values; don't assemble the URL yourself.
+When the instance is ready, the **OpenAI-compatible endpoint** card in the launch dialog and on **Home** shows the **Base URL**, the **Model** name and the **API key** for the endpoint. Use those values; don't assemble the URL yourself.
 
 On the China site the base URL has this form:
 
 ```text
-https://developer.amd.com.cn/radeon/spaces/<instance-id>/8000/v1
+https://jupyter.anruicloud.com/inference/<instance-id>/v1
 ```
 
 Other deployments can use a different form. The card always shows the right one.
 
-The endpoint's API key can differ from your shared `rc-` key. Use the key from the card.
+The API key starts with `sk-` and is created for each launch. It isn't your shared `rc-` key, so use the key from the card.
+
+Under **Quickstart**, the card also has a curl command with these values filled in.
 
 ## Calling the endpoint
 
@@ -61,4 +63,4 @@ You can't share an endpoint with someone else. To make a service public, run it 
 
 The endpoint exists only while the instance runs. The instance spends credits every hour, whether or not requests arrive, and the endpoint stops working as soon as the instance is destroyed.
 
-The base URL and key can change when you launch again. Read them from the card after each launch, or keep them in configuration rather than in code.
+Each launch gets a new API key, and the base URL changes when the instance ID does, for example when you launch in another resource pool. Copy both from the card after each launch, and keep them in configuration rather than in code.

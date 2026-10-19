@@ -157,7 +157,7 @@ sidebar:
 ```json
 {
   "success": true,
-  "message": "Instance destroyed",
+  "message": "Instance <instance-id> destroyed",
   "destroyed_count": 1
 }
 ```

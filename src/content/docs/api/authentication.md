@@ -9,7 +9,7 @@ AMD Radeon Cloud uses three kinds of credential. Which one you need depends on w
 
 | Credential | Looks like | Use it for |
 |---|---|---|
-| **API key** | `rc-` + 48 hex characters | Shared and dedicated model APIs |
+| **API key** | `rc-` + 48 hex characters | Shared model APIs |
 | **CLI token** | `rcc_...` | [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/): instances, credits, resources |
 | **Session cookie** | Set when you sign in to the console | The console and the [Platform API](/radeon-cloud-docs/api/instances/) |
 
@@ -48,11 +48,13 @@ Open [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory). Your key
 
 Accounts that are still under review don't get a key. If yours is missing, check whether your account has been approved.
 
-A dedicated model API shows its own key on the instance card, which may differ from this one. See [Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/).
+A dedicated model API has its own key, starting with `sk-`, shown on its instance card. See [Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/).
 
 ### Rotate a key
 
-On the **Your API key** card, click **Regenerate key**. The old key stops working immediately, so update every client that uses it at the same time.
+The new console has no button for this yet. Switch to the classic interface (**Settings** → **Interface** → **Use classic**), open **Profile** and click **Regenerate Key**. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
+
+The old key stops working immediately, so update every client that uses it at the same time.
 
 Rotate when a key may have leaked.
 
@@ -74,14 +76,14 @@ The session ends when you sign out, when the identity provider's sign-in expires
 
 | Endpoint | API key | CLI token | Session |
 |---|---|---|---|
-| Shared model APIs (`/api/v1/...`) | Yes | No | Yes |
-| Dedicated model APIs (`/spaces/...`) | Yes | No | Yes |
+| Shared model APIs (`/api/v1/...`) | Yes | No | Only to list models |
+| Dedicated model APIs (`/inference/...`) | The `sk-` key on its card | No | No |
 | CLI endpoints (`/api/cli/...`) | No | Yes | No |
 | Platform API: instances, templates, account | No | No | Yes |
 | Browse public templates (`GET /api/templates`) | Optional | No | Optional |
 | JupyterLab and other apps (`/instances/...`) | No | No | Yes |
 
-A dedicated model API accepts only the key for that instance, and only on the port the instance serves.
+A dedicated model API accepts only the key shown on its own card.
 
 ## Authentication errors
 

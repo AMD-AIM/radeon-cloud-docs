@@ -5,7 +5,7 @@ sidebar:
   label: Overview
 ---
 
-Radeon Cloud serves models behind an OpenAI-compatible HTTP API. Any OpenAI client — `curl`, the `openai` SDK, LangChain, Cherry Studio — works once you change the base URL and the API key.
+Radeon Cloud serves models behind an OpenAI-compatible HTTP API. Any OpenAI client, such as `curl`, the `openai` SDK, LangChain or Cherry Studio, works once you change the base URL and the API key.
 
 There are two kinds of model API. The difference is whose GPU runs the model.
 

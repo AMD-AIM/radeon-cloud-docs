@@ -51,4 +51,6 @@ If your console has a **Profile** page instead, you're on the classic interface.
 
 ## If your account needs review
 
-Some accounts are held for verification before they can launch instances. If you see a notice to that effect, you can still browse the console and use the [free shared model APIs](/radeon-cloud-docs/guides/shared-models/) — launching a GPU instance unlocks once the review completes.
+Some new accounts are reviewed before they can be used. Until the review is done, signing in shows a review page instead of the console, you can't launch instances, and you don't get an API key. Everything unlocks once the account is approved.
+
+If the review takes longer than expected, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with your account email.

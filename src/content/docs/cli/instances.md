@@ -5,7 +5,7 @@ sidebar:
   label: Manage GPU instances
 ---
 
-Each account has one current instance, and every `rcc instance` command acts on it — there is no
+Each account has one current instance, and every `rcc instance` command acts on it. There's no
 instance ID to pass. To work with another account's instance, switch accounts with `-A` (see
 [Sign-in and accounts](/radeon-cloud-docs/cli/authentication/)).
 
@@ -116,7 +116,7 @@ rcc instance open --print
 rcc instance ssh --print
 ```
 
-The JupyterLab link works once and expires quickly. It is sensitive — keep it out of logs, tickets
+The JupyterLab link works once and expires quickly. Keep it out of logs, tickets
 and chat.
 
 ## Status and logs

@@ -31,7 +31,7 @@ If the card shows **Destroy is taking longer than expected**, refresh the page. 
 
 ## Instances that stop on their own
 
-Instances are also stopped by the platform when they reach the maximum lifetime, when they have shown no activity for a while, and when your credits run out. Don't rely on these limits to stop an instance for you: credits spent up to that point are still spent, and a job cut off mid-run loses whatever it hadn't saved.
+The platform also deletes an instance when your credits run out, and when the **Auto-reclaim** time shown on the launch form has passed. Don't rely on these limits to stop an instance for you: credits spent up to that point are still spent, and a job cut off mid-run loses whatever it hadn't saved.
 
 ## Signing out doesn't stop an instance
 

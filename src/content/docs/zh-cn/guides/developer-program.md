@@ -16,7 +16,7 @@ sidebar:
 |---|---|---|
 | 活动发的积分码，形如 `DP-XXXX-XXXX-XXXX` | [开发者积分补给站](https://developer.amd.com.cn/points/devpoints) | 开发者积分 |
 | 开发者积分 | [兑取算力](https://developer.amd.com.cn/points/redeem) | 一长串优惠码 |
-| 这串优惠码 | 中国站 **Profile** → **Redeem Credits** | Radeon Cloud 积分 |
+| 这串优惠码 | 中国站 **积分与用量** → **兑换积分** | Radeon Cloud 积分 |
 
 ## 注册和登录
 

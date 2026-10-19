@@ -20,7 +20,7 @@ description: 在经典版和新版控制台之间切换，以及经典版的各�
 | **Profile → Active Instance** | **首页** 的实例卡片 |
 | **Profile → SSH Public Keys** | **设置 → SSH 密钥** |
 | **Profile → Credits Available → Redeem Credits** | **积分与用量** |
-| **Profile → Model API Key** | **Token Factory** |
+| **Profile → Model API Key** | **Token Factory**。**Regenerate Key** 暂时只在经典版里有。 |
 | 模板的 **Deploy Type: vLLM Model API** | **首页 → 部署类型：模型 API** |
 | **Gallery** | **模板库** |
 | **Custom Images** | 仍在经典版里。构建完成的镜像会出现在新版启动表单的 **镜像** 列表中。 |

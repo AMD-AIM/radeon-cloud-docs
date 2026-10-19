@@ -1,6 +1,6 @@
 ---
 title: MiniCPM-V-4.7-35B-A3B
-description: OpenBMB 的 35B 稀疏视觉语言模型——Qwen3.5-MoE 骨干、BF16 权重与可选思考。
+description: OpenBMB 的 35B 稀疏视觉语言模型：Qwen3.5-MoE 骨干、BF16 权重与可选思考。
 sidebar:
   order: 11
 ---

@@ -10,6 +10,8 @@ The shared models are free and always on. You only need your API key.
 1. Sign in to the console and open **Token Factory**.
 2. The **Your API key** card at the top shows the **Base URL** and your **API key**. The key is hidden; click **Show key** to see it or **Copy** to copy it.
 
+![Token Factory with the Your API key card: Base URL and the hidden API key](../../../assets/guide/en/tokenfactory.png)
+
 The key starts with `rc-`. One key works for every shared model. Keep it secret: anyone who has it can spend your daily allowance. See [Authentication](/radeon-cloud-docs/api/authentication/) for rotating a key.
 
 ## Pick a model

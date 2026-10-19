@@ -1,6 +1,6 @@
 ---
 title: d3-flash
-description: Decision model (9B) from vLLM Semantic Router — the faster sibling of d3, with the same API.
+description: Decision model (9B) from vLLM Semantic Router. A faster sibling of d3 with the same API.
 sidebar:
   order: 16
 ---

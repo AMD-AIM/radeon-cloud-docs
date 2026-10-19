@@ -10,8 +10,10 @@ description: 在自己的实例上用 vLLM 部署模型，并通过兼容 OpenAI
 公共模板已经配好了经过验证的模型、规格和 vLLM 启动命令。
 
 1. 在 **首页** 把 **部署类型** 设为 **模型 API**。
-2. 在 **模型** 里选一个公共模板，例如 **MiniCPM5-1B**。表单会显示模板的 **模型来源**、**资源池**、**vLLM 启动命令** 和 **规格**，这些都不能修改。
+2. 在 **模型** 里选一个公共模板，例如 **MiniCPM5-2B**。表单会显示模板的 **模型来源**、**资源池**、**vLLM 启动命令** 和 **规格**，这些都不能修改。
 3. 点 **启动实例**，查看启动进度，见[启动实例](/radeon-cloud-docs/zh-cn/guides/launch/#查看启动进度)。
+
+![选择了公共模板 MiniCPM5-2B 的模型 API 表单](../../../../assets/guide/zh/modelapi-template.png)
 
 **模型** 下拉框里列出的是你可以使用的模板。如果一个都没有，表单会提示，此时请改用自定义模型。
 
@@ -29,6 +31,8 @@ description: 在自己的实例上用 vLLM 部署模型，并通过兼容 OpenAI
    | **规格** | 选显存能装下模型权重和 KV cache 的规格。 |
 
 3. 点 **启动实例**。
+
+![自定义模型表单：模型名称、模型来源、资源池和 vLLM 启动命令](../../../../assets/guide/zh/modelapi-custom.png)
 
 表单会按模型来源预填一个示例命令：
 
@@ -48,8 +52,10 @@ vllm serve Qwen/Qwen2.5-0.5B-Instruct --host 0.0.0.0 --port 8000 --served-model-
 
 - **接口地址**：你这个实例的 base URL。
 - **模型**：`model` 字段要填的值。
-- **API 密钥**：这个端点的 API Key。它可能和你的共享 [API Key](/radeon-cloud-docs/zh-cn/guides/shared-models/#获取-api-key) 不同，请以卡片上的为准。
-- 一条可以直接运行的 curl 命令。
+- **API 密钥**：这个端点的 API Key，以 `sk-` 开头，每次启动单独生成，不是你的共享 [API Key](/radeon-cloud-docs/zh-cn/guides/shared-models/#获取-api-key)。
+- **快速开始**：一条可以直接运行的 curl 命令。
+
+![兼容 OpenAI 的接口卡片：接口地址、模型和 API 密钥](../../../../assets/guide/zh/modelapi-access.png)
 
 ```bash
 curl <base-url>/chat/completions \
@@ -72,4 +78,4 @@ curl <base-url>/chat/completions \
 - 确认启动命令里有 `--host 0.0.0.0 --port 8000`。
 - 确认 `model` 字段和 **模型名称** 一致。
 
-见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#专属端点没有响应)。
+见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#专属模型-api-没有响应)。

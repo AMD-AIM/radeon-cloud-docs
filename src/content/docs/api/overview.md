@@ -16,7 +16,7 @@ The AMD Radeon Cloud API has three parts:
 | API | Base URL |
 |---|---|
 | Shared model APIs | `https://developer.amd.com.cn/radeon/api/v1` (China site only) |
-| Dedicated model APIs | Shown on the instance card, for example `https://developer.amd.com.cn/radeon/spaces/<instance-id>/8000/v1` |
+| Dedicated model APIs | Shown on the instance card, for example `https://jupyter.anruicloud.com/inference/<instance-id>/v1` |
 | Platform API | `https://developer.amd.com.cn/radeon` or `https://radeon-global.anruicloud.com` |
 
 The shared model APIs and Token Factory are available on the China site only.

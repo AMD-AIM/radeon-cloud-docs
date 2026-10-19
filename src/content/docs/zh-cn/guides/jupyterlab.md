@@ -11,6 +11,10 @@ Notebook 实例运行的是 JupyterLab：一个在浏览器里使用的开发环
 
 右上角有两个 Radeon Cloud 提供的按钮：**Help**，以及用于销毁实例的 **Delete instance**，见[销毁实例](/radeon-cloud-docs/zh-cn/guides/destroy/#在-jupyterlab-里销毁)。
 
+顶部的状态栏可以快速查看实例情况：**Workspace**（工作区用量）、**GPU**、**VRAM**（显存）、**RAM**、**CPU**、**Runtime**（运行时长）和 **Consumed Credits**（已消耗积分）。
+
+![实例上的 JupyterLab，顶部是 Radeon Cloud 状态栏和 Delete instance 按钮](../../../../assets/guide/jupyterlab.png)
+
 ## 检查 GPU
 
 打开终端（**File → New → Terminal**，或者 Launcher 里的 **Terminal**），运行：
@@ -52,7 +56,7 @@ nohup python train.py > /workspace/train.log 2>&1 &
 tail -f /workspace/train.log
 ```
 
-实例有最长运行时长，长时间没有活动也会被回收，所以请边跑边把检查点保存到 `/workspace`。
+积分用完或超过 **超时回收** 时长时，实例会被删除，所以请边跑边把检查点保存到持久化的 `/workspace`。
 
 ## 访问 Web 应用
 

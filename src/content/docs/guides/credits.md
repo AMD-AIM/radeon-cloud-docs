@@ -19,6 +19,8 @@ Click your account in the top-right corner of the console. The menu shows your b
 
 For details, choose **Credits & Usage**. The page shows your balance and how model API usage is going.
 
+![Credits & Usage: the credit balance, Redeem credits, and model API usage by model](../../../assets/guide/en/credits-usage.png)
+
 The balance is also returned by `GET /api/me`. See [Account](/radeon-cloud-docs/api/account/).
 
 ## Get credits
@@ -31,6 +33,8 @@ The balance is also returned by `GET /api/me`. See [Account](/radeon-cloud-docs/
 1. Open **Credits & Usage** from the account menu.
 2. Click **Redeem credits**.
 3. In **Redeem a code**, paste the whole coupon and click **Redeem**.
+
+![The Redeem a code dialog](../../../assets/guide/en/redeem-dialog.png)
 
 The example in the field is `RDN-XXXX-XXXX-XXXX`, but a coupon from the developer program is a long string of letters, digits and symbols. Paste all of it.
 

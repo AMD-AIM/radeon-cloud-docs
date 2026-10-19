@@ -87,7 +87,7 @@ Signing out invalidates the token on this device and removes the local record. I
 ## Credentials and safety
 
 The CLI stores a token that starts with `rcc_`. It can only manage your account and instances.
-The model APIs use an API key that starts with `rc-` — a different credential.
+The model APIs use a different credential, an API key that starts with `rc-`.
 
 - Treat tokens and one-time authorization links as secrets. Keep them out of logs, tickets and chat.
 - Don't pass a token with `--token`: shell history and process listings expose it. If you must supply

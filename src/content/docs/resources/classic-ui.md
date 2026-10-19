@@ -20,7 +20,7 @@ The choice is remembered in your browser.
 | **Profile → Active Instance** | **Home**: the instance card. |
 | **Profile → SSH Public Keys** | **Settings → SSH keys** |
 | **Profile → Credits Available → Redeem Credits** | **Credits & Usage** |
-| **Profile → Model API Key** | **Token Factory** |
+| **Profile → Model API Key** | **Token Factory**. **Regenerate Key** is only in the classic interface for now. |
 | Template **Deploy Type: vLLM Model API** | **Home → Deploy type: Model API** |
 | **Gallery** | **Gallery** |
 | **Custom Images** | Still in the classic interface. Finished images show up in the new launch form's **Image** list. |
