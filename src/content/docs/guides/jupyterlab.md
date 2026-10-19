@@ -11,6 +11,10 @@ Click **Open notebook**, either in the launch dialog when it reads **Your instan
 
 Two buttons in the top-right corner come from Radeon Cloud: **Help**, and **Delete instance**, which destroys the instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/#destroy-from-jupyterlab).
 
+The bar across the top shows the instance at a glance: **Workspace** use, **GPU**, **VRAM**, **RAM** and **CPU** load, **Runtime** and **Consumed Credits**.
+
+![JupyterLab on an instance, with the Radeon Cloud status bar and Delete instance at the top](../../../assets/guide/jupyterlab.png)
+
 ## Check the GPU
 
 Open a terminal (**File → New → Terminal**, or the **Terminal** tile in the Launcher) and run:

@@ -11,6 +11,8 @@ Open **Gallery** in the console. Notebooks are grouped by category, such as work
 
 Search by title, tag or topic; the count next to the search box shows how many notebooks match. Click **Preview** to read a notebook before you launch it.
 
+![The Gallery with its search box and notebook cards](../../../assets/guide/en/gallery.png)
+
 ## Launch it
 
 1. Make sure no instance is running. The **Launch** buttons are disabled while one is.

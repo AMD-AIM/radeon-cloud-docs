@@ -10,6 +10,8 @@ description: 在 Token Factory 获取 API Key，用 curl 或 OpenAI SDK 调用�
 1. 登录控制台，打开 **Token Factory**。
 2. 顶部的 **您的 API 密钥** 卡片显示 **接口地址** 和 **API 密钥**。密钥默认隐藏，点 **显示密钥** 查看，或点 **复制** 直接复制。
 
+![Token Factory 顶部的您的 API 密钥卡片：接口地址和隐藏的 API 密钥](../../../../assets/guide/zh/tokenfactory.png)
+
 API Key 以 `rc-` 开头，一个 Key 可以调用所有共享模型。请妥善保管：拿到 Key 的人可以用掉你的每日用量。轮换 Key 的方法见[认证](/radeon-cloud-docs/zh-cn/api/authentication/)。
 
 ## 选择模型

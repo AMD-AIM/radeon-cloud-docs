@@ -19,6 +19,8 @@ You launch instances from **Home** in the console. This page walks through the l
 3. Under **Image**, keep **AMD OneClick Base** or pick another. See [Choose an image](/radeon-cloud-docs/guides/images/).
 4. Click **Launch instance**.
 
+![The launch form with Customize off: Notebook, 1 GPU and AMD OneClick Base](../../../assets/guide/en/launch-default.png)
+
 With **Customize** off, the form uses the smallest size available to your account, a temporary workspace, and no mounted model. The line above the button shows what you will get, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**.
 
 If the form shows **Auto-reclaim**, the instance is deleted automatically that long after it becomes ready, for example **7 days after ready**, whether or not you're using it. The time depends on the resource pool. **Not enabled** means there's no time limit.
@@ -35,6 +37,8 @@ Turn on **Customize** to choose the rest.
 | **Workspace storage** | **Temporary workspace (local storage)** is fast and is deleted with the instance. **Persistent /workspace** keeps everything under `/workspace` for your next instance. Some accounts can also pick 25 GB or 100 GB. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
 | **Mount a model** | Mounts a prepared model read-only at `/models`, so you don't have to download it. Leave it at **None** if you don't need one. |
 
+![The fields Customize adds: Resource pool, Workspace storage set to Persistent /workspace, and Mount a model](../../../assets/guide/en/launch-customize.png)
+
 Settings can't be changed on a running instance. To change storage or size, destroy the instance and launch again.
 
 To serve a model instead, set **Deploy type** to **Model API**. See [Deploy a dedicated model API](/radeon-cloud-docs/guides/dedicated-models/).
@@ -47,11 +51,15 @@ After you click **Launch instance**, the **Launching your instance** dialog move
 - **Continue in background** closes the dialog. The launch keeps going, and **Home** shows the instance when it is ready.
 - **Cancel launch** stops the launch.
 
+![View logs during a launch, showing the platform setting up SSH](../../../assets/guide/en/instance-logs.png)
+
 When a node is free, the instance is usually ready in under a minute. The first launch of an image on a node takes longer, because the node has to download the image.
 
 ## When it's ready
 
 The dialog reads **Your instance is ready**. Click **Open notebook** to open [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/) in a new tab.
+
+![The launch dialog when the instance is ready, with Open notebook](../../../assets/guide/en/launch-ready.png)
 
 **Home** now shows the instance card:
 
@@ -61,7 +69,11 @@ The dialog reads **Your instance is ready**. Click **Open notebook** to open [Ju
 - The card shows the image, how long the instance has been up and the credits it has used.
 - The SSH command appears once SSH is ready. See [Connect over SSH](/radeon-cloud-docs/guides/ssh/).
 
+![The instance card with Open notebook, View logs, Destroy instance and the SSH command](../../../assets/guide/en/instance-card.png)
+
 ## If the launch fails
+
+![A launch that failed because the resource pool has no free node](../../../assets/guide/en/launch-failed-capacity.png)
 
 | Message | What it means | What to do |
 |---|---|---|

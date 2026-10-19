@@ -13,6 +13,8 @@ Public templates come with a tested model, size and vLLM command.
 2. Under **Model**, pick a public template, for example **MiniCPM5-2B**. The form shows the template's **Model source**, **Resource pool**, **vLLM Command** and **Size**, and you can't change them.
 3. Click **Launch instance** and follow the launch dialog. See [Launch an instance](/radeon-cloud-docs/guides/launch/#follow-the-launch).
 
+![The Model API form with the public template MiniCPM5-2B selected](../../../assets/guide/en/modelapi-template.png)
+
 The templates available to you are listed in the **Model** field. If there are none, the form says so; use a custom model instead.
 
 ## Launch a custom model
@@ -29,6 +31,8 @@ The templates available to you are listed in the **Model** field. If there are n
    | **Size** | Pick a size whose GPU memory fits the model weights plus the KV cache. |
 
 3. Click **Launch instance**.
+
+![The Custom Model form: Model name, Model source, Resource pool and vLLM Command](../../../assets/guide/en/modelapi-custom.png)
 
 The form starts with an example for each source:
 
@@ -50,6 +54,8 @@ When the instance is ready, the **OpenAI-compatible endpoint** card shows:
 - **Model**: the value for the `model` field.
 - **API key**: the key for this endpoint. It starts with `sk-`, is created for each launch, and isn't your shared [API key](/radeon-cloud-docs/guides/shared-models/#get-your-api-key).
 - **Quickstart**: a ready-to-run curl command.
+
+![The OpenAI-compatible endpoint card with Base URL, Model and API key](../../../assets/guide/en/modelapi-access.png)
 
 ```bash
 curl <base-url>/chat/completions \

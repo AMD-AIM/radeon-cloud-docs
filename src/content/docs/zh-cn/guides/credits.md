@@ -21,6 +21,8 @@ Radeon Cloud 用 **积分** 支付 GPU 实例的费用（英文界面叫 Credits
 
 要看详情，选 **积分与用量**。这个页面显示积分余额和模型 API 的用量情况。
 
+![积分与用量页：积分余额、兑换积分按钮和按模型统计的模型 API 用量](../../../../assets/guide/zh/credits-usage.png)
+
 `GET /api/me` 也会返回余额，见[账号](/radeon-cloud-docs/zh-cn/api/account/)。
 
 ## 获取积分
@@ -33,6 +35,8 @@ Radeon Cloud 用 **积分** 支付 GPU 实例的费用（英文界面叫 Credits
 1. 从账号菜单打开 **积分与用量**。
 2. 点 **兑换积分**。
 3. 在弹出的 **兑换积分** 对话框里粘贴完整的优惠码，点 **兑换**。
+
+![兑换积分对话框](../../../../assets/guide/zh/redeem-dialog.png)
 
 输入框里的示例是 `RDN-XXXX-XXXX-XXXX`，但开发者计划发的优惠码是一长串字母、数字和符号，请完整粘贴。
 
