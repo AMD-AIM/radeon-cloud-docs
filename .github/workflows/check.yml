@@ -1,0 +1,39 @@
+name: Check docs
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Build and check links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Check links, anchors and images
+        run: python3 scripts/check-links.py dist
+
+      - name: Check that every page exists in both locales
+        working-directory: src/content/docs
+        run: |
+          diff <(find . -path ./zh-cn -prune -o -type f -print | sort) <(cd zh-cn && find . -type f | sort) || {
+            echo "::error::Pages marked < exist only in English, pages marked > only in zh-cn. Add the missing counterpart."
+            exit 1
+          }

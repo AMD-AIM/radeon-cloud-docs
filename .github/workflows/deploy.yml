@@ -35,6 +35,10 @@ jobs:
         with:
           path: ./dist
 
+      # A failure here fails this job, so the deploy job below doesn't run.
+      - name: Check links, anchors and images
+        run: python3 scripts/check-links.py dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
