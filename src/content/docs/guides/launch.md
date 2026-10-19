@@ -35,7 +35,7 @@ Turn on **Customize** to choose the rest.
 
 Settings can't be changed on a running instance. To change storage or size, destroy the instance and launch again.
 
-To serve a model instead, set **Deploy type** to **Model API**. See [Model APIs](/radeon-cloud-docs/guides/model-apis/).
+To serve a model instead, set **Deploy type** to **Model API**. See [Deploy a dedicated model API](/radeon-cloud-docs/guides/dedicated-models/).
 
 ## Follow the launch
 

@@ -26,7 +26,7 @@ Platform API errors use FastAPI's shape:
 { "detail": "Each user can only have one active instance" }
 ```
 
-Public Free Model API errors come from two places, and the shapes differ.
+Shared model API errors come from two places, and the shapes differ.
 
 Errors raised by the **gateway** — an invalid key, an unknown model, a gateway-side rate limit — use OpenAI's shape, so existing OpenAI error handling works unchanged:
 
@@ -84,7 +84,7 @@ itself raises, such as a prompt over the context limit, are passed through from 
 backend with its own status and message.
 
 **Dedicated model API** errors are none of the above. There is no gateway on that path, so once
-the proxy has admitted the request the body you get back is whatever vLLM or SGLang produced,
+the proxy has admitted the request the body you get back is whatever vLLM produced,
 verbatim. A `403` from the proxy means the key, the instance or the port didn't match; a `503`
 means the instance is still starting. Everything else is your server talking.
 
@@ -92,13 +92,15 @@ means the instance is still starting. Everything else is your server talking.
 
 **`400 Each user can only have one active instance`** — destroy the current instance first. [`DELETE /api/notebook/current`](/radeon-cloud-docs/api/instances/#destroy-the-instance).
 
-**`400 Insufficient credits`** — your balance is below the requested GPU count. Redeem a coupon or request fewer GPUs.
+**`400 Insufficient credits`** — your balance doesn't cover one hour on the chosen size. [Redeem a coupon](/radeon-cloud-docs/guides/credits/#redeem-a-coupon) or choose a smaller size.
 
-**`400 GPU count must be 1, 2, or 4`** — no other values are allocatable.
+**`400 Invalid image selected`** — the image isn't in the catalog or has been disabled. Pick one from the **Image** list on **Home**.
 
-**`400 Invalid image selected`** — the image isn't in the catalog or has been disabled. List available images with [`GET /api/profile/templates`](/radeon-cloud-docs/api/templates/#list-templates).
+**`401 Login required`** — the endpoint takes a browser session, and an API key was sent instead. Use [Radeon Cloud CLI](/radeon-cloud-docs/cli/automation/) to script instances.
 
-**`403 {"code": "account_not_verified"}`** — the account is still under review. The body carries a `redirect` to the review page. Free model APIs stay available in the meantime.
+**`403 resource_selection_not_assigned`** — the resource pool or size isn't assigned to your account. Choose one listed under **Size** and **Resource pool** on **Home**.
+
+**`403 {"code": "account_not_verified"}`** — the account is still under review. The body carries a `redirect` to the review page.
 
 **`403 You do not have access to this instance`** — the instance belongs to someone else, or you're using a bearer key against the instance proxy, which requires a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/#credentials-by-endpoint).
 
@@ -108,7 +110,7 @@ means the instance is still starting. Everything else is your server talking.
 
 ## Debugging checklist
 
-Confirm you're calling the right base URL — the shared and dedicated endpoints are different hosts and paths, and a dedicated URL changes every time you relaunch.
+Confirm you're calling the right base URL — the shared and dedicated endpoints are different hosts and paths, and a dedicated base URL can change when you relaunch. Copy it from the instance card again.
 
 Confirm the key is being sent, and sent as `Authorization: Bearer rc-...`. A missing header and an invalid key both produce `401`.
 

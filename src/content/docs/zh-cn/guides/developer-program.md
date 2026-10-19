@@ -68,11 +68,15 @@ sidebar:
 
 ## 在中国站兑换优惠码
 
-1. 打开 [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/)，点右上角你的名字，选 **Profile**。
-2. 在 **Credits Available** 卡片里点 **Redeem Credits**。
-3. 把整串优惠码粘贴到 **Coupon Code** 输入框（提示文字是 “Paste your encrypted coupon here”），点 **Redeem**。
+1. 打开 [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/)，点右上角的账号，选 **积分与用量**。
+2. 点 **兑换积分**。
+3. 在 **兑换积分** 对话框里粘贴整串优惠码，点 **兑换**。输入框里的示例是 `RDN-XXXX-XXXX-XXXX`，但开发者计划给的是你刚才复制的那一长串字符，请完整粘贴。
 
-卡片上显示 **AMDAI account bound** 和 Developer ID，说明这个 Radeon Cloud 账号已经和开发者计划绑定。
+余额会立即更新，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
+
+在经典版界面里，同样的兑换入口在 **Profile → Credits Available → Redeem Credits**。
+
+要确认 Radeon Cloud 账号已经和开发者计划绑定，打开 **设置**，**AMDAI 账号** 一项应显示 **已绑定**。
 
 积分只在兑换它的站点有效。在中国站兑换的积分，全球站看不到。
 

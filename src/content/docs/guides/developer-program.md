@@ -68,11 +68,15 @@ Steps:
 
 ## Redeem the coupon on the China site
 
-1. Open [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/), click your name in the top-right corner, and choose **Profile**.
-2. In the **Credits Available** card, click **Redeem Credits**.
-3. Paste the whole string into **Coupon Code** (the hint says "Paste your encrypted coupon here"), then click **Redeem**.
+1. Open [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/), click your account in the top-right corner, and choose **Credits & Usage**.
+2. Click **Redeem credits**.
+3. Paste the whole string into **Redeem a code** and click **Redeem**. The field's example reads `RDN-XXXX-XXXX-XXXX`, but the coupon from the program is the long string you copied; paste all of it.
 
-If the card shows **AMDAI account bound** with a Developer ID, your Radeon Cloud account is linked to the program.
+The balance updates right away. See [Credits](/radeon-cloud-docs/guides/credits/).
+
+In the classic interface the same redemption is under **Profile → Credits Available → Redeem Credits**.
+
+To check that your Radeon Cloud account is linked to the program, open **Settings**: **AMDAI account** should read **Linked**.
 
 Credits stay on the site where you redeem them. Credits redeemed on the China site don't show up on the Global site.
 

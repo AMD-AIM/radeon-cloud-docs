@@ -1,99 +1,158 @@
 ---
 title: Instances
-description: Launch, inspect, and destroy GPU instances programmatically.
+description: The endpoints the console uses to launch, check and destroy instances.
 sidebar:
   order: 8
 ---
 
-Each account can have one active instance at a time. These endpoints launch it, poll it, and tear it down.
+These are the endpoints the console calls when you launch, watch and destroy an instance. They accept only a browser session, not an API key. To script instances, use [Radeon Cloud CLI](/radeon-cloud-docs/cli/automation/).
 
-## Launch an instance
+Paths are relative to your site's console address, for example `https://developer.amd.com.cn/radeon`. Each account can have one instance at a time, so none of these endpoints take an instance ID.
+
+| Task | Notebook | Model API |
+|---|---|---|
+| Launch | `POST /api/notebook/request` | `POST /api/inference` or `POST /api/templates/{id}/launch` |
+| Check status | `GET /api/notebook/status` | `GET /api/inference/current` |
+| Read logs | `GET /api/notebook/logs` | `GET /api/inference/current/logs` |
+| Destroy | `DELETE /api/notebook/current` | `DELETE /api/inference/current` |
+
+## Choose resources
+
+A launch names a resource pool and a size. Both come from `GET /api/me/resource-labels`, which lists what your account may use:
+
+- entries with `"category": "resource-pool"` are pools; send the `id` as `pod_type`
+- entries with `"category": "resource-template"` are sizes; send the `id` as `resource_template`
+
+For example, `pod_type: "one-click"` with `resource_template: "resource-16c55g1u"` is 1 GPU, 16 cores and 55 GB of memory. Accounts that have pools and sizes assigned must send both fields and must not send `gpu_count`.
+
+## Launch a notebook
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
   <span class="rc-path">/api/notebook/request</span>
-  <span class="rc-auth">Session or API key</span>
+  <span class="rc-auth">Session</span>
 </div>
 
-Returns as soon as allocation begins — it does not wait for the instance to be ready. Poll [status](#check-status) until `ready` is `true`.
-
-| Parameter | Type | | Description |
+| Field | Type | | Description |
 |---|---|---|---|
-| `image` | string | <span class="rc-opt">Optional</span> | Container image. Must be enabled in the catalog. Defaults to the platform default image. |
-| `instance_type` | string | <span class="rc-opt">Optional</span> | `jupyter`, `gradio`, `streamlit`, `comfyui`, `vllm`, `sglang`, `opencode`, or `custom`. Defaults to `jupyter`. |
-| `gpu_count` | integer | <span class="rc-opt">Optional</span> | `1`, `2`, or `4`. Defaults to `1`. |
-| `disk_size_gb` | integer | <span class="rc-opt">Optional</span> | From 100 GB up to the ceiling for the GPU count: 100 for 1 GPU, 150 for 2, 200 for 4. |
-| `resource_profile` | string | <span class="rc-opt">Optional</span> | Named CPU and memory profile. Defaults to `auto`. |
-| `launch_verification_token` | string | <span class="rc-opt">Optional</span> | Required only when the account has launch verification enabled. |
-
-```bash
-curl -X POST https://radeon-global.anruicloud.com/api/notebook/request \
-  -H "Authorization: Bearer $RADEON_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"instance_type": "jupyter", "gpu_count": 1, "disk_size_gb": 100}'
-```
+| `pod_type` | string | <span class="rc-req">Required</span> | Resource pool ID. |
+| `resource_template` | string | <span class="rc-req">Required</span> | Size ID. |
+| `image` | string | <span class="rc-opt">Optional</span> | An image from the catalog. Defaults to the platform default, **AMD OneClick Base**. |
+| `instance_type` | string | <span class="rc-opt">Optional</span> | Must be `jupyter`, the default. |
+| `use_pvc` | boolean | <span class="rc-opt">Optional</span> | `true` mounts your persistent `/workspace`. Default `false`, a temporary workspace. |
+| `pvc_size` | string | <span class="rc-opt">Optional</span> | `25GB` or `100GB`, with `use_pvc: true`. 100 GB is offered only to some accounts. |
+| `model_mount` | string | <span class="rc-opt">Optional</span> | A model to mount read-only under `/models`. IDs come from `GET /api/models/mountable`. |
+| `ssh_enabled` | boolean | <span class="rc-opt">Optional</span> | The console always sends `true`. Requires an SSH key in **Settings**. |
 
 ```json
 {
-  "status": "allocating",
-  "message": "Allocating resources for your instance...",
-  "email": "you@example.com"
+  "pod_type": "one-click",
+  "resource_template": "resource-16c55g1u",
+  "instance_type": "jupyter",
+  "use_pvc": true,
+  "pvc_size": "25GB",
+  "ssh_enabled": true
 }
 ```
 
-Rejected with `400` when the GPU count isn't 1, 2, or 4; the disk size is outside the allowed range; the image or instance type is unknown or disabled; you already have an active instance; or your credit balance is below the requested GPU count.
+The call returns as soon as the launch is accepted; it doesn't wait for the instance. Poll [status](#check-status) until `ready` is `true`.
+
+The launch is refused when:
+
+- you already have an instance (`400`, `Each user can only have one active instance`), or the previous one is still being deleted (`409`)
+- your credits don't cover one hour on the chosen size (`400`, `Insufficient credits`)
+- `instance_type` isn't `jupyter` (`400`, `unsupported_deploy_type`)
+- the pool or size isn't assigned to your account (`403`, `resource_selection_not_assigned`)
+
+## Launch a model API
+
+To serve your own model, send the model name and the vLLM command:
+
+<div class="rc-endpoint">
+  <span class="rc-method" data-m="POST">POST</span>
+  <span class="rc-path">/api/inference</span>
+  <span class="rc-auth">Session</span>
+</div>
+
+| Field | Type | | Description |
+|---|---|---|---|
+| `api_model` | string | <span class="rc-req">Required</span> | The name clients send as `model`. Use the same value as `--served-model-name` in the command. |
+| `start_command` | string | <span class="rc-req">Required</span> | A `vllm serve` command listening on port `8000`. |
+| `model_source` | string | <span class="rc-opt">Optional</span> | `huggingface` (default) or `modelscope`. |
+| `pod_type`, `resource_template` | string | <span class="rc-req">Required</span> | As for a notebook. |
+
+```json
+{
+  "api_model": "MiniCPM5-1B",
+  "model_source": "modelscope",
+  "start_command": "vllm serve OpenBMB/MiniCPM5-1B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-1B",
+  "pod_type": "one-click",
+  "resource_template": "resource-16c55g1u"
+}
+```
+
+Unknown fields are rejected. To launch one of the ready-made model templates instead, list them with `GET /api/inference/templates` and call `POST /api/templates/{id}/launch` with an empty body. See [Templates](/radeon-cloud-docs/api/templates/#launch-a-template).
 
 ## Check status
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
   <span class="rc-path">/api/notebook/status</span>
-  <span class="rc-auth">Session or API key</span>
+  <span class="rc-auth">Session</span>
 </div>
 
-No parameters — it reports on the calling account's instance.
+For a model API instance, call `GET /api/inference/current`. It returns the same fields plus runtime and credit details.
 
 ```json
 {
   "status": "ready",
   "ready": true,
   "message": "Your workspace is ready",
-  "instance_id": "u-1042-9c3f8ab1",
+  "instance_id": "<instance-id>",
   "instance_type": "jupyter",
-  "url": "https://radeon-global.anruicloud.com/instances/u-1042-9c3f8ab1/",
-  "app_port": 8888,
-  "ssh_host": "ssh.anruicloud.com",
+  "url": "https://developer.amd.com.cn/radeon/instances/<instance-id>/",
+  "ssh_host": "<ssh-host>",
   "ssh_port": 32014,
   "ssh_username": "root",
-  "ssh_command": "ssh root@ssh.anruicloud.com -p 32014",
+  "ssh_command": "ssh root@<ssh-host> -p 32014",
   "api_base_url": null,
   "api_key": null,
   "api_model": null
 }
 ```
 
-### Fields
-
 | Field | Description |
 |---|---|
-| `status` | `not_found`, `allocating`, `loading`, `initializing`, `pending`, `jupyter_starting`, `running`, `ready`, `failed`, or `unknown`. |
-| `ready` | `true` only when the instance is fully usable. Gate on this, not on `status`. |
-| `message` | Human-readable progress or failure text. |
-| `instance_id` | Identifier, of the form `u-<user>-<hash>`. Appears in URLs. |
-| `url` | Where to open the instance in a browser. Requires a session cookie. |
-| `phase`, `reason`, `detail` | Lower-level scheduling state. Useful when a launch is stuck. |
-| `ssh_host`, `ssh_port`, `ssh_username`, `ssh_command` | Populated once the container is running, if SSH was enabled on the template. |
-| `api_base_url`, `api_key`, `api_model` | Populated only for `vllm` and `sglang` instances that are ready. This is where a [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) URL comes from. |
+| `ready` | `true` only when the instance is usable. Wait on this, not on `status`. |
+| `status`, `message` | Progress or failure, for display. `failed` means the launch won't recover. |
+| `phase`, `reason`, `detail`, `error_code` | Lower-level scheduling state. Useful when a launch is stuck. |
+| `instance_id` | Appears in the instance's URLs. It can stay the same across launches, but read it from here rather than storing it. |
+| `url` | Opens JupyterLab in a signed-in browser. |
+| `ssh_host`, `ssh_port`, `ssh_username`, `ssh_command` | Filled in once the container is running. |
+| `persistent_available`, `storage_notice` | Whether the persistent `/workspace` was mounted, and why not if it wasn't. |
+| `api_base_url`, `api_key`, `api_model` | Filled in for a ready model API instance. See [Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/). |
 
-Poll every few seconds. A cold start pulling a large image, or a vLLM instance downloading weights, can take several minutes.
+Poll every few seconds. A launch is usually ready within a minute, but a large image or a model download can take several minutes.
+
+## Read logs
+
+<div class="rc-endpoint">
+  <span class="rc-method" data-m="GET">GET</span>
+  <span class="rc-path">/api/notebook/logs</span>
+  <span class="rc-auth">Session</span>
+</div>
+
+Returns scheduling events and container output for the current instance. This is what **View logs** shows in the console. For a model API instance, call `GET /api/inference/current/logs`.
 
 ## Destroy the instance
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="DELETE">DELETE</span>
   <span class="rc-path">/api/notebook/current</span>
-  <span class="rc-auth">Session or API key</span>
+  <span class="rc-auth">Session</span>
 </div>
+
+For a model API instance, call `DELETE /api/inference/current`.
 
 ```json
 {
@@ -103,30 +162,6 @@ Poll every few seconds. A cold start pulling a large image, or a vLLM instance d
 }
 ```
 
-Returns `success: false` with `"No active instance found"` if there was nothing to destroy — this is not an error, and calling it twice is safe.
+If there's nothing to destroy, the response has `success: false` and `"No active instance found"`. This isn't an error, so it's safe to call twice.
 
-Data is deleted with the instance unless the template used persistent storage.
-
-## Example: launch and wait
-
-```python
-import time, requests
-
-BASE = "https://radeon-global.anruicloud.com"
-H = {"Authorization": f"Bearer {KEY}"}
-
-requests.post(f"{BASE}/api/notebook/request", headers=H,
-              json={"instance_type": "jupyter", "gpu_count": 1}).raise_for_status()
-
-while True:
-    s = requests.get(f"{BASE}/api/notebook/status", headers=H).json()
-    if s["ready"]:
-        print("ready:", s["url"])
-        break
-    if s["status"] == "failed":
-        raise RuntimeError(s.get("message", "launch failed"))
-    print(s["status"], s.get("message", ""))
-    time.sleep(5)
-```
-
-Always destroy in a `finally` block. An instance left running by a crashed script keeps spending credits.
+Files in a temporary workspace are deleted with the instance. A persistent `/workspace` is kept. See [Keep your data](/radeon-cloud-docs/guides/storage/).

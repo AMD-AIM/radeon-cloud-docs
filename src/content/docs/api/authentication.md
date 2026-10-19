@@ -1,15 +1,19 @@
 ---
 title: Authentication
-description: API keys, sessions, and which one each endpoint expects.
+description: Which credential each part of the API accepts, and how to get, send and rotate an API key.
 sidebar:
   order: 2
 ---
 
-AMD Radeon Cloud accepts two kinds of credential. Which one an endpoint wants depends on what it does.
+AMD Radeon Cloud uses three kinds of credential. Which one you need depends on what you call.
 
-**API keys** are bearer tokens for machine access. They authenticate the Model API and can also be used against most Platform API endpoints.
+| Credential | Looks like | Use it for |
+|---|---|---|
+| **API key** | `rc-` + 48 hex characters | Shared and dedicated model APIs |
+| **CLI token** | `rcc_...` | [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/): instances, credits, resources |
+| **Session cookie** | Set when you sign in to the console | The console and the [Platform API](/radeon-cloud-docs/api/instances/) |
 
-**Session cookies** come from signing in through the browser. The console uses them, and a few endpoints — notably the instance proxy for JupyterLab — accept nothing else.
+To automate instances from a script, use the CLI. The Platform API endpoints serve the console and accept only a browser session.
 
 ## API keys
 
@@ -19,8 +23,6 @@ A key looks like this:
 rc-4f8a19c7e02b6d3a5c81f70e9b2d4a6c38e5b1907f2c4d8a
 ```
 
-The `rc-` prefix is followed by 48 hexadecimal characters, 51 characters in total.
-
 Send it as a bearer token:
 
 ```bash
@@ -28,9 +30,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
   -H "Authorization: Bearer $RADEON_API_KEY"
 ```
 
-The **shared model APIs** also accept the same key in the `x-api-key` header, which is how
-Anthropic SDKs authenticate. Use it together with `anthropic-version` when calling
-[`/v1/messages`](/radeon-cloud-docs/api/messages/):
+The shared model APIs also accept the key in the `x-api-key` header, which is how Anthropic SDKs authenticate. Send `anthropic-version` with it when calling [`/v1/messages`](/radeon-cloud-docs/api/messages/):
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/messages \
@@ -40,59 +40,54 @@ curl https://developer.amd.com.cn/radeon/api/v1/messages \
   -d '{"model":"DeepSeek-V4-Flash","max_tokens":256,"messages":[{"role":"user","content":"Hello"}]}'
 ```
 
-`Authorization` wins if both are present. `x-api-key` is read on the free shared endpoints
-only — Platform API endpoints and dedicated endpoints ignore it.
+If both headers are present, `Authorization` is used. Only the shared model APIs read `x-api-key`.
 
-### Getting a key
+### Get a key
 
-Your key is issued automatically the first time you open the [Token Factory](https://developer.amd.com.cn/radeon/modelapis) or launch an instance. It's shown in the model detail dialog and on your Profile page.
+Open [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory). Your key is on the **Your API key** card at the top; click **Copy**. The key is created the first time you open Token Factory.
 
-Accounts pending verification aren't issued a key. If yours is missing, check whether your account has completed review.
+Accounts that are still under review don't get a key. If yours is missing, check whether your account has been approved.
 
-### Rotating a key
+A dedicated model API shows its own key on the instance card, which may differ from this one. See [Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/).
 
-<div class="rc-endpoint">
-  <span class="rc-method" data-m="POST">POST</span>
-  <span class="rc-path">/api/profile/api-token</span>
-  <span class="rc-auth">Session or API key</span>
-</div>
+### Rotate a key
 
-Issues a new key and invalidates the old one immediately. No request body.
+On the **Your API key** card, click **Regenerate key**. The old key stops working immediately, so update every client that uses it at the same time.
 
-```json
-{ "api_token": "rc-4f8a19c7e02b6d3a5c81f70e9b2d4a6c38e5b1907f2c4d8a" }
-```
-
-Any client still using the previous key starts getting `401` as soon as this returns. Rotate when a key may have leaked, and roll it out to your services in the same change.
+Rotate when a key may have leaked.
 
 :::danger[Treat the key like a password]
-It grants access to your model quota and your account. Keep it in an environment variable or a secrets manager, never in source control, and never in client-side code where a browser can read it.
+It grants access to your model quota. Keep it in an environment variable or a secrets manager. Never commit it to source control or put it in client-side code that a browser can read.
 :::
+
+## CLI tokens
+
+`rcc auth login` signs the CLI in through your browser and stores a token that starts with `rcc_`. It manages your account and instances, and doesn't work with the model APIs. See [Sign-in and accounts](/radeon-cloud-docs/cli/authentication/).
 
 ## Session cookies
 
-Signing in through the console sets a signed session cookie. You can't create one programmatically — there's no username-and-password endpoint to call — so scripts should use an API key.
+Signing in to the console sets a session cookie. There's no endpoint that creates a session from a password, so a script can't get one.
 
-Sessions are invalidated when you sign out, when the upstream identity provider's token expires, or when sessions are revoked administratively.
+The session ends when you sign out, when the identity provider's sign-in expires, or when it's revoked by an administrator.
 
 ## Credentials by endpoint
 
-| Endpoint group | API key | Session |
-|---|---|---|
-| Shared model APIs | Yes | Yes |
-| Dedicated model APIs | Yes | Yes |
-| Instances, templates, account | Yes | Yes |
-| Instance proxy (`/instances/...`) | No | **Session only** |
+| Endpoint | API key | CLI token | Session |
+|---|---|---|---|
+| Shared model APIs (`/api/v1/...`) | Yes | No | Yes |
+| Dedicated model APIs (`/spaces/...`) | Yes | No | Yes |
+| CLI endpoints (`/api/cli/...`) | No | Yes | No |
+| Platform API: instances, templates, account | No | No | Yes |
+| Browse public templates (`GET /api/templates`) | Optional | No | Optional |
+| JupyterLab and other apps (`/instances/...`) | No | No | Yes |
 
-The instance proxy is the one exception. JupyterLab and other interactive apps are reached only with a browser session, because they're interactive surfaces rather than APIs.
-
-For a dedicated model endpoint under `/spaces/...`, a bearer key works, but only your own key against your own instance, and only on the port that instance actually serves.
+A dedicated model API accepts only the key for that instance, and only on the port the instance serves.
 
 ## Authentication errors
 
-`401` means the credential is missing, malformed, or unrecognised.
+`401` means the credential is missing, malformed or not recognised. Sending an API key to a Platform API endpoint also returns `401`, with `Login required`.
 
-`403` with `"code": "account_not_verified"` means you're authenticated but your account is still under review. The response includes a `redirect` to the review page.
+`403` with `"code": "account_not_verified"` means you're signed in but your account is still under review. The response includes a `redirect` to the review page.
 
 `403` on an instance path means the instance isn't yours.
 

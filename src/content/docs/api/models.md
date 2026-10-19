@@ -7,7 +7,7 @@ sidebar:
 
 Returns the **shared model API** catalog, with the pricing and capability metadata for
 each entry. A dedicated endpoint serves only the model you launched it with, and answers this
-path from vLLM or SGLang instead — see
+path from vLLM instead — see
 [Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/).
 
 <div class="rc-endpoint">
@@ -93,7 +93,7 @@ Use any `id` from this list as the `model` field in [chat completions](/radeon-c
 | `name`, `description`, `family`, `aliases` | Display metadata. |
 | `architecture` | Input and output modalities, and the tokenizer family. |
 | `providers` | The backends serving this model, each with its own pricing and capability flags. |
-| `pricing` | USD per token, as decimal strings — `prompt`, `completion`, and `input_cache_read` where prompt caching applies. |
+| `pricing` | Price per token as decimal strings: `prompt`, `completion`, and `input_cache_read` where prompt caching applies. Counted against your daily allowance in model API points, not charged as money. See [Usage and quota](/radeon-cloud-docs/api/usage/). |
 | `context_length` | Maximum context window in tokens. |
 | `supported_parameters` | Request parameters this model accepts. The full schema is under [chat completions](/radeon-cloud-docs/api/chat-completions/). |
 | `json_output`, `structured_outputs` | Whether `response_format` is honoured. |
@@ -113,4 +113,4 @@ The catalog is the same for every key — it is not scoped to your account.
 
 This endpoint doesn't count against your concurrency allowance, though the per-minute rate limit still applies. It's cheap to call, but cache the result for a few minutes rather than calling it before every completion.
 
-The same metadata is rendered on each model's card in the [Token Factory](https://developer.amd.com.cn/radeon/modelapis).
+The same metadata is rendered on each model's card in the [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory).

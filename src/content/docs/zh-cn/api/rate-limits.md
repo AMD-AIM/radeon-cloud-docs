@@ -27,9 +27,9 @@ sidebar:
 | 限制 | 范围 | 典型值 |
 |---|---|---|
 | 每分钟请求数 | 每个账号 | 20，60 秒滑动窗口 |
-| 花费上限 | 每个账号 | 按北京时间的自然日累计，每天 00:00（UTC+8）重置 |
+| 每日用量上限 | 每个账号 | 以模型 API 的 pts 计量，按北京时间的自然日累计，每天 00:00（UTC+8）重置 |
 
-对话、语音合成（`/v1/audio/speech`）和决策（`/v1/systemone`）请求共用同一个每分钟窗口和同一个花费上限。
+对话、语音合成（`/v1/audio/speech`）和决策（`/v1/systemone`）请求共用同一个每分钟窗口和同一个每日用量上限。
 
 :::tip[配额就在每次响应里]
 每次成功调用都会带上当前计数，做成响应头，基本不需要你去轮询任何东西：
@@ -39,10 +39,12 @@ sidebar:
 | `X-RateLimit-Limit-User-RPM` | 你账号每分钟允许的请求数。 |
 | `X-RateLimit-Remaining-User-RPM` | 当前这一分钟还剩多少次。 |
 | `X-RateLimit-Reset` | 每分钟窗口清零的 Unix 时间。 |
-| `X-RateLimit-Limit-User-Daily-USD` | 当前周期的花费上限。 |
-| `X-RateLimit-Used-User-Daily-USD` | 本周期已经花掉的。 |
+| `X-RateLimit-Limit-User-Daily-USD` | 当前周期的每日用量上限。 |
+| `X-RateLimit-Used-User-Daily-USD` | 本周期已经用掉的。 |
 | `X-RateLimit-Remaining-User-Daily-USD` | 请求开始被拒绝之前还剩多少。 |
-| `X-RateLimit-Reset-User-Daily-USD` | 周期翻篇的 Unix 时间。 |
+| `X-RateLimit-Reset-User-Daily-USD` | 周期重置的 Unix 时间。 |
+
+带 `-USD` 的响应头里是模型 API 的 pts，和 **积分与用量** 页面上的数字相同，不会产生任何费用。
 :::
 
 列出模型不占并发槽位，但确实计入每分钟限制。
@@ -57,7 +59,7 @@ sidebar:
 {
   "detail": {
     "error": {
-      "message": "模型 API rate limit exceeded; please retry later",
+      "message": "Model API rate limit exceeded; please retry later",
       "type": "rate_limit_error",
       "code": "token_rate_limit_exceeded"
     }
@@ -91,7 +93,7 @@ sidebar:
 }
 ```
 
-花费上限用完是同样的形状，消息变成 `Daily usage limit exceeded: maximum $N per period for this OneClick user.`，`Retry-After` 是本周期剩余的秒数。
+每日用量上限用完时，返回同样结构的错误，消息变成 `Daily usage limit exceeded: maximum $N per period for this OneClick user.`，`Retry-After` 是本周期剩余的秒数。
 
 在 `/v1/messages` 上，网关改用 Anthropic 的信封：`{"type": "error", "error": {"type": "rate_limit_error", "message": "..."}}`。
 
@@ -101,15 +103,15 @@ sidebar:
 
 ## 专属模型 API
 
-上面那些一条都不适用。专属端点前面没有网关：代理核对密钥跟实例、端口对得上，就转发。请求路径上没有每分钟限制、没有并发配额，也没有消耗上限。
+上面那些一条都不适用。专属端点前面没有网关：代理核对密钥跟实例、端口对得上，就转发。请求路径上没有每分钟限制、没有并发配额，也没有每日用量上限。
 
-真正卡你的是实例本身——vLLM 或 SGLang 自己的队列和 `--max-running-requests`，以及你启动的那块卡。超过之后请求是排队，而不是回 `429`。只要实例在运行就会持续消耗积分，有没有请求都一样。
+真正的上限来自实例本身：vLLM 自己的队列、`--max-num-seqs` 等参数，以及你启动的 GPU。超过之后请求是排队，而不是回 `429`。只要实例在运行就会持续消耗积分，有没有请求都一样。
 
 ## 实例启动
 
-启动按滑动窗口节流：大致每分钟一次、每十分钟三次、每小时五次。这是冲着重试循环去的，正常使用碰不到——一个人启动实例干活，永远不会注意到它。
+从模板启动实例时，按 IP 地址在 1 分钟、10 分钟和 1 小时三个滑动窗口内限流。这是为了拦住重试循环，正常使用不会碰到。
 
-超了返回 `429` 和 `Retry-After`。
+超出后返回 `429` 和 `Retry-After`。另外，每个账号同一时间只能有一个实例，销毁前一个之前，再次启动会被拒绝。
 
 ## 登录
 
