@@ -10,7 +10,7 @@ description: 在自己的实例上用 vLLM 部署模型，并通过兼容 OpenAI
 公共模板已经配好了经过验证的模型、规格和 vLLM 启动命令。
 
 1. 在 **首页** 把 **部署类型** 设为 **模型 API**。
-2. 在 **模型** 里选一个公共模板，例如 **MiniCPM5-1B**。表单会显示模板的 **模型来源**、**资源池**、**vLLM 启动命令** 和 **规格**，这些都不能修改。
+2. 在 **模型** 里选一个公共模板，例如 **MiniCPM5-2B**。表单会显示模板的 **模型来源**、**资源池**、**vLLM 启动命令** 和 **规格**，这些都不能修改。
 3. 点 **启动实例**，查看启动进度，见[启动实例](/radeon-cloud-docs/zh-cn/guides/launch/#查看启动进度)。
 
 **模型** 下拉框里列出的是你可以使用的模板。如果一个都没有，表单会提示，此时请改用自定义模型。
@@ -48,7 +48,7 @@ vllm serve Qwen/Qwen2.5-0.5B-Instruct --host 0.0.0.0 --port 8000 --served-model-
 
 - **接口地址**：你这个实例的 base URL。
 - **模型**：`model` 字段要填的值。
-- **API 密钥**：这个端点的 API Key。它可能和你的共享 [API Key](/radeon-cloud-docs/zh-cn/guides/shared-models/#获取-api-key) 不同，请以卡片上的为准。
+- **API 密钥**：这个端点的 API Key，以 `sk-` 开头，每次启动单独生成，不是你的共享 [API Key](/radeon-cloud-docs/zh-cn/guides/shared-models/#获取-api-key)。
 - 一条可以直接运行的 curl 命令。
 
 ```bash

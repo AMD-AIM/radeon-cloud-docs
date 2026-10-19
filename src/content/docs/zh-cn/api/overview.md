@@ -16,7 +16,7 @@ AMD Radeon Cloud API 分为三部分：
 | API | 基础 URL |
 |---|---|
 | 共享模型 API | `https://developer.amd.com.cn/radeon/api/v1`（仅中国站） |
-| 专属模型 API | 显示在实例卡片上，例如 `https://developer.amd.com.cn/radeon/spaces/<instance-id>/8000/v1` |
+| 专属模型 API | 显示在实例卡片上，例如 `https://jupyter.anruicloud.com/inference/<instance-id>/v1` |
 | 平台接口 | `https://developer.amd.com.cn/radeon` 或 `https://radeon-global.anruicloud.com` |
 
 共享模型 API 和 Token Factory 只在中国站提供。
