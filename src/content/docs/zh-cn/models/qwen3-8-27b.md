@@ -28,14 +28,20 @@ sidebar:
 
 | | |
 |---|---|
-| 上下文长度 | 131,072 token |
+| 上下文长度 | 262,144 token |
 | 输入模态 | 文本 + 图片 |
 | 流式 | ✅ |
 | 工具调用 | ✅ |
 | JSON 输出 | ✅ `json_object` |
 | 思考 | ✅——默认开启 |
-| 推理引擎 | vLLM |
+| 推理引擎 | SGLang |
 | 稳定性 | `experimental` |
+
+:::note[2026-09-22 起由 SGLang 提供]
+本页最初是按更早的 vLLM 部署写的，当时窗口为 131,072 token。上表的上下文长度和推理引擎是当前值。
+思考档位、`system` 规则和角色名来自模型自带的 chat template，与推理引擎无关。
+[思考模式](#思考模式)和[图片输入](#图片输入)里提到的 `usage` 字段是在更早的部署上测得的。
+:::
 
 ## 思考模式
 
@@ -59,8 +65,9 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 要最长的思考请传 `xhigh`，或者不传这个参数。
 :::
 
-思考文本在 `choices[0].message.reasoning`。这个模型不返回
-`usage.completion_tokens_details`，思考 token 不单独计数，已包含在 `usage.completion_tokens` 里。
+思考文本在 `choices[0].message.reasoning`。更早的部署不返回 `usage.completion_tokens_details`，
+思考 token 只算在 `usage.completion_tokens` 里。有 `completion_tokens_details.reasoning_tokens`
+就读它，没有就退回读 `completion_tokens`。
 
 思考和正文共用同一份 `max_tokens` 预算。`content` 返回空时，调大 `max_tokens`
 或传 `reasoning_effort: "low"`。
@@ -73,7 +80,11 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 System message must be at the beginning.
 ```
 
-角色名写 `system` 或 `developer` 都接受。
+角色名请写 `system`。chat template 会拒绝其他角色名，包括 `developer`：
+
+```
+Unexpected message role.
+```
 
 ## 图片输入
 
@@ -92,21 +103,16 @@ System message must be at the beginning.
 }
 ```
 
-图片用量报在 `usage.prompt_tokens_details.multimodal_tokens.image`。
+更早的部署把图片用量报在 `usage.prompt_tokens_details.multimodal_tokens.image`，
+而其他模型用的是 `usage.prompt_tokens_details.image_tokens`。统计图片 token 的代码两处都要读。
 
 ## 限制
 
 | | |
 |---|---|
-| 上下文窗口 | 131,072 token，prompt 与输出合并计算 |
+| 上下文窗口 | 262,144 token，prompt 与输出合并计算 |
 | JSON 输出 | `response_format: {"type": "json_object"}` |
 | 思考档位 | `low`、`medium`、`xhigh` |
-
-`max_tokens` 按整个窗口校验：
-
-```
-max_tokens=999999 cannot be greater than max_model_len=max_total_tokens=131072.
-```
 
 ## 示例
 

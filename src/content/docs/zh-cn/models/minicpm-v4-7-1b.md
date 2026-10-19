@@ -52,8 +52,9 @@ sidebar:
 ## 在 Radeon Cloud 上的行为
 
 :::note[Token Factory 中国站 —— 2026-10-13 验证]
-以下服务行为适用于 `https://developer.amd.com.cn/radeon/api/v1`，不代表其它区域或专属部署。
-当前可用状态和价格以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准。
+以下服务行为适用于 `https://developer.amd.com.cn/radeon/api/v1`，不代表其他区域或模型服务。
+这些行为是 2026-10-13 在 SGLang 上验证的，2026-10-15 起该模型改由 vLLM 提供。
+模型当前是否在线以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准，当前用量单价以控制台里的模型卡片为准。
 :::
 
 ### 概览
@@ -66,8 +67,8 @@ sidebar:
 | 工具调用 | ✅ —— 包括工具结果回填与流式调用 |
 | JSON 输出 | ✅ `json_object`；本模型在此部署上不支持严格 `json_schema` |
 | 思考 | ✅ —— **默认关闭，需要显式开启** |
-| 推理引擎 | SGLang |
-| 稳定性 | 目录标签尚未核实，以当前模型目录为准 |
+| 推理引擎 | vLLM |
+| 稳定性 | `experimental` |
 
 ### `messages`
 
@@ -184,5 +185,5 @@ curl --fail-with-body https://developer.amd.com.cn/radeon/api/v1/chat/completion
 ```
 
 检查 `finish_reason` 后读取 `choices[0].message.content`，token 计数从 `usage` 读取。
-2026-10-13 核实的计量价为每百万 tokens：**输入 $0.035 / 输出 $0.07 / 缓存命中输入 $0.0007**。
-这是用量记账单价，不代表自动现金扣款；实时价格看模型目录，实际用量看中国区控制台。
+用量按每百万 token 多少 pts 计量，当前单价见[用量单价表](/radeon-cloud-docs/zh-cn/models/overview/#用量单价)和模型卡片。
+pts 不是钱，也和积分无关。

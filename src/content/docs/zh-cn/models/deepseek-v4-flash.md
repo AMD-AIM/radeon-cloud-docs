@@ -11,6 +11,11 @@ sidebar:
   <span class="rc-auth">model: <code>DeepSeek-V4-Flash</code></span>
 </div>
 
+:::note[模型 ID 与卡片标题]
+Token Factory 上这个模型的卡片标题是 **DeepSeek-V4-Flash-0731**。调用时 `model` 填
+`DeepSeek-V4-Flash`，也就是卡片上 **Model** 一栏的值。卡片标题不能当作模型 ID 使用。
+:::
+
 ## 模型简介
 
 这里跑的权重是 **DeepSeek-V4-Flash-0731**，DeepSeek 对 DeepSeek-V4-Flash 的正式发布版，取代此前的

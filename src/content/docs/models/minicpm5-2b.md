@@ -27,8 +27,7 @@ them:
 | Context | 131,072 |
 | Precision | `bfloat16` — **not quantised** |
 
-The only dense (non-MoE) model on this endpoint, and the only unquantised one. Its 131,072-token
-context is the shortest here.
+Its 131,072-token context is the shortest here.
 
 ## On Radeon Cloud
 
@@ -76,6 +75,6 @@ before relying on it for tool-driven work.
 | Input | text only |
 
 :::caution[This is the smallest window on the endpoint]
-131,072 is far below the others (both DeepSeek models serve 1,048,576). When migrating from another
+131,072 is far below the others (the DeepSeek models serve 1,048,576). When migrating from another
 model, bring `max_tokens` down with it.
 :::

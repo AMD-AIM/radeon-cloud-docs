@@ -30,7 +30,7 @@ Its audio tokenizer is Boson AI's Higgs Audio 2 (see [License](#license)).
 | Output | one audio file, 24 kHz mono: `wav` (default), `mp3`, `opus`, `flac` or `pcm` |
 | Streaming | ❌ — the whole file arrives in one response |
 | Voice | a preset, a free-text description, or a cloned reference clip |
-| Billing | per input character |
+| Billing | per input character; the input rate on the card applies per million characters |
 | Stability | `experimental` |
 
 ## Request

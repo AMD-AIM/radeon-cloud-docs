@@ -53,8 +53,10 @@ The outer configuration sets the default visual compression to `downsample_mode 
 
 :::note[Token Factory, China site — verified 2026-10-13]
 These service behaviours apply to `https://developer.amd.com.cn/radeon/api/v1`, not every
-regional deployment or model service. Current availability and prices come from
-[`GET /v1/models`](/radeon-cloud-docs/api/models/).
+regional deployment or model service. They were verified on 2026-10-13, when the model ran on
+SGLang. It has been served by vLLM since 2026-10-15. Current availability comes from
+[`GET /v1/models`](/radeon-cloud-docs/api/models/), and current usage rates are on the model's
+card in the console.
 :::
 
 ### At a glance
@@ -67,8 +69,8 @@ regional deployment or model service. Current availability and prices come from
 | Tool calling | ✅ — including tool-result continuation and streamed calls |
 | JSON output | ✅ `json_object`; strict `json_schema` unavailable for this model here |
 | Thinking | ✅ — **off by default**, enable explicitly |
-| Inference engine | SGLang |
-| Stability | Catalog tag not verified; consult the current model catalog |
+| Inference engine | vLLM |
+| Stability | `experimental` |
 
 ### `messages`
 
@@ -190,6 +192,6 @@ curl --fail-with-body https://developer.amd.com.cn/radeon/api/v1/chat/completion
 ```
 
 Read `choices[0].message.content` after checking `finish_reason`; token counts are in `usage`.
-Metering rates verified on 2026-10-13 were **$0.035 input / $0.07 output / $0.0007 cached input
-per million tokens**. These are usage/allowance accounting rates, not a claim of automatic cash
-charges. Check current rates in the model catalog and actual usage in the China-region console.
+Usage is metered in points (pts) per million tokens. The current rates are in the
+[usage rates table](/radeon-cloud-docs/models/overview/#usage-rates) and on the model's card.
+Points aren't money and are separate from your credits.

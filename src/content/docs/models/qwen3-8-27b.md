@@ -28,14 +28,22 @@ sidebar:
 
 | | |
 |---|---|
-| Context length | 131,072 tokens |
+| Context length | 262,144 tokens |
 | Input modalities | text + images |
 | Streaming | ✅ |
 | Tool calling | ✅ |
 | JSON output | ✅ `json_object` |
 | Thinking | ✅ — on by default |
-| Inference engine | vLLM |
+| Inference engine | SGLang |
 | Stability | `experimental` |
+
+:::note[Served by SGLang since 2026-09-22]
+This page was first written against an earlier vLLM deployment with a 131,072-token window. The
+context length and engine above are current. The thinking tiers, the `system` rule and the role
+names come from the model's chat template, so they don't depend on the engine. The `usage` fields
+described under [Thinking](#thinking) and [Image input](#image-input) were measured on the earlier
+deployment.
+:::
 
 ## Thinking
 
@@ -59,9 +67,10 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 Send `xhigh` for the longest thinking, or omit the parameter.
 :::
 
-Thinking text arrives in `choices[0].message.reasoning`. This model does not return
-`usage.completion_tokens_details`, so thinking tokens are not reported separately; they are
-included in `usage.completion_tokens`.
+Thinking text arrives in `choices[0].message.reasoning`. The earlier deployment did not return
+`usage.completion_tokens_details`, so thinking tokens were only counted inside
+`usage.completion_tokens`. Read `completion_tokens_details.reasoning_tokens` when it is present,
+and fall back to `completion_tokens` when it is not.
 
 Thinking draws on the same `max_tokens` budget as the answer. If `content` comes back empty, raise
 `max_tokens` or send `reasoning_effort: "low"`.
@@ -75,7 +84,11 @@ or one after a `user` turn, is rejected:
 System message must be at the beginning.
 ```
 
-Both `system` and `developer` are accepted as the role name.
+Spell the role `system`. The chat template rejects any other role name, `developer` included:
+
+```
+Unexpected message role.
+```
 
 ## Image input
 
@@ -94,21 +107,17 @@ Send an `image_url` content part. Both `data:` URLs and `https://` URLs are acce
 }
 ```
 
-Image usage is reported at `usage.prompt_tokens_details.multimodal_tokens.image`.
+The earlier deployment reported image usage at
+`usage.prompt_tokens_details.multimodal_tokens.image`, where the other models use
+`usage.prompt_tokens_details.image_tokens`. Code that counts image tokens should read both.
 
 ## Limits
 
 | | |
 |---|---|
-| Context window | 131,072 tokens, prompt plus output |
+| Context window | 262,144 tokens, prompt plus output |
 | JSON output | `response_format: {"type": "json_object"}` |
 | Thinking tiers | `low`, `medium`, `xhigh` |
-
-`max_tokens` is checked against the whole window:
-
-```
-max_tokens=999999 cannot be greater than max_model_len=max_total_tokens=131072.
-```
 
 ## Example
 
