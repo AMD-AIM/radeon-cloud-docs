@@ -10,7 +10,7 @@ A dedicated model API runs vLLM on your own instance. You choose the model and i
 Public templates come with a tested model, size and vLLM command.
 
 1. On **Home**, set **Deploy type** to **Model API**.
-2. Under **Model**, pick a public template, for example **MiniCPM5-1B**. The form shows the template's **Model source**, **Resource pool**, **vLLM Command** and **Size**, and you can't change them.
+2. Under **Model**, pick a public template, for example **MiniCPM5-2B**. The form shows the template's **Model source**, **Resource pool**, **vLLM Command** and **Size**, and you can't change them.
 3. Click **Launch instance** and follow the launch dialog. See [Launch an instance](/radeon-cloud-docs/guides/launch/#follow-the-launch).
 
 The templates available to you are listed in the **Model** field. If there are none, the form says so; use a custom model instead.
@@ -48,8 +48,8 @@ When the instance is ready, the **OpenAI-compatible endpoint** card shows:
 
 - **Base URL**: the endpoint of your instance.
 - **Model**: the value for the `model` field.
-- **API key**: the key for this endpoint. It can differ from your shared [API key](/radeon-cloud-docs/guides/shared-models/#get-your-api-key), so use the one on the card.
-- A ready-to-run curl command.
+- **API key**: the key for this endpoint. It starts with `sk-`, is created for each launch, and isn't your shared [API key](/radeon-cloud-docs/guides/shared-models/#get-your-api-key).
+- **Quickstart**: a ready-to-run curl command.
 
 ```bash
 curl <base-url>/chat/completions \
@@ -72,4 +72,4 @@ The endpoint works only while the instance runs. Destroy the instance when you'r
 - Check that the command has `--host 0.0.0.0 --port 8000`.
 - Check that the `model` field matches **Model name**.
 
-See [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#a-dedicated-endpoint-doesnt-respond).
+See [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#a-dedicated-model-api-doesnt-respond).

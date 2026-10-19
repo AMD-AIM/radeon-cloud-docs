@@ -1,24 +1,24 @@
 ---
 title: 错误
-description: AMD Radeon Cloud API 返回的状态码，以及各自该怎么处理。
+description: AMD Radeon Cloud API 返回的状态码，以及每种情况怎么处理。
 sidebar:
   order: 12
 ---
 
 ## 状态码
 
-| 代码 | 含义 | 怎么办 |
+| 状态码 | 含义 | 处理方法 |
 |---|---|---|
-| `400` | 请求被拒。参数无效、已有实例在跑，或积分不够。 | 读 `detail` 并修正请求。重试没用。 |
-| `401` | 凭据缺失、格式不对，或不认识。 | 检查 `Authorization` 头。如果密钥可能已被吊销，就轮换一个。 |
-| `403` | 通过了认证，但没有权限。 | 见下文——原因不止一种。 |
-| `404` | 没有这个模板或实例，或者请求了一条不提供的模型 API 路径。 | 确认标识符。目录里没有的模型名是 `400`，不是 `404`。 |
-| `409` | 状态冲突，比如需要先完成邮箱验证。 | 按响应体里的 `code` 处理。 |
-| `429` | 触发限流。 | 等 `Retry-After`，然后退避。见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。 |
-| `502` | 上游模型网关或服务后端不可达。 | 临时性问题。退避后重试。 |
-| `503` | 容量暂时耗尽，或功能被禁用。 | 按 `Retry-After` 给的间隔重试。 |
+| `400` | 请求被拒绝：参数无效、已经有实例，或积分不够。 | 查看 `detail` 并修正请求，重试没有用。 |
+| `401` | 凭证缺失、格式错误或无法识别。 | 检查 `Authorization` 请求头。如果 API Key 可能已失效，重新生成一个。 |
+| `403` | 已通过认证，但没有权限。 | 原因有多种，见下文。 |
+| `404` | 模板或实例不存在，或者请求的模型 API 路径没有模型提供。 | 确认标识符。模型名不在模型列表里时返回的是 `400`，不是 `404`。 |
+| `409` | 状态冲突，例如需要先完成邮箱验证。 | 按响应体里的 `code` 处理。 |
+| `429` | 触发限流。 | 等待 `Retry-After` 指定的时间，然后退避重试，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。 |
+| `502` | 上游模型网关或服务后端不可达。 | 通常是暂时的，退避后重试。 |
+| `503` | 容量暂时不足，或功能已关闭。 | 按 `Retry-After` 给出的间隔重试。 |
 
-## 错误体
+## 错误响应格式
 
 平台接口的错误采用 FastAPI 的格式：
 
@@ -26,9 +26,9 @@ sidebar:
 { "detail": "Each user can only have one active instance" }
 ```
 
-共享模型 API 的错误来自两个地方，格式不一样。
+共享模型 API 的错误来自两个地方，格式不同。
 
-**网关**抛的错——密钥无效、模型不存在、网关侧限流——用 OpenAI 的形状，现成的 OpenAI 错误处理代码不用改就能用：
+**网关** 返回的错误（API Key 无效、模型不存在、网关侧限流）采用 OpenAI 的格式，现有的 OpenAI 错误处理代码可以直接使用：
 
 ```json
 {
@@ -41,7 +41,7 @@ sidebar:
 }
 ```
 
-在 `/v1/messages` 和 `/v1/messages/count_tokens` 上，同样的错误改用 Anthropic 的信封，Anthropic SDK 可以直接解析：
+在 `/v1/messages` 和 `/v1/messages/count_tokens` 上，同样的错误采用 Anthropic 的格式，Anthropic SDK 可以直接解析：
 
 ```json
 {
@@ -53,7 +53,7 @@ sidebar:
 }
 ```
 
-网关前面的**平台**抛的错——凭据被拒、准入控制、网关不可达——跟其他平台接口错误一样包在 `detail` 里：
+网关之前的 **平台** 返回的错误（凭证被拒、准入控制、网关不可达）和其他平台接口一样，放在 `detail` 里：
 
 ```json
 { "detail": "Invalid bearer token" }
@@ -63,7 +63,7 @@ sidebar:
 {
   "detail": {
     "error": {
-      "message": "模型 API rate limit exceeded; please retry later",
+      "message": "Model API rate limit exceeded; please retry later",
       "type": "rate_limit_error",
       "code": "token_rate_limit_exceeded"
     }
@@ -71,42 +71,40 @@ sidebar:
 }
 ```
 
-:::caution[读 `error` 之前先拆 `detail`]
-OpenAI SDK 去顶层读 `error.type`，平台抛的错它找不到。两种都处理一下：有 `body.error` 就读它，
-否则读 `body.detail.error`，再否则把 `body.detail` 当成错误消息。HTTP 状态码和 `Retry-After`
-在任何情况下都是可靠的。
+:::caution[先解开 `detail`，再读取 `error`]
+OpenAI SDK 只在顶层读取 `error.type`，读不到平台返回的错误。请两种都处理：有 `body.error` 就读它；没有就读 `body.detail.error`；都没有时，把 `body.detail` 当作错误信息。HTTP 状态码和 `Retry-After` 在所有情况下都可靠。
 :::
 
-目录里没有的模型名由网关直接拒掉，返回 `400` 和 `Requested model <名字> not supported`，请求根本到不了后端。模型自己抛的错，比如 prompt 超过上下文上限，会带着服务后端自己的状态码和消息透传出来。
+模型名不在模型列表里时，网关直接返回 `400` 和 `Requested model <名称> not supported`，请求不会到达后端。模型自身产生的错误，例如 prompt 超出上下文长度，会连同后端的状态码和信息原样返回。
 
-**专属模型 API** 的错误不属于上面任何一种。那条路上没有网关，代理放行之后你拿到的就是 vLLM 原样吐出来的东西。代理回 `403` 说明密钥、实例或端口对不上；`503` 说明实例还在启动。其余都是你自己那台服务器在说话。
+**专属模型 API** 的错误不属于以上任何一种。这条路径上没有网关，代理放行后，你收到的就是 vLLM 原样返回的内容。代理返回 `403` 表示 API Key、实例或端口不匹配；返回 `503` 表示实例还在启动。其他错误都来自你自己的服务。
 
-## 常见情形
+## 常见情况
 
-**`400 Each user can only have one active instance`**——先销毁当前实例。[`DELETE /api/notebook/current`](/radeon-cloud-docs/zh-cn/api/instances/#销毁实例)。
+**`400 Each user can only have one active instance`**：先销毁当前实例，见 [`DELETE /api/notebook/current`](/radeon-cloud-docs/zh-cn/api/instances/#销毁实例)。
 
-**`400 Insufficient credits`**——积分不够所选规格运行 1 小时。[兑换优惠码](/radeon-cloud-docs/zh-cn/guides/credits/#兑换优惠码)，或者换一个更小的规格。
+**`400 Insufficient credits`**：积分不够所选规格运行 1 小时。[兑换优惠码](/radeon-cloud-docs/zh-cn/guides/credits/#兑换优惠码)，或者换一个更小的规格。
 
-**`400 Invalid image selected`**——镜像不在目录里，或者已被禁用。请从 **首页** 的 **镜像** 列表里选择。
+**`400 Invalid image selected`**：镜像不在镜像目录里，或者已被停用。请从 **首页** 的 **镜像** 列表里选择。
 
-**`401 Login required`**——这个接口需要浏览器会话，但请求里发的是 API Key。要在脚本里管理实例，请用 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/automation/)。
+**`401 Login required`**：这个接口需要浏览器会话，但请求里发的是 API Key。要在脚本里管理实例，请用 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/automation/)。
 
-**`403 resource_selection_not_assigned`**——资源池或规格没有分配给你的账号。请从 **首页** 的 **规格** 和 **资源池** 里选择。
+**`403 resource_selection_not_assigned`**：资源池或规格没有分配给你的账号。请从 **首页** 的 **规格** 和 **资源池** 里选择。
 
-**`403 {"code": "account_not_verified"}`**——账号还在审核中。响应体里带一个指向审核页面的 `redirect`。
+**`403 {"code": "account_not_verified"}`**：账号还在审核中。响应体里的 `redirect` 指向审核页面。
 
-**`403 You do not have access to this instance`**——实例是别人的，或者你在用 Bearer 密钥访问实例代理，而它要求浏览器会话。见[认证](/radeon-cloud-docs/zh-cn/api/authentication/#各接口接受的凭证)。
+**`403 You do not have access to this instance`**：实例属于别人，或者你用 API Key 访问了只接受浏览器会话的实例代理，见[认证](/radeon-cloud-docs/zh-cn/api/authentication/#各接口接受的凭证)。
 
-**`502 Model gateway is unavailable`**——网关挂了或者连不上。退避后重试；如果持续好几分钟，那是一次故障，不是你这边的问题。
+**`502 Model gateway is unavailable`**：网关故障或无法连接。退避后重试；如果持续几分钟都不恢复，说明是平台故障，不是你这边的问题。
 
-**`503 Model gateway connection pool exhausted`**——全平台在飞的请求太多。`Retry-After` 很短，通常 5 秒。
+**`503 Model gateway connection pool exhausted`**：整个平台同时处理的请求太多。`Retry-After` 很短，通常是 5 秒。
 
 ## 排查清单
 
-确认你调的基础 URL 对——共享端点和专属端点是不同的主机和路径，而且重新启动后专属端点的 base URL 可能会变，请重新从实例卡片复制。
+确认 base URL 正确。共享模型 API 和专属模型 API 的主机和路径不同，而且重新启动后专属端点的 base URL 可能会变，请重新从实例卡片复制。
 
-确认密钥确实发出去了，而且是以 `Authorization: Bearer rc-...` 的形式。漏掉这个头和密钥无效都会得到 `401`。
+确认 API Key 确实发出去了，格式是 `Authorization: Bearer rc-...`。缺少这个请求头和 API Key 无效都会返回 `401`。
 
-用专属端点的话，确认实例已经 `ready` 且模型加载完了。vLLM 在权重加载完之前就会响应端口，所以早期的请求会失败，报出来的后端错误看着像平台问题。
+使用专属模型 API 时，确认实例已经 `ready`，模型也已加载完成。vLLM 在权重加载完之前就会监听端口，所以早期的请求可能失败，返回看起来像平台问题的后端错误。
 
-如果一个昨天还能用的调用今天报 `400 Requested model ... not supported`，多半是共享目录变了。用 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 重新解析。
+如果昨天还能用的请求今天返回 `400 Requested model ... not supported`，多半是共享模型列表变了。请用 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 重新查询模型名。

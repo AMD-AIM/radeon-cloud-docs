@@ -1,6 +1,6 @@
 ---
 title: OmniVoice
-description: 语音合成——把文本转成音频文件，走 OpenAI 兼容的语音端点。
+description: 语音合成：把文本转成音频文件，使用兼容 OpenAI 的语音接口。
 sidebar:
   order: 13
 ---

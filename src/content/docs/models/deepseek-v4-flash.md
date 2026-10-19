@@ -1,6 +1,6 @@
 ---
 title: DeepSeek-V4-Flash
-description: DeepSeek's million-token agentic model — what the vendor ships, and how it behaves on this endpoint.
+description: "DeepSeek's million-token agentic model: what the vendor ships, and how it behaves on this endpoint."
 sidebar:
   order: 2
 ---

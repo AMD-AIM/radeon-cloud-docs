@@ -51,4 +51,6 @@ sidebar:
 
 ## 如果账号需要审核
 
-有些账号在能启动实例之前要先过审核。看到相关提示的话，你仍然可以浏览控制台、使用[免费的共享模型 API](/radeon-cloud-docs/zh-cn/guides/shared-models/) —— 审核通过后就能启动 GPU 实例了。
+部分新账号需要通过审核后才能使用。审核完成前，登录后看到的是审核页面而不是控制台，不能启动实例，也拿不到 API Key。账号通过审核后即可正常使用。
+
+如果审核时间比预期长，请把账号邮箱发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。

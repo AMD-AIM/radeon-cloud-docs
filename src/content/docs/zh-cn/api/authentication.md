@@ -9,7 +9,7 @@ AMD Radeon Cloud 有三种凭证，调用不同的接口要用不同的凭证。
 
 | 凭证 | 格式 | 用途 |
 |---|---|---|
-| **API Key** | `rc-` 加 48 位十六进制字符 | 共享模型 API 和专属模型 API |
+| **API Key** | `rc-` 加 48 位十六进制字符 | 共享模型 API |
 | **CLI 令牌** | `rcc_...` | [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/)：实例、积分、可用资源 |
 | **会话 Cookie** | 登录控制台时设置 | 控制台和[平台接口](/radeon-cloud-docs/zh-cn/api/instances/) |
 
@@ -48,11 +48,13 @@ curl https://developer.amd.com.cn/radeon/api/v1/messages \
 
 还在审核中的账号不会生成 API Key。如果看不到，请确认账号是否已通过审核。
 
-专属模型 API 会在实例卡片上显示它自己的 API Key，可能和这里的不同，见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
+专属模型 API 有自己的 API Key，以 `sk-` 开头，显示在它的实例卡片上，见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
 
 ### 轮换 API Key
 
-在 **您的 API 密钥** 卡片上点 **重新生成密钥**。旧的 API Key 立即失效，请同时更新所有用到它的客户端。
+新版控制台暂时没有这个按钮。请切换到经典版界面（**设置** → **界面** → **使用经典版**），打开 **Profile**，点 **Regenerate Key**，见[经典版界面](/radeon-cloud-docs/zh-cn/resources/classic-ui/)。
+
+旧的 API Key 立即失效，请同时更新所有用到它的客户端。
 
 API Key 可能泄露时，请立即轮换。
 
@@ -74,14 +76,14 @@ API Key 可能泄露时，请立即轮换。
 
 | 接口 | API Key | CLI 令牌 | 会话 |
 |---|---|---|---|
-| 共享模型 API（`/api/v1/...`） | 是 | 否 | 是 |
-| 专属模型 API（`/spaces/...`） | 是 | 否 | 是 |
+| 共享模型 API（`/api/v1/...`） | 是 | 否 | 仅列出模型 |
+| 专属模型 API（`/inference/...`） | 卡片上的 `sk-` Key | 否 | 否 |
 | CLI 接口（`/api/cli/...`） | 否 | 是 | 否 |
 | 平台接口：实例、模板、账号 | 否 | 否 | 是 |
 | 浏览公开模板（`GET /api/templates`） | 可选 | 否 | 可选 |
 | JupyterLab 等应用（`/instances/...`） | 否 | 否 | 是 |
 
-专属模型 API 只接受该实例对应的 API Key，并且只能访问实例实际提供服务的端口。
+专属模型 API 只接受它自己卡片上显示的 API Key。
 
 ## 认证错误
 

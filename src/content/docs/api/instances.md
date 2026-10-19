@@ -157,7 +157,7 @@ For a model API instance, call `DELETE /api/inference/current`.
 ```json
 {
   "success": true,
-  "message": "Instance destroyed",
+  "message": "Instance <instance-id> destroyed",
   "destroyed_count": 1
 }
 ```

@@ -1,6 +1,6 @@
 ---
 title: DeepSeek-V4.1-Flash
-description: DeepSeek's million-token vision model — context, thinking tiers, image input and message rules.
+description: "DeepSeek's million-token vision model: context, thinking tiers, image input and message rules."
 sidebar:
   order: 4
 ---

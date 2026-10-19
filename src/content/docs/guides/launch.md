@@ -21,6 +21,8 @@ You launch instances from **Home** in the console. This page walks through the l
 
 With **Customize** off, the form uses the smallest size available to your account, a temporary workspace, and no mounted model. The line above the button shows what you will get, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**.
 
+If the form shows **Auto-reclaim**, the instance is deleted automatically that long after it becomes ready, for example **7 days after ready**, whether or not you're using it. The time depends on the resource pool. **Not enabled** means there's no time limit.
+
 ## Customize the launch
 
 Turn on **Customize** to choose the rest.

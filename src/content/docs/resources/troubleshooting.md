@@ -1,11 +1,13 @@
 ---
 title: Troubleshooting
-description: Fixes for the problems that come up most often.
+description: Find your problem by what you see, and how to fix it.
 sidebar:
   order: 1
 ---
 
-## Instances
+Find the message or behaviour you're seeing, then follow the steps under it.
+
+## Launching
 
 ### "No matching Node has enough free CPU, memory, and GPUs for this launch"
 
@@ -15,25 +17,42 @@ The launch dialog shows **Launch failed** with this message when every node in t
 2. Or choose a smaller **Size**.
 3. Or try again later.
 
-If your account has only one pool and the launch keeps failing, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the time of the attempts.
+If your account has only one pool and the launch keeps failing, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the times of your attempts.
 
-### The instance never becomes ready
+### The dialog stays on "Waiting for a free GPU"
 
-Open **View logs** in the launch dialog. The first launch of an image on a node, or a Model API instance downloading model weights, can take several minutes.
+The launch is queued until a node has room. Keep waiting, or cancel and choose a smaller size or another pool.
 
-If the dialog shows **Waiting for a free GPU**, the launch is queued until a node has room. Keep waiting, or cancel and choose a smaller size or another pool. If it shows **Image pull failed**, try again, then pick another image.
+### The instance takes several minutes to become ready
 
-### The launch is rejected
+Click **View logs** in the launch dialog. The first launch of an image on a node takes longer, because the node downloads the image first. A Model API instance also downloads the model weights.
 
-**You already have an instance running.** means your account has an instance; destroy it first. If your credits are below the hourly rate of the size you picked, the launch is refused; see [Credits](/radeon-cloud-docs/guides/credits/). If the console can't load your sizes and pools, it shows **Resource catalog is unavailable. Try again.**; refresh the page.
+If the dialog shows **Image pull failed**, try again, then pick another image.
 
-### The instance stopped by itself
+### The Launch button is disabled
 
-Instances have a maximum lifetime, are reclaimed after a period with no activity, and are deleted when your credits run out. Save checkpoints to a persistent `/workspace` so a stop doesn't cost you the run.
+The form says why:
+
+- **You already have an instance running.** Each account can have one instance. [Destroy it](/radeon-cloud-docs/guides/destroy/) first.
+- **Resource catalog is unavailable. Try again.** Refresh the page.
+
+If the launch is refused for credits, your balance doesn't cover one hour on the chosen size. See [Credits](/radeon-cloud-docs/guides/credits/).
+
+## Running instances
+
+### The instance was deleted by itself
+
+An instance is deleted when your credits run out, and when the **Auto-reclaim** time shown on the launch form has passed. See [Limits that stop an instance](/radeon-cloud-docs/guides/instances/#limits-that-stop-an-instance).
+
+Save checkpoints to a persistent `/workspace` so a stop doesn't cost you the run.
 
 ### My files are gone
 
-Only files under `/workspace` are kept, and only when the instance was launched with **Persistent /workspace** storage. The 25 GB and 100 GB options are separate volumes, so also check that you launched with the same capacity as before. Storage can't be changed on a running instance. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+Only files under `/workspace` are kept, and only when the instance was launched with **Persistent /workspace**. The 25 GB and 100 GB options are separate volumes, so also check that you launched with the same capacity as before. Storage can't be changed on a running instance. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+
+### JupyterLab still shows the instance after I deleted it
+
+A JupyterLab tab doesn't notice that its instance is gone. Close the tab. **Home** shows the real state.
 
 ## SSH
 
@@ -42,20 +61,15 @@ Only files under `/workspace` are kept, and only when the instance was launched 
 Check these in order:
 
 1. Does the instance card still say **Setting up SSH — do not connect yet**? Wait until it shows the SSH command.
-2. Are you using the command from the current instance card? The host and port change with every launch.
-3. Does the card say **SSH could not be set up**? Then SSH isn't available on this instance. If you need it, start an SSH server from a JupyterLab terminal:
-
-```bash
-sudo apt update && sudo apt install -y openssh-server
-mkdir -p /run/sshd && /usr/sbin/sshd
-```
+2. Are you using the command from the current instance card? The host and port can change when you launch again.
+3. Does the card say **SSH could not be set up**? SSH isn't available on this instance, but JupyterLab still works. Destroy the instance and launch again. If it happens again, email support.
 
 ### Permission denied (publickey)
 
 None of the keys in **Settings → SSH keys** matches the private key you're offering. Check the list, then say which key to use:
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 -p <port> <user>@<host>
+ssh -i ~/.ssh/id_ed25519 root@<host> -p <port>
 ```
 
 A key added after the instance launched isn't installed in it. Destroy the instance and launch again.
@@ -68,29 +82,32 @@ A new instance can reuse an earlier instance's host and port with a new host key
 
 ### 401 on every request
 
-Check the header is exactly `Authorization: Bearer rc-...`. Then check the key is current — rotating a key invalidates the previous one instantly, so a service still holding the old value fails until redeployed.
+Check that the header is exactly `Authorization: Bearer rc-...`, and that the key is current. Regenerating a key stops the old one immediately, so a service still using it fails until you update it.
 
-If your account hasn't cleared verification, no key is issued at all.
+Accounts that are still under review don't get a key.
+
+If the `401` says `Login required`, you sent an API key to a console endpoint, which takes a browser session. Use [Radeon Cloud CLI](/radeon-cloud-docs/cli/automation/) to script instances.
+
+### 404 on every request from the Global site
+
+The shared model APIs and Token Factory are on the China site only. Use `https://developer.amd.com.cn/radeon/api/v1`.
 
 ### 429
 
-You've hit a rate limit. The `code` field names which one; `Retry-After` says how long to wait. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
+You've hit a rate limit or the daily usage cap. `Retry-After` says how long to wait. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
 
-Sustained `429`s mean your workload is bigger than the shared allowance, and the fix is a [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) rather than more retries.
+If you hit `429` all the time, your workload is bigger than the shared allowance. [Deploy a dedicated model API](/radeon-cloud-docs/guides/dedicated-models/) instead of retrying more.
 
-### A model that used to work returns 404
+### "Requested model ... not supported"
 
-The shared catalog changes as models are added and retired. Resolve names at runtime with [`GET /v1/models`](/radeon-cloud-docs/api/models/) instead of hard-coding them.
+The model name isn't in the shared model list. Models are added and retired over time, so look names up with [`GET /v1/models`](/radeon-cloud-docs/api/models/) instead of hard-coding them.
 
-### A dedicated endpoint doesn't respond
+### A dedicated model API doesn't respond
 
-Confirm the serve command binds correctly — `--host 0.0.0.0 --port 8000` is what the platform routes to, and binding to `127.0.0.1` leaves the endpoint unreachable while the instance looks healthy.
-
-Confirm the model finished loading. Check the instance logs from a JupyterLab terminal.
-
-Confirm you're using the base URL and API key from the current instance card. They can change when you launch again.
-
-Confirm the `model` field matches what you passed to `vllm serve`, not a name from the shared catalog.
+1. Make sure the command binds to `--host 0.0.0.0 --port 8000`. With `127.0.0.1`, the instance looks healthy but can't be reached.
+2. Click **View logs** on the instance card and wait until the model has finished loading.
+3. Use the base URL and API key from the current instance card. They can change when you launch again.
+4. Send the name from `--served-model-name` as `model`, not a name from the shared model list.
 
 ## GPU
 
@@ -101,43 +118,40 @@ rocm-smi
 python -c "import torch; print(torch.cuda.is_available(), torch.version.hip)"
 ```
 
-If `torch.version.hip` is `None`, the environment has a CUDA build of PyTorch installed rather than a ROCm one — a common outcome of `pip install torch` overwriting the image's build. Reinstall from the ROCm index, or use a fresh instance from a ROCm image and avoid reinstalling torch.
-
-On some consumer Radeon parts, ROCm needs an explicit architecture override:
-
-```bash
-export HSA_OVERRIDE_GFX_VERSION=11.0.0
-```
+If `torch.version.hip` is `None`, a CUDA build of PyTorch has replaced the ROCm one, usually because `pip install torch` overwrote the image's build. In **AMD OneClick Base**, PyTorch for ROCm is already installed in `/opt/venv`; don't reinstall `torch`. Launch a new instance to get a clean environment.
 
 ## Tunnels
 
 ### The install script fails
 
-If it reports a missing identity directory or `FRP_BROKER_URL`, the notebook was created before the feature was enabled. Destroy it and create a new one. Don't try to write platform keys by hand.
+If it reports a missing identity directory or `FRP_BROKER_URL`, the instance was created before tunnels were enabled. Destroy it and launch a new one. Don't write platform keys by hand.
 
 ### The public URL doesn't work
 
-Work outward from the service. `curl --fail http://127.0.0.1:<port>/` inside the notebook — if that fails, the problem is your application, not the tunnel. Then `rc-tunnel status`, and `rc-tunnel logs --lines 100` if it isn't running.
+Work outward from the service:
 
-If the local service works and status is healthy but the public URL still fails, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the full domain, when the notebook was created, and when the failure happened. Don't send config files or keys.
+1. Inside the instance, run `curl --fail http://127.0.0.1:<port>/`. If that fails, the problem is your application, not the tunnel.
+2. Run `rc-tunnel status`, and `rc-tunnel logs --lines 100` if it isn't running.
+
+If the local service works and the status is healthy but the public URL still fails, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the full domain, when the instance was created and when the failure happened. Don't send config files or keys.
 
 ## Credits and coupons
 
-### A coupon won't redeem
+### "That code is not valid. Check it and try again."
 
-Paste the whole string. A coupon from the developer program is long and encrypted, and a partial copy fails. Coupons expire 30 days after you exchange points for them, and each one works once. Make sure you're on the site you want the credits on, because credits don't move between sites. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/#if-redemption-fails).
+Paste the whole string. A coupon from the developer program is long, and a partial copy fails. Coupons expire 30 days after you exchange points for them, and each one works once. Make sure you're on the site you want the credits on, because credits don't move between sites. See [If redemption fails](/radeon-cloud-docs/guides/developer-program/#if-redemption-fails).
 
 ### A `DP-` code didn't add credits
 
-`DP-XXXX-XXXX-XXXX` codes add developer points, not credits. Redeem them on the [point-code page](https://developer.amd.com.cn/points/devpoints), then exchange the points for a coupon on [兑取算力](https://developer.amd.com.cn/points/redeem).
+`DP-XXXX-XXXX-XXXX` codes add developer points, not credits. Redeem them on the [point code page](https://developer.amd.com.cn/points/devpoints), then exchange the points for a coupon on [兑取算力](https://developer.amd.com.cn/points/redeem).
 
 ## Still stuck
 
 Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) and include:
 
-- the site (China or Global) and the account email
+- the site (China or Global) and your account email
 - what you ran or clicked, and what you expected to happen
-- the exact error text, plus the time it happened
-- for an instance, the instance ID and template name
+- the exact error text and when it happened
+- for an instance, the image and size you launched with
 
-Don't include API keys, `rcc_` tokens, private SSH keys, or one-time JupyterLab links. Send a coupon string only when the email is about that coupon.
+Don't include API keys, `rcc_` tokens, private SSH keys or one-time JupyterLab links. Send a coupon string only when the email is about that coupon.

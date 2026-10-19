@@ -1,6 +1,6 @@
 ---
 title: Clef
-description: Decision model — answers typed questions about a situation with probabilities, on its own endpoint.
+description: "Decision model: answers typed questions about a situation with probabilities, on its own endpoint."
 sidebar:
   order: 14
 ---

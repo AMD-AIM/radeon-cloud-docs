@@ -1,6 +1,6 @@
 ---
 title: DeepSeek-V4.1-Flash
-description: DeepSeek 百万上下文视觉模型——上下文、思考档位、图片输入与消息规则。
+description: DeepSeek 百万上下文视觉模型：上下文、思考档位、图片输入与消息规则。
 sidebar:
   order: 4
 ---
