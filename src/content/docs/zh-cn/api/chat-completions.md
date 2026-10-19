@@ -76,6 +76,7 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取。除 Qw
 | Qwen3.8-Flash-Next | **照样思考**，默认档位是 `xhigh`，也就是最长的一档 |
 | Qwen3.8-27B | **照样思考**，默认档位是 `xhigh` |
 | GLM-5.3-Flash | **照样思考** |
+| MiMo-V2.6-Flash | **照样思考**，传 `none` 也关不掉 |
 | MiniCPM5-2B | 不思考 |
 
 要确定性地控制，就显式传值；想让两个 Qwen 模型和 GLM-5.3-Flash 少思考，传 `low`。
@@ -90,6 +91,7 @@ token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取。除 Qw
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | 任何取值都接受，但不起作用 |
 | MiniCPM5-2B | 不适用，直接给出答案 |
 
 要用同一套代码调用所有模型，**请用 `low` 或 `medium`**，只有这两个值所有模型都接受。

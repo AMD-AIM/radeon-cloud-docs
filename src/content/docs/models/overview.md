@@ -29,7 +29,9 @@ and the vLLM Semantic Router decision models [d3](/radeon-cloud-docs/models/d3/)
 
 ## Specifications
 
-| Model | Context | Image input | Thinks with `reasoning_effort` omitted |
+**Thinks by default** means the model thinks even when you leave out `reasoning_effort`. See [Thinking](#thinking).
+
+| Model | Context | Image input | Thinks by default |
 |---|---|:---:|:---:|
 | [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
 | [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
@@ -39,9 +41,6 @@ and the vLLM Semantic Router decision models [d3](/radeon-cloud-docs/models/d3/)
 | [GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
-
-[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) is the only model here that also
-accepts **audio** input, and the only one that accepts a strict `json_schema`.
 
 Five models are not in this table, and the parameters below do not apply to them:
 
@@ -65,10 +64,13 @@ The accepted tiers differ per model:
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
-| MiMo-V2.6-Flash | `none` and the usual tiers — send `none` to disable thinking |
+| MiMo-V2.6-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 
 The parameter may also be omitted entirely. MiniCPM5-2B does not return separated thinking, so
 `reasoning_effort` does not apply to it.
+
+MiMo-V2.6-Flash accepts every value but doesn't act on it: in tests on 2026-10-19, every value,
+`none` included, returned the same short `reasoning`. You can't turn its thinking off.
 
 :::caution[`high` is a 400 on Qwen3.8-27B]
 `high` is what most OpenAI-compatible clients send for "think hard", and it is the one value that
@@ -106,7 +108,7 @@ against the table above.
 
 ## Thinking
 
-| Model | With `reasoning_effort` omitted | `usage.reasoning_tokens` (top level) |
+| Model | Without `reasoning_effort` | Top-level `reasoning_tokens` |
 |---|:---:|:---:|
 | DeepSeek-V4-Flash | does not think | ✅ |
 | DeepSeek-V4-Flash-Vision-Exp | does not think | ✅ |
@@ -114,15 +116,17 @@ against the table above.
 | Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
 | Qwen3.8-27B | **thinks anyway** | ❌ |
 | GLM-5.3-Flash | **thinks anyway** | ❌ |
+| MiMo-V2.6-Flash | **thinks anyway** | ❌ |
 | MiniCPM5-2B | does not think | ❌ |
 
 Thinking text arrives in `choices[0].message.reasoning`. MiniCPM5-2B answers directly, so that
 field is empty and `reasoning_tokens` is `0` — read `content` for its answer.
 
 For the token count use **`usage.completion_tokens_details.reasoning_tokens`**, which every model
-here reports **except [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/)** — that one omits the
-`completion_tokens_details` object entirely, so its thinking tokens cannot be separated from the
-rest of its output. They are still counted in `usage.completion_tokens`, and still billed.
+here reports **except [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/)** and
+**[MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/)**. Qwen3.8-27B omits the
+`completion_tokens_details` object entirely, and MiMo-V2.6-Flash reports `0` there even when it
+thinks, so their thinking tokens cannot be separated from the rest of the output. They are still counted in `usage.completion_tokens`, and still billed.
 
 :::caution[Thinking is on by default on both Qwen models and on GLM-5.3-Flash, and it spends `max_tokens`]
 On Qwen3.8-Flash-Next and Qwen3.8-27B a request with no `reasoning_effort` still thinks, and the
@@ -213,7 +217,7 @@ The shape every chat model here accepts:
   Qwen3.8-27B) and **not `xhigh`** (422 on GLM-5.3-Flash)
 - read thinking text from `choices[0].message.reasoning`
 - read thinking tokens from `usage.completion_tokens_details.reasoning_tokens` (Qwen3.8-27B
-  omits it)
+  omits it, and MiMo-V2.6-Flash reports `0`)
 - use `response_format: {"type": "json_object"}` for JSON
 - keep `content` textual unless the target model supports images
 - size `max_tokens` against the target model's window — they span 131,072 to 1,048,576, an

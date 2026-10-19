@@ -14,7 +14,7 @@ sidebar:
 ## 模型简介
 
 在 [DeepSeek-V4-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash/) 的权重上接了一座视觉塔，
-名字里的 `Exp` 就是 experimental。**它是本端点上唯一既有 100 万上下文、又能读图的模型。**
+名字里的 `Exp` 就是 experimental。它有 100 万上下文，也能读图，这一点和 [DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/)、[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 一样。
 
 语言侧的架构与文本版同源，逐字段核对过；下面这张表取自本端点实际加载的那份权重的 `config.json`。
 

@@ -1,6 +1,6 @@
 ---
 title: MiMo-V2.6-Flash
-description: 小米的全模态稀疏 MoE 模型：这里唯一接受音频输入的端点，也是唯一滑动窗口只有 128 token 的模型。
+description: 小米的全模态稀疏 MoE 模型，这里提供文本和图像输入，上下文 100 万 token，滑动窗口层只有 128 token 宽。
 sidebar:
   order: 8
 ---
@@ -14,7 +14,7 @@ sidebar:
 ## 模型简介
 
 这里提供的权重是 **MiMo-V2.6-Flash**，小米 MiMo-V2.6 系列里侧重效率的那一档 ——
-一个稀疏 MoE 模型，在同一个端点上接受文本、图像、视频和音频，并且默认先思考再回答。
+一个面向文本、图像、视频和音频的稀疏 MoE 模型。在这个端点上它接受文本和图像，并且总会先思考再回答。
 
 ### 架构
 
@@ -52,15 +52,15 @@ sidebar:
 | | |
 |---|---|
 | 上下文长度 | 1,048,576 token |
-| 输入模态 | **文本、图像、音频** |
+| 输入模态 | **文本、图像** |
 | 流式 | ✅ |
 | 工具调用 | ✅ |
 | JSON 输出 | ✅ `json_object` **和** `json_schema` |
-| 思考 | ✅ —— **默认开启，需要显式关闭** |
+| 思考 | ✅ —— **始终开启** |
 | 推理引擎 | SGLang |
 | 稳定性 | `experimental` |
 
-这是本 API 上唯一接受**音频**的模型，也是唯一接受**严格 `json_schema`**（而不只是 `json_object`）的模型。
+权重本身也支持音频和视频，但这个端点会拒绝音频输入，见[音频输入](#音频输入)。
 
 ### `messages`
 
@@ -73,7 +73,7 @@ sidebar:
 
 ### 思考
 
-思考**默认开启**。完全不传 `reasoning_effort`，响应里依然带有内容的 `reasoning`：
+思考**始终开启**。完全不传 `reasoning_effort`，响应里依然带有内容的 `reasoning`：
 
 ```json
 "message": {
@@ -83,7 +83,7 @@ sidebar:
 }
 ```
 
-要关掉，传 `reasoning_effort: "none"`，此时 `reasoning` 返回空。
+`reasoning_effort` 接受任何取值（`none`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`），但 2026-10-19 的测试中，没有一个取值改变结果：即使传 `none`，也会返回一段简短的 `reasoning`。用量里的思考 token 在顶层和 `completion_tokens_details` 里都报 `0`，思考只计入 `completion_tokens`。
 
 :::caution[预算要算上思考，不只是答案]
 在推荐采样参数下思考长度波动很大。同一个图像问题，一次只用了 62 个字符的 `reasoning`，
@@ -110,19 +110,7 @@ sidebar:
 
 ### 音频输入
 
-音频使用 OpenAI 的 `input_audio` 部件：
-
-```json
-{
-  "role": "user",
-  "content": [
-    { "type": "input_audio", "input_audio": { "data": "<base64>", "format": "wav" } },
-    { "type": "text", "text": "这是什么声音？" }
-  ]
-}
-```
-
-音频前端会重采样到 24 kHz。本 API 上没有其它模型接受这个部件类型。
+这个端点目前不支持。截至 2026-10-19，OpenAI 的 `input_audio` 部件会被拒绝，返回 `400`（"data did not match any variant of untagged enum MessageContent"）。请只发送文本和图像。
 
 ### 结构化输出
 
@@ -138,9 +126,9 @@ sidebar:
 | | |
 |---|---|
 | 上下文窗口 | 1,048,576 token，按**总预算**计 —— 提示词加输出 |
-| 输入 | 文本、图像、音频 |
+| 输入 | 文本、图像 |
 | JSON 输出 | `json_object` 与严格 `json_schema` |
-| 思考档位 | `reasoning_effort` —— 传 `none` 关闭；其它档位会被接受，但本模型没有像 DeepSeek 系列那样按档位标定 |
+| 思考档位 | `reasoning_effort` 接受任何取值，但不会改变输出；思考无法关闭 |
 
 :::caution[1M 的窗口不等于你会想用的 1M]
 上下文长度是真实的 —— 524,288 token 的提示词能被接受并正常作答。
@@ -162,4 +150,4 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   }'
 ```
 
-加上 `"reasoning_effort": "none"` 即可只要答案、不要思考过程。
+答案在 `content` 里，思考过程在 `reasoning` 里。
