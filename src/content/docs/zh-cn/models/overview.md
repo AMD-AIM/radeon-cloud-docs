@@ -28,7 +28,9 @@ sidebar:
 
 ## 规格
 
-| 模型 | 上下文 | 图像输入 | 不传 `reasoning_effort` 时是否思考 |
+**默认思考** 指不传 `reasoning_effort` 时模型也会思考，见[思考模式](#思考模式)。
+
+| 模型 | 上下文 | 图像输入 | 默认思考 |
 |---|---|:---:|:---:|
 | [DeepSeek-V4-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
 | [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
@@ -101,7 +103,7 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 
 ## 思考模式
 
-| 模型 | 不传 `reasoning_effort` 时 | `usage.reasoning_tokens`（顶层）|
+| 模型 | 不传 `reasoning_effort` 时 | 顶层 `reasoning_tokens` |
 |---|:---:|:---:|
 | DeepSeek-V4-Flash | 不思考 | ✅ |
 | DeepSeek-V4-Flash-Vision-Exp | 不思考 | ✅ |

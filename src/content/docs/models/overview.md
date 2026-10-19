@@ -29,7 +29,9 @@ and the vLLM Semantic Router decision models [d3](/radeon-cloud-docs/models/d3/)
 
 ## Specifications
 
-| Model | Context | Image input | Thinks with `reasoning_effort` omitted |
+**Thinks by default** means the model thinks even when you leave out `reasoning_effort`. See [Thinking](#thinking).
+
+| Model | Context | Image input | Thinks by default |
 |---|---|:---:|:---:|
 | [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
 | [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
@@ -106,7 +108,7 @@ against the table above.
 
 ## Thinking
 
-| Model | With `reasoning_effort` omitted | `usage.reasoning_tokens` (top level) |
+| Model | Without `reasoning_effort` | Top-level `reasoning_tokens` |
 |---|:---:|:---:|
 | DeepSeek-V4-Flash | does not think | ✅ |
 | DeepSeek-V4-Flash-Vision-Exp | does not think | ✅ |

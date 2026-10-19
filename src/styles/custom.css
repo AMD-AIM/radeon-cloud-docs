@@ -195,7 +195,17 @@ header.header {
   color: var(--sl-color-gray-3);
   font-weight: 600;
   text-align: left;
+  vertical-align: bottom;
   border-bottom: 1px solid var(--sl-color-hairline-light);
+}
+
+.sl-markdown-content th[align='center'] { text-align: center; }
+.sl-markdown-content th[align='right'] { text-align: right; }
+
+/* Parameter names are case-sensitive; keep them as written. */
+.sl-markdown-content th code {
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 .sl-markdown-content td { vertical-align: top; }
@@ -205,6 +215,9 @@ header.header {
 }
 
 .sl-markdown-content td code { white-space: nowrap; }
+
+/* Model and product names break badly at their hyphens. */
+.sl-markdown-content td:first-child a { white-space: nowrap; }
 
 /* ---------- HTTP method + endpoint signature ---------- */
 .rc-endpoint {
