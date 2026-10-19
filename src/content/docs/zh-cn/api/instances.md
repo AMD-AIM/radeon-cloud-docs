@@ -9,7 +9,7 @@ sidebar:
 
 路径相对于你所在站点的控制台地址，例如 `https://developer.amd.com.cn/radeon`。每个账号同一时间只能有一个实例，所以这些接口都不需要实例 ID。
 
-| 操作 | Notebook | 模型 API |
+| 操作 | Notebook | 模型服务 |
 |---|---|---|
 | 启动 | `POST /api/notebook/request` | `POST /api/inference` 或 `POST /api/templates/{id}/launch` |
 | 查看状态 | `GET /api/notebook/status` | `GET /api/inference/current` |
@@ -64,9 +64,9 @@ sidebar:
 - `instance_type` 不是 `jupyter`（`400`，`unsupported_deploy_type`）
 - 资源池或规格没有分配给你的账号（`403`，`resource_selection_not_assigned`）
 
-## 启动模型 API
+## 启动模型服务
 
-要部署自己的模型，发送模型名称和 vLLM 命令：
+要部署自己的模型（**部署类型：模型 API**），发送模型名称和 vLLM 命令：
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
@@ -101,7 +101,7 @@ sidebar:
   <span class="rc-auth">会话</span>
 </div>
 
-模型 API 实例请调用 `GET /api/inference/current`，它返回相同的字段，另外还有运行时长和积分消耗。
+模型服务请调用 `GET /api/inference/current`，它返回相同的字段，另外还有运行时长和积分消耗。
 
 ```json
 {
@@ -130,7 +130,7 @@ sidebar:
 | `url` | 在已登录的浏览器里打开 JupyterLab。 |
 | `ssh_host`、`ssh_port`、`ssh_username`、`ssh_command` | 容器运行后填入。 |
 | `persistent_available`、`storage_notice` | 持久化 `/workspace` 是否挂载成功；没有成功时说明原因。 |
-| `api_base_url`、`api_key`、`api_model` | 模型 API 实例就绪后填入，见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。 |
+| `api_base_url`、`api_key`、`api_model` | 模型服务就绪后填入，见[模型服务接口](/radeon-cloud-docs/zh-cn/api/model-services/)。 |
 
 每隔几秒轮询一次。实例通常一分钟内就绪，但镜像很大或需要下载模型时，可能要几分钟。
 
@@ -142,7 +142,7 @@ sidebar:
   <span class="rc-auth">会话</span>
 </div>
 
-返回当前实例的调度事件和容器输出，也就是控制台里 **查看日志** 显示的内容。模型 API 实例请调用 `GET /api/inference/current/logs`。
+返回当前实例的调度事件和容器输出，也就是控制台里 **查看日志** 显示的内容。模型服务请调用 `GET /api/inference/current/logs`。
 
 ## 销毁实例
 
@@ -152,7 +152,7 @@ sidebar:
   <span class="rc-auth">会话</span>
 </div>
 
-模型 API 实例请调用 `DELETE /api/inference/current`。
+模型服务请调用 `DELETE /api/inference/current`。
 
 ```json
 {

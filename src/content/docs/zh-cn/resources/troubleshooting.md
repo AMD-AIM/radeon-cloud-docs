@@ -25,7 +25,7 @@ sidebar:
 
 ### 实例要好几分钟才就绪
 
-在启动弹窗里点 **查看日志**。某个镜像在节点上第一次启动时会慢一些，因为节点要先下载镜像。模型 API 实例还要下载模型权重。
+在启动弹窗里点 **查看日志**。某个镜像在节点上第一次启动时会慢一些，因为节点要先下载镜像。模型服务还要下载模型权重。
 
 如果弹窗显示 **镜像拉取失败**，先重试，仍然失败就换一个镜像。
 
@@ -54,6 +54,15 @@ sidebar:
 
 JupyterLab 标签页不会发现实例已经删除。关掉这个标签页即可，实例的真实状态以 **首页** 为准。
 
+### 模型服务没有响应
+
+对于用 **部署类型：模型 API** 启动的实例：
+
+1. 确认命令绑定的是 `--host 0.0.0.0 --port 8000`。绑定到 `127.0.0.1` 时，实例看起来正常，但外部访问不到。
+2. 在实例卡片上点 **查看日志**，等模型加载完成。
+3. 使用当前实例卡片上的 base URL 和 API Key，重新启动后它们可能会变。
+4. `model` 字段请填 `--served-model-name` 里的名称，不要用 Token Factory 里的模型名称。
+
 ## SSH
 
 ### 连接被拒
@@ -78,7 +87,7 @@ ssh -i ~/.ssh/id_ed25519 root@<host> -p <port>
 
 新实例可能沿用之前实例的主机和端口，但主机密钥变了。用实例卡片上给出的 `ssh-keygen -R` 命令删除旧记录，再重新连接。
 
-## 模型 API
+## Token Factory
 
 ### 每个请求都返回 401
 
@@ -90,24 +99,17 @@ ssh -i ~/.ssh/id_ed25519 root@<host> -p <port>
 
 ### 在全球站调用总是返回 404
 
-共享模型 API 和 Token Factory 只在中国站提供，请使用 `https://developer.amd.com.cn/radeon/api/v1`。
+Token Factory 只在中国站提供，请使用 `https://developer.amd.com.cn/radeon/api/v1`。
 
 ### 429
 
 触发了限流或每日用量上限，`Retry-After` 表示要等多久，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
 
-如果经常收到 `429`，说明你的用量超出了共享额度。与其加大重试，不如[部署专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。
+如果经常收到 `429`，说明你的用量超出了 Token Factory 的额度。与其加大重试，不如[在自己的实例上部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。
 
 ### 提示 “Requested model ... not supported”
 
-模型名不在共享模型列表里。模型会不定期上线和下线，请用 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 查询模型名，不要写死在代码里。
-
-### 专属模型 API 没有响应
-
-1. 确认命令绑定的是 `--host 0.0.0.0 --port 8000`。绑定到 `127.0.0.1` 时，实例看起来正常，但外部访问不到。
-2. 在实例卡片上点 **查看日志**，等模型加载完成。
-3. 使用当前实例卡片上的 base URL 和 API Key，重新启动后它们可能会变。
-4. `model` 字段请填 `--served-model-name` 里的名称，不要用共享模型列表里的名称。
+模型名不在 Token Factory 的模型列表里。模型会不定期上线和下线，请用 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 查询模型名，不要写死在代码里。
 
 ## GPU
 

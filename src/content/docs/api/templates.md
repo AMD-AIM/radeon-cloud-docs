@@ -1,11 +1,11 @@
 ---
 title: Templates
-description: The endpoints behind the Gallery and the Model API templates.
+description: The endpoints behind the Gallery and the model service templates.
 sidebar:
   order: 9
 ---
 
-A template stores a launch configuration: an image, an instance type, a startup command and, optionally, a fixed resource pool and size. The [Gallery](/radeon-cloud-docs/guides/gallery/) and the ready-made Model API templates on **Home** are templates.
+A template stores a launch configuration: an image, an instance type, a startup command and, optionally, a fixed resource pool and size. The [Gallery](/radeon-cloud-docs/guides/gallery/) and the ready-made templates under **Deploy type: Model API** on **Home** are templates.
 
 Except for browsing public templates, these endpoints accept only a browser session. Paths are relative to your site's console address.
 
@@ -19,7 +19,7 @@ Except for browsing public templates, these endpoints accept only a browser sess
 
 Returns published templates. With an API key or a session, it also returns your own private templates.
 
-## List Model API templates
+## List model service templates
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>

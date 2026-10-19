@@ -9,7 +9,7 @@ description: 实例由哪些部分组成：部署类型、镜像、规格、存�
 
 | 设置 | 决定什么 |
 |---|---|
-| **部署类型** | **Notebook** 提供 JupyterLab 和 SSH，用于开发；**模型 API** 把模型部署成兼容 OpenAI 的接口。 |
+| **部署类型** | **Notebook** 提供 JupyterLab 和 SSH，用于开发；**模型 API** 用 vLLM 把模型部署成兼容 OpenAI 的接口，见[部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。 |
 | **规格** | GPU 数量、CPU 核数、内存，以及每小时消耗的积分。 |
 | **镜像** | 容器里的软件：ROCm、Python 和各类框架。见[选择镜像](/radeon-cloud-docs/zh-cn/guides/images/)。 |
 | **资源池** | 实例调度到哪一组 GPU 节点上。 |

@@ -15,6 +15,14 @@ export default defineConfig({
   redirects: {
     '/guides/templates/': `${BASE}/guides/launch/`,
     '/zh-cn/guides/templates/': `${BASE}/zh-cn/guides/launch/`,
+    '/guides/model-apis/': `${BASE}/guides/token-factory/`,
+    '/zh-cn/guides/model-apis/': `${BASE}/zh-cn/guides/token-factory/`,
+    '/guides/shared-models/': `${BASE}/guides/token-factory/`,
+    '/zh-cn/guides/shared-models/': `${BASE}/zh-cn/guides/token-factory/`,
+    '/guides/dedicated-models/': `${BASE}/guides/serve-model/`,
+    '/zh-cn/guides/dedicated-models/': `${BASE}/zh-cn/guides/serve-model/`,
+    '/api/dedicated-endpoints/': `${BASE}/api/model-services/`,
+    '/zh-cn/api/dedicated-endpoints/': `${BASE}/zh-cn/api/model-services/`,
   },
   integrations: [
     starlight({
@@ -23,7 +31,7 @@ export default defineConfig({
         'zh-CN': 'Radeon Cloud 文档',
       },
       description:
-        'Run AMD Radeon GPUs in the cloud. Launch notebooks, deploy OpenAI-compatible model endpoints, and call the AMD Radeon Cloud API.',
+        'Run AMD Radeon GPUs in the cloud. Launch GPU instances, call hosted models in Token Factory, and use the AMD Radeon Cloud API.',
       logo: {
         light: './src/assets/amd-logo.png',
         dark: './src/assets/amd-logo-white.png',
@@ -86,17 +94,15 @@ export default defineConfig({
             { slug: 'guides/jupyterlab' },
             { slug: 'guides/ssh' },
             { slug: 'guides/gallery' },
+            { slug: 'guides/serve-model' },
             { slug: 'guides/tunnel' },
             { slug: 'guides/destroy' },
           ],
         },
         {
-          label: 'Model APIs',
-          translations: { 'zh-CN': '模型 API' },
+          label: 'Token Factory',
           items: [
-            { slug: 'guides/model-apis' },
-            { slug: 'guides/shared-models' },
-            { slug: 'guides/dedicated-models' },
+            { slug: 'guides/token-factory' },
             {
               label: 'Model catalog',
               translations: { 'zh-CN': '模型目录' },
@@ -122,8 +128,7 @@ export default defineConfig({
             { slug: 'api/overview' },
             { slug: 'api/authentication' },
             {
-              label: 'OpenAI-compatible API',
-              translations: { 'zh-CN': 'OpenAI 兼容接口' },
+              label: 'Token Factory API',
               items: [
                 { slug: 'api/models' },
                 { slug: 'api/chat-completions' },
@@ -131,7 +136,7 @@ export default defineConfig({
                 { slug: 'api/usage' },
               ],
             },
-            { slug: 'api/dedicated-endpoints' },
+            { slug: 'api/model-services' },
             {
               label: 'Platform API',
               translations: { 'zh-CN': '平台接口' },

@@ -1,17 +1,17 @@
 ---
 title: API terms of use
-description: What the Model API is for, and the rules that apply when you call it.
+description: What Token Factory is for, and the rules that apply when you call it.
 sidebar:
   order: 3
 ---
 
 Last updated: 2026-09-10
 
-These terms cover the **Model API** — the free shared endpoints documented in
-this section. They do not govern GPU instances, templates, or the rest of the
-platform.
+These terms cover **Token Factory**, the free hosted models documented in
+this section. They do not govern GPU instances, model services you run on them,
+templates, or the rest of the platform.
 
-The Model API is offered by the AMD developer community as a **trial and
+Token Factory is offered by the AMD developer community as a **trial and
 development service** for people building on AMD hardware. It is free, and it is
 provided as is.
 
@@ -59,7 +59,7 @@ model, you were misinformed** — see [Reselling](#reselling-is-not-allowed).
 
 ## Free of charge
 
-The Model API is free. Credits, quotas and rate limits are capacity controls,
+Token Factory is free. Credits, quotas and rate limits are capacity controls,
 not currency, and carry no monetary value. Free also means no purchased
 entitlement: quotas can change and access can be suspended without compensation.
 
@@ -98,7 +98,7 @@ a reseller can see what happened and register directly.
 
 ## Acceptable use
 
-Do not use the Model API to:
+Do not use Token Factory to:
 
 - Break the law, or infringe anyone's rights.
 - Generate malware, exploits, or tooling for unauthorised access to systems.
@@ -140,13 +140,13 @@ If you think your key was disabled in error, write to
 
 ## Availability and changes
 
-We may change, suspend or discontinue any part of the Model API, and we may amend
+We may change, suspend or discontinue any part of Token Factory, and we may amend
 these terms, at any time. Material changes will be reflected here with a new date
 at the top. Continuing to call the endpoints after a change means you accept it.
 
 ## No warranty, no liability
 
-The Model API is provided **as is** and **as available**, without warranty of any
+Token Factory is provided **as is** and **as available**, without warranty of any
 kind. To the extent permitted by law, we are not liable for any loss arising from
 your use of it, including lost data, lost profits, or the consequences of acting
 on model output.

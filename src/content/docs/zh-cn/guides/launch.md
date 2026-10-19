@@ -41,7 +41,7 @@ description: 在首页启动 GPU 实例，启动表单里每个字段的含义�
 
 运行中的实例不能修改配置。要换存储或规格，先销毁实例再重新启动。
 
-要部署模型服务，把 **部署类型** 设为 **模型 API**，见[部署专属模型 API](/radeon-cloud-docs/zh-cn/guides/dedicated-models/)。
+要部署模型服务，把 **部署类型** 设为 **模型 API**，见[部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。
 
 ## 查看启动进度
 

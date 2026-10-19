@@ -1,11 +1,11 @@
 ---
 title: 用量和配额
-description: 查看共享模型 API 的用量，以及今天还剩多少额度。
+description: 查看 Token Factory 的用量，以及今天还剩多少额度。
 sidebar:
   order: 6
 ---
 
-返回你在共享模型 API 上用了多少，以及今天还剩多少额度。数据和控制台 **积分与用量** 页面上的相同。
+返回你在 Token Factory 上用了多少，以及今天还剩多少额度。数据和控制台 **积分与用量** 页面上的相同。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
@@ -65,7 +65,7 @@ curl "https://developer.amd.com.cn/radeon/api/v1/usage?include_recent=true" \
 | `by_model` | 同样的汇总，按模型拆分。 |
 | `recent` | 最近的单次请求。只有 `include_recent=true` 时才有内容。 |
 
-用量和费用的单位是模型 API 的 pts，也就是 **积分与用量** 页面上显示的单位。字段名以 `_usd` 结尾，但不会产生任何费用，也和你的积分无关。
+用量和费用的单位是 Token Factory 的 pts，也就是 **积分与用量** 页面上显示的单位。字段名以 `_usd` 结尾，但不会产生任何费用，也和你的积分无关。
 
 token 数分为 `prompt_tokens` 和 `completion_tokens`，有些模型还会返回 `reasoning_tokens`。
 
@@ -77,7 +77,7 @@ token 数分为 `prompt_tokens` 和 `completion_tokens`，有些模型还会返�
 
 跑大批量任务前先确认额度够用，或者持续关注 `daily_cost_remaining_usd`，免得任务跑到一半停下。额度用完后，请求会被拒绝，直到 `daily_reset_at`。
 
-每次调用模型 API 的响应头里也带有当前的计数，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
+每次调用 Token Factory 的响应头里也带有当前的计数，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)。
 
 ## 在控制台查看
 

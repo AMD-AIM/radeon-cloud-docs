@@ -5,8 +5,8 @@ sidebar:
   order: 4
 ---
 
-The main inference endpoint on the **shared model APIs**. It follows OpenAI's chat
-completions schema. A [dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) serves
+The main inference endpoint in **Token Factory**. It follows OpenAI's chat
+completions schema. A [model service](/radeon-cloud-docs/api/model-services/) on your instance serves
 the same path from your own vLLM, and none of the request filtering below applies
 there.
 
@@ -141,7 +141,7 @@ and no effect.
 That includes some parameters an OpenAI or vLLM client would reasonably expect to work:
 `stop`, `seed`, `logit_bias`, `logprobs`, `top_logprobs`, `top_k`, `min_p`, and
 `repetition_penalty`. If you need any of them, run a
-[dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/), which passes your body
+[model service](/radeon-cloud-docs/api/model-services/) on your instance, which passes your body
 straight to vLLM.
 :::
 

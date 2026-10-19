@@ -1,6 +1,6 @@
 ---
 title: 模型目录
-description: 共享模型 API 上各模型支持的输入和返回的内容。
+description: Token Factory 里各模型支持的输入和返回的内容。
 sidebar:
   label: 总览
   order: 1
@@ -218,5 +218,5 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 | 稳定性 | `experimental` |
 
 不在接受列表里的参数，会在请求到达推理后端之前被剔除——不报错，也不生效。确实需要这些参数，
-请用[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)，它会把请求体原样透传给
+请自己部署[模型服务](/radeon-cloud-docs/zh-cn/api/model-services/)，它会把请求体原样透传给
 vLLM 或 SGLang。

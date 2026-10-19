@@ -53,9 +53,9 @@ The outer configuration sets the default visual compression to `downsample_mode 
 
 ## On Radeon Cloud
 
-:::note[China shared API — verified 2026-10-13]
+:::note[Token Factory, China site — verified 2026-10-13]
 These service behaviours apply to `https://developer.amd.com.cn/radeon/api/v1`, not every
-regional or dedicated deployment. Current availability and prices come from
+regional deployment or model service. Current availability and prices come from
 [`GET /v1/models`](/radeon-cloud-docs/api/models/).
 :::
 
@@ -149,7 +149,7 @@ calls and execute them serially in your application when needed.
 
 JSON object mode and JSON tool arguments do not enforce a response schema. Check for a complete
 response before parsing, then validate required fields and types in your application.
-This restriction describes this MiniCPM deployment, not every model on the shared API.
+This restriction describes this MiniCPM deployment, not every model in Token Factory.
 
 ### Limits
 
@@ -176,7 +176,7 @@ can encounter ingress, timeout and [rate-limit](/radeon-cloud-docs/api/rate-limi
 
 ### Example
 
-Use the exact model ID without `openbmb/`. Set `RADEON_API_KEY` to your console's Model API key
+Use the exact model ID without `openbmb/`. Set `RADEON_API_KEY` to your Token Factory API key
 in the environment; never commit a real key.
 
 ```bash

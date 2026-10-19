@@ -41,7 +41,7 @@ sidebar:
 点右上角的账号，可以看到：
 
 - 积分余额
-- **积分与用量**：积分、兑换优惠码、模型 API 用量，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)
+- **积分与用量**：积分、兑换优惠码、Token Factory 用量，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)
 - **设置**：SSH 密钥、语言、外观、AMDAI 账号绑定，以及切换到经典版界面
 - **退出登录**
 

@@ -53,7 +53,7 @@ sidebar:
 
 ## 在 Radeon Cloud 上的行为
 
-:::note[中国区共享 API —— 2026-10-13 验证]
+:::note[Token Factory 中国站 —— 2026-10-13 验证]
 以下服务行为适用于 `https://developer.amd.com.cn/radeon/api/v1`，不代表其它区域或专属部署。
 当前可用状态和价格以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准。
 :::
@@ -145,7 +145,7 @@ base64 也会增加请求体大小。
 | `{"type":"json_schema","json_schema":{...}}` | ❌ —— `MiniCPM-V-4.7-35B-A3B` 在此部署上返回 400 |
 
 JSON 对象模式和工具参数 JSON 不等于响应受到严格 Schema 约束。解析前先确认响应完整，
-再由应用校验必需字段与类型。这是本款 MiniCPM 部署的限制，不代表共享 API 的所有模型。
+再由应用校验必需字段与类型。这是本款 MiniCPM 部署的限制，不代表 Token Factory 的所有模型。
 
 ### 限制
 

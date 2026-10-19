@@ -1,11 +1,11 @@
 ---
 title: Usage and quota
-description: Check your shared model API usage and what's left of today's allowance.
+description: Check your Token Factory usage and what's left of today's allowance.
 sidebar:
   order: 6
 ---
 
-Reports how much of the shared model APIs you've used, and what's left of today's allowance. This is the same data as **Credits & Usage** in the console.
+Reports how much of Token Factory you've used, and what's left of today's allowance. This is the same data as **Credits & Usage** in the console.
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="GET">GET</span>
@@ -65,7 +65,7 @@ curl "https://developer.amd.com.cn/radeon/api/v1/usage?include_recent=true" \
 | `by_model` | The same totals per model. |
 | `recent` | Recent individual requests. Empty unless `include_recent=true`. |
 
-Usage and cost values are in model API points (pts), the unit shown on **Credits & Usage**. The field names end in `_usd`, but you aren't charged money, and these points have nothing to do with your credits.
+Usage and cost values are in Token Factory points (pts), the unit shown on **Credits & Usage**. The field names end in `_usd`, but you aren't charged money, and these points have nothing to do with your credits.
 
 Token counts are split into `prompt_tokens` and `completion_tokens`. Some models also report `reasoning_tokens`.
 
@@ -77,7 +77,7 @@ The numbers above are an example. Read your own limits from this endpoint rather
 
 Check before a large batch job that there's enough left, or watch `daily_cost_remaining_usd` so a job doesn't stop halfway. Once the allowance is used up, requests are refused until `daily_reset_at`.
 
-Every model API response also carries the current counters as headers. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
+Every Token Factory response also carries the current counters as headers. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
 
 ## From the console
 

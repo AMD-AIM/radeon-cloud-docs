@@ -9,7 +9,7 @@ These are the endpoints the console calls when you launch, watch and destroy an 
 
 Paths are relative to your site's console address, for example `https://developer.amd.com.cn/radeon`. Each account can have one instance at a time, so none of these endpoints take an instance ID.
 
-| Task | Notebook | Model API |
+| Task | Notebook | Model service |
 |---|---|---|
 | Launch | `POST /api/notebook/request` | `POST /api/inference` or `POST /api/templates/{id}/launch` |
 | Check status | `GET /api/notebook/status` | `GET /api/inference/current` |
@@ -64,9 +64,9 @@ The launch is refused when:
 - `instance_type` isn't `jupyter` (`400`, `unsupported_deploy_type`)
 - the pool or size isn't assigned to your account (`403`, `resource_selection_not_assigned`)
 
-## Launch a model API
+## Launch a model service
 
-To serve your own model, send the model name and the vLLM command:
+To serve your own model (**Deploy type: Model API**), send the model name and the vLLM command:
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
@@ -101,7 +101,7 @@ Unknown fields are rejected. To launch one of the ready-made model templates ins
   <span class="rc-auth">Session</span>
 </div>
 
-For a model API instance, call `GET /api/inference/current`. It returns the same fields plus runtime and credit details.
+For a model service, call `GET /api/inference/current`. It returns the same fields plus runtime and credit details.
 
 ```json
 {
@@ -130,7 +130,7 @@ For a model API instance, call `GET /api/inference/current`. It returns the same
 | `url` | Opens JupyterLab in a signed-in browser. |
 | `ssh_host`, `ssh_port`, `ssh_username`, `ssh_command` | Filled in once the container is running. |
 | `persistent_available`, `storage_notice` | Whether the persistent `/workspace` was mounted, and why not if it wasn't. |
-| `api_base_url`, `api_key`, `api_model` | Filled in for a ready model API instance. See [Dedicated endpoints](/radeon-cloud-docs/api/dedicated-endpoints/). |
+| `api_base_url`, `api_key`, `api_model` | Filled in for a ready model service. See [Model service endpoints](/radeon-cloud-docs/api/model-services/). |
 
 Poll every few seconds. A launch is usually ready within a minute, but a large image or a model download can take several minutes.
 
@@ -142,7 +142,7 @@ Poll every few seconds. A launch is usually ready within a minute, but a large i
   <span class="rc-auth">Session</span>
 </div>
 
-Returns scheduling events and container output for the current instance. This is what **View logs** shows in the console. For a model API instance, call `GET /api/inference/current/logs`.
+Returns scheduling events and container output for the current instance. This is what **View logs** shows in the console. For a model service, call `GET /api/inference/current/logs`.
 
 ## Destroy the instance
 
@@ -152,7 +152,7 @@ Returns scheduling events and container output for the current instance. This is
   <span class="rc-auth">Session</span>
 </div>
 
-For a model API instance, call `DELETE /api/inference/current`.
+For a model service, call `DELETE /api/inference/current`.
 
 ```json
 {

@@ -79,7 +79,7 @@ you have finished, and check `rcc instance status` until no running instance is 
 ## The CLI token is not an API key
 
 After sign-in the CLI stores a token that starts with `rcc_`. It manages your account and
-instances only. The [model APIs](/radeon-cloud-docs/guides/model-apis/) use an API key that starts
+instances only. [Token Factory](/radeon-cloud-docs/guides/token-factory/) uses an API key that starts
 with `rc-`.
 
 ## Next steps

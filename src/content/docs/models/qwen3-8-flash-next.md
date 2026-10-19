@@ -85,7 +85,7 @@ Qwen lists the type as *Causal Language Model with Vision Encoder*, and the repo
 :::caution[Exactly one `system` message, and it must come first]
 This comes from the Jinja chat template shipped with the weights — Qwen writes the check into
 `tokenizer_config.json` — not from a gateway rule, so a
-[dedicated endpoint](/radeon-cloud-docs/api/dedicated-endpoints/) running the same weights behaves
+[model service](/radeon-cloud-docs/api/model-services/) running the same weights behaves
 the same way.
 
 ```json

@@ -1,13 +1,13 @@
 ---
 title: Messages（Anthropic）
-description: 用 Claude Code 等 Anthropic 客户端调用共享模型 API。
+description: 用 Claude Code 等 Anthropic 客户端调用 Token Factory 里的模型。
 sidebar:
   order: 5
 ---
 
-**共享模型 API** 也能通过 Anthropic 的 Messages API 访问，为 Claude 开发的客户端，例如 Claude Code 和 `anthropic` SDK，只要换掉 base URL 和 API Key 就能使用。
+**Token Factory** 也能通过 Anthropic 的 Messages API 访问，为 Claude 开发的客户端，例如 Claude Code 和 `anthropic` SDK，只要换掉 base URL 和 API Key 就能使用。
 
-这组接口由共享模型 API 的网关提供。[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)是你自己的 vLLM 服务，那边能不能用 `/v1/messages`，取决于它运行的 vLLM 版本。
+这组接口由 Token Factory 的网关提供。实例上的[模型服务](/radeon-cloud-docs/zh-cn/api/model-services/)是你自己的 vLLM 服务，那边能不能用 `/v1/messages`，取决于它运行的 vLLM 版本。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
@@ -25,7 +25,7 @@ sidebar:
 
 | 参数 | 类型 | | 说明 |
 |---|---|---|---|
-| `model` | string | <span class="rc-req">必填</span> | 要调用的模型，取自共享模型列表。 |
+| `model` | string | <span class="rc-req">必填</span> | 要调用的模型，取自 Token Factory 的模型列表。 |
 | `messages` | array | <span class="rc-req">必填</span> | 到目前为止的对话，用 Anthropic 的块格式。 |
 | `max_tokens` | integer | <span class="rc-req">必填</span> | 生成的 token 上限。Anthropic 要求必填，网关也一样。 |
 | `system` | string 或 array | <span class="rc-opt">选填</span> | 系统提示词，可以是字符串，也可以是一组 text 块。 |

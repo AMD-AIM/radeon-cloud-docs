@@ -9,7 +9,7 @@ AMD Radeon Cloud 有三种凭证，调用不同的接口要用不同的凭证。
 
 | 凭证 | 格式 | 用途 |
 |---|---|---|
-| **API Key** | `rc-` 加 48 位十六进制字符 | 共享模型 API |
+| **API Key** | `rc-` 加 48 位十六进制字符 | Token Factory |
 | **CLI 令牌** | `rcc_...` | [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/)：实例、积分、可用资源 |
 | **会话 Cookie** | 登录控制台时设置 | 控制台和[平台接口](/radeon-cloud-docs/zh-cn/api/instances/) |
 
@@ -30,7 +30,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
   -H "Authorization: Bearer $RADEON_API_KEY"
 ```
 
-共享模型 API 也接受放在 `x-api-key` 请求头里的 API Key，这是 Anthropic SDK 的认证方式。调用 [`/v1/messages`](/radeon-cloud-docs/zh-cn/api/messages/) 时，同时发送 `anthropic-version`：
+Token Factory 也接受放在 `x-api-key` 请求头里的 API Key，这是 Anthropic SDK 的认证方式。调用 [`/v1/messages`](/radeon-cloud-docs/zh-cn/api/messages/) 时，同时发送 `anthropic-version`：
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/messages \
@@ -40,7 +40,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/messages \
   -d '{"model":"DeepSeek-V4-Flash","max_tokens":256,"messages":[{"role":"user","content":"Hello"}]}'
 ```
 
-两个请求头同时存在时，以 `Authorization` 为准。只有共享模型 API 读取 `x-api-key`。
+两个请求头同时存在时，以 `Authorization` 为准。只有 Token Factory 读取 `x-api-key`。
 
 ### 获取 API Key
 
@@ -48,7 +48,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/messages \
 
 还在审核中的账号不会生成 API Key。如果看不到，请确认账号是否已通过审核。
 
-专属模型 API 有自己的 API Key，以 `sk-` 开头，显示在它的实例卡片上，见[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)。
+实例上的模型服务有自己的 API Key，以 `sk-` 开头，显示在它的实例卡片上，见[模型服务接口](/radeon-cloud-docs/zh-cn/api/model-services/)。
 
 ### 轮换 API Key
 
@@ -64,7 +64,7 @@ API Key 可能泄露时，请立即轮换。
 
 ## CLI 令牌
 
-`rcc auth login` 通过浏览器让 CLI 登录，并保存一个以 `rcc_` 开头的令牌。它用来管理账号和实例，不能调用模型 API。见[登录与账号](/radeon-cloud-docs/zh-cn/cli/authentication/)。
+`rcc auth login` 通过浏览器让 CLI 登录，并保存一个以 `rcc_` 开头的令牌。它用来管理账号和实例，不能调用 Token Factory。见[登录与账号](/radeon-cloud-docs/zh-cn/cli/authentication/)。
 
 ## 会话 Cookie
 
@@ -76,14 +76,14 @@ API Key 可能泄露时，请立即轮换。
 
 | 接口 | API Key | CLI 令牌 | 会话 |
 |---|---|---|---|
-| 共享模型 API（`/api/v1/...`） | 是 | 否 | 仅列出模型 |
-| 专属模型 API（`/inference/...`） | 卡片上的 `sk-` Key | 否 | 否 |
+| Token Factory（`/api/v1/...`） | 是 | 否 | 仅列出模型 |
+| 实例上的模型服务（`/inference/...`） | 卡片上的 `sk-` Key | 否 | 否 |
 | CLI 接口（`/api/cli/...`） | 否 | 是 | 否 |
 | 平台接口：实例、模板、账号 | 否 | 否 | 是 |
 | 浏览公开模板（`GET /api/templates`） | 可选 | 否 | 可选 |
 | JupyterLab 等应用（`/instances/...`） | 否 | 否 | 是 |
 
-专属模型 API 只接受它自己卡片上显示的 API Key。
+模型服务只接受它自己卡片上显示的 API Key。
 
 ## 认证错误
 

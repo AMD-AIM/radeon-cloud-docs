@@ -5,7 +5,7 @@ sidebar:
   order: 4
 ---
 
-主要的推理端点，属于 **共享模型 API**，遵循 OpenAI 的聊天补全 schema。[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)用你自己的 vLLM 提供同一路径，下面的请求过滤在那边都不适用。
+**Token Factory** 主要的推理接口，遵循 OpenAI 的聊天补全 schema。实例上的[模型服务](/radeon-cloud-docs/zh-cn/api/model-services/)用你自己的 vLLM 提供同一路径，下面的请求过滤在那边都不适用。
 
 <div class="rc-endpoint">
   <span class="rc-method" data-m="POST">POST</span>
@@ -126,7 +126,7 @@ GLM-5.3-Flash 传 `xhigh` 返回 422。
 
 其中包括一些 OpenAI 或 vLLM 客户端通常会用的参数：`stop`、`seed`、`logit_bias`、
 `logprobs`、`top_logprobs`、`top_k`、`min_p`、`repetition_penalty`。如果需要其中任何一个，
-请使用[专属端点](/radeon-cloud-docs/zh-cn/api/dedicated-endpoints/)，它会把请求体原样转发给 vLLM。
+请在实例上部署[模型服务](/radeon-cloud-docs/zh-cn/api/model-services/)，它会把请求体原样转发给 vLLM。
 :::
 
 ## 示例
