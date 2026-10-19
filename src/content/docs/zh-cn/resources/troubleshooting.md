@@ -36,13 +36,15 @@ sidebar:
 - **您已有一个正在运行的实例。** 每个账号只能有一个实例，请先[销毁](/radeon-cloud-docs/zh-cn/guides/destroy/)它。
 - **资源目录不可用，请重试。** 刷新页面。
 
-如果因为积分被拒绝，说明余额不够所选规格运行 1 小时，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
+在全球站，如果因为积分被拒绝，说明余额不够所选规格运行 1 小时，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
 
 ## 运行中的实例
 
 ### 实例被自动删除了
 
 积分用完时，或者超过启动表单上显示的 **超时回收** 时长时，实例会被删除，见[实例会被自动停止的情况](/radeon-cloud-docs/zh-cn/guides/instances/#实例会被自动停止的情况)。
+
+在中国站，如果余额不够第一个小时，实例就绪后一两分钟也会被删除。重新启动前，先在 **积分与用量** 页面确认余额，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
 
 请把检查点保存到持久化的 `/workspace`，这样实例停止时不会前功尽弃。
 

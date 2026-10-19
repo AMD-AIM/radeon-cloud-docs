@@ -9,9 +9,9 @@ The [China site and the Global site](/radeon-cloud-docs/introduction/#china-site
 
 ## China site
 
-The China site uses your [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) account. You can sign in at [developer.amd.com.cn](https://developer.amd.com.cn/), or click **Login** in the top-right corner of [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/). Either way, you end up on the same program login page.
+The China site uses your [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) account. You can sign in at [developer.amd.com.cn](https://developer.amd.com.cn/), or click **Login with AMDAI** in the top-right corner of [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/). The classic interface, which new visitors may see first, labels the same button **Login**. Either way, you end up on the same program login page.
 
-![The China site, with Login in the top-right corner](../../../assets/guide/cn-login.png)
+![The China site in the classic interface, with Login in the top-right corner](../../../assets/guide/cn-login.png)
 
 The login page has two tabs:
 
@@ -28,11 +28,14 @@ Once you're signed in to the program, you're signed in to the China site too. Yo
 
 ## Global site
 
-Open [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/), click **Login** in the top-right corner, and choose **Login with Email**.
+Open [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/), click **Sign in** in the top-right corner, and choose **Login with Email**. To use a GitHub account instead, choose **Login with GitHub**. In the classic interface, the button reads **Login**.
 
-![The Global site login screen](../../../assets/guide/login.png)
+![The Global site login menu in the classic interface](../../../assets/guide/login.png)
 
-Enter your email address and the six-digit code sent to it. Codes expire after a few minutes; if one doesn't arrive, wait for the cooldown and request another.
+1. Enter your email address and click **Send code**.
+2. Enter the six-digit code sent to you and click **Verify & sign in**.
+
+Codes expire after a few minutes. If one doesn't arrive, wait until **Resend code** is available and request another.
 
 ## After signing in
 

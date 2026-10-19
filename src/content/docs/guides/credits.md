@@ -5,11 +5,13 @@ description: How credits pay for instances, how to check and top up your balance
 
 Credits pay for GPU instances, including model services you run on them. Token Factory is free and doesn't use them.
 
+Credits aren't the same as AMD AI Developer Program points. On the China site you exchange points for credits. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
+
 ## How credits are spent
 
-- A running instance spends credits every hour. The rate is shown on the size you pick, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**.
-- The first hour is charged as soon as the instance starts.
-- You need at least one hour's worth of credits to launch.
+- A running instance spends 1 credit per GPU every hour. The rate is shown on the size you pick, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**.
+- The first hour is charged within a minute or two of the instance becoming ready, and each later hour as it begins.
+- Your balance has to cover the first hour. On the Global site, a launch is refused otherwise. On the China site, the launch goes ahead, but the instance is deleted as soon as that first hour can't be charged.
 - When your credits run out, the instance is deleted. Save your work to a persistent `/workspace` before that happens. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 - A destroyed instance spends nothing. [Destroy it](/radeon-cloud-docs/guides/destroy/) when you're done; an idle instance still spends credits.
 
@@ -44,7 +46,7 @@ Credits belong to the site where you redeem them and can't be moved between the 
 
 ## Token Factory usage
 
-Token Factory doesn't spend credits. They have their own daily usage cap, counted in points (pts), which resets at 00:00 Beijing time (UTC+8).
+Token Factory doesn't spend credits. It has its own daily usage cap, counted in points (pts), which resets at 00:00 Beijing time (UTC+8).
 
 **Credits & Usage** shows:
 

@@ -24,6 +24,8 @@ Token Factory lists its models. Filter them by **Use case**, **Provider** or **P
 
 Click a card to see the model's description, its pricing and how to call it. The value to send in the `model` field is shown there. The [Model catalog](/radeon-cloud-docs/models/overview/) describes what each model accepts.
 
+Prices are in points (pts) per million tokens, for example **0.14 pts / 1M tokens**. A model billed by input characters, such as OmniVoice, shows **pts / 1M characters** instead. Points measure usage against your [daily cap](#limits). They aren't money, and they aren't credits.
+
 ## Make a request
 
 ```bash

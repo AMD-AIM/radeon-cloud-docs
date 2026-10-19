@@ -14,7 +14,7 @@ An instance is a container with an AMD Radeon GPU attached. You start it from **
 | **Image** | The software in the container: ROCm, Python, frameworks. See [Choose an image](/radeon-cloud-docs/guides/images/). |
 | **Resource pool** | The group of GPU nodes the instance is scheduled on. |
 | **Workspace storage** | Whether `/workspace` is deleted with the instance or kept. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
-| **Mount a model** | Model files mounted read-only at `/models`. |
+| **Mount a model** | Model files mounted read-only, at `/models` for most models. See [Keep your data](/radeon-cloud-docs/guides/storage/#mounted-models). |
 
 The form shows **Deploy type**, **Size** and **Image** by default. Turn on **Customize** to see the rest.
 
@@ -30,13 +30,13 @@ Each account runs one instance at a time. While it runs, **Home** shows the inst
 
 ## Billing
 
-A running instance spends credits every hour. The rate is shown on the size you pick, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**. The first hour is charged as soon as the instance starts. The instance card on **Home** shows how long the instance has been up and how many credits it has used.
+A running instance spends 1 credit per GPU every hour. The rate is shown on the size you pick, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**. The first hour is charged within a minute or two of the instance becoming ready. The instance card on **Home** shows how long the instance has been up and how many credits it has used.
 
-You need enough credits to launch, and the instance is deleted when your credits run out. See [Credits](/radeon-cloud-docs/guides/credits/).
+Your balance has to cover the first hour, and the instance is deleted when your credits run out. See [Credits](/radeon-cloud-docs/guides/credits/).
 
 ## Limits that stop an instance
 
-An instance is deleted automatically when your credits run out, and, if the launch form showed **Auto-reclaim**, once that time has passed since it became ready. Save results to a persistent `/workspace` as you go, so a stop doesn't cost you the work.
+An instance is deleted automatically when your credits run out. It's also deleted once the **Auto-reclaim** time shown on the launch form has passed since it became ready, unless the form reads **Not enabled**. Save results to a persistent `/workspace` as you go, so a stop doesn't cost you the work.
 
 ## SSH is always on
 
