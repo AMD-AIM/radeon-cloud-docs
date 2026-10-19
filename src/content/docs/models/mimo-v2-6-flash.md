@@ -1,6 +1,6 @@
 ---
 title: MiMo-V2.6-Flash
-description: "Xiaomi's omnimodal sparse MoE model: the only endpoint here that takes audio, and the only one whose sliding-window layers are just 128 tokens wide."
+description: "Xiaomi's omnimodal sparse MoE model, served here for text and image input, with a 1M-token context and sliding-window layers just 128 tokens wide."
 sidebar:
   order: 8
 ---
@@ -14,8 +14,8 @@ sidebar:
 ## About the model
 
 The weights served here are **MiMo-V2.6-Flash**, the efficiency-balanced member of Xiaomi's
-MiMo-V2.6 line — a sparse Mixture-of-Experts model that accepts text, images, video and audio
-in one endpoint, and thinks before answering unless told not to.
+MiMo-V2.6 line — a sparse Mixture-of-Experts model built for text, images, video and audio.
+On this endpoint it takes text and images, and it always thinks before answering.
 
 ### Architecture
 
@@ -53,16 +53,15 @@ this shape would need — which is how a 1M window fits at all.
 | | |
 |---|---|
 | Context length | 1,048,576 tokens |
-| Input modalities | **text, image, audio** |
+| Input modalities | **text, image** |
 | Streaming | ✅ |
 | Tool calling | ✅ |
 | JSON output | ✅ `json_object` **and** `json_schema` |
-| Thinking | ✅ — **on unless you turn it off** |
+| Thinking | ✅ — **always on** |
 | Inference engine | SGLang |
 | Stability | `experimental` |
 
-This is the only model on this API that accepts **audio**, and the only one that accepts a
-**strict `json_schema`** rather than just `json_object`.
+The weights were built for audio and video too, but this endpoint rejects audio input. See [Audio input](#audio-input).
 
 ### `messages`
 
@@ -76,7 +75,7 @@ not need to rewrite newer OpenAI SDK output back to `system`.
 
 ### Thinking
 
-Thinking is **on by default**. Omit `reasoning_effort` entirely and the response still carries a
+Thinking is **always on**. Omit `reasoning_effort` entirely and the response still carries a
 populated `reasoning`:
 
 ```json
@@ -87,7 +86,10 @@ populated `reasoning`:
 }
 ```
 
-To turn it off, send `reasoning_effort: "none"` — `reasoning` then comes back empty.
+`reasoning_effort` is accepted with any value (`none`, `minimal`, `low`, `medium`, `high`, `xhigh`,
+`max`), but in tests on 2026-10-19 none of them changed the result: even `none` returned a short
+`reasoning`. Usage reports `0` reasoning tokens, both at the top level and in
+`completion_tokens_details`, so the thinking is counted only in `completion_tokens`.
 
 :::caution[Budget for the thinking, not just the answer]
 Thinking length varies a lot at the recommended sampling settings. The same image question has
@@ -115,19 +117,9 @@ back as 494 image tokens.
 
 ### Audio input
 
-Audio uses the OpenAI `input_audio` part:
-
-```json
-{
-  "role": "user",
-  "content": [
-    { "type": "input_audio", "input_audio": { "data": "<base64>", "format": "wav" } },
-    { "type": "text", "text": "What is this sound?" }
-  ]
-}
-```
-
-The audio front end resamples to 24 kHz. No other model on this API accepts this part type.
+Not available on this endpoint. An OpenAI `input_audio` part is rejected with `400` ("data did
+not match any variant of untagged enum MessageContent"), as of 2026-10-19. Send text and images
+only.
 
 ### Structured output
 
@@ -143,9 +135,9 @@ Both forms work:
 | | |
 |---|---|
 | Context window | 1,048,576 tokens, counted as a **total budget** — prompt plus output |
-| Input | text, image, audio |
+| Input | text, image |
 | JSON output | `json_object` and strict `json_schema` |
-| Thinking tiers | `reasoning_effort` — send `none` to disable; other tiers are accepted but the model is not tier-calibrated the way the DeepSeek models are |
+| Thinking tiers | `reasoning_effort` accepts every value but doesn't change the output; thinking can't be turned off |
 
 :::caution[A 1M window is not a 1M window you want to use]
 The context length is real — a 524,288-token prompt is accepted and answered. But time to first
@@ -168,4 +160,4 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   }'
 ```
 
-Add `"reasoning_effort": "none"` to get the answer without the thinking trace.
+The answer is in `content`; the thinking trace is in `reasoning`.

@@ -84,6 +84,7 @@ emitted by some models, so do not rely on it.
 | Qwen3.8-Flash-Next | **Still thinks**; the default tier is `xhigh`, the longest one |
 | Qwen3.8-27B | **Still thinks**; the default tier is `xhigh` |
 | GLM-5.3-Flash | **Still thinks** |
+| MiMo-V2.6-Flash | **Still thinks**, and `none` doesn't turn it off |
 | MiniCPM5-2B | Does not think |
 
 Pass the value explicitly if you want deterministic behaviour; send `low` to make the Qwen models
@@ -99,6 +100,7 @@ and GLM-5.3-Flash think less.
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
+| MiMo-V2.6-Flash | Any value is accepted but has no effect |
 | MiniCPM5-2B | Not applicable; answers directly |
 
 For one code path across all models, **stick to `low` and `medium`**. Those are the only two

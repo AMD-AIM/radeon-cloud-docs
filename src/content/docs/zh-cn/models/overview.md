@@ -41,9 +41,6 @@ sidebar:
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 
-[MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 是表中唯一还收**音频**输入的模型，
-也是唯一支持严格 `json_schema` 的模型。
-
 以下五个模型不在此表，下面的参数对它们不适用：
 
 | 模型 | 端点 | 输入 | 返回 | 计费单位 |
@@ -66,9 +63,11 @@ sidebar:
 | Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
-| MiMo-V2.6-Flash | `none` 及常见各档 —— 传 `none` 关闭思考 |
+| MiMo-V2.6-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 
 这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
+
+MiMo-V2.6-Flash 接受所有取值，但不会按取值调整：2026-10-19 的测试中，包括 `none` 在内的每个取值，返回的都是同样简短的 `reasoning`。它的思考无法关闭。
 
 :::caution[`high` 在 Qwen3.8-27B 上是 400]
 `high` 是多数 OpenAI 兼容客户端表达「多想一会儿」时发的值，也恰恰是唯一一个
@@ -111,14 +110,16 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 | Qwen3.8-Flash-Next | **照样思考** | ✅ |
 | Qwen3.8-27B | **照样思考** | ❌ |
 | GLM-5.3-Flash | **照样思考** | ❌ |
+| MiMo-V2.6-Flash | **照样思考** | ❌ |
 | MiniCPM5-2B | 不思考 | ❌ |
 
 思考文本从 `choices[0].message.reasoning` 读。MiniCPM5-2B 直接给答案，该字段为空、
 `reasoning_tokens` 为 `0`，答案从 `content` 读。
 
 token 数用 **`usage.completion_tokens_details.reasoning_tokens`**，除
-[Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) 外每个模型都给——那一个
-完全不返回 `completion_tokens_details` 对象，所以它的思考 token 无法与其余输出分开统计，
+[Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) 和 [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) 外每个模型都给。
+Qwen3.8-27B 完全不返回 `completion_tokens_details` 对象，MiMo-V2.6-Flash 即使思考了也在这里报 `0`，
+所以它们的思考 token 无法与其余输出分开统计，
 但仍然计入 `usage.completion_tokens`，也仍然计费。
 
 :::caution[两个 Qwen 模型和 GLM-5.3-Flash 默认就在思考，而且思考要花 `max_tokens`]
@@ -204,7 +205,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 - `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400；
   **也别用 `xhigh`**，GLM-5.3-Flash 会 422）
 - 思考文本从 `choices[0].message.reasoning` 读
-- 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 不给）
+- 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 不给，MiMo-V2.6-Flash 报 `0`）
 - 要 JSON 用 `response_format: {"type": "json_object"}`
 - `content` 只放文本；要发图先确认模型支持，并注意 Qwen3.8-27B 的计量字段不同
 - `max_tokens` 按目标模型的窗口算，从 131,072 到 1,048,576 差了 8 倍
