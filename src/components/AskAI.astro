@@ -1,0 +1,488 @@
+---
+const endpoint = import.meta.env.PUBLIC_ASK_AI_ENDPOINT || '';
+const isZh = Astro.locals.starlightRoute.locale === 'zh-cn';
+const t = isZh
+  ? {
+      button: '问 AI',
+      title: '问 AI',
+      close: '关闭',
+      clear: '清空对话',
+      placeholder: '问一个关于 Radeon Cloud 的问题…',
+      send: '发送',
+      intro: '我会根据这份文档回答关于 Radeon Cloud 的问题，并附上相关页面的链接。',
+      disclaimer:
+        '回答由 Token Factory 上的模型根据文档自动生成，可能有误，请以文档为准。不要在这里输入 API Key 等敏感信息。',
+      suggestions: ['怎么启动一个 GPU 实例？', '怎么获取 API Key 调用模型？', '实例销毁后文件还在吗？'],
+      thinking: '正在查阅文档…',
+      errors: {
+        rate_limited: '提问太频繁了，请一分钟后再试。',
+        model_busy: '模型正忙，请稍后再试。',
+        invalid_request: '问题太长了，请控制在 2,000 字以内。',
+        default: '暂时无法回答。可以发邮件到 member-service@mail.developer.amd.com.cn 咨询。',
+      },
+    }
+  : {
+      button: 'Ask AI',
+      title: 'Ask AI',
+      close: 'Close',
+      clear: 'Clear conversation',
+      placeholder: 'Ask a question about Radeon Cloud…',
+      send: 'Send',
+      intro: 'I answer questions about Radeon Cloud from these docs and link to the pages I used.',
+      disclaimer:
+        "Answers are generated from the docs by a model on Token Factory and can be wrong; the docs are authoritative. Don't enter API keys or other secrets here.",
+      suggestions: ['How do I launch a GPU instance?', 'How do I get an API key to call a model?', 'Are my files kept after I destroy an instance?'],
+      thinking: 'Reading the docs…',
+      errors: {
+        rate_limited: 'Too many questions. Try again in a minute.',
+        model_busy: 'The model is busy. Try again shortly.',
+        invalid_request: 'That question is too long. Keep it under 2,000 characters.',
+        default: "Couldn't get an answer right now. You can email member-service@mail.developer.amd.com.cn.",
+      },
+    };
+---
+
+{
+  endpoint && (
+    <ask-ai data-endpoint={endpoint} data-locale={isZh ? 'zh-cn' : 'en'} data-strings={JSON.stringify(t)}>
+      <button type="button" class="ask-ai-open" data-open aria-haspopup="dialog">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z" />
+          <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
+        </svg>
+        <span>{t.button}</span>
+      </button>
+      <dialog class="ask-ai-dialog" aria-label={t.title}>
+        <div class="ask-ai-panel">
+          <header class="ask-ai-header">
+            <h2>{t.title}</h2>
+            <div class="ask-ai-actions">
+              <button type="button" data-clear>{t.clear}</button>
+              <button type="button" data-close aria-label={t.close}>✕</button>
+            </div>
+          </header>
+          <div class="ask-ai-log" data-log aria-live="polite">
+            <div class="ask-ai-intro" data-intro>
+              <p>{t.intro}</p>
+              <div class="ask-ai-suggestions">
+                {t.suggestions.map((s) => <button type="button" data-suggestion>{s}</button>)}
+              </div>
+            </div>
+          </div>
+          <form class="ask-ai-form" data-form>
+            <textarea data-input rows="2" maxlength="2000" placeholder={t.placeholder} aria-label={t.placeholder}></textarea>
+            <button type="submit" data-send>{t.send}</button>
+          </form>
+          <p class="ask-ai-disclaimer">{t.disclaimer}</p>
+        </div>
+      </dialog>
+    </ask-ai>
+  )
+}
+
+<script>
+  const STORE_KEY = 'rc-ask-ai';
+  const MAX_HISTORY = 6;
+
+  function escapeHtml(text: string) {
+    return text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  }
+
+  function inline(text: string) {
+    const codes: string[] = [];
+    let out = escapeHtml(text).replace(/`([^`]+)`/g, (_, code) => `\u0000${codes.push(code) - 1}\u0000`);
+    out = out
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (match, label, href) => {
+        const url = href.replace(/&amp;/g, '&');
+        if (!/^(https?:\/\/|\/)/.test(url)) return match;
+        return `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${label}</a>`;
+      });
+    return out.replace(/\u0000(\d+)\u0000/g, (_, i) => `<code>${codes[Number(i)]}</code>`);
+  }
+
+  function renderMarkdown(source: string) {
+    const blocks: string[] = [];
+    const parts = source.split(/```[^\n]*\n?/);
+    parts.forEach((part, index) => {
+      if (index % 2 === 1) {
+        blocks.push(`<pre><code>${escapeHtml(part.replace(/\n$/, ''))}</code></pre>`);
+        return;
+      }
+      let list: string | null = null;
+      const close = () => {
+        if (list) blocks.push(`</${list}>`);
+        list = null;
+      };
+      for (const raw of part.split('\n')) {
+        const line = raw.trimEnd();
+        const bullet = line.match(/^\s*[-*]\s+(.*)$/);
+        const numbered = line.match(/^\s*\d+[.)]\s+(.*)$/);
+        const heading = line.match(/^#{1,6}\s+(.*)$/);
+        if (bullet || numbered) {
+          const kind = bullet ? 'ul' : 'ol';
+          if (list !== kind) {
+            close();
+            blocks.push(`<${kind}>`);
+            list = kind;
+          }
+          blocks.push(`<li>${inline((bullet || numbered)![1])}</li>`);
+        } else if (!line.trim()) {
+          close();
+        } else {
+          close();
+          blocks.push(heading ? `<p><strong>${inline(heading[1])}</strong></p>` : `<p>${inline(line)}</p>`);
+        }
+      }
+      close();
+    });
+    return blocks.join('');
+  }
+
+  type Turn = { role: 'user' | 'assistant'; content: string };
+
+  class AskAI extends HTMLElement {
+    endpoint = this.dataset.endpoint!;
+    locale = this.dataset.locale!;
+    strings = JSON.parse(this.dataset.strings!);
+    dialog = this.querySelector('dialog')!;
+    log = this.querySelector<HTMLElement>('[data-log]')!;
+    intro = this.querySelector<HTMLElement>('[data-intro]')!;
+    input = this.querySelector<HTMLTextAreaElement>('[data-input]')!;
+    sendButton = this.querySelector<HTMLButtonElement>('[data-send]')!;
+    turns: Turn[] = [];
+    busy = false;
+
+    connectedCallback() {
+      this.turns = this.load();
+      this.turns.forEach((turn) => this.addMessage(turn.role, turn.content));
+      this.querySelector('[data-open]')!.addEventListener('click', () => this.open());
+      this.querySelector('[data-close]')!.addEventListener('click', () => this.dialog.close());
+      this.querySelector('[data-clear]')!.addEventListener('click', () => this.clear());
+      this.dialog.addEventListener('click', (event) => {
+        if (event.target === this.dialog) this.dialog.close();
+      });
+      this.querySelectorAll<HTMLButtonElement>('[data-suggestion]').forEach((b) =>
+        b.addEventListener('click', () => this.ask(b.textContent || ''))
+      );
+      this.querySelector('[data-form]')!.addEventListener('submit', (event) => {
+        event.preventDefault();
+        this.ask(this.input.value);
+      });
+      this.input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+          event.preventDefault();
+          this.ask(this.input.value);
+        }
+      });
+      const preset = new URLSearchParams(location.search).get('ask');
+      if (preset) {
+        this.open();
+        this.ask(preset);
+      }
+    }
+
+    load(): Turn[] {
+      try {
+        return JSON.parse(sessionStorage.getItem(`${STORE_KEY}:${this.locale}`) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    save() {
+      sessionStorage.setItem(`${STORE_KEY}:${this.locale}`, JSON.stringify(this.turns.slice(-2 * MAX_HISTORY)));
+    }
+
+    open() {
+      if (!this.dialog.open) this.dialog.showModal();
+      this.input.focus();
+      this.log.scrollTop = this.log.scrollHeight;
+    }
+
+    clear() {
+      this.turns = [];
+      this.save();
+      this.log.querySelectorAll('.ask-ai-message').forEach((el) => el.remove());
+      this.intro.hidden = false;
+    }
+
+    addMessage(role: Turn['role'], content: string) {
+      this.intro.hidden = true;
+      const el = document.createElement('div');
+      el.className = `ask-ai-message ask-ai-${role}`;
+      if (role === 'user') el.textContent = content;
+      else el.innerHTML = renderMarkdown(content);
+      this.log.append(el);
+      this.log.scrollTop = this.log.scrollHeight;
+      return el;
+    }
+
+    async ask(raw: string) {
+      const question = raw.trim();
+      if (!question || this.busy) return;
+      this.busy = true;
+      this.sendButton.disabled = true;
+      this.input.value = '';
+      const history = this.turns.slice(-MAX_HISTORY);
+      this.addMessage('user', question);
+      const answerEl = this.addMessage('assistant', '');
+      answerEl.classList.add('ask-ai-pending');
+      answerEl.textContent = this.strings.thinking;
+      let answer = '';
+      try {
+        const response = await fetch(this.endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question, locale: this.locale, history }),
+        });
+        if (!response.ok || !response.body) {
+          const code = (await response.json().catch(() => ({})))?.error?.code;
+          throw new Error(this.strings.errors[code] || this.strings.errors.default);
+        }
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let frame = 0;
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+          for (const line of lines) {
+            if (!line.startsWith('data:')) continue;
+            const data = line.slice(5).trim();
+            if (!data || data === '[DONE]') continue;
+            try {
+              answer += JSON.parse(data).choices?.[0]?.delta?.content || '';
+            } catch {}
+          }
+          if (answer && !frame) {
+            frame = requestAnimationFrame(() => {
+              frame = 0;
+              answerEl.classList.remove('ask-ai-pending');
+              answerEl.innerHTML = renderMarkdown(answer);
+              this.log.scrollTop = this.log.scrollHeight;
+            });
+          }
+        }
+        if (!answer) throw new Error(this.strings.errors.default);
+        answerEl.classList.remove('ask-ai-pending');
+        answerEl.innerHTML = renderMarkdown(answer);
+        this.turns.push({ role: 'user', content: question }, { role: 'assistant', content: answer });
+        this.save();
+      } catch (error) {
+        answerEl.classList.remove('ask-ai-pending');
+        answerEl.classList.add('ask-ai-error');
+        answerEl.textContent = error instanceof Error && error.message ? error.message : this.strings.errors.default;
+      } finally {
+        this.busy = false;
+        this.sendButton.disabled = false;
+        this.log.scrollTop = this.log.scrollHeight;
+      }
+    }
+  }
+
+  customElements.define('ask-ai', AskAI);
+</script>
+
+<style>
+  .ask-ai-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2.5rem;
+    padding: 0 0.85rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .ask-ai-open:hover {
+    border-color: var(--sl-color-accent);
+    color: var(--sl-color-white);
+  }
+  .ask-ai-open svg {
+    color: var(--sl-color-accent-high);
+  }
+  @media (max-width: 50rem) {
+    .ask-ai-open span {
+      display: none;
+    }
+    .ask-ai-open {
+      padding: 0 0.5rem;
+      border: 0;
+      background: transparent;
+    }
+  }
+
+  .ask-ai-dialog {
+    width: min(40rem, 100vw);
+    max-height: min(46rem, 100dvh);
+    margin: auto 1.5rem 1.5rem auto;
+    padding: 0;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.75rem;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-white);
+    box-shadow: var(--sl-shadow-lg);
+  }
+  .ask-ai-dialog::backdrop {
+    background: rgb(0 0 0 / 0.35);
+  }
+  @media (max-width: 50rem) {
+    .ask-ai-dialog {
+      width: 100vw;
+      max-width: 100vw;
+      height: 100dvh;
+      max-height: 100dvh;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+    }
+  }
+  .ask-ai-panel {
+    display: flex;
+    flex-direction: column;
+    height: min(46rem, 100dvh);
+  }
+  @media (max-width: 50rem) {
+    .ask-ai-panel {
+      height: 100dvh;
+    }
+  }
+  .ask-ai-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--sl-color-hairline);
+  }
+  .ask-ai-header h2 {
+    margin: 0;
+    font-size: var(--sl-text-lg);
+  }
+  .ask-ai-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .ask-ai-actions button,
+  .ask-ai-suggestions button {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.4rem;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-xs);
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+  }
+  .ask-ai-actions button:hover,
+  .ask-ai-suggestions button:hover {
+    color: var(--sl-color-white);
+    border-color: var(--sl-color-accent);
+  }
+  .ask-ai-log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    font-size: var(--sl-text-sm);
+    line-height: 1.6;
+  }
+  .ask-ai-intro p {
+    margin: 0 0 0.75rem;
+    color: var(--sl-color-gray-2);
+  }
+  .ask-ai-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .ask-ai-log :global(.ask-ai-message) {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .ask-ai-log :global(.ask-ai-user) {
+    align-self: flex-end;
+    max-width: 85%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.6rem;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-white);
+    white-space: pre-wrap;
+  }
+  .ask-ai-log :global(.ask-ai-assistant p),
+  .ask-ai-log :global(.ask-ai-assistant ul),
+  .ask-ai-log :global(.ask-ai-assistant ol),
+  .ask-ai-log :global(.ask-ai-assistant pre) {
+    margin: 0 0 0.6rem;
+  }
+  .ask-ai-log :global(.ask-ai-assistant ul),
+  .ask-ai-log :global(.ask-ai-assistant ol) {
+    padding-inline-start: 1.25rem;
+  }
+  .ask-ai-log :global(.ask-ai-assistant pre) {
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.4rem;
+    background: var(--sl-color-gray-6);
+    overflow-x: auto;
+    font-size: var(--sl-text-xs);
+  }
+  .ask-ai-log :global(.ask-ai-assistant code) {
+    font-family: var(--__sl-font-mono);
+  }
+  .ask-ai-log :global(.ask-ai-assistant a) {
+    color: var(--sl-color-text-accent);
+  }
+  .ask-ai-log :global(.ask-ai-pending) {
+    color: var(--sl-color-gray-3);
+    font-style: italic;
+  }
+  .ask-ai-log :global(.ask-ai-error) {
+    color: var(--sl-color-red-high, #f87171);
+  }
+  .ask-ai-form {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem 0.5rem;
+    border-top: 1px solid var(--sl-color-hairline);
+  }
+  .ask-ai-form textarea {
+    flex: 1;
+    resize: none;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-white);
+    font: inherit;
+    font-size: var(--sl-text-sm);
+  }
+  .ask-ai-form button {
+    align-self: stretch;
+    padding: 0 1rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .ask-ai-form button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+  .ask-ai-disclaimer {
+    margin: 0;
+    padding: 0 1rem 0.75rem;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-2xs, 0.7rem);
+    line-height: 1.4;
+  }
+</style>

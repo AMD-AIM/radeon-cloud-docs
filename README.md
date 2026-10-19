@@ -112,6 +112,14 @@ Pushing to `main` builds and publishes automatically via `.github/workflows/depl
 
 To move the site elsewhere, edit `SITE` and `BASE` at the top of `astro.config.mjs`. For a custom domain, set `BASE` to `/`, `SITE` to the domain, and add a `public/CNAME` file containing it.
 
+## Ask AI
+
+The **Ask AI** button next to search sends the reader's question to the Radeon Cloud backend (`POST /api/docs/ask` on the China site), which answers with a Token Factory model using these docs as its knowledge base.
+
+- Every build writes the knowledge base to `dist/ask-ai/corpus-en.md` and `dist/ask-ai/corpus-zh-cn.md` (`src/integrations/ask-ai-corpus.mjs`). The backend fetches them from the published site, so a docs change reaches Ask AI on the next deploy.
+- The button appears only when the build has `PUBLIC_ASK_AI_ENDPOINT`. In CI it comes from the repository variable `ASK_AI_ENDPOINT` (**Settings → Secrets and variables → Actions → Variables**), for example `https://developer.amd.com.cn/radeon/api/docs/ask`. Delete the variable and redeploy to hide it.
+- `?ask=<question>` on any page opens the panel and asks the question.
+
 ## License
 
 Documentation content is maintained by AMD.

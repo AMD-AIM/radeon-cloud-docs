@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import askAiCorpus from './src/integrations/ask-ai-corpus.mjs';
 
 // Deployed to GitHub Pages under the AMD-AIM organization.
 // If you later move to a custom domain (e.g. docs.radeon.cloud), set
@@ -25,6 +26,7 @@ export default defineConfig({
     '/zh-cn/api/dedicated-endpoints/': `${BASE}/zh-cn/api/model-services/`,
   },
   integrations: [
+    askAiCorpus({ site: SITE, base: BASE }),
     starlight({
       title: {
         en: 'Radeon Cloud Docs',
@@ -70,6 +72,7 @@ export default defineConfig({
       tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
       components: {
         Hero: './src/components/Hero.astro',
+        Search: './src/components/Search.astro',
       },
       sidebar: [
         {
