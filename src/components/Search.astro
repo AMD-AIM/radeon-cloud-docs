@@ -1,0 +1,17 @@
+---
+import DefaultSearch from '@astrojs/starlight/components/Search.astro';
+import AskAI from './AskAI.astro';
+---
+
+<div class="search-with-ask-ai">
+  <DefaultSearch {...Astro.props} />
+  <AskAI />
+</div>
+
+<style>
+  .search-with-ask-ai {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+</style>

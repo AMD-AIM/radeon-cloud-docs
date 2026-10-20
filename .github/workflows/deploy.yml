@@ -30,6 +30,9 @@ jobs:
       - run: npm ci
 
       - run: npm run build
+        env:
+          # Ask AI stays hidden until the repository variable ASK_AI_ENDPOINT is set.
+          PUBLIC_ASK_AI_ENDPOINT: ${{ vars.ASK_AI_ENDPOINT }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
