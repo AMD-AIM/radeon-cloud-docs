@@ -38,7 +38,7 @@ name. `claude-3-5-sonnet-20241022` is not served here and will be rejected with 
 | `stream` | boolean | <span class="rc-opt">Optional</span> | Stream the response as server-sent events. Defaults to `false`. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
 | `thinking` | object | <span class="rc-opt">Optional</span> | Extended-thinking configuration. Mapped onto the reasoning controls the backend understands. **The `budget_tokens` form is currently rejected**; see below. |
-| `output_config` | object | <span class="rc-opt">Optional</span> | `effort` controls adaptive reasoning depth on models that support it. Accepted tiers vary per model; `low` and `medium` work everywhere. |
+| `output_config` | object | <span class="rc-opt">Optional</span> | `effort` controls adaptive reasoning depth on models that support it. Accepted tiers vary per model; `low` and `medium` work on every model whose tiers are verified. |
 | `metadata` | object | <span class="rc-opt">Optional</span> | `user_id` is used for sticky routing. Claude Code puts its session id here. |
 
 :::caution[Unlisted parameters are dropped, not forwarded]
@@ -80,7 +80,9 @@ The thinking text arrives as `thinking` blocks in `content`, alongside the `text
 
 `effort` becomes `reasoning_effort` internally, so **the same per-model tier limits apply**: the
 `high` above is fine on DeepSeek-V4-Flash but returns 400 on Qwen3.8-Flash-Next. Stick to `low` and
-`medium` for one code path across models; the full table is on
+`medium` for one code path across models; those two are accepted by every model whose tiers are
+verified. How MiniCPM-V-4.7-1B, MiniCPM-V-4.7-35B-A3B and Gemma-4-31B-IT treat `effort` has not
+been verified. The full table is on
 [`POST /v1/chat/completions`](/radeon-cloud-docs/api/chat-completions/).
 
 Alternatively, use `reasoning_effort` on that endpoint.

@@ -93,7 +93,7 @@ Use any `id` from this list as the `model` field in [chat completions](/radeon-c
 | `name`, `description`, `family`, `aliases` | Display metadata. |
 | `architecture` | Input and output modalities, and the tokenizer family. |
 | `providers` | The backends serving this model, each with its own pricing and capability flags. |
-| `pricing` | Price per token as decimal strings: `prompt`, `completion`, and `input_cache_read` where prompt caching applies. Counted against your daily allowance in Token Factory points, not charged as money. See [Usage and quota](/radeon-cloud-docs/api/usage/). |
+| `pricing` | Price per token as decimal strings: `prompt`, `completion`, and `input_cache_read` where prompt caching applies. A model billed by input characters, such as OmniVoice, puts its price per character in `prompt`. Counted against your daily allowance in Token Factory points, not charged as money. See [Usage and quota](/radeon-cloud-docs/api/usage/). |
 | `context_length` | Maximum context window in tokens. |
 | `supported_parameters` | Request parameters this model accepts. The full schema is under [chat completions](/radeon-cloud-docs/api/chat-completions/). |
 | `json_output`, `structured_outputs` | Whether `response_format` is honoured. |

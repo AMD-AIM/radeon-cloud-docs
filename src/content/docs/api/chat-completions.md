@@ -33,7 +33,7 @@ Also reachable at `/api/v1/chat/completions`. The two paths are the same endpoin
 | `response_format` | object | <span class="rc-opt">Optional</span> | `{"type": "json_object"}` or a `json_schema`, on models where `json_output` is true. |
 | `tools` | array | <span class="rc-opt">Optional</span> | Tool definitions, if the model supports tool calling. |
 | `tool_choice` | string or object | <span class="rc-opt">Optional</span> | Which tool the model may or must call. |
-| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model (see the table below); `low` and `medium` work everywhere. **Whether omitting it disables thinking also varies per model.** |
+| `reasoning_effort` | string | <span class="rc-opt">Optional</span> | Controls thinking length. Accepted tiers vary per model (see the table below); `low` and `medium` work on every model whose tiers are verified. **Whether omitting it disables thinking also varies per model.** |
 | `reasoning.effort` | string | <span class="rc-opt">Optional</span> | Same thing, unified form. Cannot be combined with `reasoning_effort`. |
 
 :::caution[`messages`: roles and system-message placement differ per model]
@@ -57,8 +57,8 @@ Some models are more permissive than that. Per-model detail is on the
 :::
 
 :::tip[How to turn thinking on]
-On this endpoint, **`reasoning_effort` (or the equivalent `reasoning.effort`) is the only way**
-to enable thinking.
+On this endpoint, **`reasoning_effort` (or the equivalent `reasoning.effort`) is how you enable
+thinking** on most models.
 
 ```json
 {
@@ -69,9 +69,10 @@ to enable thinking.
 ```
 
 The thinking text comes back in `choices[0].message.reasoning` (not `reasoning_content`). For the
-token count use **`usage.completion_tokens_details.reasoning_tokens`**, which every model reports
-except Qwen3.8-27B. That model omits `completion_tokens_details`, and its thinking tokens are
-counted in `usage.completion_tokens` instead. The top-level `usage.reasoning_tokens` is only
+token count use **`usage.completion_tokens_details.reasoning_tokens`**, which every verified model
+reports except Qwen3.8-27B. That model omits `completion_tokens_details`, and its thinking tokens
+are counted in `usage.completion_tokens` instead. For MiniCPM-V-4.7-1B, MiniCPM-V-4.7-35B-A3B and
+Gemma-4-31B-IT these usage fields have not been verified. The top-level `usage.reasoning_tokens` is only
 emitted by some models, so do not rely on it.
 
 **Omitting `reasoning_effort` does not mean no thinking.** The default differs per model:
@@ -86,6 +87,9 @@ emitted by some models, so do not rely on it.
 | GLM-5.3-Flash | **Still thinks** |
 | MiMo-V2.6-Flash | **Still thinks**, and `none` doesn't turn it off |
 | MiniCPM5-2B | Does not think |
+| MiniCPM-V-4.7-1B | Does not think |
+| MiniCPM-V-4.7-35B-A3B | Does not think |
+| Gemma-4-31B-IT | Does not think |
 
 Pass the value explicitly if you want deterministic behaviour; send `low` to make the Qwen models
 and GLM-5.3-Flash think less.
@@ -102,9 +106,26 @@ and GLM-5.3-Flash think less.
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | Any value is accepted but has no effect |
 | MiniCPM5-2B | Not applicable; answers directly |
+| MiniCPM-V-4.7-1B | Not verified |
+| MiniCPM-V-4.7-35B-A3B | Not verified |
+| Gemma-4-31B-IT | Not verified |
+
+MiniCPM-V-4.7-1B, MiniCPM-V-4.7-35B-A3B and Gemma-4-31B-IT turn thinking on with
+`chat_template_kwargs: {"enable_thinking": true}` instead, which the gateway forwards unchanged:
+
+```json
+{
+  "model": "Gemma-4-31B-IT",
+  "chat_template_kwargs": { "enable_thinking": true },
+  "messages": [{ "role": "user", "content": "..." }]
+}
+```
+
+How these three models treat `reasoning_effort` and the `developer` role has not been verified, and
+this toggle has not been tested end to end on Gemma-4-31B-IT.
 
 For one code path across all models, **stick to `low` and `medium`**. Those are the only two
-every model accepts. The name of the top tier is not portable, and the two spellings are mutually
+every model in the table with verified tiers accepts. The name of the top tier is not portable, and the two spellings are mutually
 exclusive: Qwen3.8-27B returns 400 for `high`, while GLM-5.3-Flash returns 422 for `xhigh`. The
 full matrix is in the [model reference](/radeon-cloud-docs/models/overview/).
 :::

@@ -33,7 +33,7 @@ sidebar:
 | `stream` | boolean | <span class="rc-opt">选填</span> | 以 server-sent events 流式返回。默认 `false`。 |
 | `tools` | array | <span class="rc-opt">选填</span> | 工具定义，前提是模型支持工具调用。 |
 | `thinking` | object | <span class="rc-opt">选填</span> | 扩展思考配置，会映射到后端支持的推理控制项。**带 `budget_tokens` 的写法目前会被拒绝**，见下文。 |
-| `output_config` | object | <span class="rc-opt">选填</span> | `effort` 控制支持该能力的模型的自适应推理深度。取值因模型而异，`low` 和 `medium` 所有模型都接受。 |
+| `output_config` | object | <span class="rc-opt">选填</span> | `effort` 控制支持该能力的模型的自适应推理深度。取值因模型而异，已验证档位的模型都接受 `low` 和 `medium`。 |
 | `metadata` | object | <span class="rc-opt">选填</span> | `user_id` 用于粘性路由。Claude Code 把它的会话 id 放在这里。 |
 
 :::caution[不在列表里的参数会被丢弃，不会透传]
@@ -70,7 +70,8 @@ sidebar:
 思考内容会以 `thinking` 块的形式出现在 `content` 里，和 `text` 块并列。
 
 `effort` 在内部对应 `reasoning_effort`，**可用的取值同样因模型而异**：上面的 `high` 在
-DeepSeek-V4-Flash 上可用，在 Qwen3.8-Flash-Next 上会返回 400。要兼容所有模型，只用 `low` 和 `medium`，
+DeepSeek-V4-Flash 上可用，在 Qwen3.8-Flash-Next 上会返回 400。要兼容多个模型，只用 `low` 和 `medium`，已验证档位的模型都接受这两个值。
+MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 如何处理 `effort` 尚未验证。
 完整对照表见 [`POST /v1/chat/completions`](/radeon-cloud-docs/zh-cn/api/chat-completions/)。
 
 也可以改用聊天补全接口的 `reasoning_effort`。

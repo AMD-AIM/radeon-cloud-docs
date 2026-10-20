@@ -13,7 +13,7 @@ sidebar:
 | `401` | Missing, malformed, or unrecognised credential. | Check the `Authorization` header. Rotate the key if it may have been revoked. |
 | `403` | Authenticated, but not permitted. | The cause varies; see below. |
 | `404` | No such template or instance, or a Token Factory path that no model serves. | Confirm the identifier. A model name that isn't in the catalog is a `400`, not a `404`. |
-| `409` | A conflicting state, such as email verification being required first. | Follow the `code` in the body. |
+| `409` | A conflicting state, such as the previous instance still being deleted, or email verification being required first. | Follow the `code` in the body, or wait and retry. |
 | `429` | Rate limited. | Wait for `Retry-After`, then back off. See [Rate limits](/radeon-cloud-docs/api/rate-limits/). |
 | `502` | The upstream model gateway or serving backend is unreachable. | Transient. Retry with backoff. |
 | `503` | Capacity temporarily exhausted, or a feature is disabled. | Retry after the interval in `Retry-After`. |
@@ -85,16 +85,17 @@ backend with its own status and message.
 
 Errors from a **model service** on your instance are none of the above. There is no gateway on that path, so once
 the proxy has admitted the request the body you get back is whatever vLLM produced,
-verbatim. A `403` from the proxy means the key, the instance or the port didn't match; a `503`
-means the instance is still starting. Everything else is your server talking.
+verbatim. A `403` from the proxy means the key doesn't match the instance, or the instance isn't
+running a model service. A `502` means vLLM isn't accepting connections yet. Everything else is
+your server talking.
 
 ## Common cases
 
 **`400 Each user can only have one active instance`**: Destroy the current instance first. See [`DELETE /api/notebook/current`](/radeon-cloud-docs/api/instances/#destroy-the-instance).
 
-**`400 Insufficient credits`**: Your balance doesn't cover one hour on the chosen size. [Redeem a coupon](/radeon-cloud-docs/guides/credits/#redeem-a-coupon) or choose a smaller size.
+**`400 Insufficient credits`**: Your balance doesn't cover one hour on the chosen size. [Redeem a coupon](/radeon-cloud-docs/guides/credits/#redeem-a-coupon) or choose a smaller size. Only the Global site checks this before launch. See [Credits](/radeon-cloud-docs/guides/credits/#how-credits-are-spent).
 
-**`400 Invalid image selected`**: The image isn't in the catalog or has been disabled. Pick one from the **Image** list on **Home**.
+**`400 {"code": "catalog_image_not_found"}`**: The image isn't in the catalog for your account, or has been retired. Pick one from the **Image** list on **Home**. On the China site, `china_image_not_remote_ready` means the image can't be launched there yet; pick another one.
 
 **`401 Login required`**: The endpoint takes a browser session, and an API key was sent instead. Use [Radeon Cloud CLI](/radeon-cloud-docs/cli/automation/) to script instances.
 
@@ -102,11 +103,11 @@ means the instance is still starting. Everything else is your server talking.
 
 **`403 {"code": "account_not_verified"}`**: The account is still under review. The body carries a `redirect` to the review page.
 
-**`403 You do not have access to this instance`**: The instance belongs to someone else, or you're using a bearer key against the instance proxy, which requires a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/#credentials-by-endpoint).
+**`403` or `404 Instance not found` on an instance URL**: The instance belongs to someone else, has been destroyed, or the request has no browser session. An API key doesn't work there. Open JupyterLab from **Home** while signed in. See [Authentication](/radeon-cloud-docs/api/authentication/#credentials-by-endpoint).
 
 **`502 Model gateway is unavailable`**: The gateway is down or unreachable. Retry with backoff; if it persists across several minutes, it's an outage rather than something on your side.
 
-**`503 Model gateway connection pool exhausted`**: Too many requests in flight platform-wide. `Retry-After` is short, usually 5 seconds.
+**`503 Model gateway is busy`**: Too many requests in flight platform-wide. `Retry-After` is short, 5 seconds by default.
 
 ## Debugging checklist
 
