@@ -1,0 +1,33 @@
+---
+// GitHub Pages serves this one page for every missing URL in either locale,
+// so it speaks both languages instead of following the route's locale.
+const PAGE_TITLE_ID = '_top';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<div class="rc-hero rc-hero--404">
+  <div class="rc-404">
+    <p class="rc-eyebrow">404</p>
+    <h1 id={PAGE_TITLE_ID} data-page-title>
+      Page not found <span class="rc-404__zh" lang="zh-CN">找不到这个页面</span>
+    </h1>
+    <div class="rc-404__langs">
+      <div lang="en">
+        <p class="rc-hero__tagline">
+          This page doesn't exist or has moved. Search the docs, or start from the home page.
+        </p>
+        <div class="rc-actions">
+          <a class="rc-btn rc-btn--primary" href={`${base}/`}>Docs home</a>
+          <a class="rc-btn rc-btn--ghost" href={`${base}/quickstart/`}>Quickstart</a>
+        </div>
+      </div>
+      <div lang="zh-CN">
+        <p class="rc-hero__tagline">这个页面不存在或已经移动。可以搜索文档，或从首页开始。</p>
+        <div class="rc-actions">
+          <a class="rc-btn rc-btn--primary" href={`${base}/zh-cn/`}>文档首页</a>
+          <a class="rc-btn rc-btn--ghost" href={`${base}/zh-cn/quickstart/`}>快速上手</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
