@@ -23,7 +23,7 @@ You launch instances from **Home** in the console. This page walks through the l
 
 With **Customize** off, the form uses the smallest size available to your account, a temporary workspace, and no mounted model. The line above the button shows what you will get, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**.
 
-If the form shows **Auto-reclaim**, the instance is deleted automatically that long after it becomes ready, for example **7 days after ready**, whether or not you're using it. The time depends on the resource pool. **Not enabled** means there's no time limit.
+**Auto-reclaim** shows how long the instance may run. It's deleted automatically that long after it becomes ready, for example **7 days after ready**, whether or not you're using it. The time depends on the resource pool. **Not enabled** means there's no time limit.
 
 ## Customize the launch
 
@@ -35,7 +35,7 @@ Turn on **Customize** to choose the rest.
 | **Image** | The default suits most work. |
 | **Resource pool** | Most accounts have one pool. If yours has several and a launch fails for lack of capacity, try another. |
 | **Workspace storage** | **Temporary workspace (local storage)** is fast and is deleted with the instance. **Persistent /workspace** keeps everything under `/workspace` for your next instance. Some accounts can also pick 25 GB or 100 GB. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
-| **Mount a model** | Mounts a prepared model read-only at `/models`, so you don't have to download it. Leave it at **None** if you don't need one. |
+| **Mount a model** | Mounts a prepared model read-only, so you don't have to download it. Most models appear at `/models`; see [Mounted models](/radeon-cloud-docs/guides/storage/#mounted-models). Leave it at **None** if you don't need one. |
 
 ![The fields Customize adds: Resource pool, Workspace storage set to Persistent /workspace, and Mount a model](../../../assets/guide/en/launch-customize.png)
 
@@ -45,7 +45,7 @@ To serve a model instead, set **Deploy type** to **Model API**. See [Serve a mod
 
 ## Follow the launch
 
-After you click **Launch instance**, the **Launching your instance** dialog moves through **Requested**, **Scheduling**, **Preparing**, **Starting** and **Ready**.
+After you click **Launch instance**, the **Launching your instance** dialog moves through **Requested**, **Scheduling**, **Preparing**, **Starting** and **Ready**. If the resource pool has an auto-reclaim time, the dialog also says when the instance will be reclaimed.
 
 - **View logs** shows scheduling events and the container's output. Before a node is assigned and the image is pulled, the output stays empty.
 - **Continue in background** closes the dialog. The launch keeps going, and **Home** shows the instance when it is ready.

@@ -36,13 +36,15 @@ The form says why:
 - **You already have an instance running.** Each account can have one instance. [Destroy it](/radeon-cloud-docs/guides/destroy/) first.
 - **Resource catalog is unavailable. Try again.** Refresh the page.
 
-If the launch is refused for credits, your balance doesn't cover one hour on the chosen size. See [Credits](/radeon-cloud-docs/guides/credits/).
+On the Global site, a launch refused for credits means your balance doesn't cover one hour on the chosen size. See [Credits](/radeon-cloud-docs/guides/credits/).
 
 ## Running instances
 
 ### The instance was deleted by itself
 
 An instance is deleted when your credits run out, and when the **Auto-reclaim** time shown on the launch form has passed. See [Limits that stop an instance](/radeon-cloud-docs/guides/instances/#limits-that-stop-an-instance).
+
+On the China site, an instance is also deleted a minute or two after it becomes ready if your balance can't cover the first hour. Check your balance on **Credits & Usage** before launching again. See [Credits](/radeon-cloud-docs/guides/credits/).
 
 Save checkpoints to a persistent `/workspace` so a stop doesn't cost you the run.
 

@@ -24,7 +24,7 @@ SSH lets you use the instance from your own terminal and editor. Every instance 
 3. In the console, open **Settings** and click **New SSH key**.
 4. Enter a **Title** such as the computer's name, paste the key into **Key**, and click **New SSH key** in the dialog.
 
-The key is listed with its fingerprint, the date it was added and when it was last used. You can add one key for each computer you use.
+The key is listed with its title and fingerprint. You can add one key for each computer you use, up to 10 keys.
 
 ![The SSH keys section of Settings with one key added](../../../assets/guide/en/settings-ssh-keys.png)
 

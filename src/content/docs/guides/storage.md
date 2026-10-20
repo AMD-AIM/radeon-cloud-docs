@@ -1,6 +1,6 @@
 ---
 title: Keep your data
-description: Temporary and persistent workspace storage, read-only models at /models, and getting files out before you destroy an instance.
+description: Temporary and persistent workspace storage, read-only mounted models, and getting files out before you destroy an instance.
 ---
 
 Whether your files survive depends on the **Workspace storage** you pick at launch. Decide before you launch: the setting can't be changed on a running instance.
@@ -36,9 +36,11 @@ The 25 GB and 100 GB options are two separate volumes. Files saved with one don'
 
 Large datasets and model weights fill 25 GB quickly. Check usage with `du -sh /workspace/*` and `df -h /workspace`.
 
-## Models at /models
+## Mounted models
 
-**Mount a model** in the launch form mounts a prepared model read-only at `/models`. Read the weights from there instead of downloading them. To change them, copy them into `/workspace` first.
+**Mount a model** in the launch form mounts a prepared model read-only. Read the weights from there instead of downloading them. To change them, copy them into `/workspace` first.
+
+Most models are mounted at `/models`. **ComfyUI** is mounted at `/comfyui_workspace/ComfyUI/models`, where ComfyUI looks for its models.
 
 ## Before you destroy an instance
 

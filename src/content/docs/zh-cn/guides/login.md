@@ -9,9 +9,9 @@ sidebar:
 
 ## 中国站
 
-中国站使用 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 的账号。可以先在 [developer.amd.com.cn](https://developer.amd.com.cn/) 登录，也可以在 [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) 右上角点 **Login**。两种方式进入的是同一个开发者计划登录页。
+中国站使用 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 的账号。可以先在 [developer.amd.com.cn](https://developer.amd.com.cn/) 登录，也可以在 [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) 右上角点 **使用 AMDAI 登录**。新访客可能先看到经典版界面，那里这个按钮叫 **Login**。两种方式进入的是同一个开发者计划登录页。
 
-![中国站，右上角是 Login 按钮](../../../../assets/guide/cn-login.png)
+![经典版界面里的中国站，右上角是 Login 按钮](../../../../assets/guide/cn-login.png)
 
 登录页有两个页签：
 
@@ -28,11 +28,14 @@ sidebar:
 
 ## 全球站
 
-打开 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/)，点右上角的 **Login**，选 **Login with Email**。
+打开 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/)，点右上角的 **登录**，选 **使用邮箱登录**。想用 GitHub 账号登录的话，选 **使用 GitHub 登录**。经典版界面里这个按钮叫 **Login**。
 
-![全球站登录界面](../../../../assets/guide/login.png)
+![经典版界面里全球站的登录菜单](../../../../assets/guide/login.png)
 
-填邮箱地址和收到的 6 位验证码。验证码几分钟后失效；没收到就等冷却结束再重发一次。
+1. 填邮箱地址，点 **发送验证码**。
+2. 填收到的 6 位验证码，点 **验证并登录**。
+
+验证码几分钟后失效。没收到的话，等 **重新发送** 可以点了再发一次。
 
 ## 登录之后
 
