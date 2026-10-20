@@ -140,6 +140,42 @@ header.header {
   letter-spacing: -0.02em;
 }
 
+/* Phones: search, the menu button and any extra header buttons leave too
+   little room for the full title. Instead of clipping it mid-word, drop whole
+   words from the end ("Docs", then "Radeon Cloud"): the title wraps onto lines
+   that are clipped away, and moves to a hidden second flex line, hairline and
+   all, once "Radeon Cloud" no longer fits. The hidden text still names the
+   link for screen readers. */
+@media (max-width: 49.99rem) {
+  .site-title {
+    flex-wrap: wrap;
+    align-content: flex-start;
+    height: 1.5rem;
+    overflow: hidden;
+    font-size: 1.0625rem;
+  }
+
+  .site-title img {
+    height: 1.25rem;
+  }
+
+  .site-title::after {
+    display: none;
+  }
+
+  .site-title > span {
+    flex: 1 1 0;
+    min-width: min-content;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    padding-inline-start: calc(0.6rem + 1px);
+    background: linear-gradient(var(--sl-color-hairline-light), var(--sl-color-hairline-light))
+      0 50% / 1px 1.1rem no-repeat;
+    white-space: normal;
+    word-break: keep-all;
+  }
+}
+
 /* ---------- Sidebar ---------- */
 .sidebar-content ul.top-level > li > details > summary > .group-label > span,
 .sidebar-content ul.top-level > li > span.large {

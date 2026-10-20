@@ -28,9 +28,11 @@ export default defineConfig({
   integrations: [
     askAiCorpus({ site: SITE, base: BASE }),
     starlight({
+      // The no-break space keeps "Radeon Cloud" together when the phone
+      // header drops the last word of the title (see .site-title in custom.css).
       title: {
-        en: 'Radeon Cloud Docs',
-        'zh-CN': 'Radeon Cloud 文档',
+        en: 'Radeon\u00a0Cloud Docs',
+        'zh-CN': 'Radeon\u00a0Cloud 文档',
       },
       description:
         'Run AMD Radeon GPUs in the cloud. Launch GPU instances, call hosted models in Token Factory, and use the AMD Radeon Cloud API.',
