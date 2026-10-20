@@ -15,5 +15,9 @@
     "@astrojs/starlight": "^0.36.3",
     "astro": "^5.16.2",
     "sharp": "^0.34.4"
+  },
+  "overrides": {
+    "pagefind": "1.4.0",
+    "@pagefind/default-ui": "1.4.0"
   }
 }

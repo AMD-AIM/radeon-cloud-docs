@@ -115,6 +115,10 @@ API pages use a small HTML block for the method-and-path header:
 
 `data-m` accepts `GET`, `POST`, `PUT`, `DELETE`, and `ANY`. In parameter tables, mark requirements with `<span class="rc-req">Required</span>` and `<span class="rc-opt">Optional</span>`.
 
+## Search
+
+Search is Starlight's built-in Pagefind. `package.json` pins Pagefind to 1.4.0 through `overrides`. Pagefind 1.5 splits Chinese queries with the browser's word segmenter, which in Chrome breaks common words such as 镜像, 密钥 and 余额 into single characters that match almost nothing ([Pagefind #1176](https://github.com/Pagefind/pagefind/issues/1176)). Remove the override once a Pagefind release fixes this, then check that searching 镜像 on the zh-cn site finds 选择镜像.
+
 ## Deploying
 
 Pushing to `main` builds and publishes automatically via `.github/workflows/deploy.yml`. Enable it once under **Settings → Pages → Source → GitHub Actions**.
