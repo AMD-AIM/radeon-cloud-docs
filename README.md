@@ -20,6 +20,14 @@ npm run preview  # serve the built site
 
 Node 20 or newer.
 
+After a build, check every internal link, anchor and image in `dist`:
+
+```bash
+python3 scripts/check-links.py   # exits 1 and lists what's broken
+```
+
+Every pull request runs this check (`.github/workflows/check.yml`) after `npm ci` and `npm run build`, and also fails if a page exists in only one locale. The deploy runs the link check too and stops if it fails.
+
 ## Structure
 
 ```
@@ -35,6 +43,7 @@ src/
   components/Hero.astro  home page hero
   styles/custom.css      theme
 astro.config.mjs         site config, sidebar, locales
+scripts/check-links.py   link, anchor and image check for dist
 ```
 
 ## Writing
