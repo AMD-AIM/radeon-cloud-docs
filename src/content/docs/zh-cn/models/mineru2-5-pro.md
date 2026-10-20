@@ -2,7 +2,7 @@
 title: MinerU2.5-Pro
 description: 文档 OCR：把 PDF 或图片转成 Markdown，使用独立接口。
 sidebar:
-  order: 12
+  order: 13
 ---
 
 <div class="rc-endpoint">

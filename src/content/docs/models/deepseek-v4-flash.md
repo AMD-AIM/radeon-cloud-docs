@@ -11,6 +11,12 @@ sidebar:
   <span class="rc-auth">model: <code>DeepSeek-V4-Flash</code></span>
 </div>
 
+:::note[Model ID and card title]
+The Token Factory card for this model is titled **DeepSeek-V4-Flash-0731**. Send
+`DeepSeek-V4-Flash` as `model`, the value in the card's **Model** field. The card title is not
+accepted as a model ID.
+:::
+
 ## About the model
 
 The weights served here are **DeepSeek-V4-Flash-0731**, DeepSeek's official release of
