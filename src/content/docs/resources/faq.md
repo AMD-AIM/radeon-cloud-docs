@@ -19,6 +19,9 @@ It depends on the sizes assigned to your account. **Size** in the launch form li
 **How do I get credits on the China site?**
 Exchange AMD AI Developer Program points for a coupon on [兑取算力](https://developer.amd.com.cn/points/redeem), then redeem it under **Credits & Usage → Redeem credits**. 1 point buys 1 hour, up to 20 points a day. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
 
+**How do I get credits on the Global site?**
+Same two steps as the China site. Sign in with **Login with AMD Developer Program**, or connect that account in **Settings**, then exchange developer points for a coupon on [兑取算力](https://developer.amd.com.cn/points/redeem). Paste it under **Credits & Usage → Redeem credits**. Events and workshops may also hand you a coupon. The Global console has **Redeem credits**; it does not have a developer-points page of its own — that page lives on the program site. See [Credits](/radeon-cloud-docs/guides/credits/).
+
 **Who do I contact?**
 Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn). [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#still-stuck) lists what to include.
 

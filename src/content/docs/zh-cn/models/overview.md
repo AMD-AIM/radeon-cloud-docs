@@ -24,6 +24,9 @@ sidebar:
 
 **MiniCPM5-1B 已不再对外提供**，其说明页已移除。
 同体量级由 [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) 提供。
+
+**[DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/)** 的
+Token Factory 卡片在 2026-10-21 标了 **Retiring 10/23**。
 :::
 
 ## 模型 ID 与卡片标题

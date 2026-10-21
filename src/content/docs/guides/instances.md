@@ -16,7 +16,7 @@ An instance is a container with an AMD Radeon GPU attached. You start it from **
 | **Workspace storage** | Whether `/workspace` is deleted with the instance or kept. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
 | **Mount a model** | Model files mounted read-only, at `/models` for most models. See [Keep your data](/radeon-cloud-docs/guides/storage/#mounted-models). |
 
-The form shows **Deploy type**, **Size** and **Image** by default. Turn on **Customize** to see the rest.
+The form shows **Deploy type**, **Size**, **Image** and **Auto-reclaim** by default. Turn on **Customize** to see the rest.
 
 ## What your account can use
 

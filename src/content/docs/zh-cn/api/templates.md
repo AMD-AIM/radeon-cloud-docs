@@ -34,10 +34,10 @@ sidebar:
   "templates": [
     {
       "id": 412,
-      "title": "MiniCPM5-1B",
+      "title": "MiniCPM5-2B",
       "description": "...",
       "model_source": "modelscope",
-      "start_command": "vllm serve OpenBMB/MiniCPM5-1B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-1B",
+      "start_command": "vllm serve OpenBMB/MiniCPM5-2B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-2B",
       "pod_type": "one-click",
       "resource_template": "resource-16c55g1u",
       "gpu_count": 1

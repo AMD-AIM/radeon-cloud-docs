@@ -19,6 +19,9 @@ sidebar:
 **在中国站怎么获取积分？**
 在[兑取算力](https://developer.amd.com.cn/points/redeem)用 AMD AI 开发者计划的开发者积分换优惠码，再到 **积分与用量 → 兑换积分** 兑换。1 个开发者积分换 1 小时，每天最多换 20 个。见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/)。
 
+**在全球站怎么获取积分？**
+和中国站一样是两步。用 **使用 AMD Developer Program 登录**，或之后在 **设置** 里连接该账号，再到[兑取算力](https://developer.amd.com.cn/points/redeem)用开发者积分换优惠码，最后在 **积分与用量 → 兑换积分** 粘贴。活动和工作坊也可能直接发优惠码。全球站控制台有 **兑换积分**，没有把开发者积分换成券的页面——那个页面在开发者计划网站上。见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
+
 **遇到问题找谁？**
 发邮件到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。邮件里要写哪些内容，见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#仍然无法解决)。
 

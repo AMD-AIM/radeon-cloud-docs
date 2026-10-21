@@ -83,9 +83,9 @@ To serve your own model (**Deploy type: Model API**), send the model name and th
 
 ```json
 {
-  "api_model": "MiniCPM5-1B",
+  "api_model": "MiniCPM5-2B",
   "model_source": "modelscope",
-  "start_command": "vllm serve OpenBMB/MiniCPM5-1B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-1B",
+  "start_command": "vllm serve OpenBMB/MiniCPM5-2B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-2B",
   "pod_type": "one-click",
   "resource_template": "resource-16c55g1u"
 }
