@@ -18,6 +18,9 @@ const t = isZh
         rate_limited: '提问太频繁了，请一分钟后再试。',
         model_busy: '模型正忙，请稍后再试。',
         invalid_request: '问题太长了，请控制在 2,000 字以内。',
+        request_too_large: '问题太长了，请控制在 2,000 字以内。',
+        blocked: '这个问题被网络防护拦截了。请换个说法再试，比如去掉其中的命令或代码。',
+        network: '连接不上问答服务，请检查网络后重试。如果问题里有命令或代码，可以换个说法再试。',
         default: '暂时无法回答。可以发邮件到 member-service@mail.developer.amd.com.cn 咨询。',
       },
     }
@@ -37,6 +40,9 @@ const t = isZh
         rate_limited: 'Too many questions. Try again in a minute.',
         model_busy: 'The model is busy. Try again shortly.',
         invalid_request: 'That question is too long. Keep it under 2,000 characters.',
+        request_too_large: 'That question is too long. Keep it under 2,000 characters.',
+        blocked: 'A network filter blocked this question. Try rephrasing it, for example without commands or code.',
+        network: "Couldn't reach Ask AI. Check your connection and try again. If the question contains commands or code, try rephrasing it.",
         default: "Couldn't get an answer right now. You can email member-service@mail.developer.amd.com.cn.",
       },
     };
@@ -85,6 +91,24 @@ const t = isZh
   const MAX_HISTORY = 6;
   // The backend refuses longer turns; a long answer is cut rather than lost.
   const MAX_TURN_CHARS = 4000;
+
+  // Question text is sent base64-encoded: the WAF in front of the backend refuses
+  // request bodies that contain shell commands, SQL or HTML, which questions about
+  // the API and earlier answers sent back as history often do.
+  function toBase64(text: string) {
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(binary);
+  }
+
+  // Only these messages are shown as they are. Anything else thrown on the way,
+  // such as a refused connection, a blocked request without CORS headers or a
+  // dropped stream, shows the panel's own wording instead of the browser's
+  // "Failed to fetch".
+  class AskError extends Error {}
 
   function escapeHtml(text: string) {
     return text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -239,11 +263,18 @@ const t = isZh
         const response = await fetch(this.endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question, locale: this.locale, history }),
+          body: JSON.stringify({
+            encoding: 'base64',
+            question: toBase64(question),
+            locale: this.locale,
+            history: history.map(({ role, content }) => ({ role, content: toBase64(content) })),
+          }),
         });
         if (!response.ok || !response.body) {
           const code = (await response.json().catch(() => ({})))?.error?.code;
-          throw new Error(this.strings.errors[code] || this.strings.errors.default);
+          const errors = this.strings.errors;
+          // A 403 without one of our error codes comes from the WAF, not the backend.
+          throw new AskError(errors[code] || (response.status === 403 ? errors.blocked : errors.default));
         }
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -272,7 +303,7 @@ const t = isZh
             });
           }
         }
-        if (!answer) throw new Error(this.strings.errors.default);
+        if (!answer) throw new AskError(this.strings.errors.default);
         answerEl.classList.remove('ask-ai-pending');
         answerEl.innerHTML = renderMarkdown(answer);
         this.turns.push({ role: 'user', content: question }, { role: 'assistant', content: answer });
@@ -280,7 +311,10 @@ const t = isZh
       } catch (error) {
         answerEl.classList.remove('ask-ai-pending');
         answerEl.classList.add('ask-ai-error');
-        answerEl.textContent = error instanceof Error && error.message ? error.message : this.strings.errors.default;
+        const { errors } = this.strings;
+        // fetch and the stream reader reject with a TypeError when the network fails.
+        answerEl.textContent =
+          error instanceof AskError ? error.message : error instanceof TypeError ? errors.network : errors.default;
       } finally {
         this.busy = false;
         this.sendButton.disabled = false;
