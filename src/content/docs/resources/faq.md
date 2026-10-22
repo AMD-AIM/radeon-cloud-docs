@@ -19,6 +19,9 @@ It depends on the sizes assigned to your account. **Size** in the launch form li
 **How do I get credits on the China site?**
 Exchange AMD AI Developer Program points for a coupon on [兑取算力](https://developer.amd.com.cn/points/redeem), then redeem it under **Credits & Usage → Redeem credits**. 1 point buys 1 hour, up to 20 points a day. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
 
+**How do I get credits on the Global site?**
+Same two steps as the China site. Sign in with **Login with AMD Developer Program**, or connect that account in **Settings**, then exchange developer points for a coupon on [兑取算力](https://developer.amd.com.cn/points/redeem). Paste it under **Credits & Usage → Redeem credits**. Events and workshops may also hand you a coupon. The Global console has **Redeem credits**; it does not have a developer-points page of its own — that page lives on the program site. See [Credits](/radeon-cloud-docs/guides/credits/).
+
 **Who do I contact?**
 Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn). [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#still-stuck) lists what to include.
 
@@ -31,7 +34,7 @@ Running instances: 1 credit per GPU per hour. Token Factory doesn't use credits.
 Yes. An instance spends credits for as long as it exists, whether or not you're using it. [Destroy it](/radeon-cloud-docs/guides/destroy/) when you're done.
 
 **Will my instance be stopped for me?**
-Only when your credits run out, or when the **Auto-reclaim** time shown on the launch form has passed. Don't rely on either to save credits.
+Only when your credits run out, or when the **Auto-delete** time you chose on the launch form has passed. Don't rely on either to save credits.
 
 **Are Token Factory usage and credits the same thing?**
 No. Token Factory has its own daily usage cap, counted in points (pts). See it on **Credits & Usage**, or with [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).

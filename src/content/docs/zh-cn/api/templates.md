@@ -34,10 +34,10 @@ sidebar:
   "templates": [
     {
       "id": 412,
-      "title": "MiniCPM5-1B",
+      "title": "MiniCPM5-2B",
       "description": "...",
       "model_source": "modelscope",
-      "start_command": "vllm serve OpenBMB/MiniCPM5-1B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-1B",
+      "start_command": "vllm serve OpenBMB/MiniCPM5-2B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-2B",
       "pod_type": "one-click",
       "resource_template": "resource-16c55g1u",
       "gpu_count": 1
@@ -54,12 +54,13 @@ sidebar:
   <span class="rc-auth">会话</span>
 </div>
 
-控制台发送空请求体。固定了资源池和规格的模板，按它自己的规格启动。
+固定了资源池和规格的模板，按它自己的规格启动。控制台会把 **自动销毁** 作为 `max_runtime_hours` 发送。
 
 | 字段 | 类型 | | 说明 |
 |---|---|---|---|
 | `gpu_count` | integer | <span class="rc-opt">可选</span> | 只对没有固定规格的模板有效，默认 `1`。 |
 | `ssh_enabled` | boolean | <span class="rc-opt">可选</span> | 这次启动是否开启 SSH。 |
+| `max_runtime_hours` | number | <span class="rc-opt">可选</span> | 实例就绪后的 **自动销毁** 时长。取值与[启动 Notebook](/radeon-cloud-docs/zh-cn/api/instances/#启动-notebook) 相同。不发则使用资源池上限。 |
 
 只有 `jupyter` 和 `vllm` 类型的模板可以启动。返回值和后续调用与其他启动方式相同：轮询 [`GET /api/notebook/status`](/radeon-cloud-docs/zh-cn/api/instances/#查看状态)；`vllm` 模板则轮询 `GET /api/inference/current`。
 

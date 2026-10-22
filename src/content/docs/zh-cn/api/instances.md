@@ -43,6 +43,7 @@ sidebar:
 | `pvc_size` | string | <span class="rc-opt">可选</span> | `25GB` 或 `100GB`，配合 `use_pvc: true` 使用。100 GB 只对部分账号开放。 |
 | `model_mount` | string | <span class="rc-opt">可选</span> | 以只读方式挂载的模型。`GET /api/models/mountable` 列出可用的 ID，以及每个模型的挂载路径 `mount_path`，通常是 `/models`。 |
 | `ssh_enabled` | boolean | <span class="rc-opt">可选</span> | 控制台总是发送 `true`。需要先在 **设置** 里添加 SSH 密钥。 |
+| `max_runtime_hours` | number | <span class="rc-opt">可选</span> | 实例就绪后的 **自动销毁** 时长。控制台发送 `2`、`8`、`24`、`72` 或 `168`；表单默认是 `72`（3 天）。不发则使用资源池上限（One-click 是 `168` / 7 天）。 |
 
 ```json
 {
@@ -80,18 +81,19 @@ sidebar:
 | `start_command` | string | <span class="rc-req">必填</span> | 监听 `8000` 端口的 `vllm serve` 命令。 |
 | `model_source` | string | <span class="rc-opt">可选</span> | `huggingface`（默认）或 `modelscope`。 |
 | `pod_type`、`resource_template` | string | <span class="rc-req">必填</span> | 和 Notebook 相同。 |
+| `max_runtime_hours` | number | <span class="rc-opt">可选</span> | 实例就绪后的 **自动销毁** 时长。取值与启动 Notebook 相同。 |
 
 ```json
 {
-  "api_model": "MiniCPM5-1B",
+  "api_model": "MiniCPM5-2B",
   "model_source": "modelscope",
-  "start_command": "vllm serve OpenBMB/MiniCPM5-1B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-1B",
+  "start_command": "vllm serve OpenBMB/MiniCPM5-2B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-2B",
   "pod_type": "one-click",
   "resource_template": "resource-16c55g1u"
 }
 ```
 
-不认识的字段会被拒绝。要启动现成的模型模板，先用 `GET /api/inference/templates` 列出模板，再用空请求体调用 `POST /api/templates/{id}/launch`，见[模板](/radeon-cloud-docs/zh-cn/api/templates/#启动模板)。
+不认识的字段会被拒绝。要启动现成的模型模板，先用 `GET /api/inference/templates` 列出模板，再调用 `POST /api/templates/{id}/launch`，见[模板](/radeon-cloud-docs/zh-cn/api/templates/#启动模板)。
 
 ## 查看状态
 
@@ -131,6 +133,7 @@ sidebar:
 | `ssh_host`、`ssh_port`、`ssh_username`、`ssh_command` | 容器运行后填入。 |
 | `persistent_available`、`storage_notice` | 持久化 `/workspace` 是否挂载成功；没有成功时说明原因。 |
 | `api_base_url`、`api_key`、`api_model` | 模型服务就绪后填入，见[模型服务接口](/radeon-cloud-docs/zh-cn/api/model-services/)。 |
+| `auto_reclaim_hours`、`auto_reclaim_at` | **自动销毁** 的时长（小时）和销毁时间。带寿命的启动才会出现。 |
 
 每隔几秒轮询一次。实例通常一分钟内就绪，但镜像很大或需要下载模型时，可能要几分钟。
 

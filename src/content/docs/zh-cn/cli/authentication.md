@@ -15,6 +15,16 @@ CLI 会在浏览器里打开一个一次性的授权页面。登录 Radeon Cloud
 然后批准。设备名称默认是“主机名 + RCC CLI”，可以用 `--device-name` 改。CLI 不会读取浏览器 Cookie，
 也不需要你把网页上的任何东西复制到终端。
 
+内置地址是 `https://radeon-global.anruicloud.com`（全球站）。要使用中国站，加上 `--base-url`
+（简写 `-u`），或设置 `RCC_URL`：
+
+```bash
+rcc auth login -u https://developer.amd.com.cn/radeon
+rcc auth login -u https://developer.amd.com.cn/radeon -A china
+```
+
+`-A` 把这次登录存成本地名字，同一台机器上可以同时保留两个站点，见[多个账号](#多个账号)。
+
 ### 在没有浏览器的机器上登录
 
 ```bash

@@ -15,7 +15,7 @@ AMD Radeon Cloud has two sites, each run separately for its own region. Both off
 | Site | Address | Account |
 |---|---|---|
 | **China** | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) | [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) |
-| **Global** | [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) | Email sign-in |
+| **Global** | [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) | Email or AMD Developer Program |
 
 Use the site for your region. Accounts, credits, API keys and instances stay on the site where you created them. An API key from one site doesn't work on the other, so the base URL in your code must match your site.
 
@@ -29,7 +29,7 @@ An **instance** is a container with one or more Radeon GPUs. You choose the imag
 
 Open an instance in [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/) or connect over [SSH](/radeon-cloud-docs/guides/ssh/), then use it like any Linux machine with a GPU: install packages, download weights, train and profile.
 
-An instance spends [credits](/radeon-cloud-docs/guides/credits/) every hour it runs, so [destroy it](/radeon-cloud-docs/guides/destroy/) when you're done. To keep your files after that, launch with **Persistent /workspace**. See [Keep your data](/radeon-cloud-docs/guides/storage/). On the China site, you get credits by exchanging [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) points.
+An instance spends [credits](/radeon-cloud-docs/guides/credits/) every hour it runs, so [destroy it](/radeon-cloud-docs/guides/destroy/) when you're done. To keep your files after that, launch with **Persistent /workspace**. See [Keep your data](/radeon-cloud-docs/guides/storage/). You get credits by exchanging [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) points for a coupon, then redeeming it on the site you use.
 
 An instance can also serve a model of your choice with vLLM, behind an OpenAI-compatible endpoint. See [Serve a model](/radeon-cloud-docs/guides/serve-model/).
 
@@ -52,7 +52,7 @@ For an application that calls an LLM, start with **Token Factory**. When you nee
 | Console: instances, credits, settings | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) or [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
 | Token Factory: API key, models | [developer.amd.com.cn/radeon/tokenfactory](https://developer.amd.com.cn/radeon/tokenfactory) |
 | Radeon Cloud CLI | [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) |
-| AMD AI Developer Program: points and coupons (China site) | [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) |
+| AMD AI Developer Program: points and coupons | [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) |
 | Support | [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) |
 
 ## Next

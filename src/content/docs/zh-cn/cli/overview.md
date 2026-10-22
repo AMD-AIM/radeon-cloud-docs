@@ -35,9 +35,15 @@ rcc auth login
 rcc doctor
 ```
 
-`rcc auth login` 会打开浏览器，你在网页上批准这台设备即可。服务器这类没有浏览器的机器，用
-`rcc auth login --no-browser`，再把打印出的链接拿到别的设备上打开。`rcc doctor` 检查安装、
-登录状态和服务连通性。
+`rcc auth login` 会打开浏览器，你在网页上批准这台设备即可。内置地址是
+[全球站](https://radeon-global.anruicloud.com/)。要登录中国站，把地址传进去：
+
+```bash
+rcc auth login -u https://developer.amd.com.cn/radeon
+```
+
+服务器这类没有浏览器的机器，用 `rcc auth login --no-browser`，再把打印出的链接拿到别的设备上打开。
+`rcc doctor` 检查安装、登录状态和服务连通性。见[登录与账号](/radeon-cloud-docs/zh-cn/cli/authentication/)。
 
 ### 3. 查看积分和可用资源
 
