@@ -34,7 +34,7 @@ Running instances: 1 credit per GPU per hour. Token Factory doesn't use credits.
 Yes. An instance spends credits for as long as it exists, whether or not you're using it. [Destroy it](/radeon-cloud-docs/guides/destroy/) when you're done.
 
 **Will my instance be stopped for me?**
-Only when your credits run out, or when the **Auto-reclaim** time shown on the launch form has passed. Don't rely on either to save credits.
+Only when your credits run out, or when the **Auto-delete** time you chose on the launch form has passed. Don't rely on either to save credits.
 
 **Are Token Factory usage and credits the same thing?**
 No. Token Factory has its own daily usage cap, counted in points (pts). See it on **Credits & Usage**, or with [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).

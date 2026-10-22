@@ -12,11 +12,12 @@ An instance is a container with an AMD Radeon GPU attached. You start it from **
 | **Deploy type** | **Notebook** gives you JupyterLab and SSH for development. **Model API** serves a model with vLLM behind an OpenAI-compatible endpoint. See [Serve a model](/radeon-cloud-docs/guides/serve-model/). |
 | **Size** | The number of GPUs, CPU cores and memory, and the credits it costs per hour. |
 | **Image** | The software in the container: ROCm, Python, frameworks. See [Choose an image](/radeon-cloud-docs/guides/images/). |
-| **Resource pool** | The group of GPU nodes the instance is scheduled on. |
+| **Resource pool** | The group of GPU nodes the instance is scheduled on. Some accounts have more than one, listed by name such as **One-click** and **HF**. |
 | **Workspace storage** | Whether `/workspace` is deleted with the instance or kept. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
 | **Mount a model** | Model files mounted read-only, at `/models` for most models. See [Keep your data](/radeon-cloud-docs/guides/storage/#mounted-models). |
+| **Auto-delete** | How long the instance may run after it becomes ready. One-click defaults to **3 days**; you can pick **2 h**, **8 h**, **1 day**, **3 days**, or **7 days**. |
 
-The form shows **Deploy type**, **Size**, **Image** and **Auto-reclaim** by default. Turn on **Customize** to see the rest.
+The form shows **Deploy type**, **Size**, **Image** and **Auto-delete** by default. Turn on **Customize** to see the rest.
 
 ## What your account can use
 
@@ -36,7 +37,7 @@ Your balance has to cover the first hour, and the instance is deleted when your 
 
 ## Limits that stop an instance
 
-An instance is deleted automatically when your credits run out. It's also deleted once the **Auto-reclaim** time shown on the launch form has passed since it became ready, unless the form reads **Not enabled**. Save results to a persistent `/workspace` as you go, so a stop doesn't cost you the work.
+An instance is deleted automatically when your credits run out. It's also deleted once the **Auto-delete** time you chose on the launch form has passed since it became ready. One-click launches default to **3 days**, and you can pick **2 h**, **8 h**, **1 day**, **3 days**, or **7 days**. Save results to a persistent `/workspace` as you go, so a stop doesn't cost you the work.
 
 ## SSH is always on
 

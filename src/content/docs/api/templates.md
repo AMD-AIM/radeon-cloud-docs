@@ -54,12 +54,13 @@ Returns the public vLLM templates that **Deploy type → Model API** offers, eac
   <span class="rc-auth">Session</span>
 </div>
 
-The console sends an empty body. A template with a fixed pool and size launches on that size.
+A template with a fixed pool and size launches on that size. The console sends **Auto-delete** as `max_runtime_hours`.
 
 | Field | Type | | Description |
 |---|---|---|---|
 | `gpu_count` | integer | <span class="rc-opt">Optional</span> | Only for templates without a fixed size. Defaults to `1`. |
 | `ssh_enabled` | boolean | <span class="rc-opt">Optional</span> | Turn on SSH for this launch. |
+| `max_runtime_hours` | number | <span class="rc-opt">Optional</span> | **Auto-delete** lifetime after the instance is ready. Same values as [Launch a notebook](/radeon-cloud-docs/api/instances/#launch-a-notebook). Omit it and the pool maximum applies. |
 
 Only `jupyter` and `vllm` templates can be launched. The response and the follow-up calls are the same as for any other launch: poll [`GET /api/notebook/status`](/radeon-cloud-docs/api/instances/#check-status), or `GET /api/inference/current` for a `vllm` template.
 

@@ -66,7 +66,7 @@ nohup python train.py > /workspace/train.log 2>&1 &
 tail -f /workspace/train.log
 ```
 
-An instance can be deleted when your credits run out or when its **Auto-reclaim** time passes, so save checkpoints to a persistent `/workspace` as you go.
+An instance can be deleted when your credits run out or when its **Auto-delete** time passes, so save checkpoints to a persistent `/workspace` as you go.
 
 ## Reach a web app
 

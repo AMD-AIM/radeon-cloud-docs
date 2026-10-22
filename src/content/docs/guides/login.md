@@ -63,7 +63,7 @@ The header also has **Classic**, which switches to the classic interface, plus t
 
 The console stays on **Home**, where you launch instances. The header shows **No instance running** until you launch one. **Gallery** appears in the nav after you sign in. **Token Factory** appears on the China site; the Global site currently does not show it.
 
-![The Global site Home after sign-in: Gallery in the nav, No instance running, and the launch form](../../../assets/guide/en/home-signed-in.png)
+![The Global site Home after sign-in: Gallery in the nav, No instance running, and the launch form with Auto-delete](../../../assets/guide/en/home-signed-in.png)
 
 Click your account in the top-right corner for:
 
