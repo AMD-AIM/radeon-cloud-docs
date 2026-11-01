@@ -79,7 +79,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
 }
 ```
 
-把这个列表里的任意 `id` 用作[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)的 `model` 字段。
+把这个列表里的任意 `id` 用作[聊天补全](/radeon-cloud-docs/zh-cn/api/chat-completions/)的 `model` 字段。想知道某个模型现在忙不忙，见[模型负载](/radeon-cloud-docs/zh-cn/api/model-utilization/)。
 
 ## 字段
 

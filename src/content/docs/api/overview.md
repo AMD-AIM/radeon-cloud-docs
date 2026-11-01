@@ -42,6 +42,7 @@ Always on, nothing to launch, and no credits spent. AMD chooses which models are
 
 - [`POST /v1/chat/completions`](/radeon-cloud-docs/api/chat-completions/): OpenAI-compatible chat
 - [`GET /v1/models`](/radeon-cloud-docs/api/models/): the models you can call
+- [`GET /v1/models/utilization`](/radeon-cloud-docs/api/model-utilization/): how busy each model is right now (China only)
 - [`POST /v1/messages`](/radeon-cloud-docs/api/messages/): Anthropic-compatible, for clients such as Claude Code
 - [`POST /v1/messages/count_tokens`](/radeon-cloud-docs/api/messages/#counting-tokens): the token count those clients ask for first
 - [`GET /v1/usage`](/radeon-cloud-docs/api/usage/): your usage and remaining daily allowance

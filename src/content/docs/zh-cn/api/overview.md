@@ -42,6 +42,7 @@ Token Factory 使用你的 `rc-` API Key，模型服务使用它卡片上的 `sk
 
 - [`POST /v1/chat/completions`](/radeon-cloud-docs/zh-cn/api/chat-completions/)：兼容 OpenAI 的聊天补全接口
 - [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/)：可调用的模型
+- [`GET /v1/models/utilization`](/radeon-cloud-docs/zh-cn/api/model-utilization/)：每个模型当前有多忙（仅中国站）
 - [`POST /v1/messages`](/radeon-cloud-docs/zh-cn/api/messages/)：兼容 Anthropic，供 Claude Code 等客户端使用
 - [`POST /v1/messages/count_tokens`](/radeon-cloud-docs/zh-cn/api/messages/#计算-token)：这些客户端发请求前先调用的 token 计数接口
 - [`GET /v1/usage`](/radeon-cloud-docs/zh-cn/api/usage/)：你的用量和今天剩余的额度

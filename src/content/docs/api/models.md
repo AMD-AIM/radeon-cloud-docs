@@ -83,7 +83,7 @@ metadata than OpenAI's model object, without `owned_by` or `created`.
 }
 ```
 
-Use any `id` from this list as the `model` field in [chat completions](/radeon-cloud-docs/api/chat-completions/).
+Use any `id` from this list as the `model` field in [chat completions](/radeon-cloud-docs/api/chat-completions/). To see how busy a model is right now, use [Model load](/radeon-cloud-docs/api/model-utilization/).
 
 ## Fields
 
