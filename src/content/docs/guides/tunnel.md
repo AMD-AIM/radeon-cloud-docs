@@ -77,8 +77,8 @@ Work through it in this order:
 
 1. **Local `curl` fails.** Your application isn't listening on that port. The tunnel isn't the cause; fix the service first.
 2. **`status` shows FRPC not running.** Read `rc-tunnel logs`.
-3. **The public page is frp's 404, or `status` stays pending.** Unset the proxy and expose again, as in [If the public URL does not open](#if-the-public-url-does-not-open).
-4. **It still fails after that.** Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the full domain, when the notebook was created, and when the failure happened. Don't send config files or keys.
+3. **The public page is frp's 404, or `status` stays pending.** You can try unsetting the proxy, as in [If the public URL does not open](#if-the-public-url-does-not-open).
+4. **Status is healthy but the public URL fails.** Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the full domain, when the notebook was created, and when the failure happened. Don't send config files or keys. That path stays open whether or not you tried the proxy workaround.
 
 ## If the public URL does not open
 
@@ -97,7 +97,7 @@ env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY \
 
 4. Open the new URL it prints. Logs that mention `DialTcpByHttpProxy` or `StatusCode [403]` are this same case.
 
-Running `rc-tunnel expose` without unsetting the proxy fails again.
+Running `rc-tunnel expose` without unsetting the proxy fails again. If it still fails, or you would rather not debug it, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the full domain, when the notebook was created, and when the failure happened. Don't send config files or keys.
 
 ## Stop
 

@@ -149,9 +149,9 @@ python -c "import torch; print(torch.cuda.is_available(), torch.version.hip)"
 
 1. 在实例里运行 `curl --fail http://127.0.0.1:<port>/`。如果失败，问题出在你的应用，不在隧道。
 2. 运行 `rc-tunnel status`；如果没有在运行，再看 `rc-tunnel logs --lines 100`。
-3. 公网是 frp 的 404，或 `status` 一直 pending：按[对外暴露服务](/radeon-cloud-docs/zh-cn/guides/tunnel/#公网-url-打不开)清掉代理再暴露。
+3. 公网是 frp 的 404，或 `status` 一直 pending：可以按[对外暴露服务](/radeon-cloud-docs/zh-cn/guides/tunnel/#公网-url-打不开)清掉代理再暴露。
 
-清代理之后仍然打不开，请发邮件到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)，写明完整域名、实例创建时间和出错时间。不要发送配置文件或密钥。
+如果本地服务正常、状态也健康，公网 URL 仍然打不开，请发邮件到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)，写明完整域名、实例创建时间和出错时间。不要发送配置文件或密钥。这条通道一直有效，不要求先做完清代理。
 
 ## 积分和优惠码
 

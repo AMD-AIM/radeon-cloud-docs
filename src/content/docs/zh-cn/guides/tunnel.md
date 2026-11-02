@@ -77,8 +77,8 @@ curl --fail http://127.0.0.1:8081/
 
 1. **本地 `curl` 就失败。** 你的应用根本没在那个端口上监听。和隧道无关，先修服务。
 2. **`status` 显示 FRPC 没在跑。** 看 `rc-tunnel logs`。
-3. **公网是 frp 的 404，或 `status` 一直 pending。** 按下面「公网 URL 打不开」清掉代理再暴露。
-4. **清代理之后仍打不开。** 把完整域名、notebook 的创建时间和故障发生时间发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。不要发送配置文件或密钥。
+3. **公网是 frp 的 404，或 `status` 一直 pending。** 可以先试下面「公网 URL 打不开」里清代理再暴露。
+4. **状态正常但公网 URL 访问不了。** 把完整域名、notebook 的创建时间和故障发生时间发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。不要发送配置文件或密钥。这条求助通道一直有效，不要求先做完清代理。
 
 ## 公网 URL 打不开
 
@@ -97,7 +97,7 @@ env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY \
 
 4. 用新打印出来的 URL 访问。日志里出现 `DialTcpByHttpProxy` 或 `StatusCode [403]`，就是这一类问题。
 
-直接跑 `rc-tunnel expose`、不清代理，会再次失败。
+直接跑 `rc-tunnel expose`、不清代理，会再次失败。清代理之后仍打不开，或者不想自己排，把完整域名、notebook 的创建时间和故障发生时间发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。不要发送配置文件或密钥。
 
 ## 停止
 
