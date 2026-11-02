@@ -109,6 +109,19 @@ Token Factory 只在中国站提供，请使用 `https://developer.amd.com.cn/ra
 
 如果经常收到 `429`，说明你的用量超出了 Token Factory 的额度。与其加大重试，不如[在自己的实例上部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。
 
+### 400 “System message must be at the beginning.”
+
+该模型最多只接受一条 `system` 消息，而且必须是 `messages` 的第一条。Qwen3.8 和 MiniCPM-V 都是这样，具体以各[模型页面](/radeon-cloud-docs/zh-cn/models/overview/)为准。请把系统指令合并成一条，放在最前面：
+
+```json
+"messages": [
+  { "role": "system", "content": "你是代码审查员。\n\n请用中文回答。" },
+  { "role": "user",   "content": "请审查这段 diff。" }
+]
+```
+
+如果使用的 Agent 框架会追加第二条 `system`，或在对话中途插入 `system`，调用这些模型前也需要这样处理。
+
 ### 提示 “Requested model ... not supported”
 
 模型名不在 Token Factory 的模型列表里。模型会不定期上线和下线，请用 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 查询模型名，不要写死在代码里。

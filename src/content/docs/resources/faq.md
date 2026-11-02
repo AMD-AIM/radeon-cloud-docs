@@ -61,6 +61,9 @@ Any model vLLM supports that fits in the GPU memory of the size you chose. Weigh
 **Does streaming work?**
 Yes. Set `stream: true` on chat completions.
 
+**Can I send more than one `system` message?**
+It depends on the model. Qwen3.8 and MiniCPM-V accept one `system` message, and only as the first message; anything else returns `400 System message must be at the beginning.` One `system` message at the start works on every model. See [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/).
+
 **Are embeddings available?**
 In Token Factory, only if the model catalog lists an embedding model. A model service on your instance serves whatever vLLM supports, which usually includes `/v1/embeddings`.
 
