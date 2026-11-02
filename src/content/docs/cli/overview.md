@@ -36,9 +36,16 @@ rcc auth login
 rcc doctor
 ```
 
-`rcc auth login` opens your browser, where you approve this device. On a server or any machine
-without a browser, run `rcc auth login --no-browser` and open the printed link on another device.
-`rcc doctor` checks the installation, your sign-in and the connection to the service.
+`rcc auth login` opens your browser, where you approve this device. The built-in address is the
+[Global site](https://radeon-global.anruicloud.com/). For the China site, pass that address:
+
+```bash
+rcc auth login -u https://developer.amd.com.cn/radeon
+```
+
+On a server or any machine without a browser, run `rcc auth login --no-browser` and open the printed
+link on another device. `rcc doctor` checks the installation, your sign-in and the connection to the
+service. See [Sign-in and accounts](/radeon-cloud-docs/cli/authentication/).
 
 ### 3. Check credits and available resources
 

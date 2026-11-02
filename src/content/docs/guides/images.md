@@ -103,4 +103,4 @@ pip list
 
 ## Custom images
 
-Custom images built in the classic console's **Custom Images** page appear in the list with **(custom)** after their name once the build has finished.
+Custom image builds still live in the classic console. Switch with **Classic** in the header, or **Settings → Interface → Use classic**, then open **Custom Images**. When the build finishes, the image appears in the new launch form's **Image** list with **(custom)** after its name. Building a custom image is not the same as launching a GPU instance.

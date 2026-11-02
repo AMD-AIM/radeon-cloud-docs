@@ -16,6 +16,17 @@ device name shown on the page, and approve. The device name defaults to your hos
 `RCC CLI`; set your own with `--device-name`. The CLI does not read browser cookies and never asks
 you to copy anything from the website into the terminal.
 
+The built-in address is `https://radeon-global.anruicloud.com` (the Global site). To use the China
+site, pass `--base-url` (short `-u`) or set `RCC_URL`:
+
+```bash
+rcc auth login -u https://developer.amd.com.cn/radeon
+rcc auth login -u https://developer.amd.com.cn/radeon -A china
+```
+
+`-A` saves that login under a local name so you can keep both sites on one machine. See
+[Several accounts](#several-accounts).
+
 ### Signing in on a machine without a browser
 
 ```bash

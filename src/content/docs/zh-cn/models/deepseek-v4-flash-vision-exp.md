@@ -48,6 +48,12 @@ sidebar:
 
 ## 在 Radeon Cloud 上的行为
 
+:::caution[Token Factory 卡片已标下线]
+2026-10-21 查看时，Token Factory 上该模型的卡片标了 **Retiring 10/23**。新的读图任务请改用
+[DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/) 或其他仍在线的视觉模型。
+当前是否还提供，以 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 为准。
+:::
+
 ### 概览
 
 | | |

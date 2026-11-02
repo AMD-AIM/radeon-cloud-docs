@@ -16,7 +16,9 @@ Token Factory is on the China site only. The platform chooses the models and cha
 
 ![Token Factory with the Your API key card: Base URL and the hidden API key](../../../assets/guide/en/tokenfactory.png)
 
-The key starts with `rc-` and works for every model in Token Factory. Keep it secret: anyone who has it can spend your daily allowance. See [Authentication](/radeon-cloud-docs/api/authentication/) for rotating a key.
+The key starts with `rc-` and works for every model in Token Factory. Keep it secret: anyone who has it can spend your daily allowance.
+
+The new console has no **Regenerate Key** yet. To rotate the key, switch to the classic interface (**Settings → Interface → Use classic**), open **Profile**, and click **Regenerate Key**. The old key stops working immediately. See [Authentication](/radeon-cloud-docs/api/authentication/).
 
 ## Pick a model
 

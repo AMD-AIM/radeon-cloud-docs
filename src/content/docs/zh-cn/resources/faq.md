@@ -19,6 +19,9 @@ sidebar:
 **在中国站怎么获取积分？**
 在[兑取算力](https://developer.amd.com.cn/points/redeem)用 AMD AI 开发者计划的开发者积分换优惠码，再到 **积分与用量 → 兑换积分** 兑换。1 个开发者积分换 1 小时，每天最多换 20 个。见 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/)。
 
+**在全球站怎么获取积分？**
+和中国站一样是两步。用 **使用 AMD Developer Program 登录**，或之后在 **设置** 里连接该账号，再到[兑取算力](https://developer.amd.com.cn/points/redeem)用开发者积分换优惠码，最后在 **积分与用量 → 兑换积分** 粘贴。活动和工作坊也可能直接发优惠码。全球站控制台有 **兑换积分**，没有把开发者积分换成券的页面——那个页面在开发者计划网站上。见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
+
 **遇到问题找谁？**
 发邮件到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。邮件里要写哪些内容，见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#仍然无法解决)。
 
@@ -31,7 +34,7 @@ sidebar:
 扣。实例只要存在就会消耗积分，不管你是否在用。用完请及时[销毁](/radeon-cloud-docs/zh-cn/guides/destroy/)。
 
 **平台会自动停止我的实例吗？**
-只在积分用完，或者超过启动表单上显示的 **超时回收** 时长时才会。不要指望靠它们节省积分。
+只在积分用完，或者超过启动表单上你选的 **自动销毁** 时长时才会。不要指望靠它们节省积分。
 
 **Token Factory 用量和积分是一回事吗？**
 不是。Token Factory 有自己的每日用量上限，以 pts 计量。可以在 **积分与用量** 页面查看，也可以调用 [`GET /v1/usage`](/radeon-cloud-docs/zh-cn/api/usage/)。

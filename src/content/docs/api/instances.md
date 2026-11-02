@@ -43,6 +43,7 @@ For example, `pod_type: "one-click"` with `resource_template: "resource-16c55g1u
 | `pvc_size` | string | <span class="rc-opt">Optional</span> | `25GB` or `100GB`, with `use_pvc: true`. 100 GB is offered only to some accounts. |
 | `model_mount` | string | <span class="rc-opt">Optional</span> | A model to mount read-only. `GET /api/models/mountable` lists the IDs, each with the `mount_path` it appears at, usually `/models`. |
 | `ssh_enabled` | boolean | <span class="rc-opt">Optional</span> | The console always sends `true`. Requires an SSH key in **Settings**. |
+| `max_runtime_hours` | number | <span class="rc-opt">Optional</span> | **Auto-delete** lifetime after the instance is ready. The console sends `2`, `8`, `24`, `72`, or `168`; the form default is `72` (3 days). Omit it and the pool maximum applies (`168` / 7 days on one-click). |
 
 ```json
 {
@@ -80,18 +81,19 @@ To serve your own model (**Deploy type: Model API**), send the model name and th
 | `start_command` | string | <span class="rc-req">Required</span> | A `vllm serve` command listening on port `8000`. |
 | `model_source` | string | <span class="rc-opt">Optional</span> | `huggingface` (default) or `modelscope`. |
 | `pod_type`, `resource_template` | string | <span class="rc-req">Required</span> | As for a notebook. |
+| `max_runtime_hours` | number | <span class="rc-opt">Optional</span> | **Auto-delete** lifetime after the instance is ready. Same values as a notebook launch. |
 
 ```json
 {
-  "api_model": "MiniCPM5-1B",
+  "api_model": "MiniCPM5-2B",
   "model_source": "modelscope",
-  "start_command": "vllm serve OpenBMB/MiniCPM5-1B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-1B",
+  "start_command": "vllm serve OpenBMB/MiniCPM5-2B --host 0.0.0.0 --port 8000 --served-model-name MiniCPM5-2B",
   "pod_type": "one-click",
   "resource_template": "resource-16c55g1u"
 }
 ```
 
-Unknown fields are rejected. To launch one of the ready-made model templates instead, list them with `GET /api/inference/templates` and call `POST /api/templates/{id}/launch` with an empty body. See [Templates](/radeon-cloud-docs/api/templates/#launch-a-template).
+Unknown fields are rejected. To launch one of the ready-made model templates instead, list them with `GET /api/inference/templates` and call `POST /api/templates/{id}/launch`. See [Templates](/radeon-cloud-docs/api/templates/#launch-a-template).
 
 ## Check status
 
@@ -131,6 +133,7 @@ For a model service, call `GET /api/inference/current`. It returns the same fiel
 | `ssh_host`, `ssh_port`, `ssh_username`, `ssh_command` | Filled in once the container is running. |
 | `persistent_available`, `storage_notice` | Whether the persistent `/workspace` was mounted, and why not if it wasn't. |
 | `api_base_url`, `api_key`, `api_model` | Filled in for a ready model service. See [Model service endpoints](/radeon-cloud-docs/api/model-services/). |
+| `auto_reclaim_hours`, `auto_reclaim_at` | The **Auto-delete** lifetime in hours, and when it will be deleted. Present after a launch that has a lifetime. |
 
 Poll every few seconds. A launch is usually ready within a minute, but a large image or a model download can take several minutes.
 

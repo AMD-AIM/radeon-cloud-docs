@@ -52,6 +52,12 @@ high-resolution inputs do not cost linearly more — and do not carry more detai
 
 ## On Radeon Cloud
 
+:::caution[Marked retiring on Token Factory]
+The model's card on Token Factory showed **Retiring 10/23** when checked on 2026-10-21. For new
+vision work prefer [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) or another
+published vision model. [`GET /v1/models`](/radeon-cloud-docs/api/models/) is the source of truth.
+:::
+
 ### At a glance
 
 | | |
