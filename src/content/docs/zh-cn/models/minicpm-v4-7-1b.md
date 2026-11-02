@@ -72,8 +72,14 @@ sidebar:
 
 ### `messages`
 
-使用常规的 `user` / `assistant` 对话；需要系统指令时，使用一条置于首位的 `system`。
-本模型尚未验证多条或非首位 `system` 消息，以及 `developer` 角色。
+使用常规的 `user` / `assistant` 对话。`system` 消息可以不给，但最多一条，且必须放在最前。出现第二条、或排在 `user` 之后会被拒：
+
+```
+System message must be at the beginning.
+```
+
+如果客户端会生成多条 `system` 消息，请先合并成一条，放在 `messages` 的开头。
+本模型尚未验证 `developer` 角色，角色名请写 `system`。
 图片与文本部件放在同一条用户消息的 `content` 数组中。
 
 ### 思考
