@@ -109,6 +109,19 @@ You've hit a rate limit or the daily usage cap. `Retry-After` says how long to w
 
 If you hit `429` all the time, your workload is bigger than the Token Factory allowance. [Serve the model on your own instance](/radeon-cloud-docs/guides/serve-model/) instead of retrying more.
 
+### 400 "System message must be at the beginning."
+
+The model accepts at most one `system` message, and it must be the first item in `messages`. This applies to Qwen3.8 and MiniCPM-V; check each [model page](/radeon-cloud-docs/models/overview/). Join your system instructions into one message at the start:
+
+```json
+"messages": [
+  { "role": "system", "content": "You are a code reviewer.\n\nAnswer in English." },
+  { "role": "user",   "content": "Review this diff." }
+]
+```
+
+Agent frameworks that add a second `system` message, or insert one mid-conversation, need the same change before calling these models.
+
 ### "Requested model ... not supported"
 
 The model name isn't in Token Factory. Models are added and retired over time, so look names up with [`GET /v1/models`](/radeon-cloud-docs/api/models/) instead of hard-coding them.

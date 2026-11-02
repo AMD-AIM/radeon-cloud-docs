@@ -74,8 +74,15 @@ card in the console.
 
 ### `messages`
 
-Use ordinary `user` / `assistant` turns. If needed, put one `system` message first.
-Multiple or later `system` messages and the `developer` role have not been qualified for this model.
+Use ordinary `user` / `assistant` turns. A `system` message is optional, but there can be at most
+one and it must come first. A second one, or one after a `user` turn, is rejected:
+
+```
+System message must be at the beginning.
+```
+
+If your client builds several `system` messages, join them into one at the start of `messages`.
+The `developer` role has not been qualified for this model; spell the role `system`.
 Images go in a user message's `content` array, alongside text parts.
 
 ### Thinking

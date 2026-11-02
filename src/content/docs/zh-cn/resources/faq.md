@@ -61,6 +61,9 @@ vLLM 支持、并且装得进所选规格显存的模型都可以。权重在首
 **支持流式输出吗？**
 支持。聊天补全请求里设置 `stream: true`。
 
+**可以发多条 `system` 消息吗？**
+取决于模型。Qwen3.8 和 MiniCPM-V 只接受一条、而且必须放在第一条的 `system` 消息，否则返回 `400 System message must be at the beginning.`。在开头放一条 `system` 消息，所有模型都支持。参见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/)。
+
 **有 embedding 接口吗？**
 Token Factory 只有在模型目录里有 embedding 模型时才提供。实例上的模型服务提供 vLLM 支持的接口，通常包括 `/v1/embeddings`。
 
