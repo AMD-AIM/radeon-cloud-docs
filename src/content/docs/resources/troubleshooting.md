@@ -149,6 +149,7 @@ Work outward from the service:
 
 1. Inside the instance, run `curl --fail http://127.0.0.1:<port>/`. If that fails, the problem is your application, not the tunnel.
 2. Run `rc-tunnel status`, and `rc-tunnel logs --lines 100` if it isn't running.
+3. If the public page is frp's 404, or `status` stays pending, you can unset the HTTP proxy and expose again. See [If the public URL does not open](/radeon-cloud-docs/guides/tunnel/#if-the-public-url-does-not-open).
 
 If the local service works and the status is healthy but the public URL still fails, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the full domain, when the instance was created and when the failure happened. Don't send config files or keys.
 
