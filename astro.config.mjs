@@ -140,6 +140,7 @@ export default defineConfig({
               label: 'Token Factory API',
               items: [
                 { slug: 'api/models' },
+                { slug: 'api/model-utilization' },
                 { slug: 'api/chat-completions' },
                 { slug: 'api/messages' },
                 { slug: 'api/usage' },
