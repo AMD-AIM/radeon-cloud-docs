@@ -69,6 +69,11 @@ Token Factory 只有在模型目录里有 embedding 模型时才提供。实例�
 
 ## 访问
 
+**为什么实例内访问 GitHub 或拉取 Notebook 会失败？**
+由于网络限制，实例内无法稳定访问 GitHub；请在本地下载后通过 JupyterLab 上传，或使用国内镜像（如 Gitee）。
+
+此说明适用于中国站和 Global。
+
 **能把我的端点分享给同事吗？**
 平台本身不支持。要把服务公开出去，请在实例里运行它，再用 [rc-tunnel](/radeon-cloud-docs/zh-cn/guides/tunnel/) 暴露，并自己加上认证。
 
