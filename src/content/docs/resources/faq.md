@@ -69,6 +69,11 @@ In Token Factory, only if the model catalog lists an embedding model. A model se
 
 ## Access
 
+**Why do `git clone`, `pip install git+…` or GitHub downloads often fail inside an instance?**
+Due to network restrictions, GitHub is not reliably reachable from instances. Please download the notebook locally and upload it through JupyterLab, or use a mirror such as Gitee.
+
+This applies to both the China and Global sites.
+
 **Can I share my endpoint with a teammate?**
 Not through the platform. To expose a service publicly, run it in the instance and use [rc-tunnel](/radeon-cloud-docs/guides/tunnel/), with your own authentication in front of it.
 
