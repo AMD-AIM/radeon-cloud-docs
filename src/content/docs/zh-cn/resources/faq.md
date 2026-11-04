@@ -69,7 +69,7 @@ Token Factory 只有在模型目录里有 embedding 模型时才提供。实例�
 
 ## 访问
 
-**为什么实例内访问 GitHub 或拉取 Notebook 会失败？**
+**为什么在实例里 `git clone`、`pip install git+…` 或下载 GitHub 文件经常失败？**
 由于网络限制，实例内无法稳定访问 GitHub；请在本地下载后通过 JupyterLab 上传，或使用国内镜像（如 Gitee）。
 
 此说明适用于中国站和 Global。

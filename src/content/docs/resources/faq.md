@@ -69,7 +69,7 @@ In Token Factory, only if the model catalog lists an embedding model. A model se
 
 ## Access
 
-**Why does accessing GitHub or fetching notebooks fail from an instance?**
+**Why do `git clone`, `pip install git+…` or GitHub downloads often fail inside an instance?**
 Due to network restrictions, GitHub is not reliably reachable from instances. Please download the notebook locally and upload it through JupyterLab, or use a mirror such as Gitee.
 
 This applies to both the China and Global sites.
