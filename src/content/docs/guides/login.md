@@ -7,11 +7,27 @@ sidebar:
 
 The [China site and the Global site](/radeon-cloud-docs/introduction/#china-site-and-global-site) have separate accounts and different sign-in methods. Use the one for your region.
 
+These docs describe the **new console**. Until you sign in, the nav shows only **Home**. **Gallery** appears after you sign in. **Token Factory** appears on the China site only.
+
 ## China site
 
-The China site uses your [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) account. You can sign in at [developer.amd.com.cn](https://developer.amd.com.cn/), or click **Login with AMDAI** in the top-right corner of [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/). The classic interface, which new visitors may see first, labels the same button **Login**. Either way, you end up on the same program login page.
+The China site uses your [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) account. You can sign in at [developer.amd.com.cn](https://developer.amd.com.cn/), or open [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) and sign in from there. Either way, you end up on the same program login page.
 
-![The China site in the classic interface, with Login in the top-right corner](../../../assets/guide/cn-login.png)
+A new browser often opens the classic Gallery first. You can stay on it, or click **Switch to the new design** in the bottom-right corner. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
+
+### From the classic Gallery
+
+Click **Login** in the top-right corner.
+
+![The China site classic Gallery, with Login in the top-right corner](../../../assets/guide/cn-login.png)
+
+### From the new console
+
+After **Switch to the new design**, **Home** asks you to sign in. Click **Login with AMDAI**, in the header or on the panel.
+
+![The China site new console Home, with Login with AMDAI](../../../assets/guide/en/china-new-home.png)
+
+### Program login page
 
 The login page has two tabs:
 
@@ -28,29 +44,45 @@ Once you're signed in to the program, you're signed in to the China site too. Yo
 
 ## Global site
 
-Open [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/), click **Sign in** in the top-right corner, and choose **Login with Email**. To use a GitHub account instead, choose **Login with GitHub**. In the classic interface, the button reads **Login**.
+1. Open [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/). The console opens on **Home**.
+2. Click **Sign in** in the top-right corner, or **Sign in** next to **Sign in to launch an instance.**
 
-![The Global site login menu in the classic interface](../../../assets/guide/login.png)
+![The Global site Home before sign-in, with Sign in](../../../assets/guide/en/global-home.png)
 
-1. Enter your email address and click **Send code**.
-2. Enter the six-digit code sent to you and click **Verify & sign in**.
+3. Choose **Login with Email** or **Login with AMD Developer Program**.
 
-Codes expire after a few minutes. If one doesn't arrive, wait until **Resend code** is available and request another.
+![The Sign in menu with Login with Email and Login with AMD Developer Program](../../../assets/guide/en/global-signin-menu.png)
+
+If you chose **Login with Email**, enter your address under **Email** and click **Send code**. Codes expire after a few minutes; if one doesn't arrive, wait for the cooldown and request another.
+
+![The Login with Email dialog with Email and Send code](../../../assets/guide/en/global-email-modal.png)
+
+The header also has **Classic**, which switches to the classic interface, plus the language (**EN** / **中**) and theme controls.
 
 ## After signing in
 
-The console opens on **Home**, where you launch instances. The tabs at the top lead to **Gallery** and **Token Factory**.
+The console stays on **Home**, where you launch instances. The header shows **No instance running** until you launch one. **Gallery** appears in the nav after you sign in. **Token Factory** appears on the China site; the Global site currently does not show it.
+
+![The Global site Home after sign-in: Gallery in the nav, No instance running, and the launch form with Auto-delete](../../../assets/guide/en/home-signed-in.png)
 
 Click your account in the top-right corner for:
 
 - your credit balance
-- **Credits & Usage**: credits, redeeming coupons, Token Factory usage. See [Credits](/radeon-cloud-docs/guides/credits/).
-- **Settings**: SSH keys, language, appearance, the AMDAI account link and the switch to the classic interface
+- **Credits & Usage**: credits and redeeming coupons. On the China site this page also shows Token Factory usage. See [Credits](/radeon-cloud-docs/guides/credits/).
+- **Settings**: SSH keys, language, appearance, linking an AMD Developer Program account, and the switch to the classic interface
 - **Sign out**
 
-The header also has buttons for the language (**EN** / **中**) and the light or dark theme.
-
 If your console has a **Profile** page instead, you're on the classic interface. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
+
+## Settings
+
+Open **Settings** from the account menu.
+
+- **SSH keys**: add the public keys that can connect to instances you launch later. See [Connect over SSH](/radeon-cloud-docs/guides/ssh/).
+- **Language**: **EN** or **中**. The header **EN** / **中** control does the same thing.
+- **Appearance**: light or dark theme.
+- **AMD Developer Program**: on the Global site, link the program account if you sign in with it. On the China site, **AMDAI account** should read **Linked**.
+- **Interface**: **Use classic** switches to the classic console. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
 
 ## If your account needs review
 

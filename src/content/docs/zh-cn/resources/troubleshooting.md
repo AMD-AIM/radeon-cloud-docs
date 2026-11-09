@@ -42,7 +42,7 @@ sidebar:
 
 ### 实例被自动删除了
 
-积分用完时，或者超过启动表单上显示的 **超时回收** 时长时，实例会被删除，见[实例会被自动停止的情况](/radeon-cloud-docs/zh-cn/guides/instances/#实例会被自动停止的情况)。
+积分用完时，或者超过启动表单上你选的 **自动销毁** 时长时，实例会被删除，见[实例会被自动停止的情况](/radeon-cloud-docs/zh-cn/guides/instances/#实例会被自动停止的情况)。
 
 在中国站，如果余额不够第一个小时，实例就绪后一两分钟也会被删除。重新启动前，先在 **积分与用量** 页面确认余额，见[积分](/radeon-cloud-docs/zh-cn/guides/credits/)。
 

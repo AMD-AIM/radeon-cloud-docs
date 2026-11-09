@@ -19,11 +19,11 @@ You launch instances from **Home** in the console. This page walks through the l
 3. Under **Image**, keep **AMD OneClick Base** or pick another. See [Choose an image](/radeon-cloud-docs/guides/images/).
 4. Click **Launch instance**.
 
-![The launch form with Customize off: Notebook, 1 GPU and AMD OneClick Base](../../../assets/guide/en/launch-default.png)
+![The launch form with Customize off: Notebook, 1 GPU, AMD OneClick Base, and Auto-delete set to 3 days](../../../assets/guide/en/launch-default.png)
 
 With **Customize** off, the form uses the smallest size available to your account, a temporary workspace, and no mounted model. The line above the button shows what you will get, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**.
 
-**Auto-reclaim** shows how long the instance may run. It's deleted automatically that long after it becomes ready, for example **7 days after ready**, whether or not you're using it. The time depends on the resource pool. **Not enabled** means there's no time limit.
+**Auto-delete** is on the default form. Choose how long the instance may run after it becomes ready: **2 h**, **8 h**, **1 day**, **3 days**, or **7 days**. The default is **3 days**. The clock starts when the instance is ready and runs whether or not you use it. Running until it is deleted uses up to the credits shown next to the control — 73 credits for 3 days at 1 credit / hour — because every started hour is billed, and deletion can land a few minutes after the deadline. When it is deleted, data in the temporary workspace is lost.
 
 ## Customize the launch
 
@@ -33,11 +33,11 @@ Turn on **Customize** to choose the rest.
 |---|---|
 | **Size** | Pick the number of GPUs. If a GPU count comes in more than one memory size, a **Memory** row appears; each option shows its credits per hour. Choose the smallest size that fits your model. |
 | **Image** | The default suits most work. |
-| **Resource pool** | Most accounts have one pool. If yours has several and a launch fails for lack of capacity, try another. |
+| **Resource pool** | Most accounts have one pool. If yours has several, the form lists them by name, such as **One-click** and **HF**. If a launch fails for lack of capacity, try another. |
 | **Workspace storage** | **Temporary workspace (local storage)** is fast and is deleted with the instance. **Persistent /workspace** keeps everything under `/workspace` for your next instance. Some accounts can also pick 25 GB or 100 GB. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
 | **Mount a model** | Mounts a prepared model read-only, so you don't have to download it. Most models appear at `/models`; see [Mounted models](/radeon-cloud-docs/guides/storage/#mounted-models). Leave it at **None** if you don't need one. |
 
-![The fields Customize adds: Resource pool, Workspace storage set to Persistent /workspace, and Mount a model](../../../assets/guide/en/launch-customize.png)
+![Customize on: Resource pool, Workspace storage, Mount a model, and Auto-delete](../../../assets/guide/en/launch-customize.png)
 
 Settings can't be changed on a running instance. To change storage or size, destroy the instance and launch again.
 
@@ -45,7 +45,9 @@ To serve a model instead, set **Deploy type** to **Model API**. See [Serve a mod
 
 ## Follow the launch
 
-After you click **Launch instance**, the **Launching your instance** dialog moves through **Requested**, **Scheduling**, **Preparing**, **Starting** and **Ready**. If the resource pool has an auto-reclaim time, the dialog also says when the instance will be reclaimed.
+After you click **Launch instance**, the **Launching your instance** dialog moves through **Requested**, **Scheduling**, **Preparing**, **Starting** and **Ready**. The dialog also shows an **Auto-delete** notice. Before the instance is ready, that notice uses the lifetime you picked, for example **2 hours after it becomes ready**. Temporary workspace data will be deleted; files in a persistent `/workspace` are kept.
+
+![The launch dialog while it is still checking status, with the Auto-delete notice](../../../assets/guide/en/launch-progress.png)
 
 - **View logs** shows scheduling events and the container's output. Before a node is assigned and the image is pulled, the output stays empty.
 - **Continue in background** closes the dialog. The launch keeps going, and **Home** shows the instance when it is ready.
@@ -57,9 +59,9 @@ When a node is free, the instance is usually ready in under a minute. The first 
 
 ## When it's ready
 
-The dialog reads **Your instance is ready**. Click **Open notebook** to open [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/) in a new tab.
+The dialog reads **Your instance is ready**. The **Auto-delete** notice now names the clock time, for example **This instance will be deleted automatically at Oct 22, 09:13**. Click **Open notebook** to open [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/) in a new tab.
 
-![The launch dialog when the instance is ready, with Open notebook](../../../assets/guide/en/launch-ready.png)
+![The launch dialog when the instance is ready, with Open notebook and the Auto-delete time](../../../assets/guide/en/launch-ready.png)
 
 **Home** now shows the instance card:
 
@@ -67,9 +69,10 @@ The dialog reads **Your instance is ready**. Click **Open notebook** to open [Ju
 - **View logs** shows the startup events and container output.
 - **Destroy instance** deletes the instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/).
 - The card shows the image, how long the instance has been up and the credits it has used.
+- **Auto-delete** counts down on the card, in the form **Auto-deletes {time} · {left} left**. It turns amber in the last 24 hours when the original time was more than a day, and red in the last hour. When the time is reached it reads **Auto-delete time reached. Deleting shortly**.
 - The SSH command appears once SSH is ready. See [Connect over SSH](/radeon-cloud-docs/guides/ssh/).
 
-![The instance card with Open notebook, View logs, Destroy instance and the SSH command](../../../assets/guide/en/instance-card.png)
+![The instance card with Open notebook, View logs, Destroy instance, the Auto-delete countdown and the SSH command](../../../assets/guide/en/instance-card.png)
 
 ## If the launch fails
 

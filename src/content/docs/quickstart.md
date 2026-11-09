@@ -69,7 +69,7 @@ Install [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/), sign in, check whi
 
 ```bash
 python3 -m pip install amd-oneclick-sdk
-rcc auth login
+rcc auth login -u https://developer.amd.com.cn/radeon   # omit -u for the Global site
 rcc catalog list
 rcc instance add-key
 rcc instance create

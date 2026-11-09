@@ -17,7 +17,10 @@ Search by title, tag or topic; the count next to the search box shows how many n
 
 1. Make sure no instance is running. The **Launch** buttons are disabled while one is.
 2. Click **Launch** on the notebook.
-3. Follow the launch dialog as for any instance. See [Launch an instance](/radeon-cloud-docs/guides/launch/).
+3. A dialog titled **Launch** plus the notebook name opens. Pick **Auto-delete** (**2 h**, **8 h**, **1 day**, **3 days**, or **7 days**; the default is **3 days**), then click **Launch**. See [Launch an instance](/radeon-cloud-docs/guides/launch/).
+
+![The Gallery launch dialog with Auto-delete set to 3 days, Cancel and Launch](../../../assets/guide/en/gallery-launch-dialog.png)
+
 4. When the instance is ready, click **Open notebook**.
 
 The instance uses the image and size set by the notebook's author, or one GPU if the notebook doesn't specify a size. SSH is on, as for every instance. It spends credits like any other instance, so destroy it when you're done.

@@ -17,7 +17,10 @@ description: 在模板库里找到现成的 Notebook，预览后启动一个实�
 
 1. 确认没有正在运行的实例。有实例在运行时，**启动** 按钮不可用。
 2. 在 Notebook 上点 **启动**。
-3. 和普通实例一样查看启动进度，见[启动实例](/radeon-cloud-docs/zh-cn/guides/launch/)。
+3. 会弹出标题为 **启动「Notebook 名称」** 的对话框。选择 **自动销毁**（**2 小时**、**8 小时**、**1 天**、**3 天** 或 **7 天**，默认 **3 天**），再点 **启动**。见[启动实例](/radeon-cloud-docs/zh-cn/guides/launch/)。
+
+![模板库启动对话框，自动销毁为 3 天，可以取消或启动](../../../../assets/guide/zh/gallery-launch-dialog.png)
+
 4. 实例就绪后，点 **打开 Notebook**。
 
 实例使用 Notebook 作者设定的镜像和规格；作者没有指定规格时，默认 1 GPU。和所有实例一样，SSH 默认开启，运行期间同样消耗积分，用完请及时销毁。

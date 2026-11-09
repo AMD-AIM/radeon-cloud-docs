@@ -5,7 +5,7 @@ description: How credits pay for instances, how to check and top up your balance
 
 Credits pay for GPU instances, including model services you run on them. Token Factory is free and doesn't use them.
 
-Credits aren't the same as AMD AI Developer Program points. On the China site you exchange points for credits. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
+Credits aren't the same as AMD AI Developer Program points. You exchange those points for a coupon, then redeem it on the China or Global site. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
 
 ## How credits are spent
 
@@ -19,16 +19,18 @@ Credits aren't the same as AMD AI Developer Program points. On the China site yo
 
 Click your account in the top-right corner of the console. The menu shows your balance, for example **8,167 credits**.
 
-For details, choose **Credits & Usage**. The page shows your balance and your Token Factory usage.
+For details, choose **Credits & Usage**. The page always shows your balance. On the China site it also shows Token Factory usage.
 
-![Credits & Usage: the credit balance, Redeem credits, and Token Factory usage by model](../../../assets/guide/en/credits-usage.png)
+![Credits & Usage on the China site: the credit balance, Redeem credits, and Token Factory usage by model](../../../assets/guide/en/credits-usage.png)
 
 The balance is also returned by `GET /api/me`. See [Account](/radeon-cloud-docs/api/account/).
 
 ## Get credits
 
-- **China site:** exchange AMD AI Developer Program points for a coupon. 1 point buys 1 hour, up to 20 points a day. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
-- **Events:** hackathons and workshops may hand out coupons directly.
+Both sites add credits the same way: **Credits & Usage** → **Redeem credits**, then paste a coupon. The coupon is not minted on that page.
+
+- **Developer points:** exchange AMD AI Developer Program points for a coupon on [兑取算力](https://developer.amd.com.cn/points/redeem). 1 point buys 1 hour, up to 20 points a day. On the China site you're already in that program. On the Global site, sign in with **Login with AMD Developer Program**, or connect it later in **Settings**, then use the same 兑取算力 page. See [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
+- **Events:** hackathons and workshops on either site may hand out coupons directly.
 
 ## Redeem a coupon
 
@@ -40,18 +42,20 @@ The balance is also returned by `GET /api/me`. See [Account](/radeon-cloud-docs/
 
 The example in the field is `RDN-XXXX-XXXX-XXXX`, but a coupon from the developer program is a long string of letters, digits and symbols. Paste all of it.
 
-When it works, the console shows how many credits were added, and the balance updates right away. **That code is not valid. Check it and try again.** means the coupon is incomplete, expired, already used, or meant for another site. See [If redemption fails](/radeon-cloud-docs/guides/developer-program/#if-redemption-fails).
+When it works, the console shows how many credits were added, and the balance updates right away. **That code is not valid. Check it and try again.** means the coupon is incomplete, expired, already used, or doesn't belong to this signed-in account. See [If redemption fails](/radeon-cloud-docs/guides/developer-program/#if-redemption-fails).
 
 Credits belong to the site where you redeem them and can't be moved between the China and Global sites.
 
 ## Token Factory usage
 
-Token Factory doesn't spend credits. It has its own daily usage cap, counted in points (pts), which resets at 00:00 Beijing time (UTC+8).
+Token Factory doesn't spend credits. It has its own daily usage cap, counted in points (pts), which resets at 00:00 Beijing time (UTC+8). Token Factory is on the China site only.
 
-**Credits & Usage** shows:
+On the China site, **Credits & Usage** also shows:
 
 - **Daily model cap**: how much of today's cap you have used, and when it resets.
 - **By model**: requests and usage per model.
 - **Recent requests**: the last 24 hours, in your local time zone.
 
-To read the same numbers with your API key, call [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).
+The Global site currently has no Token Factory, so this page is only the credit balance and **Redeem credits**.
+
+To read the same numbers with your API key on the China site, call [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).

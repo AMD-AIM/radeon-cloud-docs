@@ -16,7 +16,9 @@ Token Factory 只在中国站提供。提供哪些模型由平台决定，会不
 
 ![Token Factory 顶部的您的 API 密钥卡片：接口地址和隐藏的 API 密钥](../../../../assets/guide/zh/tokenfactory.png)
 
-API Key 以 `rc-` 开头，可以调用 Token Factory 里的所有模型。请妥善保管：拿到 Key 的人可以用掉你的每日用量。轮换 Key 的方法见[认证](/radeon-cloud-docs/zh-cn/api/authentication/)。
+API Key 以 `rc-` 开头，可以调用 Token Factory 里的所有模型。请妥善保管：拿到 Key 的人可以用掉你的每日用量。
+
+新版控制台还没有 **Regenerate Key**。要轮换密钥，先切到经典版界面（**设置 → 界面 → 使用经典版**），打开 **Profile**，点 **Regenerate Key**。旧密钥会立刻失效。见[认证](/radeon-cloud-docs/zh-cn/api/authentication/)。
 
 ## 选择模型
 

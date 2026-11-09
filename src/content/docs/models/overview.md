@@ -25,6 +25,9 @@ cover [MiniCPM-V-4.7-1B](/radeon-cloud-docs/models/minicpm-v4-7-1b/) and
 
 **MiniCPM5-1B is no longer published.** Its page has been removed;
 [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) serves the same size class.
+
+**[DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/)** was marked
+**Retiring 10/23** on its Token Factory card (checked 2026-10-21).
 :::
 
 ## Model ID and card title
