@@ -76,6 +76,10 @@ rcc instance create \
 By default the instance gets a temporary workspace that is deleted with it. To keep `/workspace` after
 the instance is deleted, add `--use-pvc`. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
+The CLI does not let you pick **Auto-delete**. The instance uses the pool's default runtime, the same
+as a launch that leaves the form at its default. Destroy it yourself when you are done; don't wait
+for the deadline. See [How instances work](/radeon-cloud-docs/guides/instances/#limits-that-stop-an-instance).
+
 The CLI creates notebook instances. To serve a model, use the console. See
 [Serve a model](/radeon-cloud-docs/guides/serve-model/).
 
