@@ -21,6 +21,8 @@ AMD Radeon Cloud 有两个站点，各自独立部署，分别服务不同地区
 
 文档示例使用中国站的地址。用全球站时，换成全球站的地址即可。
 
+本文档以**新版控制台**为准。中国站登录后可能先进入[经典版界面](/radeon-cloud-docs/zh-cn/resources/classic-ui/)，页顶横幅可以切到新版。
+
 ## 能做什么
 
 ### GPU 实例
@@ -29,7 +31,7 @@ AMD Radeon Cloud 有两个站点，各自独立部署，分别服务不同地区
 
 实例可以在 [JupyterLab](/radeon-cloud-docs/zh-cn/guides/jupyterlab/) 里打开，也可以通过 [SSH](/radeon-cloud-docs/zh-cn/guides/ssh/) 连接，用法和一台带 GPU 的 Linux 机器一样：装软件包、下载权重、训练、做性能分析。
 
-实例运行期间每小时消耗[积分](/radeon-cloud-docs/zh-cn/guides/credits/)，用完请及时[销毁](/radeon-cloud-docs/zh-cn/guides/destroy/)。如果希望销毁后文件还在，启动时选择 **持久化 /workspace**，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。在中国站，积分用 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 的开发者积分兑换。
+实例运行期间每小时消耗[积分](/radeon-cloud-docs/zh-cn/guides/credits/)，用完请及时[销毁](/radeon-cloud-docs/zh-cn/guides/destroy/)。启动时还要选 **自动销毁**：到点后即使你还在用也会删掉，运行中可以 **延长** 一次。如果希望销毁后文件还在，启动时选择 **持久化 /workspace**，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。在中国站，积分用 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 的开发者积分兑换。
 
 实例还可以用 vLLM 部署你选的模型，对外提供兼容 OpenAI 的接口，见[部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。
 

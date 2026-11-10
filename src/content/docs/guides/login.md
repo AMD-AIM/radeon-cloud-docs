@@ -18,7 +18,7 @@ The login page has two tabs:
 - **验证码登录 / Verification Code Login**: enter your mobile number or email, click **发送验证码 / Send Code**, and type in the code. You may need to pass a slider captcha first. After a code is sent, the button counts down before you can request another.
 - **密码登录 / Password Login**: for accounts that already have a password.
 
-Below the form, you can also sign in with a ModelScope (魔搭), CSDN, or GitHub account.
+Below the form, you can also sign in with a ModelScope (魔搭), CSDN, or GitHub account. If you used GitHub before and the console asks you to bind an AMD AI Developer Program account, finish that step before you can launch an instance.
 
 ![The AMD AI Developer Program sign-in form](../../../assets/guide/cn-login-form.png)
 
@@ -50,7 +50,9 @@ Click your account in the top-right corner for:
 
 The header also has buttons for the language (**EN** / **中**) and the light or dark theme.
 
-If your console has a **Profile** page instead, you're on the classic interface. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
+If your console has a **Profile** page instead, you're on the classic interface. On the China site that can be the first screen after sign-in; a banner on **Home** and **Profile** points to the new console. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
+
+On the new interface, a short tour can appear the first time. Replay it from the account menu.
 
 ## If your account needs review
 

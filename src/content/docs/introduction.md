@@ -21,6 +21,8 @@ Use the site for your region. Accounts, credits, API keys and instances stay on 
 
 The examples in these docs use the China site. On the Global site, use its address instead.
 
+These docs describe the **new console**. On the China site you may land on the [classic interface](/radeon-cloud-docs/resources/classic-ui/) first; a banner there points you to the new one.
+
 ## What you can do
 
 ### GPU instances
@@ -29,7 +31,7 @@ An **instance** is a container with one or more Radeon GPUs. You choose the imag
 
 Open an instance in [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/) or connect over [SSH](/radeon-cloud-docs/guides/ssh/), then use it like any Linux machine with a GPU: install packages, download weights, train and profile.
 
-An instance spends [credits](/radeon-cloud-docs/guides/credits/) every hour it runs, so [destroy it](/radeon-cloud-docs/guides/destroy/) when you're done. To keep your files after that, launch with **Persistent /workspace**. See [Keep your data](/radeon-cloud-docs/guides/storage/). On the China site, you get credits by exchanging [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) points.
+An instance spends [credits](/radeon-cloud-docs/guides/credits/) every hour it runs, so [destroy it](/radeon-cloud-docs/guides/destroy/) when you're done. At launch you also choose **Auto-delete**, after which the instance is removed even if you are still using it; you can extend that deadline once. To keep your files after that, launch with **Persistent /workspace**. See [Keep your data](/radeon-cloud-docs/guides/storage/). On the China site, you get credits by exchanging [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) points.
 
 An instance can also serve a model of your choice with vLLM, behind an OpenAI-compatible endpoint. See [Serve a model](/radeon-cloud-docs/guides/serve-model/).
 
