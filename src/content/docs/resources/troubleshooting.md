@@ -11,7 +11,7 @@ Find the message or behaviour you're seeing, then follow the steps under it.
 
 ### "No matching Node has enough free CPU, memory, and GPUs for this launch"
 
-The launch dialog shows **Launch failed** with this message when every node in the selected resource pool is busy. No instance is created and no credits are spent.
+The launch dialog shows **Launch failed** with this message when every node in the selected resource pool is busy. No instance is created and no credits are spent. If the size pill already said **Full**, wait and try again.
 
 1. Turn on **Customize** in the launch form and pick another **Resource pool**, if your account has more than one.
 2. Or choose a smaller **Size**.
@@ -38,11 +38,15 @@ The form says why:
 
 On the Global site, a launch refused for credits means your balance doesn't cover one hour on the chosen size. See [Credits](/radeon-cloud-docs/guides/credits/).
 
+### The size pill says Full
+
+The pill next to **Size** is **Available**, **Limited**, or **Full**. **Full** does not disable **Launch instance**, but the launch will likely fail. Wait, or pick another pool under **Customize**.
+
 ## Running instances
 
 ### The instance was deleted by itself
 
-An instance is deleted when your credits run out, and when the **Auto-reclaim** time shown on the launch form has passed. See [Limits that stop an instance](/radeon-cloud-docs/guides/instances/#limits-that-stop-an-instance).
+An instance is deleted when your credits run out, and at the **Auto-delete** time you chose on the launch form, unless the form reads **Never**. The instance card counts down to that time. **Extend** adds time once and cannot go past the runtime you set at launch. See [Limits that stop an instance](/radeon-cloud-docs/guides/instances/#limits-that-stop-an-instance).
 
 On the China site, an instance is also deleted a minute or two after it becomes ready if your balance can't cover the first hour. Check your balance on **Credits & Usage** before launching again. See [Credits](/radeon-cloud-docs/guides/credits/).
 
