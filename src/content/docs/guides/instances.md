@@ -12,11 +12,12 @@ An instance is a container with an AMD Radeon GPU attached. You start it from **
 | **Deploy type** | **Notebook** gives you JupyterLab and SSH for development. **Model API** serves a model with vLLM behind an OpenAI-compatible endpoint. See [Serve a model](/radeon-cloud-docs/guides/serve-model/). |
 | **Size** | The number of GPUs, CPU cores and memory, and the credits it costs per hour. |
 | **Image** | The software in the container: ROCm, Python, frameworks. See [Choose an image](/radeon-cloud-docs/guides/images/). |
-| **Resource pool** | The group of GPU nodes the instance is scheduled on. |
+| **Resource pool** | The group of GPU nodes the instance is scheduled on. The launch form shows whether that pool has free GPUs right now. |
+| **Auto-delete** | How long the instance may run after it becomes ready. You pick a time on the form. |
 | **Workspace storage** | Whether `/workspace` is deleted with the instance or kept. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
 | **Mount a model** | Model files mounted read-only, at `/models` for most models. See [Keep your data](/radeon-cloud-docs/guides/storage/#mounted-models). |
 
-The form shows **Deploy type**, **Size** and **Image** by default. Turn on **Customize** to see the rest.
+The form shows **Deploy type**, **Size**, **Image** and **Auto-delete** by default. Turn on **Customize** to see the rest.
 
 ## What your account can use
 
@@ -36,7 +37,9 @@ Your balance has to cover the first hour, and the instance is deleted when your 
 
 ## Limits that stop an instance
 
-An instance is deleted automatically when your credits run out. It's also deleted once the **Auto-reclaim** time shown on the launch form has passed since it became ready, unless the form reads **Not enabled**. Save results to a persistent `/workspace` as you go, so a stop doesn't cost you the work.
+An instance is deleted automatically when your credits run out. It is also deleted at the **Auto-delete** time you chose, counted from when it became ready, unless the form reads **Never**. The instance card counts down to that time. **Extend** adds 2 hours, 8 hours or 1 day once, and cannot go past the runtime you set at launch.
+
+Save results to a persistent `/workspace` as you go, so a stop doesn't cost you the work.
 
 ## SSH is always on
 
