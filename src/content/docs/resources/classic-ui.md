@@ -5,9 +5,15 @@ description: Switch between the classic and new console, and where each classic 
 
 These docs describe the new console. If your console looks different, with a **Profile** page and **My Templates**, you are on the classic interface.
 
+When the new interface is enabled, classic **Home** and **Profile** show a bilingual migration notice announcing that the classic interface will be retired soon. Click **Go to the new UI / 前往新版** to switch. The notice does not specify a retirement date.
+
+![Bilingual migration notice and Go to the new UI button on classic Home; isolated preview example](../../../assets/guide/shared/classic-home-migration.png)
+
+*This image renders the merged UI templates in an isolated preview, with synthetic Gallery data.*
+
 ## Switch interfaces
 
-- From the classic interface, click **Switch to the new design**.
+- From the classic interface, click **Go to the new UI / 前往新版** in the migration notice, or use the existing **Switch to the new design** entry.
 - From the new interface, click **Classic** in the header, or open **Settings** and click **Use classic** under **Interface**.
 
 The choice is remembered in your browser.

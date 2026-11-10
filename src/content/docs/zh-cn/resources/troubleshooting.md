@@ -7,6 +7,22 @@ sidebar:
 
 找到你看到的提示或现象，按下面的步骤处理。
 
+## 页面加载
+
+### 控制台一直加载，或提示“页面加载失败”
+
+打开控制台时，页面可能短暂显示“正在加载 Radeon Cloud…”。如果加载时间较长，会提示“页面加载较慢，可尝试重新加载。”；检测到加载错误时，会提示“页面加载失败，请重新加载。”
+
+![页面加载失败提示，以及 Reload / 重新加载按钮；隔离预览示例](../../../../assets/guide/shared/page-load-failed.png)
+
+*图为已合并界面模板的隔离预览；加载失败仅在预览浏览器中触发。*
+
+1. 点击 **Reload / 重新加载**，重新加载当前页面。
+2. 如果提示需要 JavaScript，请在浏览器中启用 JavaScript 后重新加载。
+3. 如果反复失败，请联系本页末尾的支持邮箱，提供站点、发生时间、页面地址和错误截图。不要附上密钥、令牌或一次性 JupyterLab 链接。
+
+这些提示表示控制台网页尚未完成加载。查看 GPU 实例的启动进度，请使用启动弹窗和实例日志，见[启动实例](/radeon-cloud-docs/zh-cn/guides/launch/)。
+
 ## 启动
 
 ### 提示 “No matching Node has enough free CPU, memory, and GPUs for this launch”
