@@ -7,6 +7,22 @@ sidebar:
 
 Find the message or behaviour you're seeing, then follow the steps under it.
 
+## Page loading
+
+### The console keeps loading or says “Page could not load”
+
+When you open the console, it may briefly show “Loading Radeon Cloud…”. If loading takes longer than expected, it shows “Loading is taking longer than expected. You can reload.” If a loading error is detected, it shows “Page could not load. Please reload.”
+
+![Page loading failure message and Reload button; isolated preview example](../../../assets/guide/shared/page-load-failed.png)
+
+*This image renders the merged UI templates in an isolated preview. The loading failure was triggered only in the preview browser.*
+
+1. Click **Reload / 重新加载** to reload the current page.
+2. If the page asks for JavaScript, enable it in your browser and reload.
+3. If the problem persists, contact the support email at the end of this page. Include the site, time, page address and a screenshot of the error. Do not include keys, tokens or one-time JupyterLab links.
+
+These messages concern the console webpage loading. To follow a GPU instance launch, use the launch dialog and instance logs. See [Launch an instance](/radeon-cloud-docs/guides/launch/).
+
 ## Launching
 
 ### "No matching Node has enough free CPU, memory, and GPUs for this launch"
