@@ -43,6 +43,7 @@ For example, `pod_type: "one-click"` with `resource_template: "resource-16c55g1u
 | `pvc_size` | string | <span class="rc-opt">Optional</span> | `25GB` or `100GB`, with `use_pvc: true`. 100 GB is offered only to some accounts. |
 | `model_mount` | string | <span class="rc-opt">Optional</span> | A model to mount read-only. `GET /api/models/mountable` lists the IDs, each with the `mount_path` it appears at, usually `/models`. |
 | `ssh_enabled` | boolean | <span class="rc-opt">Optional</span> | The console always sends `true`. Requires an SSH key in **Settings**. |
+| `max_runtime_hours` | number | <span class="rc-opt">Optional</span> | Hours the instance may run after it becomes ready, the same field as **Auto-delete** on the launch form. Send a value that pool lists on the form. Omit it to use the pool's maximum. |
 
 ```json
 {
@@ -63,6 +64,7 @@ The launch is refused when:
 - your credits don't cover one hour on the chosen size (`400`, `Insufficient credits`). Only the Global site checks this up front. On the China site, the instance is deleted once an hour can't be charged.
 - `instance_type` isn't `jupyter` (`400`, `unsupported_deploy_type`)
 - the pool or size isn't assigned to your account (`403`, `resource_selection_not_assigned`)
+- `max_runtime_hours` isn't one of that pool's Auto-delete choices (`400`, `auto_reclaim_choice_invalid`)
 
 ## Launch a model service
 
@@ -80,6 +82,7 @@ To serve your own model (**Deploy type: Model API**), send the model name and th
 | `start_command` | string | <span class="rc-req">Required</span> | A `vllm serve` command listening on port `8000`. |
 | `model_source` | string | <span class="rc-opt">Optional</span> | `huggingface` (default) or `modelscope`. |
 | `pod_type`, `resource_template` | string | <span class="rc-req">Required</span> | As for a notebook. |
+| `max_runtime_hours` | number | <span class="rc-opt">Optional</span> | Same as for a notebook. |
 
 ```json
 {
