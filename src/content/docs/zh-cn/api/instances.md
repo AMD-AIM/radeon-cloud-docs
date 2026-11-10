@@ -43,6 +43,7 @@ sidebar:
 | `pvc_size` | string | <span class="rc-opt">可选</span> | `25GB` 或 `100GB`，配合 `use_pvc: true` 使用。100 GB 只对部分账号开放。 |
 | `model_mount` | string | <span class="rc-opt">可选</span> | 以只读方式挂载的模型。`GET /api/models/mountable` 列出可用的 ID，以及每个模型的挂载路径 `mount_path`，通常是 `/models`。 |
 | `ssh_enabled` | boolean | <span class="rc-opt">可选</span> | 控制台总是发送 `true`。需要先在 **设置** 里添加 SSH 密钥。 |
+| `max_runtime_hours` | number | <span class="rc-opt">可选</span> | 实例就绪后最多运行多少小时，和启动表单上的 **自动销毁** 是同一个字段。填该资源池表单里列出的档位。不传则使用该池的上限。 |
 
 ```json
 {
@@ -63,6 +64,7 @@ sidebar:
 - 积分不够所选规格运行 1 小时（`400`，`Insufficient credits`）。只有全球站会提前检查；在中国站，扣不出某个小时的积分时实例会被删除。
 - `instance_type` 不是 `jupyter`（`400`，`unsupported_deploy_type`）
 - 资源池或规格没有分配给你的账号（`403`，`resource_selection_not_assigned`）
+- `max_runtime_hours` 不是该资源池 **自动销毁** 表单上的档位（`400`，`auto_reclaim_choice_invalid`）
 
 ## 启动模型服务
 
@@ -80,6 +82,7 @@ sidebar:
 | `start_command` | string | <span class="rc-req">必填</span> | 监听 `8000` 端口的 `vllm serve` 命令。 |
 | `model_source` | string | <span class="rc-opt">可选</span> | `huggingface`（默认）或 `modelscope`。 |
 | `pod_type`、`resource_template` | string | <span class="rc-req">必填</span> | 和 Notebook 相同。 |
+| `max_runtime_hours` | number | <span class="rc-opt">可选</span> | 和 Notebook 相同。 |
 
 ```json
 {

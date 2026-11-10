@@ -34,7 +34,7 @@ Token Factory takes your `rc-` API key, a model service takes the `sk-` key on i
 
 ## Conventions
 
-Requests and responses are JSON with `Content-Type: application/json`. Timestamps are ISO 8601. Errors have a non-2xx status and a JSON body. See [Errors](/radeon-cloud-docs/api/errors/).
+Requests and responses are JSON with `Content-Type: application/json`. Timestamps are ISO 8601. Errors have a non-2xx status. Most bodies are JSON; a `413` or a `503` from the front door may be HTML or empty. See [Errors](/radeon-cloud-docs/api/errors/).
 
 ## Token Factory API
 
