@@ -35,7 +35,7 @@ If the card shows **Destroy is taking longer than expected. Refresh, or contact 
 
 ## Instances that are auto-destroyed
 
-The instance is also destroyed when your credits run out, or when the **Auto-delete** time you chose is up. Credits already spent are not refunded, and anything you haven't saved is gone. Near the deadline, the instance card can **Extend** once.
+When your credits run out, or when the **Auto-delete** time is up, the instance is destroyed. Credits already spent are not refunded, and files you haven't saved are lost. Near the auto-delete time, you can **Extend** once.
 
 ## Signing out doesn't stop an instance
 
