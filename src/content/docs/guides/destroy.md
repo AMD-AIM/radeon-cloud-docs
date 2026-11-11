@@ -1,6 +1,6 @@
 ---
 title: Destroy an instance
-description: Delete your instance to stop spending credits, and what happens to your files.
+description: Destroy your instance to stop spending credits, and what happens to your files.
 ---
 
 A running instance spends credits whether you use it or not. Destroy it when you're done.
@@ -13,29 +13,33 @@ A running instance spends credits whether you use it or not. Destroy it when you
 
 ![The Destroy this instance? confirmation on the instance card](../../../assets/guide/en/destroy-confirm.png)
 
-The card shows **Destroying instance**. When it's gone, the launch form comes back and credits stop.
-
-If you need anything that isn't under a persistent `/workspace`, save it first. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+The card shows **Destroying instance**, and credits stop. When it's gone, the launch form comes back.
 
 Destroying usually takes a few seconds.
+
+:::note
+Files that are not under a persistent `/workspace` are deleted with the instance. Save them first if you still need them. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+:::
 
 ## Destroy from JupyterLab
 
 JupyterLab has a **Delete instance** button in its top-right corner. Click it, then click **Destroy** in the confirmation. The confirmation carries the same reminder about temporary and persistent data.
 
-The JupyterLab tab stays open afterwards but no longer works. Close it; **Home** shows that no instance is running.
+![JupyterLab after Open notebook, with Delete instance marked](../../../assets/guide/en/jupyterlab-destroy.png)
+
+The JupyterLab tab stays open afterwards but no longer works. Close it; **Home** no longer shows a running instance, and the launch form comes back.
 
 ## If destroying takes too long
 
-If the card shows **Destroy is taking longer than expected**, refresh the page. If the instance is still there after a few minutes, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the time and the instance name.
+If the card shows **Destroy is taking longer than expected. Refresh, or contact support.** Refresh the page first. If the instance is still there after a few minutes, send the instance ID and a description of the problem to [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn), and a member of the team will help.
 
-## Instances that stop on their own
+## Instances that are auto-destroyed
 
-The platform also deletes an instance when your credits run out, and when the **Auto-reclaim** time shown on the launch form has passed. Don't rely on these limits to stop an instance for you: credits spent up to that point are still spent, and a job cut off mid-run loses whatever it hadn't saved.
+When your credits run out, or when the **Auto-delete** time is up, the instance is destroyed. Credits already spent are not refunded, and files you haven't saved are lost. When auto-delete is near, you can **Extend** once.
 
 ## Signing out doesn't stop an instance
 
-Signing out of the console, closing the browser or signing out of the CLI leaves the instance running.
+Signing out of the console, closing the browser or signing out of the CLI leaves the instance running. Keep an eye on it so you don't spend credits you don't need.
 
 ## From the CLI or API
 
