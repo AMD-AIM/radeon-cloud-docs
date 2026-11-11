@@ -3,7 +3,7 @@ title: How instances work
 description: What an instance is made of (deploy type, image, size and storage) and how it is billed.
 ---
 
-An instance is a container with an AMD Radeon GPU attached. You start it from **Home** in the console, choose what runs in it and how large it is, and it runs until you destroy it or a platform limit stops it.
+An instance is a container with an AMD Radeon GPU attached. You start it from **Home** in the console, choose what runs in it and how large it is, and it runs until you destroy it, or a platform limit auto-deletes it.
 
 ## What you choose at launch
 
