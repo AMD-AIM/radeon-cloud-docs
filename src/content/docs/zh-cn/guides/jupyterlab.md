@@ -11,7 +11,7 @@ description: 打开实例上的 JupyterLab，检查 GPU，管理文件。
 
 右上角有两个 Radeon Cloud 提供的按钮：**Help**，以及用于销毁实例的 **Delete instance**，见[销毁实例](/radeon-cloud-docs/zh-cn/guides/destroy/#在-jupyterlab-里销毁)。
 
-顶部的状态栏可以快速查看实例情况：**Workspace**（工作区用量）、**GPU**、**VRAM**（显存）、**RAM**、**CPU**、**Runtime**（运行时长）和 **Consumed Credits**（已消耗积分）。
+顶部的状态栏可以快速查看实例情况：**Workspace**（工作区存储用量）、**GPU**、**VRAM**（显存）、**RAM**、**CPU**、**Runtime**（运行时长）和 **Consumed Credits**（已消耗积分）。
 
 ![实例上的 JupyterLab，顶部是 Radeon Cloud 状态栏和 Delete instance 按钮](../../../../assets/guide/jupyterlab.png)
 

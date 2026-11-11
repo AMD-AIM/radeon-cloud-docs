@@ -11,7 +11,7 @@ When the instance is ready, **Open notebook** appears on the launch dialog and o
 
 Two buttons in the top-right corner come from Radeon Cloud: **Help**, and **Delete instance**, which destroys the instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/#destroy-from-jupyterlab).
 
-The bar across the top shows the instance at a glance: **Workspace** use, **GPU**, **VRAM**, **RAM** and **CPU** load, **Runtime** and **Consumed Credits**.
+The bar across the top shows the instance at a glance: **Workspace** storage use, **GPU**, **VRAM**, **RAM** and **CPU** load, **Runtime** and **Consumed Credits**.
 
 ![JupyterLab on an instance, with the Radeon Cloud status bar and Delete instance at the top](../../../assets/guide/jupyterlab.png)
 
