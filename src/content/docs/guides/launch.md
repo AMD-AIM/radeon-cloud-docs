@@ -27,7 +27,7 @@ Next to **Size**, a status pill shows whether GPUs are free in your pool right n
 
 **Auto-delete** is how long the instance may run after it becomes ready, whether or not you use it. Choose a time on the form, for example **2 h**, **8 h**, **1 day**, or **3 days**. The form also shows the most credits you might spend if it runs until then.
 
-You can extend that deadline once after the instance is running. See [How instances work](/radeon-cloud-docs/guides/instances/#limits-that-stop-an-instance).
+You can extend that deadline once after the instance is running. See [How instances work](/radeon-cloud-docs/guides/instances/#when-an-instance-is-auto-destroyed).
 
 ## Customize the launch
 
@@ -73,7 +73,7 @@ The dialog reads **Your instance is ready**. Click **Open notebook** to open [Ju
 
 - **Open notebook** opens JupyterLab.
 - **View logs** shows the startup events and container output.
-- **Destroy instance** deletes the instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/).
+- **Destroy instance** destroys this instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/).
 - The card shows the image, how long the instance has been up, the credits it has used, and when it will **Auto-delete**. Near the deadline, **Extend** adds time once. Each instance has one extension, and the extra time cannot exceed the runtime you set at launch.
 - The SSH command appears once SSH is ready. See [Connect over SSH](/radeon-cloud-docs/guides/ssh/).
 

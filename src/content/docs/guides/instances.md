@@ -3,7 +3,7 @@ title: How instances work
 description: What an instance is made of (deploy type, image, size and storage) and how it is billed.
 ---
 
-An instance is a container with an AMD Radeon GPU attached. You start it from **Home** in the console, choose what runs in it and how large it is, and it runs until you destroy it, or a platform limit auto-deletes it.
+An instance is a container with an AMD Radeon GPU attached. You start it from **Home** in the console, choose what runs in it and how large it is, and it runs until you destroy it, or a platform limit destroys it automatically.
 
 ## What you choose at launch
 
@@ -33,16 +33,16 @@ Each account runs one instance at a time. While it runs, **Home** shows the inst
 
 A running instance spends 1 credit per GPU every hour. The size you pick shows how much that option costs, for example **1 GPU · 16 cores · 55GB · 1 credit / hour**. The first hour is charged within a minute or two of the instance becoming ready. The instance card on **Home** shows how long it has been up and how many credits it has used.
 
-Your balance has to cover the first hour, and the instance is deleted when your credits run out. See [Credits](/radeon-cloud-docs/guides/credits/).
+Your balance has to cover the first hour, and the instance is destroyed when your credits run out. See [Credits](/radeon-cloud-docs/guides/credits/).
 
-## Limits that stop an instance
+## When an instance is auto-destroyed
 
-- The instance is deleted when your credits run out.
-- It is also deleted at the **Auto-delete** time you chose (counted from when it became ready; the instance card also counts down).
+- The instance is destroyed when your credits run out.
+- It is also destroyed at the **Auto-delete** time you chose (counted from when it became ready; the instance card also counts down).
 - Near the deadline, **Extend** adds 2 hours, 8 hours or 1 day. Each instance has one extension, and the extra time cannot exceed the runtime you set at launch.
 
 :::note
-Save anything you need to keep to a persistent `/workspace`. Files anywhere else are gone if the instance is stopped.
+Save files you need to keep under a persistent `/workspace`. After the instance is destroyed, files anywhere else are gone.
 :::
 
 ## SSH is on by default

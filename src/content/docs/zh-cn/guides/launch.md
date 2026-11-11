@@ -27,7 +27,7 @@ description: 在首页启动 GPU 实例，启动表单里每个字段的含义�
 
 **自动销毁** 是实例就绪后最长能运行多久，不论你是否在使用。在表单上选择时长，例如 **2 小时**、**8 小时**、**1 天** 或 **3 天**。表单还会估算一直运行到销毁最多消耗多少积分。
 
-实例运行后可以 **延长** 一次销毁时间，见[实例会被自动停止的情况](/radeon-cloud-docs/zh-cn/guides/instances/#实例会被自动停止的情况)。
+实例运行后可以 **延长** 一次销毁时间，见[实例会被自动销毁的情况](/radeon-cloud-docs/zh-cn/guides/instances/#实例会被自动销毁的情况)。
 
 ## 自定义启动配置
 
@@ -38,7 +38,7 @@ description: 在首页启动 GPU 实例，启动表单里每个字段的含义�
 | **规格** | 选择 GPU 数量。同一 GPU 数量有多种内存时，会出现 **内存** 一行，每个选项都标有每小时消耗的积分。选能装下你的模型的最小规格。 |
 | **镜像** | 默认镜像适合大多数场景。 |
 | **资源池** | 大多数账号只有一个资源池。如果你有多个，规格旁显示 **已满** 或启动因资源不足失败时，可以换一个试试。 |
-| **工作区存储** | **临时工作区（本地高速存储）** 速度快，随实例删除；**持久化 /workspace** 会保留 `/workspace` 下的全部内容，供下一次启动实例继续使用，容量 25 GB。见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。 |
+| **工作区存储** | **临时工作区（本地高速存储）** 速度快，随实例销毁；**持久化 /workspace** 会保留 `/workspace` 下的全部内容，供下一次启动实例继续使用，容量 25 GB。见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。 |
 | **挂载模型** | 把平台准备好的模型以只读方式挂载进实例，省去下载。下拉里目前是 **ComfyUI**、**Openclaw**、**Devzone**、**AMD AI Developer Hub CI**，挂载路径见[挂载的模型](/radeon-cloud-docs/zh-cn/guides/storage/#挂载的模型)。不需要就保持 **不挂载**。 |
 
 ![打开自定义后：已选持久化 /workspace](../../../../assets/guide/zh/launch-customize.png)
@@ -73,7 +73,7 @@ description: 在首页启动 GPU 实例，启动表单里每个字段的含义�
 
 - **打开 Notebook**：打开 JupyterLab。
 - **查看日志**：查看启动事件和容器输出。
-- **销毁实例**：删除实例，见[销毁实例](/radeon-cloud-docs/zh-cn/guides/destroy/)。
+- **销毁实例**：销毁这台实例，见[销毁实例](/radeon-cloud-docs/zh-cn/guides/destroy/)。
 - 卡片上还会显示镜像、已运行时长、已消耗的积分，以及 **将于 … 自动销毁**。临近销毁时可点 **延长**，每个实例只有一次延长机会，并且延长时间不能超过启动时选的时长。
 - SSH 准备好之后会显示 SSH 命令，见[通过 SSH 连接](/radeon-cloud-docs/zh-cn/guides/ssh/)。
 

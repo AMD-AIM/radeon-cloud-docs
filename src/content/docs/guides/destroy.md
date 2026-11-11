@@ -1,6 +1,6 @@
 ---
 title: Destroy an instance
-description: Delete your instance to stop spending credits, and what happens to your files.
+description: Destroy your instance to stop spending credits, and what happens to your files.
 ---
 
 A running instance spends credits whether you use it or not. Destroy it when you're done.
@@ -29,9 +29,9 @@ The JupyterLab tab stays open afterwards but no longer works. Close it; **Home**
 
 If the card shows **Destroy is taking longer than expected**, refresh the page. If the instance is still there after a few minutes, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the time and the instance name.
 
-## Instances that stop on their own
+## Instances that are auto-destroyed
 
-The platform also deletes an instance when your credits run out, and when the **Auto-delete** time you chose has passed. Don't rely on these limits to stop an instance for you: credits spent up to that point are still spent, and a job cut off mid-run loses whatever it hadn't saved. Near the deadline the instance card offers **Extend** once.
+The platform also destroys an instance when your credits run out, and when the **Auto-delete** time you chose has passed. Don't rely on these limits to stop an instance for you: credits spent up to that point are still spent, and a job cut off mid-run loses whatever it hadn't saved. Near the deadline the instance card offers **Extend** once.
 
 ## Signing out doesn't stop an instance
 
