@@ -38,7 +38,7 @@ Your balance has to cover the first hour, and the instance is deleted when your 
 ## Limits that stop an instance
 
 - The instance is deleted when your credits run out.
-- It is also deleted at the **Auto-delete** time you chose, counted from when it became ready, and the instance card counts down to that time.
+- It is also deleted at the **Auto-delete** time you chose (counted from when it became ready; the instance card also counts down).
 - Near the deadline, **Extend** adds 2 hours, 8 hours or 1 day. Each instance has one extension, and the extra time cannot exceed the runtime you set at launch.
 
 :::note
