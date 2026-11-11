@@ -14,7 +14,7 @@ description: 实例由哪些部分组成：部署类型、镜像、规格、存�
 | **镜像** | 容器里的软件：ROCm、Python 和各类框架。见[选择镜像](/radeon-cloud-docs/zh-cn/guides/images/)。 |
 | **资源池** | 实例调度到哪一组 GPU 节点上。启动表单会显示这个池此刻有没有空闲 GPU。 |
 | **自动销毁** | 实例就绪后最长能运行多久。 |
-| **工作区存储** | 实例销毁后，`/workspace` 是一起删掉，还是留下来下次接着用。见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。 |
+| **工作区存储** | 选持久化后，`/workspace` 不随实例销毁而清除，可以留下来下次接着用。见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。 |
 | **挂载模型** | 以只读方式挂载的模型文件，大多数挂载在 `/models`。见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/#挂载的模型)。 |
 
 表单默认显示 **部署类型**、**规格**、**镜像** 和 **自动销毁**。打开 **自定义** 才会显示其余选项。

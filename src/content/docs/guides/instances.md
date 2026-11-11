@@ -14,7 +14,7 @@ An instance is a container with an AMD Radeon GPU attached. You start it from **
 | **Image** | The software in the container: ROCm, Python, frameworks. See [Choose an image](/radeon-cloud-docs/guides/images/). |
 | **Resource pool** | The group of GPU nodes the instance is scheduled on. The launch form shows whether that pool has free GPUs right now. |
 | **Auto-delete** | How long the instance may run after it becomes ready. |
-| **Workspace storage** | After you destroy the instance, whether `/workspace` is deleted with it, or still there the next time you launch. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
+| **Workspace storage** | With persistent storage, `/workspace` is not wiped when the instance is destroyed, so the next launch can continue from there. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
 | **Mount a model** | Model files mounted read-only, at `/models` for most models. See [Keep your data](/radeon-cloud-docs/guides/storage/#mounted-models). |
 
 The form shows **Deploy type**, **Size**, **Image** and **Auto-delete** by default. Turn on **Customize** to see the rest.
