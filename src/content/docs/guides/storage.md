@@ -10,7 +10,7 @@ Whether your files survive depends on the **Workspace storage** you pick at laun
 | Option | What happens to `/workspace` |
 |---|---|
 | **Temporary workspace (local storage)** | Fast local disk on the node. Everything is deleted when the instance is destroyed. This is the default. |
-| **Persistent /workspace** | Everything under `/workspace` is kept and appears again in your next instance that also uses persistent storage. |
+| **Persistent /workspace** | Everything under `/workspace` is kept so the next launch can continue from there. |
 
 Only `/workspace` is kept. Packages you install with `pip`, files in your home directory and anything else outside `/workspace` are gone when the instance is destroyed. New instances start in `/workspace`.
 
@@ -18,7 +18,7 @@ To pick persistent storage, turn on **Customize** in the launch form and set **W
 
 ## Capacity
 
-Persistent storage is 25 GB. Some accounts can choose **100 GB large storage** under **Persistent workspace capacity**.
+**Persistent /workspace** defaults to **25 GB standard storage**. **100 GB large storage** appears under **Persistent workspace capacity** only if your account has it.
 
 The 25 GB and 100 GB options are two separate volumes. Files saved with one don't appear when you launch with the other, so stick to one capacity.
 
@@ -40,7 +40,15 @@ Large datasets and model weights fill 25 GB quickly. Check usage with `du -sh /w
 
 **Mount a model** in the launch form mounts a prepared model read-only. Read the weights from there instead of downloading them. To change them, copy them into `/workspace` first.
 
-Most models are mounted at `/models`. **ComfyUI** is mounted at `/comfyui_workspace/ComfyUI/models`, where ComfyUI looks for its models.
+The form currently lists these three (China site, November 2026; the list can change, so use what the form shows):
+
+| Option on the form | Mount path |
+|---|---|
+| **ComfyUI** | `/comfyui_workspace/ComfyUI/models` (where ComfyUI looks for models) |
+| **Openclaw** | `/models` |
+| **Devzone** | `/models` |
+
+Leave it at **None** if you don't need one. The mount is read-only; write outputs to `/workspace`.
 
 ## Before you destroy an instance
 
