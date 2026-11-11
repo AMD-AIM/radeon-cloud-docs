@@ -252,6 +252,13 @@ header.header {
 
 .sl-markdown-content td code { white-space: nowrap; }
 
+/* Field-name column: keep 工作区存储 / Workspace storage on one line. */
+.sl-markdown-content td:first-child {
+  white-space: nowrap;
+  width: 1%;
+  padding-right: 1.25rem;
+}
+
 /* Model and product names break badly at their hyphens. */
 .sl-markdown-content td:first-child a { white-space: nowrap; }
 
