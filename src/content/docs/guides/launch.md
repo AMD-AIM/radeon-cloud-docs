@@ -53,6 +53,8 @@ To serve a model instead, set **Deploy type** to **Model API**. See [Serve a mod
 
 After you click **Launch instance**, the **Launching your instance** dialog moves through **Requested**, **Scheduling**, **Preparing**, **Starting** and **Ready**. It also states when the instance will be auto-deleted.
 
+![The launch dialog while Scheduling](../../../assets/guide/en/launch-progress.png)
+
 - **View logs** shows scheduling events and the container's output. Before a node is assigned and the image is pulled, the output stays empty.
 - **Continue in background** closes the dialog. The launch keeps going, and **Home** shows the instance when it is ready.
 - **Cancel launch** stops the launch.
