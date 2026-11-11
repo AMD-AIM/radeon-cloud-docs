@@ -7,7 +7,7 @@ Instances launched with deploy type **Notebook** run JupyterLab. JupyterLab is a
 
 ## Open JupyterLab
 
-Click **Open notebook**, either in the launch dialog when it reads **Your instance is ready** or on the instance card on **Home**. JupyterLab opens in a new tab, in `/workspace`.
+When the instance is ready, **Open notebook** appears on the launch dialog and on the instance card on **Home**. Click it, and JupyterLab opens in a new tab, in `/workspace`.
 
 Two buttons in the top-right corner come from Radeon Cloud: **Help**, and **Delete instance**, which destroys the instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/#destroy-from-jupyterlab).
 
