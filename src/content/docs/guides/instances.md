@@ -47,7 +47,7 @@ Save anything you need to keep to a persistent `/workspace`. Files anywhere else
 
 ## SSH is on by default
 
-Instances launched from the console turn SSH **on by default**. That setup can fail, for example if OpenSSH doesn't download, or the SSH service doesn't start. JupyterLab still works, and you can start SSH yourself inside the instance. See [Connect over SSH](/radeon-cloud-docs/guides/ssh/).
+Instances launched from the console turn SSH **on by default**. That setup can fail, for example if OpenSSH doesn't download, or the SSH service doesn't start. JupyterLab is fine, and you can start SSH yourself inside the instance. See [Connect over SSH](/radeon-cloud-docs/guides/ssh/).
 
 :::note
 Add your public key in **Settings** before you launch.

@@ -47,7 +47,7 @@ description: 实例由哪些部分组成：部署类型、镜像、规格、存�
 
 ## SSH 默认开启
 
-从控制台启动的实例，SSH **默认开启**。偶尔会失败，例如下载 OpenSSH 没成功，或者 SSH 服务没起来。这时 JupyterLab 还能用，也可以自己进实例把 SSH 开起来。见[通过 SSH 连接](/radeon-cloud-docs/zh-cn/guides/ssh/)。
+从控制台启动的实例，SSH **默认开启**。偶尔会失败，例如下载 OpenSSH 没成功，或者 SSH 服务没起来。这时 JupyterLab 是正常的，也可以自己进实例把 SSH 开起来。见[通过 SSH 连接](/radeon-cloud-docs/zh-cn/guides/ssh/)。
 
 :::note
 请在启动前到 **设置** 里添加公钥。
