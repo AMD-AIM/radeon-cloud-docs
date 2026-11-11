@@ -37,37 +37,37 @@ ROCm 版 PyTorch 沿用 `torch.cuda` 这套接口名称，输出 `True` 就说�
 rocm-smi --showmeminfo vram
 ```
 
-## CPU 和内存限制
+## CPU 和内存
 
-CPU 和内存上限由启动时选的规格决定，例如 16 核、55 GB。`nproc` 这类命令显示的是整台节点的核数，而不是你的上限。工具需要设置线程数或 worker 数时，请按规格里的核数来设，不要按 `nproc` 的结果。
+实例可用的 CPU 和内存，以启动时选择的规格为准。容器内 `nproc`、`free` 等命令反映的是宿主机资源，通常高于该配额。配置线程数、worker 数或其他并行度时，请按规格中的数值设置。
 
 ## 管理文件
 
-- 左侧的文件浏览器显示实例里的文件。把文件拖进去，或者用上传按钮，就能导入 Notebook 和数据。
-- 要下载文件，右键文件选 **Download**。
-- 需要保留的内容请放在 `/workspace` 下，并用持久化存储启动实例，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
+左侧文件浏览器对应实例文件系统。上传文件：拖放到该面板，或使用上传按钮。下载文件：右键目标文件，选择 **Download**。
 
-## 查看哪些单元格运行过
+实例销毁后仍需保留的数据，须放在 `/workspace`，并在启动时启用持久化存储，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
 
-代码单元格会按最近一次运行的结果标记：
+## 单元格运行状态
 
-- 正在运行：❗，黄色背景
-- 运行成功：✅，绿色
-- 运行出错：❌，红色
+代码单元格按其最近一次运行结果标记：
 
-这些标记只显示在你的浏览器里，不会保存到 Notebook，刷新页面后消失。它们需要 JupyterLab 4，JupyterLab 版本较旧的镜像不会显示。
+- 运行中：黄色背景，❗
+- 成功：绿色背景，✅
+- 失败：红色背景，❌
 
-## 运行长任务
+标记仅存在于当前浏览器会话，不会写入 Notebook，刷新后消失。该功能需要 JupyterLab 4；镜像中的 JupyterLab 版本较低时不会显示。
 
-在 Notebook 单元格里启动的任务，会随内核停止而停止。长时间运行的任务，请在终端里启动，并把输出写到文件：
+## 长时间任务
+
+Notebook 单元格中的进程会随内核停止而结束。长时间任务请在终端中启动，并将输出重定向到文件：
 
 ```bash
 nohup python train.py > /workspace/train.log 2>&1 &
 tail -f /workspace/train.log
 ```
 
-积分用完或到了 **自动销毁** 时间时，实例会被销毁，所以请边跑边把检查点保存到持久化的 `/workspace`。
+积分耗尽或到达 **自动销毁** 时间后，实例会被销毁。请将检查点写入 `/workspace`，并使用持久化存储启动实例，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
 
-## 访问 Web 应用
+## 从公网访问服务
 
-要让实例里运行的 Web 服务（比如 Gradio 应用，或者正在开发的 API）能从公网访问，见[对外暴露服务](/radeon-cloud-docs/zh-cn/guides/tunnel/)。
+实例内的 Web 服务默认不能从公网访问。若需为 Gradio 应用或本地 API 分配公网 URL，见[对外暴露服务](/radeon-cloud-docs/zh-cn/guides/tunnel/)。

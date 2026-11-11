@@ -37,37 +37,37 @@ To see how much GPU memory you have:
 rocm-smi --showmeminfo vram
 ```
 
-## CPU and memory limits
+## CPU and memory
 
-The size you launched sets the CPU and memory limits, for example 16 cores and 55 GB. Commands such as `nproc` show every core on the node, not your limit. When a tool asks for a thread or worker count, base it on the cores in your size, not on `nproc`.
+CPU and memory available to the instance are set by the size chosen at launch. Commands such as `nproc` and `free` report the host node's resources, which are typically larger than that quota. Set thread counts, workers, and other parallelism from the size, not from those commands.
 
 ## Work with files
 
-- The file browser on the left shows the instance's files. Drag files onto it, or use the upload button, to bring in notebooks and data.
-- To download a file, right-click it and choose **Download**.
-- Save anything you want to keep under `/workspace`, and launch with persistent storage. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+The file browser on the left is the instance file system. To upload, drag files onto the pane or use the upload control. To download, right-click the file and choose **Download**.
 
-## See which cells have run
+Data that must survive instance destruction belongs under `/workspace`, with persistent storage enabled at launch. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
-Code cells are marked by how their last run went:
+## Cell run status
 
-- ❗ and a yellow background while the cell is running
-- ✅ and green when it ran without errors
-- ❌ and red when it raised an error
+Code cells are marked by the result of their last run:
 
-The marks are shown only in your browser. They aren't saved in the notebook and disappear when you reload the page. They need JupyterLab 4, so images with an older JupyterLab don't show them.
+- Running: yellow background, ❗
+- Succeeded: green background, ✅
+- Failed: red background, ❌
 
-## Run long jobs
+The marks exist only in the current browser session. They are not stored in the notebook and disappear on reload. They require JupyterLab 4; images with an older JupyterLab do not show them.
 
-A job started in a notebook cell stops when its kernel stops. For long runs, start the job from a terminal and write its output to a file:
+## Long-running jobs
+
+A process started in a notebook cell ends when the kernel stops. Start long-running jobs from a terminal and redirect output to a file:
 
 ```bash
 nohup python train.py > /workspace/train.log 2>&1 &
 tail -f /workspace/train.log
 ```
 
-An instance can be destroyed when your credits run out or when its **Auto-delete** time passes, so save checkpoints to a persistent `/workspace` as you go.
+The instance is destroyed when credits run out or when **Auto-delete** is reached. Write checkpoints under `/workspace` and launch with persistent storage. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
-## Reach a web app
+## Reach a service from the internet
 
-To make a web service running in the instance reachable from the internet, such as a Gradio app or an API you're building, see [Expose a service](/radeon-cloud-docs/guides/tunnel/).
+Web services inside the instance are not reachable from the public internet by default. To assign a public URL to a Gradio app or a local API, see [Expose a service](/radeon-cloud-docs/guides/tunnel/).
