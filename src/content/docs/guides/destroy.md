@@ -39,7 +39,7 @@ When your credits run out, or when the **Auto-delete** time is up, the instance 
 
 ## Signing out doesn't stop an instance
 
-Signing out of the console, closing the browser or signing out of the CLI leaves the instance running.
+Signing out of the console, closing the browser or signing out of the CLI leaves the instance running. Keep an eye on it so you don't spend credits you don't need.
 
 ## From the CLI or API
 
