@@ -38,13 +38,14 @@ Large datasets and model weights fill 25 GB quickly. Check usage with `du -sh /w
 
 **Mount a model** in the launch form mounts a prepared model read-only. Read the weights from there instead of downloading them. To change them, copy them into `/workspace` first.
 
-The form currently lists these three (China site, November 2026; the list can change, so use what the form shows):
+The form currently lists these four (China site, November 2026; the list can change, so use what the form shows):
 
 | Option on the form | Mount path |
 |---|---|
 | **ComfyUI** | `/comfyui_workspace/ComfyUI/models` (where ComfyUI looks for models) |
 | **Openclaw** | `/models` |
 | **Devzone** | `/models` |
+| **AMD AI Developer Hub CI** | `/models` |
 
 Leave it at **None** if you don't need one. The mount is read-only; write outputs to `/workspace`.
 

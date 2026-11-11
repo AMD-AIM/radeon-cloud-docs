@@ -39,7 +39,7 @@ Turn on **Customize** to choose the rest.
 | **Image** | The default suits most work. |
 | **Resource pool** | Most accounts have one pool. If yours has several and the size pill reads **Full** or a launch fails for lack of capacity, try another. |
 | **Workspace storage** | **Temporary workspace (local storage)** is fast and is deleted with the instance. **Persistent /workspace** keeps everything under `/workspace` so the next launch can continue from there. Capacity is 25 GB. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
-| **Mount a model** | Mounts a prepared model read-only, so you don't have to download it. The list currently has **ComfyUI**, **Openclaw** and **Devzone**; see [Mounted models](/radeon-cloud-docs/guides/storage/#mounted-models) for the paths. Leave it at **None** if you don't need one. |
+| **Mount a model** | Mounts a prepared model read-only, so you don't have to download it. The list currently has **ComfyUI**, **Openclaw**, **Devzone**, and **AMD AI Developer Hub CI**; see [Mounted models](/radeon-cloud-docs/guides/storage/#mounted-models) for the paths. Leave it at **None** if you don't need one. |
 
 ![Customize on: Persistent /workspace selected, Mount a model list open](../../../assets/guide/en/launch-customize.png)
 

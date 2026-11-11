@@ -38,13 +38,14 @@ description: 临时工作区与持久化工作区、只读挂载的模型，以�
 
 启动表单里的 **挂载模型** 会把平台准备好的模型以只读方式挂载进实例。直接从挂载目录读取权重，不用另外下载。需要修改时，先复制到 `/workspace`。
 
-表单下拉里目前是这三项（2026-11 中国站，列表会变，以表单为准）：
+表单下拉里目前是这四项（2026-11 中国站，列表会变，以表单为准）：
 
 | 表单选项 | 挂载路径 |
 |---|---|
 | **ComfyUI** | `/comfyui_workspace/ComfyUI/models`（ComfyUI 读取模型的位置） |
 | **Openclaw** | `/models` |
 | **Devzone** | `/models` |
+| **AMD AI Developer Hub CI** | `/models` |
 
 不需要就保持 **不挂载**。挂载是只读的，输出请写到 `/workspace`。
 
