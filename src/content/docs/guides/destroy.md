@@ -13,7 +13,7 @@ A running instance spends credits whether you use it or not. Destroy it when you
 
 ![The Destroy this instance? confirmation on the instance card](../../../assets/guide/en/destroy-confirm.png)
 
-The card shows **Destroying instance**. When it's gone, the launch form comes back and credits stop.
+The card shows **Destroying instance**, and credits stop. When it's gone, the launch form comes back.
 
 If you need anything that isn't under a persistent `/workspace`, save it first. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
