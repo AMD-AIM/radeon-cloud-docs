@@ -17,25 +17,44 @@ description: 打开实例上的 JupyterLab，检查 GPU，管理文件。
 
 ## 检查 GPU
 
-打开终端（**File → New → Terminal**，或者 Launcher 里的 **Terminal**），运行：
+打开终端（**File → New → Terminal**，或 Launcher 中的 **Terminal**），运行：
 
-```bash
-rocm-smi
+```shellsession frame="terminal" title="终端"
+$ rocm-smi
+=========================================== ROCm System Management Interface ===========================================
+===================================================== Concise Info =====================================================
+Device  Node  IDs              Temp    Power   Partitions          SCLK     MCLK     Fan     Perf  PwrCap  VRAM%  GPU%
+              (DID,     GUID)  (Edge)  (Avg)   (Mem, Compute, ID)
+========================================================================================================================
+0       2     0x7551,   52503  50.0°C  22.0W   N/A, N/A, 0         41Mhz    96Mhz    20.0%   auto  300.0W  0%     0%
+========================================================================================================================
+================================================= End of ROCm SMI Log ==================================================
 ```
 
-它会列出实例挂载的 Radeon GPU，以及显存占用和温度。确认 PyTorch 能使用 GPU：
+`Device` 行对应实例挂载的 GPU，并给出温度、功耗、显存占用（**VRAM%**）和计算占用（**GPU%**）。输出随规格变化；上面是 1 张 GPU 时的示例。
 
-```bash
-python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
+确认 PyTorch 可以访问这些 GPU：
+
+```shellsession frame="terminal" title="终端"
+$ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
+True 1
 ```
 
-ROCm 版 PyTorch 沿用 `torch.cuda` 这套接口名称，输出 `True` 就说明 ROCm 工作正常。
+ROCm 版 PyTorch 沿用 `torch.cuda` 接口。`True` 表示 ROCm 工作正常，其后的数字是可见 GPU 数量。
 
-查看显存大小：
+查看显存容量：
 
-```bash
-rocm-smi --showmeminfo vram
+```shellsession frame="terminal" title="终端"
+$ rocm-smi --showmeminfo vram
+============================ ROCm System Management Interface ============================
+================================== Memory Usage (Bytes) ==================================
+GPU[0]          : VRAM Total Memory (B): 32061259776
+GPU[0]          : VRAM Total Used Memory (B): 62087168
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
 ```
+
+**VRAM Total Memory** 为显存总量，单位是字节。
 
 ## CPU 和内存
 

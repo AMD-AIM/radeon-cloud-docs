@@ -57,20 +57,22 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:image:alt', content: 'Radeon Cloud Docs' } },
       ],
       customCss: ['./src/styles/custom.css'],
-      // VS Code Dark+/Light+ so fenced blocks match the editor, not a
-      // generic GitHub/macOS terminal widget.
+      // Always Dark+ so fenced blocks match the homepage terminal,
+      // including on the light site theme.
       expressiveCode: {
-        themes: ['dark-plus', 'light-plus'],
+        themes: ['dark-plus', 'dark-plus'],
         styleOverrides: {
-          borderRadius: '6px',
+          borderRadius: '12px',
           borderWidth: '1px',
           frames: {
             frameBoxShadowCssValue: 'none',
-            terminalTitlebarDotsOpacity: '0',
-            editorTabBorderRadius: '0px',
-            editorActiveTabIndicatorHeight: '2px',
-            editorActiveTabIndicatorTopColor: '#007acc',
-            editorActiveTabIndicatorBottomColor: 'transparent',
+            terminalTitlebarDotsOpacity: '1',
+            terminalTitlebarDotsForeground: '#2b313b',
+            terminalTitlebarBackground: '#14181f',
+            terminalTitlebarForeground: '#6b7280',
+            terminalTitlebarBorderBottomColor: '#1f242d',
+            terminalBackground: '#0e1116',
+            editorBackground: '#0e1116',
           },
         },
       },

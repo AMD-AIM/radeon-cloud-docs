@@ -19,23 +19,42 @@ The bar across the top shows the instance at a glance: **Workspace** storage use
 
 Open a terminal (**File → New → Terminal**, or the **Terminal** tile in the Launcher) and run:
 
-```bash
-rocm-smi
+```shellsession frame="terminal" title="Terminal"
+$ rocm-smi
+=========================================== ROCm System Management Interface ===========================================
+===================================================== Concise Info =====================================================
+Device  Node  IDs              Temp    Power   Partitions          SCLK     MCLK     Fan     Perf  PwrCap  VRAM%  GPU%
+              (DID,     GUID)  (Edge)  (Avg)   (Mem, Compute, ID)
+========================================================================================================================
+0       2     0x7551,   52503  50.0°C  22.0W   N/A, N/A, 0         41Mhz    96Mhz    20.0%   auto  300.0W  0%     0%
+========================================================================================================================
+================================================= End of ROCm SMI Log ==================================================
 ```
 
-It lists the Radeon GPUs attached to the instance with their memory use and temperature. To check that PyTorch can use them:
+Each `Device` row is a GPU attached to the instance, with temperature, power, memory use (**VRAM%**) and compute use (**GPU%**). The output depends on the size; the example above is a 1-GPU instance.
 
-```bash
-python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
+Confirm that PyTorch can see those GPUs:
+
+```shellsession frame="terminal" title="Terminal"
+$ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
+True 1
 ```
 
-ROCm builds of PyTorch keep the `torch.cuda` API names, so `True` here means ROCm is working.
+ROCm builds of PyTorch keep the `torch.cuda` API. `True` means ROCm is working; the number after it is how many GPUs are visible.
 
-To see how much GPU memory you have:
+Check GPU memory capacity:
 
-```bash
-rocm-smi --showmeminfo vram
+```shellsession frame="terminal" title="Terminal"
+$ rocm-smi --showmeminfo vram
+============================ ROCm System Management Interface ============================
+================================== Memory Usage (Bytes) ==================================
+GPU[0]          : VRAM Total Memory (B): 32061259776
+GPU[0]          : VRAM Total Used Memory (B): 62087168
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
 ```
+
+**VRAM Total Memory** is the GPU memory capacity, in bytes.
 
 ## CPU and memory
 
