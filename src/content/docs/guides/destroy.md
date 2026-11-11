@@ -27,7 +27,9 @@ Files that are not under a persistent `/workspace` are deleted with the instance
 
 JupyterLab has a **Delete instance** button in its top-right corner. Click it, then click **Destroy** in the confirmation. The confirmation carries the same reminder about temporary and persistent data.
 
-The JupyterLab tab stays open afterwards but no longer works. Close it; **Home** shows that no instance is running.
+![JupyterLab after Open notebook, with Delete instance marked](../../../assets/guide/en/jupyterlab-destroy.png)
+
+The JupyterLab tab stays open afterwards but no longer works. Close it; **Home** no longer shows a running instance, and the launch form comes back.
 
 ## If destroying takes too long
 

@@ -27,7 +27,9 @@ description: 销毁实例以停止消耗积分，以及销毁后文件会怎样�
 
 JupyterLab 右上角有一个 **Delete instance** 按钮。点击后，在确认框里点 **Destroy**。确认框里同样会提醒临时数据和持久化数据的区别。
 
-销毁后 JupyterLab 标签页不会自动关闭，但已经无法使用，直接关掉即可。**首页** 会显示没有正在运行的实例。
+![打开 Notebook 后的 JupyterLab，右上角 Delete instance 已标出](../../../../assets/guide/zh/jupyterlab-destroy.png)
+
+销毁后 JupyterLab 标签页不会自动关闭，但已经无法使用，直接关掉即可。**首页** 不再显示运行中的实例，会恢复为启动表单。
 
 ## 销毁耗时过长
 
