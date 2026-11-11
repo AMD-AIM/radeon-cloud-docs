@@ -35,7 +35,7 @@ If the card shows **Destroy is taking longer than expected. Refresh, or contact 
 
 ## Instances that are auto-destroyed
 
-The platform also destroys an instance when your credits run out, and when the **Auto-delete** time you chose has passed. Don't rely on these limits to stop an instance for you: credits spent up to that point are still spent, and a job cut off mid-run loses whatever it hadn't saved. Near the deadline the instance card offers **Extend** once.
+The instance is also destroyed when your credits run out, or when the **Auto-delete** time you chose is up. Credits already spent are not refunded, and anything you haven't saved is gone. Near the deadline, the instance card can **Extend** once.
 
 ## Signing out doesn't stop an instance
 
