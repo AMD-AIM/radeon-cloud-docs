@@ -17,10 +17,8 @@ description: 销毁实例以停止消耗积分，以及销毁后文件会怎样�
 
 销毁通常几秒钟就能完成。
 
-不在持久化 `/workspace` 里的内容，如果还需要，请先保存，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
-
 :::note
-不在持久化 `/workspace` 里的文件，会随实例销毁被清除。如果还需要，请先保存。
+不在持久化 `/workspace` 里的文件，会随实例销毁被清除。如果还需要，请先保存，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
 :::
 
 ## 在 JupyterLab 里销毁

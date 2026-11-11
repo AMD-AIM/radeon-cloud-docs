@@ -17,10 +17,8 @@ The card shows **Destroying instance**, and credits stop. When it's gone, the la
 
 Destroying usually takes a few seconds.
 
-If you need anything that isn't under a persistent `/workspace`, save it first. See [Keep your data](/radeon-cloud-docs/guides/storage/).
-
 :::note
-Files that are not under a persistent `/workspace` are deleted with the instance. Save them first if you still need them.
+Files that are not under a persistent `/workspace` are deleted with the instance. Save them first if you still need them. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 :::
 
 ## Destroy from JupyterLab
