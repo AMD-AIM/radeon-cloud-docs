@@ -74,7 +74,7 @@ The dialog reads **Your instance is ready**. Click **Open notebook** to open [Ju
 - **Open notebook** opens JupyterLab.
 - **View logs** shows the startup events and container output.
 - **Destroy instance** deletes the instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/).
-- The card shows the image, how long the instance has been up, the credits it has used, and when it will **Auto-delete**. Near the deadline, **Extend** adds time once, up to the runtime you set at launch.
+- The card shows the image, how long the instance has been up, the credits it has used, and when it will **Auto-delete**. Near the deadline, **Extend** adds time once. Each instance has one extension, and the extra time cannot exceed the runtime you set at launch.
 - The SSH command appears once SSH is ready. See [Connect over SSH](/radeon-cloud-docs/guides/ssh/).
 
 ![The instance card with Open notebook, View logs, Destroy instance and the SSH command](../../../assets/guide/en/instance-card.png)

@@ -39,7 +39,7 @@ Your balance has to cover the first hour, and the instance is deleted when your 
 
 - The instance is deleted when your credits run out.
 - It is also deleted at the **Auto-delete** time you chose, counted from when it became ready, and the instance card counts down to that time.
-- Near the deadline, **Extend** adds 2 hours, 8 hours or 1 day. You can extend once, and not past the runtime you set at launch.
+- Near the deadline, **Extend** adds 2 hours, 8 hours or 1 day. Each instance has one extension, and the extra time cannot exceed the runtime you set at launch.
 
 :::note
 Save anything you need to keep to a persistent `/workspace`. Files anywhere else are gone if the instance is stopped.
