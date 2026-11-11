@@ -25,7 +25,7 @@ With **Customize** off, the form uses the smallest size available to your accoun
 
 Next to **Size**, a status pill shows whether GPUs are free in your pool right now: **Available**, **Limited**, or **Full**. **Full** does not disable **Launch instance**; the launch will likely fail, so wait or pick another pool.
 
-**Auto-delete** is how long the instance may run after it becomes ready, whether or not you use it. Choose a time on the form, for example **2 h**, **8 h**, **1 day**, or **3 days**. The longest option depends on the resource pool. The form also shows the most credits you might spend if it runs until then.
+**Auto-delete** is how long the instance may run after it becomes ready, whether or not you use it. Choose a time on the form, for example **2 h**, **8 h**, **1 day**, or **3 days**. The form also shows the most credits you might spend if it runs until then.
 
 You can extend that deadline once after the instance is running. See [How instances work](/radeon-cloud-docs/guides/instances/#limits-that-stop-an-instance).
 
@@ -38,26 +38,24 @@ Turn on **Customize** to choose the rest.
 | **Size** | Pick the number of GPUs. If a GPU count comes in more than one memory size, a **Memory** row appears; each option shows its credits per hour. Choose the smallest size that fits your model. |
 | **Image** | The default suits most work. |
 | **Resource pool** | Most accounts have one pool. If yours has several and the size pill reads **Full** or a launch fails for lack of capacity, try another. |
-| **Workspace storage** | **Temporary workspace (local storage)** is fast and is deleted with the instance. **Persistent /workspace** keeps everything under `/workspace` so the next launch can continue from there. Persistent storage defaults to **25 GB standard storage**; **100 GB large storage** appears only if your account has it. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
+| **Workspace storage** | **Temporary workspace (local storage)** is fast and is deleted with the instance. **Persistent /workspace** keeps everything under `/workspace` so the next launch can continue from there. Capacity is 25 GB. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
 | **Mount a model** | Mounts a prepared model read-only, so you don't have to download it. The list currently has **ComfyUI**, **Openclaw** and **Devzone**; see [Mounted models](/radeon-cloud-docs/guides/storage/#mounted-models) for the paths. Leave it at **None** if you don't need one. |
 
-![The fields Customize adds: Resource pool, Workspace storage, Mount a model, and Auto-delete](../../../assets/guide/en/launch-customize.png)
+![Customize on: Persistent /workspace selected, Mount a model list open](../../../assets/guide/en/launch-customize.png)
 
+:::note
 Settings can't be changed on a running instance. To change storage or size, destroy the instance and launch again.
+:::
 
 To serve a model instead, set **Deploy type** to **Model API**. See [Serve a model](/radeon-cloud-docs/guides/serve-model/).
 
 ## Follow the launch
 
-After you click **Launch instance**, **Home** opens **Launching your instance**. The dialog shows:
+After you click **Launch instance**, the **Launching your instance** dialog moves through **Requested**, **Scheduling**, **Preparing**, **Starting** and **Ready**. It also states when the instance will be auto-deleted.
 
-| On the dialog | What it does |
-|---|---|
-| **Requested**, **Scheduling**, **Preparing**, **Starting**, **Ready** | The steps at the top, in that order. |
-| Auto-delete note | When the instance will be deleted. |
-| **View logs** | Opens **Startup logs**: events above, container output below. Output stays empty until a node is assigned and the image is pulled. |
-| **Continue in background** | Closes the dialog. The launch keeps going; **Home** shows the instance card when it is ready. |
-| **Cancel launch** | Stops this launch. |
+- **View logs** shows scheduling events and the container's output. Before a node is assigned and the image is pulled, the output stays empty.
+- **Continue in background** closes the dialog. The launch keeps going, and **Home** shows the instance when it is ready.
+- **Cancel launch** stops the launch.
 
 ![View logs during a launch, showing the platform setting up SSH](../../../assets/guide/en/instance-logs.png)
 

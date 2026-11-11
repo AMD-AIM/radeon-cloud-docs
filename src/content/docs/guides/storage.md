@@ -18,9 +18,7 @@ To pick persistent storage, turn on **Customize** in the launch form and set **W
 
 ## Capacity
 
-**Persistent /workspace** defaults to **25 GB standard storage**. **100 GB large storage** appears under **Persistent workspace capacity** only if your account has it.
-
-The 25 GB and 100 GB options are two separate volumes. Files saved with one don't appear when you launch with the other, so stick to one capacity.
+Persistent /workspace is 25 GB.
 
 ## What to put under /workspace
 
