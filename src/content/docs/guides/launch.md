@@ -65,7 +65,7 @@ When a node is free, the instance is usually ready in under a minute. The first 
 
 ## When it's ready
 
-The dialog reads **Your instance is ready**. Click **Open notebook** to open [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/) in a new tab.
+The dialog reads **Your instance is ready**. Click **Open notebook** to open [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/).
 
 ![The launch dialog when the instance is ready, with Open notebook](../../../assets/guide/en/launch-ready.png)
 

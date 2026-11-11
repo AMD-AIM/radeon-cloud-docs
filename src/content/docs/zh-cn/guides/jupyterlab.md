@@ -7,7 +7,7 @@ description: 打开实例上的 JupyterLab，检查 GPU，管理文件。
 
 ## 打开 JupyterLab
 
-实例就绪后，启动弹窗或 **首页** 的实例卡片上会出现 **打开 Notebook**。点这个按钮，JupyterLab 会在新标签页打开，默认位于 `/workspace` 目录。
+实例就绪后，启动弹窗或 **首页** 的实例卡片上会出现 **打开 Notebook**。点这个按钮进入 JupyterLab，默认路径是 `/workspace`。
 
 右上角有两个 Radeon Cloud 提供的按钮：**Help**，以及用于销毁实例的 **Delete instance**，见[销毁实例](/radeon-cloud-docs/zh-cn/guides/destroy/#在-jupyterlab-里销毁)。
 

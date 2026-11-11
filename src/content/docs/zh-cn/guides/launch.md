@@ -65,7 +65,7 @@ description: 在首页启动 GPU 实例，启动表单里每个字段的含义�
 
 ## 启动完成后
 
-弹窗显示 **实例已就绪**。点 **打开 Notebook**，会在新标签页打开 [JupyterLab](/radeon-cloud-docs/zh-cn/guides/jupyterlab/)。
+弹窗显示 **实例已就绪**。点 **打开 Notebook**，进入 [JupyterLab](/radeon-cloud-docs/zh-cn/guides/jupyterlab/)。
 
 ![实例就绪时的启动弹窗，可以点打开 Notebook](../../../../assets/guide/zh/launch-ready.png)
 
