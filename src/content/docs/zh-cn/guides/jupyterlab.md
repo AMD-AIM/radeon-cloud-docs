@@ -3,7 +3,7 @@ title: 在 JupyterLab 中工作
 description: 打开实例上的 JupyterLab，检查 GPU，管理文件。
 ---
 
-Notebook 实例运行的是 JupyterLab：一个在浏览器里使用的开发环境，包含 Notebook、终端和文件浏览器。
+选 **部署类型：Notebook** 启动的实例，运行的是 JupyterLab。JupyterLab 是浏览器里的开发环境，有笔记本、终端和文件浏览器。
 
 ## 打开 JupyterLab
 

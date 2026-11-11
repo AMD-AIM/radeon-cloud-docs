@@ -3,7 +3,7 @@ title: Work in JupyterLab
 description: Open JupyterLab on your instance, check the GPU, and work with files.
 ---
 
-Notebook instances run JupyterLab, a development environment in your browser with notebooks, terminals and a file browser.
+Instances launched with deploy type **Notebook** run JupyterLab. JupyterLab is a development environment in the browser, with notebooks, a terminal and a file browser.
 
 ## Open JupyterLab
 
