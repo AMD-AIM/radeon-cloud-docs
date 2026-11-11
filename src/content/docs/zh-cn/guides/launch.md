@@ -41,7 +41,7 @@ description: 在首页启动 GPU 实例，启动表单里每个字段的含义�
 | **工作区存储** | **临时工作区（本地高速存储）** 速度快，随实例删除；**持久化 /workspace** 会保留 `/workspace` 下的全部内容，供下一次启动实例继续使用，容量 25 GB。见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。 |
 | **挂载模型** | 把平台准备好的模型以只读方式挂载进实例，省去下载。下拉里目前是 **ComfyUI**、**Openclaw**、**Devzone**、**AMD AI Developer Hub CI**，挂载路径见[挂载的模型](/radeon-cloud-docs/zh-cn/guides/storage/#挂载的模型)。不需要就保持 **不挂载**。 |
 
-![打开自定义后：已选持久化 /workspace，并展开挂载模型下拉](../../../../assets/guide/zh/launch-customize.png)
+![打开自定义后：已选持久化 /workspace](../../../../assets/guide/zh/launch-customize.png)
 
 :::note
 运行中的实例不能修改配置。要换存储或规格，先销毁实例再重新启动。

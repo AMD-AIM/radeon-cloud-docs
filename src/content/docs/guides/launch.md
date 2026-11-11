@@ -41,7 +41,7 @@ Turn on **Customize** to choose the rest.
 | **Workspace storage** | **Temporary workspace (local storage)** is fast and is deleted with the instance. **Persistent /workspace** keeps everything under `/workspace` so the next launch can continue from there. Capacity is 25 GB. See [Keep your data](/radeon-cloud-docs/guides/storage/). |
 | **Mount a model** | Mounts a prepared model read-only, so you don't have to download it. The list currently has **ComfyUI**, **Openclaw**, **Devzone**, and **AMD AI Developer Hub CI**; see [Mounted models](/radeon-cloud-docs/guides/storage/#mounted-models) for the paths. Leave it at **None** if you don't need one. |
 
-![Customize on: Persistent /workspace selected, Mount a model list open](../../../assets/guide/en/launch-customize.png)
+![Customize on, with Persistent /workspace selected](../../../assets/guide/en/launch-customize.png)
 
 :::note
 Settings can't be changed on a running instance. To change storage or size, destroy the instance and launch again.
