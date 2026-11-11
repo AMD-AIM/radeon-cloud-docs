@@ -31,7 +31,7 @@ JupyterLab 右上角有一个 **Delete instance** 按钮。点击后，在确认
 
 ## 销毁耗时过长
 
-如果卡片显示 **销毁耗时超出预期。请刷新页面或联系支持。**，先刷新页面。几分钟后实例仍然存在，请把时间和实例名称发到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)。
+如果卡片显示 **销毁耗时超出预期。请刷新页面或联系支持。** 请先刷新页面。几分钟后实例仍然存在，请把实例 ID 和您遇到的问题详情发送到 [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn)，由工作人员为您提供帮助。
 
 ## 实例会被自动销毁的情况
 

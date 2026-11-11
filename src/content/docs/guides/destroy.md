@@ -31,7 +31,7 @@ The JupyterLab tab stays open afterwards but no longer works. Close it; **Home**
 
 ## If destroying takes too long
 
-If the card shows **Destroy is taking longer than expected**, refresh the page. If the instance is still there after a few minutes, email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) with the time and the instance name.
+If the card shows **Destroy is taking longer than expected. Refresh, or contact support.** Refresh the page first. If the instance is still there after a few minutes, send the instance ID and a description of the problem to [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn), and a member of the team will help.
 
 ## Instances that are auto-destroyed
 
