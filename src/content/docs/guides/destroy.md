@@ -15,9 +15,13 @@ A running instance spends credits whether you use it or not. Destroy it when you
 
 The card shows **Destroying instance**, and credits stop. When it's gone, the launch form comes back.
 
+Destroying usually takes a few seconds.
+
 If you need anything that isn't under a persistent `/workspace`, save it first. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
-Destroying usually takes a few seconds.
+:::note
+Files that are not under a persistent `/workspace` are deleted with the instance. Save them first if you still need them.
+:::
 
 ## Destroy from JupyterLab
 
