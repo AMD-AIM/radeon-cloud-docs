@@ -15,7 +15,7 @@ AMD Radeon Cloud 有两个站点，各自独立部署，分别服务不同地区
 | 站点 | 地址 | 账号 |
 |---|---|---|
 | **中国站** | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) | [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) |
-| **全球站** | [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) | 邮箱登录 |
+| **全球站** | [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) | 邮箱或 AMD Developer Program |
 
 请使用所在地区的站点。账号、积分、API Key 和实例都只属于创建它们的站点。一个站点的 API Key 在另一个站点无法使用，所以代码里的 base URL 必须和你的站点一致。
 

@@ -6,7 +6,7 @@ sidebar:
   order: 2
 ---
 
-中国站使用 [AMD AI 开发者计划](https://developer.amd.com.cn/) 的账号登录，运行 GPU 实例所需的 Radeon Cloud 积分也要用计划里的开发者积分来换。全球站有自己的账号体系，不使用这个计划，见[登录](/radeon-cloud-docs/zh-cn/guides/login/#全球站)。
+中国站使用 [AMD AI 开发者计划](https://developer.amd.com.cn/) 的账号登录，运行 GPU 实例所需的 Radeon Cloud 积分也要用计划里的开发者积分来换。全球站不使用这个中国站计划。全球站 **登录** 菜单里是 **使用邮箱登录** 和 **使用 AMD Developer Program 登录**，后者是另一套账号，见[登录](/radeon-cloud-docs/zh-cn/guides/login/#全球站)。
 
 计划免费加入，没有 AMD 硬件也可以加入。登录后，计划首页会显示你的等级和开发者积分余额。
 

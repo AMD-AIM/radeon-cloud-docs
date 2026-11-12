@@ -28,14 +28,16 @@ Once you're signed in to the program, you're signed in to the China site too. Yo
 
 ## Global site
 
-Open [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/), click **Sign in** in the top-right corner, and choose **Login with Email**. To use a GitHub account instead, choose **Login with GitHub**. In the classic interface, the button reads **Login**.
+Open [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) and click **Sign in** in the top-right corner. The new console offers two methods:
 
-![The Global site login menu in the classic interface](../../../assets/guide/login.png)
+- **Login with Email**: enter your email, click **Send code**, then enter the six-digit code and click **Verify & sign in**.
+- **Login with AMD Developer Program**: signs you in with an AMD Developer Program account. That is not the China-site [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
 
-1. Enter your email address and click **Send code**.
-2. Enter the six-digit code sent to you and click **Verify & sign in**.
+![The Global site Sign in menu](../../../assets/guide/en/global-login-menu.png)
 
 Codes expire after a few minutes. If one doesn't arrive, wait until **Resend code** is available and request another.
+
+In the classic interface the same menu is under **Login**.
 
 ## After signing in
 

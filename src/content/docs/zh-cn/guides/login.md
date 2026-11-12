@@ -28,14 +28,16 @@ sidebar:
 
 ## 全球站
 
-打开 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/)，点右上角的 **登录**，选 **使用邮箱登录**。想用 GitHub 账号登录的话，选 **使用 GitHub 登录**。经典版界面里这个按钮叫 **Login**。
+打开 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/)，点右上角 **登录**。新版控制台有两种方式：
 
-![经典版界面里全球站的登录菜单](../../../../assets/guide/login.png)
+- **使用邮箱登录**：填邮箱，点 **发送验证码**，再填 6 位验证码并点 **验证并登录**。
+- **使用 AMD Developer Program 登录**：用 AMD Developer Program 账号登录。这和中国站的 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 不是同一套账号。
 
-1. 填邮箱地址，点 **发送验证码**。
-2. 填收到的 6 位验证码，点 **验证并登录**。
+![全球站新版控制台的登录菜单](../../../../assets/guide/zh/global-login-menu.png)
 
 验证码几分钟后失效。没收到的话，等 **重新发送** 可以点了再发一次。
+
+经典版界面里同一个菜单在 **Login** 下面。
 
 ## 登录之后
 

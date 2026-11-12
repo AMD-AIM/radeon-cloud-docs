@@ -15,7 +15,7 @@ AMD Radeon Cloud has two sites, each run separately for its own region. Both off
 | Site | Address | Account |
 |---|---|---|
 | **China** | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) | [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) |
-| **Global** | [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) | Email sign-in |
+| **Global** | [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) | Email or AMD Developer Program |
 
 Use the site for your region. Accounts, credits, API keys and instances stay on the site where you created them. An API key from one site doesn't work on the other, so the base URL in your code must match your site.
 
