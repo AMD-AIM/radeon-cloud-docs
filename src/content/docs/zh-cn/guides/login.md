@@ -18,7 +18,7 @@ sidebar:
 - **验证码登录**：填手机号或邮箱，点 **发送验证码**，再填收到的验证码。发送前可能要先拖动滑块完成验证。验证码发出后按钮会倒计时，倒计时结束前不能重新发送。
 - **密码登录**：适用于已经设置过密码的账号。
 
-表单下方还可以用魔搭、CSDN 或 GitHub 账号登录。
+表单下方还可以用魔搭、CSDN 或 GitHub 账号登录。如果以前用 GitHub 登录，控制台可能先要求绑定 AMD AI 开发者计划账号，绑定完成后才能启动实例。
 
 ![AMD AI 开发者计划登录表单](../../../../assets/guide/cn-login-form.png)
 
@@ -28,14 +28,16 @@ sidebar:
 
 ## 全球站
 
-打开 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/)，点右上角的 **登录**，选 **使用邮箱登录**。想用 GitHub 账号登录的话，选 **使用 GitHub 登录**。经典版界面里这个按钮叫 **Login**。
+打开 [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/)，点右上角 **登录**。新版控制台有两种方式：
 
-![经典版界面里全球站的登录菜单](../../../../assets/guide/login.png)
+- **使用邮箱登录**：填邮箱，点 **发送验证码**，再填 6 位验证码并点 **验证并登录**。
+- **使用 AMD Developer Program 登录**：用 AMD Developer Program 账号登录。这和中国站的 [AMD AI 开发者计划](/radeon-cloud-docs/zh-cn/guides/developer-program/) 不是同一套账号。
 
-1. 填邮箱地址，点 **发送验证码**。
-2. 填收到的 6 位验证码，点 **验证并登录**。
+![全球站新版控制台的登录菜单](../../../../assets/guide/zh/global-login-menu.png)
 
 验证码几分钟后失效。没收到的话，等 **重新发送** 可以点了再发一次。
+
+经典版界面里同一个菜单在 **Login** 下面。
 
 ## 登录之后
 
@@ -50,7 +52,9 @@ sidebar:
 
 页头还有切换语言（**EN** / **中**）和浅色、深色主题的按钮。
 
-如果你的控制台里看到的是 **Profile** 页面，说明你在用经典版界面，见[经典版界面](/radeon-cloud-docs/zh-cn/resources/classic-ui/)。
+如果你的控制台里看到的是 **Profile** 页面，说明你在用经典版界面。中国站登录后可能先进入经典版，**首页** 和 **Profile** 顶部的横幅可以切到新版。见[经典版界面](/radeon-cloud-docs/zh-cn/resources/classic-ui/)。
+
+新版界面第一次打开时可能出现简短引导，之后可在账号菜单里再看一遍。
 
 ## 如果账号需要审核
 
