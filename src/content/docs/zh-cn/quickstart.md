@@ -56,7 +56,7 @@ print(response.choices[0].message.content)
 ### 在控制台启动
 
 1. 登录你所在站点的控制台，见[登录](/radeon-cloud-docs/zh-cn/guides/login/)。
-2. 在 **首页**，**部署类型** 保持 **Notebook**，**镜像** 保持 **AMD OneClick Base**。
+2. 在 **首页**，**部署类型** 保持 **Notebook**，**镜像** 选择 **PyTorch · Stable**。
 3. 如果希望实例销毁后文件还在，打开 **自定义**，把 **工作区存储** 设为 **持久化 /workspace**，见[保存数据](/radeon-cloud-docs/zh-cn/guides/storage/)。
 4. 点 **启动实例**。有空闲节点时，实例通常一分钟内就绪。
 5. 弹窗显示 **实例已就绪** 后，点 **打开 Notebook** 进入 [JupyterLab](/radeon-cloud-docs/zh-cn/guides/jupyterlab/)，或者通过 [SSH](/radeon-cloud-docs/zh-cn/guides/ssh/) 连接。

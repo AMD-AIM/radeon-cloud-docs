@@ -16,7 +16,7 @@ description: 在首页启动 GPU 实例，启动表单里每个字段的含义�
 
 1. 打开 **首页**。
 2. **部署类型** 保持 **Notebook**。
-3. **镜像** 保持 **AMD OneClick Base**，或者换成其他镜像，见[选择镜像](/radeon-cloud-docs/zh-cn/guides/images/)。
+3. **镜像** 选择 **Base**、**PyTorch · Stable** 或其他镜像，见[选择镜像](/radeon-cloud-docs/zh-cn/guides/images/)。
 4. 点 **启动实例**。
 
 ![关闭自定义时的启动表单：Notebook、1 GPU、AMD OneClick Base](../../../../assets/guide/zh/launch-default.png)

@@ -56,7 +56,7 @@ An instance spends credits every hour it runs, so check your balance first. See 
 ### From the console
 
 1. Sign in to the console for your site. See [Sign in](/radeon-cloud-docs/guides/login/).
-2. On **Home**, keep **Deploy type** at **Notebook** and **Image** at **AMD OneClick Base**.
+2. On **Home**, keep **Deploy type** at **Notebook** and set **Image** to **PyTorch · Stable**.
 3. To keep your files after the instance is gone, turn on **Customize** and set **Workspace storage** to **Persistent /workspace**. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 4. Click **Launch instance**. When a node is free, the instance is usually ready within a minute.
 5. When the dialog reads **Your instance is ready**, click **Open notebook** to open [JupyterLab](/radeon-cloud-docs/guides/jupyterlab/), or connect over [SSH](/radeon-cloud-docs/guides/ssh/).

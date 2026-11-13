@@ -135,7 +135,7 @@ rocm-smi
 python -c "import torch; print(torch.cuda.is_available(), torch.version.hip)"
 ```
 
-If `torch.version.hip` is `None`, a CUDA build of PyTorch has replaced the ROCm one, usually because `pip install torch` overwrote the image's build. In **AMD OneClick Base**, PyTorch for ROCm is already installed in `/opt/venv`; don't reinstall `torch`. Launch a new instance to get a clean environment.
+If `torch.version.hip` is `None`, a CUDA build of PyTorch has replaced the ROCm one, usually because `pip install torch` overwrote the image's build. In the **PyTorch** images, PyTorch for ROCm is already installed; don't reinstall `torch`. Launch a new instance to get a clean environment.
 
 ## Tunnels
 

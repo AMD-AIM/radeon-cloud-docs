@@ -5,84 +5,34 @@ description: Which image to start from, what each image in the list is for, and 
 
 The image decides what software is in your instance: ROCm, Python, PyTorch and the tools around them. Pick it under **Image** in the launch form.
 
-## Start with AMD OneClick Base
+## Pick a stable image
 
-**AMD OneClick Base** is the default, described in the form as **Default ROCm Jupyter/OpenCode image**. It is the image the platform maintains for general work. Use it unless you have a reason to pick something else.
+The list has a small set of stable images that the platform maintains and keeps up to date. Each one has a one-line description under the field when you select it.
 
-In October 2026 it contained:
+| Image | Description in the form | Use it for |
+|---|---|---|
+| **Base** | General-purpose ROCm environment with Python, JupyterLab and OpenCode. | General development and exploring the GPU. |
+| **PyTorch · Stable** | PyTorch on ROCm, stable release, for training and running models. | Most PyTorch code: training, fine-tuning, running models. |
+| **PyTorch · Latest** | PyTorch on ROCm, newest release, for trying the latest features. | Code that needs a newer PyTorch or ROCm than the stable image. |
+| **vLLM · Stable** | vLLM for serving LLMs behind an OpenAI-compatible API. | Serving a model yourself with `vllm serve`. |
+| **SGLang** | SGLang for serving LLMs behind an OpenAI-compatible API. | Serving a model with SGLang instead of vLLM. |
+| **Unsloth · Fine-tuning** | Unsloth Studio for fine-tuning LLMs, with JupyterLab. | Fine-tuning LLMs with Unsloth. |
+| **llama.cpp** | llama.cpp for running GGUF models, with Unsloth included. | Running GGUF models. |
+| **ComfyUI** | ComfyUI for node-based image and video generation. | Image and video generation workflows. |
 
-| Component | Version |
-|---|---|
-| OS | Ubuntu 24.04 |
-| Python | 3.12, in a virtual environment at `/opt/venv` |
-| PyTorch | 2.9.1, built for ROCm 7.2 |
-| JupyterLab | 4.5 |
-| Other tools | OpenCode, `rocm-smi` |
+Stable images are updated in place: the name stays the same and new instances get the newer build. The versions inside change over time, so check them in your instance (see below) instead of relying on the name.
 
-The image is updated from time to time, so check the versions in your own instance (see below).
+To serve a model with **Deploy type: Model API**, you don't pick an image here; that form picks its own runtime. See [Serve a model](/radeon-cloud-docs/guides/serve-model/).
 
-## Read the image list
+## Other images in the list
 
-The **Image** field is a searchable list. Type part of a name to filter it. When an image has a description, it appears under the field after you select it.
-
-The list depends on your account, and it also contains images made for specific courses, workshops and demos. As a rule:
-
-| You want to | Pick |
-|---|---|
-| Develop, explore, or run most PyTorch code | **AMD OneClick Base** |
-| Use the stock ROCm PyTorch environment | **rocm-pytorch** |
-| Follow a course, workshop or tutorial | The image its instructions name |
-| Serve a model with **Deploy type: Model API** | Nothing here; that form picks its own runtime. See [Serve a model](/radeon-cloud-docs/guides/serve-model/). |
-
-Avoid images with no description unless an instruction tells you to use them.
-
-## Images in the list
-
-The tables below list the images on the China site in October 2026, by the name shown in the **Image** field. Your list may differ, and images are added and retired over time.
+The list also has a few images made for a specific course, workshop or event. Pick one of these only when its instructions name it.
 
 To follow a course or workshop, launch its notebook from the [Gallery](/radeon-cloud-docs/guides/gallery/) instead of picking an image yourself. The notebook launches with the right image.
 
-### General purpose
+## Older images
 
-| Image | What's in it | Use it for |
-|---|---|---|
-| **AMD OneClick Base** | ROCm 7.2, Python 3.12, PyTorch, JupyterLab and OpenCode. Maintained by the platform. See [above](#start-with-amd-oneclick-base). | Most work. The default. |
-| **rocm-pytorch** | AMD's official `rocm/pytorch` image: ROCm 7.2.4, Ubuntu 24.04, Python 3.12, PyTorch 2.10.0. | Code that expects the stock ROCm PyTorch environment, or a newer PyTorch than AMD OneClick Base. |
-| **rocm10-pytorch** | An official `rocm/pytorch` image built on ROCm 10. | Trying ROCm 10. The Hello GPU notebook uses it. |
-
-### Model serving
-
-| Image | What's in it | Use it for |
-|---|---|---|
-| **Qwen3.8-27B** | vLLM set up to serve Qwen3.8-27B. Needs a 2-GPU size. | Running Qwen3.8-27B yourself in a notebook. To get an endpoint without setting up vLLM yourself, use [Serve a model](/radeon-cloud-docs/guides/serve-model/) instead. |
-
-### Courses, workshops and events
-
-These images exist for one course or event. Pick one only when its instructions name it.
-
-| Image | Made for |
-|---|---|
-| **AMD-Stable-GH-Proxy** | A variant of AMD OneClick Base with a proxy for reaching GitHub. Used by the Hello ROCm and AgenticAI推理自优化 notebooks. |
-| **Unsloth Studio** | Unsloth fine-tuning. Used by the Modern LLM Notebook. |
-| **Muse Glimmer Llamacpp** | A llama.cpp environment prepared for an event. |
-| **Oceanbase** | SeekDB and hipVS demo, version 1.0.0, for the OceanBase database contest. Superseded by **seekdb-hipvs-nb-demo_v1.4.0**. |
-| **seekdb-hipvs-nb-demo_v1.4.0** | SeekDB and hipVS demo, version 1.4.0, for the OceanBase database contest. Used by the seekdb-hipvs notebook. |
-| **Ultralytics Workshop** | An Ultralytics and OpenCV workshop (August 2026). |
-| **Ultralytics YOLO26** | Ultralytics YOLO26 notebooks. |
-| **ultralytics-yolo26-workshop-20260911-unified** | Used by the Ultralytics Workshop2 notebook. |
-| **ultralytics_workshop_1** | Used by the Ultralytics Workshop 1 notebook. |
-| **robotwin** | RoboTwin simulation with LingBot-VLA, for embodied AI. |
-| **FPGA-CHINA** | FPGA RTL and HLS tools on ROCm 10, for the FPGA China event. |
-| **ai-academy_in_radeon-cloud:vllm-openai-rocm-v0.26.0** | Most AI Academy courses: GPU Profiling with rocprof, GPU Debugging with ROCgdb, HIP Programming Basics, HIP Kernel Programming, CUDA-to-HIP Conversion, Triton Kernel Development, Diffusion Models - Image Generation, Agents 101 and HF on AMD. |
-| **ai-academy_in_radeon-cloud:vllm-openai-rocm-v0.16.0** | AI Academy: LLM Serving Inference with vLLM, and AI on AMD. |
-| **ai-academy_in_radeon-cloud:vllm-openai-rocm-v0.16.0-curl** | The v0.16.0 image plus `curl`, for the API exercise in the vLLM serving course. |
-| **ai-academy_in_radeon-cloud:vllm-dev-open-mi300-08052025** | An alternative environment for the AI Academy vLLM serving course on one 48 GB GPU. |
-| **ai-academy_in_radeon-cloud:vllm-openai-rocm-v0.26.0-benchmark** | AI Academy: GPU Optimization for LLM Inference, Lab 1. |
-| **ai-academy_in_radeon-cloud:llms-benchmark-v1** | AI Academy: GPU Optimization for LLM Inference, Lab 2. |
-| **ai-academy_in_radeon-cloud:vllm-openai-rocm-v0.26.0-web** | AI Academy: Diffusion Models - Video Generation. |
-| **ai-academy_in_radeon-cloud:gspo-lab-v1.0.0** | AI Academy: Reinforcement Learning with LLMs. |
-| **ai-academy_in_radeon-cloud:agentic-ai-adk-tutorial-20260317** | AI Academy: Agents 201. |
-| **ai-academy_in_radeon-cloud:unsloth-rocm-20261013** | AI Academy: Finetuning Your Own R1 Reasoning Model on Unsloth. |
+Many older images were removed from the list in November 2026. Gallery notebooks that use them still launch with their own image, so a course that worked before still works from the Gallery. If you used one of the older general-purpose images directly, switch to the matching stable image above.
 
 ## Check what an image contains
 
