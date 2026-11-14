@@ -15,6 +15,7 @@ description: 该从哪个镜像开始、列表里每个镜像是做什么的、�
 | **PyTorch · Stable** | PyTorch on ROCm, stable release, for training and running models. | 大多数 PyTorch 代码：训练、微调、运行模型。 |
 | **PyTorch · Latest** | PyTorch on ROCm, newest release, for trying the latest features. | 需要比稳定版更新的 PyTorch 或 ROCm 时使用。 |
 | **vLLM · Stable** | vLLM for serving LLMs behind an OpenAI-compatible API. | 自己用 `vllm serve` 部署模型。 |
+| **vLLM · Latest** | vLLM on the newest ROCm release, for trying the latest features. | 想在更新的 ROCm 上试用 vLLM 时使用；正式部署服务请用 vLLM · Stable。 |
 | **SGLang** | SGLang for serving LLMs behind an OpenAI-compatible API. | 用 SGLang 而不是 vLLM 部署模型。 |
 | **Unsloth · Fine-tuning** | Unsloth Studio for fine-tuning LLMs, with JupyterLab. | 用 Unsloth 微调大模型。 |
 | **llama.cpp** | llama.cpp for running GGUF models, with Unsloth included. | 运行 GGUF 格式的模型。 |

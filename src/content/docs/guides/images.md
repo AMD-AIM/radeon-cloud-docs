@@ -15,6 +15,7 @@ The list has a small set of stable images that the platform maintains and keeps 
 | **PyTorch · Stable** | PyTorch on ROCm, stable release, for training and running models. | Most PyTorch code: training, fine-tuning, running models. |
 | **PyTorch · Latest** | PyTorch on ROCm, newest release, for trying the latest features. | Code that needs a newer PyTorch or ROCm than the stable image. |
 | **vLLM · Stable** | vLLM for serving LLMs behind an OpenAI-compatible API. | Serving a model yourself with `vllm serve`. |
+| **vLLM · Latest** | vLLM on the newest ROCm release, for trying the latest features. | Trying vLLM on a newer ROCm stack. For production serving, use vLLM · Stable. |
 | **SGLang** | SGLang for serving LLMs behind an OpenAI-compatible API. | Serving a model with SGLang instead of vLLM. |
 | **Unsloth · Fine-tuning** | Unsloth Studio for fine-tuning LLMs, with JupyterLab. | Fine-tuning LLMs with Unsloth. |
 | **llama.cpp** | llama.cpp for running GGUF models, with Unsloth included. | Running GGUF models. |
