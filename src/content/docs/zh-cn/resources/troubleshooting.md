@@ -135,7 +135,7 @@ rocm-smi
 python -c "import torch; print(torch.cuda.is_available(), torch.version.hip)"
 ```
 
-如果 `torch.version.hip` 是 `None`，说明 ROCm 版 PyTorch 被 CUDA 版替换了，通常是 `pip install torch` 覆盖了镜像自带的版本。**AMD OneClick Base** 已经在 `/opt/venv` 里装好了 ROCm 版 PyTorch，不要重新安装 `torch`。重新启动一个实例即可恢复干净的环境。
+如果 `torch.version.hip` 是 `None`，说明 ROCm 版 PyTorch 被 CUDA 版替换了，通常是 `pip install torch` 覆盖了镜像自带的版本。**PyTorch** 镜像已经装好了 ROCm 版 PyTorch，不要重新安装 `torch`。重新启动一个实例即可恢复干净的环境。
 
 ## 隧道
 

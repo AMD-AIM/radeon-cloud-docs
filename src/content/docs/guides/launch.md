@@ -16,7 +16,7 @@ You launch instances from **Home** in the console. This page walks through the l
 
 1. Open **Home**.
 2. Under **Deploy type**, keep **Notebook**.
-3. Under **Image**, keep **AMD OneClick Base** or pick another. See [Choose an image](/radeon-cloud-docs/guides/images/).
+3. Under **Image**, pick **Base**, **PyTorch · Stable** or another image. See [Choose an image](/radeon-cloud-docs/guides/images/).
 4. Click **Launch instance**.
 
 ![The launch form with Customize off: Notebook, 1 GPU and AMD OneClick Base](../../../assets/guide/en/launch-default.png)
