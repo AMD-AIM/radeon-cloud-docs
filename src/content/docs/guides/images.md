@@ -1,6 +1,6 @@
 ---
 title: Choose an image
-description: Which image to start from, what each image in the list is for, how to check what an image contains, and how to speed up vLLM with hk-dsl.
+description: Which image to start from, what each image in the list is for, how to check what an image contains, and how to speed up vLLM and SGLang with hk-dsl.
 ---
 
 The image decides what software is in your instance: ROCm, Python, PyTorch and the tools around them. Pick it under **Image** in the launch form.
@@ -56,20 +56,23 @@ pip list
 
 Custom images built in the classic console's **Custom Images** page appear in the list with **(custom)** after their name once the build has finished.
 
-## Speed up vLLM with hk-dsl
+## Speed up vLLM and SGLang with hk-dsl
 
-[hk-dsl](https://pypi.org/project/hk-dsl/) is a Python package that replaces some of vLLM's GPU kernels with kernels written for Radeon GPUs. To use it:
+[hk-dsl](https://pypi.org/project/hk-dsl/) is a Python package that replaces some of vLLM's and SGLang's GPU kernels with kernels written for Radeon GPUs. To use it:
 
-1. Launch an instance with the **vLLM · Stable** image.
-2. In a terminal, install it and start vLLM as usual:
+1. Launch an instance with the **vLLM · Stable** or the **SGLang** image.
+2. In a terminal, install it and start the server as usual:
 
    ```bash
    pip install -U hk-dsl
-   vllm serve <model>
+   vllm serve <model>                                  # vLLM · Stable
+   python -m sglang.launch_server --model-path <model> # SGLang
    ```
 
-3. Check the startup log. A `[hk] vLLM routes on: ...` line means hk-dsl is active. To turn it off, start vLLM with `HK_DISABLE=1`.
+3. Check the startup log. A `[hk] vLLM routes on: ...` or `[hk] SGLang routes on: ...` line means hk-dsl is active. To turn it off, start the server with `HK_DISABLE=1`.
 
-hk-dsl needs version 0.9.21 or newer; check with `pip show hk-dsl`. On images whose vLLM version hk-dsl doesn't support, such as **Base**, it stays inactive, says so in one log line, and vLLM runs as stock vLLM.
+hk-dsl needs version 0.9.21 or newer; check with `pip show hk-dsl`. On images whose vLLM or SGLang version hk-dsl doesn't support, such as **Base**, it stays inactive, says so in one log line, and the server runs as usual.
+
+On the **SGLang** image, the log may show a warning about an aiter build. It is harmless and goes away with the next hk-dsl release.
 
 For measured results, see the [hk-dsl scorecard](https://vivienfanghuagood.github.io/hk-dsl/performance/scorecard/).
