@@ -55,7 +55,7 @@ otherwise. Both parameters are accepted here, so you can follow that advice as w
 Unlike most open-weight releases, this one ships **no Jinja chat template** — prompt assembly lives
 in a Python `encoding/` folder instead. That is why this model has no opinion about where a
 `system` message sits: there is no template to raise on it. The
-[Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) page shows what happens when a
+[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) page shows what happens when a
 model does ship one.
 :::
 
@@ -108,7 +108,7 @@ as "did not think"; do not branch on which key exists.
 A `system` message may sit at any position, there may be more than one, and the role may be spelled
 either `system` or `developer`.
 
-That is *not* true of [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/). If one
+That is *not* true of [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/). If one
 code path has to serve both, write to that model's stricter rules: a single `system` message, first
 in the array, with the role spelled `system`.
 

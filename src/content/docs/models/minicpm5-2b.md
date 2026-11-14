@@ -52,7 +52,7 @@ This model answers directly. It does not return separated thinking, so
 
 Read the answer from `choices[0].message.content`. For separated thinking, use
 [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) or
-[Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/).
+[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/).
 
 ### `messages`
 
