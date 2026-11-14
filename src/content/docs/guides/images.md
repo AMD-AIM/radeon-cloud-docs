@@ -9,19 +9,21 @@ The image decides what software is in your instance: ROCm, Python, PyTorch and t
 
 The list has a small set of stable images that the platform maintains and keeps up to date. Each one has a one-line description under the field when you select it.
 
-| Image | Description in the form | Use it for |
-|---|---|---|
-| **Base** | General-purpose ROCm environment with Python, JupyterLab and OpenCode. | General development and exploring the GPU. |
-| **PyTorch · Stable** | PyTorch on ROCm, stable release, for training and running models. | Most PyTorch code: training, fine-tuning, running models. |
-| **PyTorch · Latest** | PyTorch on ROCm, newest release, for trying the latest features. | Code that needs a newer PyTorch or ROCm than the stable image. |
-| **vLLM · Stable** | vLLM for serving LLMs behind an OpenAI-compatible API. | Serving a model yourself with `vllm serve`. |
-| **vLLM · Latest** | vLLM on the newest ROCm release, for trying the latest features. | Trying vLLM on a newer ROCm stack. For production serving, use vLLM · Stable. |
-| **SGLang** | SGLang for serving LLMs behind an OpenAI-compatible API. | Serving a model with SGLang instead of vLLM. |
-| **Unsloth · Fine-tuning** | Unsloth Studio for fine-tuning LLMs, with JupyterLab. | Fine-tuning LLMs with Unsloth. |
-| **llama.cpp** | llama.cpp for running GGUF models, with Unsloth included. | Running GGUF models. |
-| **ComfyUI** | ComfyUI for node-based image and video generation. | Image and video generation workflows. |
+<!-- image-versions:start -->
+| Image | Key versions (current build) | Description in the form | Use it for |
+|---|---|---|---|
+| **Base** | ROCm 7.2.1 · Python 3.12 · PyTorch 2.9.1 · vLLM 0.16.1 | General-purpose ROCm environment with Python, JupyterLab and OpenCode. | General development and exploring the GPU. |
+| **PyTorch · Stable** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 | PyTorch on ROCm, stable release, for training and running models. | Most PyTorch code: training, fine-tuning, running models. |
+| **PyTorch · Latest** | ROCm 10.1.0 · Python 3.12 · PyTorch 2.14.0 | PyTorch on ROCm, newest release, for trying the latest features. | Code that needs a newer PyTorch or ROCm than the stable image. |
+| **vLLM · Stable** | ROCm 7.2.3 · Python 3.12 · PyTorch 2.13.0 · vLLM 0.33.0 | vLLM for serving LLMs behind an OpenAI-compatible API. | Serving a model yourself with `vllm serve`. |
+| **vLLM · Latest** | ROCm 10.0.0 · Python 3.12 · PyTorch 2.13.0 · vLLM 0.33.0 | vLLM on the newest ROCm release, for trying the latest features. | Trying vLLM on a newer ROCm stack. For production serving, use vLLM · Stable. |
+| **SGLang** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 · SGLang 0.5.19 | SGLang for serving LLMs behind an OpenAI-compatible API. | Serving a model with SGLang instead of vLLM. |
+| **Unsloth · Fine-tuning** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 · Unsloth 2026.7.2 | Unsloth Studio for fine-tuning LLMs, with JupyterLab. | Fine-tuning LLMs with Unsloth. |
+| **llama.cpp** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 · llama.cpp b9766 · Unsloth 2026.6.9 | llama.cpp for running GGUF models, with Unsloth included. | Running GGUF models. |
+| **ComfyUI** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 · ComfyUI 0.45.0 | ComfyUI for node-based image and video generation. | Image and video generation workflows. |
+<!-- image-versions:end -->
 
-Stable images are updated in place: the name stays the same and new instances get the newer build. The versions inside change over time, so check them in your instance (see below) instead of relying on the name.
+Stable images are updated in place: the name stays the same and new instances get the newer build. The key versions in the table, and in the description under the field, are those of the current build and are updated with each release. To see everything an image contains, check inside your instance (see below).
 
 To serve a model with **Deploy type: Model API**, you don't pick an image here; that form picks its own runtime. See [Serve a model](/radeon-cloud-docs/guides/serve-model/).
 

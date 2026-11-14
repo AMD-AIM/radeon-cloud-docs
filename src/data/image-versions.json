@@ -1,0 +1,86 @@
+{
+  "source": "radeon-cloud-images release smoke / versions-probe (RC-VERSIONS), Global stable rows",
+  "updated": "2026-11-14",
+  "images": {
+    "Base": {
+      "digest": "sha256:f7e7f2063b99efabbfc5dc61138700735010e22f523380d4f9cfbc59fb5d9909",
+      "versions": {
+        "ROCm": "7.2.1",
+        "Python": "3.12",
+        "PyTorch": "2.9.1",
+        "vLLM": "0.16.1"
+      }
+    },
+    "PyTorch · Stable": {
+      "digest": "sha256:2c7f6f6b65e5a971fc3121e8a1beac7e44b53fd04e09b89f7577ce9b5b31ad4f",
+      "versions": {
+        "ROCm": "7.14.1",
+        "Python": "3.12",
+        "PyTorch": "2.12.0"
+      }
+    },
+    "PyTorch · Latest": {
+      "digest": "sha256:a1e282f8cd9638e036c4f40e98facd88f7e40e3c2be1094c9f34cf7c1fc4ed98",
+      "versions": {
+        "ROCm": "10.1.0",
+        "Python": "3.12",
+        "PyTorch": "2.14.0"
+      }
+    },
+    "vLLM · Stable": {
+      "digest": "sha256:6ebc2a550b337903b5590e2eb2c1b063301fd17249a93ff2cfb9a3dff8b9d591",
+      "versions": {
+        "ROCm": "7.2.3",
+        "Python": "3.12",
+        "PyTorch": "2.13.0",
+        "vLLM": "0.33.0"
+      }
+    },
+    "Unsloth · Fine-tuning": {
+      "digest": "sha256:151117c04ab8625828fce36ff7f778a88dfa67f48268e78ac92602380ee7f2e3",
+      "versions": {
+        "ROCm": "7.2.4",
+        "Python": "3.12",
+        "PyTorch": "2.10.0",
+        "Unsloth": "2026.7.2"
+      }
+    },
+    "llama.cpp": {
+      "digest": "sha256:b43835f2f07a8ad01f2d8532c3968053b8debfed23e8e7ab85d97931e23c47f2",
+      "versions": {
+        "ROCm": "7.2.4",
+        "Python": "3.12",
+        "PyTorch": "2.10.0",
+        "llama.cpp": "b9766",
+        "Unsloth": "2026.6.9"
+      }
+    },
+    "ComfyUI": {
+      "digest": "sha256:040093f8d55e552dca5238ee9d491575e241b7317cd825bd31dde04f46dd4c47",
+      "versions": {
+        "ROCm": "7.14.1",
+        "Python": "3.12",
+        "PyTorch": "2.12.0",
+        "ComfyUI": "0.45.0"
+      }
+    },
+    "SGLang": {
+      "digest": "sha256:f90c3de9582ea74af933310bfd634525d6c0c48f710a8274dd4bf740cc8d9882",
+      "versions": {
+        "ROCm": "7.2.4",
+        "Python": "3.12",
+        "PyTorch": "2.10.0",
+        "SGLang": "0.5.19"
+      }
+    },
+    "vLLM · Latest": {
+      "digest": "sha256:04f0ddcac5f0ce7b6491b6514c871c5dc03169a0019dcd8b939d79dfe83295fb",
+      "versions": {
+        "ROCm": "10.0.0",
+        "Python": "3.12",
+        "PyTorch": "2.13.0",
+        "vLLM": "0.33.0"
+      }
+    }
+  }
+}
