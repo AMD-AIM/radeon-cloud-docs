@@ -71,8 +71,8 @@ pip list
 
 3. 查看启动日志。出现 `[hk] vLLM routes on: ...` 或 `[hk] SGLang routes on: ...` 说明 hk-dsl 已生效。想关闭它，启动服务时加上 `HK_DISABLE=1`。
 
-hk-dsl 需要 0.9.21 或更新版本，可以用 `pip show hk-dsl` 查看。在 vLLM 或 SGLang 版本不受 hk-dsl 支持的镜像上（例如 **Base**），它不会生效，日志里会用一行说明，服务照常运行。
+vLLM 需要 hk-dsl 0.9.21 或更新版本，SGLang 需要 0.9.22 或更新版本，可以用 `pip show hk-dsl` 查看。在 vLLM 或 SGLang 版本不受 hk-dsl 支持的镜像上（例如 **Base**），它不会生效，日志里会用一行说明，服务照常运行。
 
-在 **SGLang** 镜像上，日志里可能出现一条 aiter 编译相关的警告，不影响使用，下一个 hk-dsl 版本会去掉。
+在 **SGLang** 镜像上，新实例第一次启动服务时，日志里可能出现 aiter 编译相关的信息，并多花约 13 秒。这与 hk-dsl 无关，不影响使用。
 
 实测结果见 [hk-dsl scorecard](https://vivienfanghuagood.github.io/hk-dsl/performance/scorecard/)。
