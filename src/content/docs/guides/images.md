@@ -71,8 +71,8 @@ Custom images built in the classic console's **Custom Images** page appear in th
 
 3. Check the startup log. A `[hk] vLLM routes on: ...` or `[hk] SGLang routes on: ...` line means hk-dsl is active. To turn it off, start the server with `HK_DISABLE=1`.
 
-hk-dsl needs version 0.9.21 or newer; check with `pip show hk-dsl`. On images whose vLLM or SGLang version hk-dsl doesn't support, such as **Base**, it stays inactive, says so in one log line, and the server runs as usual.
+Use hk-dsl 0.9.21 or newer with vLLM, and 0.9.22 or newer with SGLang; check with `pip show hk-dsl`. On images whose vLLM or SGLang version hk-dsl doesn't support, such as **Base**, it stays inactive, says so in one log line, and the server runs as usual.
 
-On the **SGLang** image, the log may show a warning about an aiter build. It is harmless and goes away with the next hk-dsl release.
+On the **SGLang** image, the first server start in a new instance may log an aiter build message and take about 13 seconds longer. This is unrelated to hk-dsl and harmless.
 
 For measured results, see the [hk-dsl scorecard](https://vivienfanghuagood.github.io/hk-dsl/performance/scorecard/).
