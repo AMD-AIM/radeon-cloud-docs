@@ -70,7 +70,7 @@ sidebar:
 思考内容会以 `thinking` 块的形式出现在 `content` 里，和 `text` 块并列。
 
 `effort` 在内部对应 `reasoning_effort`，**可用的取值同样因模型而异**：上面的 `high` 在
-DeepSeek-V4-Flash 上可用，在 Qwen3.8-Flash-Next 上会返回 400。要兼容多个模型，只用 `low` 和 `medium`，已验证档位的模型都接受这两个值。
+DeepSeek-V4-Flash 上可用，在 Qwen3.8-27B 上会返回 400。要兼容多个模型，只用 `low` 和 `medium`，已验证档位的模型都接受这两个值。
 MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 如何处理 `effort` 尚未验证。
 完整对照表见 [`POST /v1/chat/completions`](/radeon-cloud-docs/zh-cn/api/chat-completions/)。
 

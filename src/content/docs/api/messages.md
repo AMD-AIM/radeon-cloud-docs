@@ -79,7 +79,7 @@ To enable thinking on this endpoint, use `output_config.effort`:
 The thinking text arrives as `thinking` blocks in `content`, alongside the `text` ones.
 
 `effort` becomes `reasoning_effort` internally, so **the same per-model tier limits apply**: the
-`high` above is fine on DeepSeek-V4-Flash but returns 400 on Qwen3.8-Flash-Next. Stick to `low` and
+`high` above is fine on DeepSeek-V4-Flash but returns 400 on Qwen3.8-27B. Stick to `low` and
 `medium` for one code path across models; those two are accepted by every model whose tiers are
 verified. How MiniCPM-V-4.7-1B, MiniCPM-V-4.7-35B-A3B and Gemma-4-31B-IT treat `effort` has not
 been verified. The full table is on

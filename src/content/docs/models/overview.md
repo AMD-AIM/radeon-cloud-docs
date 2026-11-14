@@ -51,7 +51,6 @@ For every other model, the ID, the card title and `name` are the same.
 | [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
 | [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
 | [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
-| [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
 | [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) | 262,144 | ✅ | ✅ |
 | [GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
@@ -82,7 +81,6 @@ the model's card for the current values.
 | DeepSeek-V4-Flash | 0.14 | 0.28 | 0.0028 |
 | DeepSeek-V4-Flash-Vision-Exp | 0.14 | 0.28 | 0.0028 |
 | DeepSeek-V4.1-Flash | 0.28 | 0.56 | 0.0056 |
-| Qwen3.8-Flash-Next | 0.14 | 0.28 | 0.0028 |
 | Qwen3.8-27B | 0.035 | 0.07 | 0.0007 |
 | GLM-5.3-Flash | 0.28 | 0.56 | 0.0056 |
 | MiMo-V2.6-Flash | 0.14 | 0.28 | 0.0028 |
@@ -112,7 +110,6 @@ The accepted tiers differ per model:
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
-| Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
@@ -140,7 +137,7 @@ That model's top tier is `xhigh`. `minimal` and `max` are rejected by it too.
 :::
 
 :::caution[`xhigh` is a 422 on GLM-5.3-Flash]
-[GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) is the mirror image of the Qwen models:
+[GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) is the mirror image of Qwen3.8-27B:
 it takes the OpenAI trio and nothing else.
 
 ```
@@ -155,7 +152,7 @@ deserialisation, while Qwen3.8-27B returns **400** from a validator.
 
 :::tip[For one client across the thinking models, use `low` or `medium`]
 Those two are the intersection of every model in the table. The name of the top tier is not
-portable — the Qwen models spell it `xhigh`, GLM-5.3-Flash spells it `high`, the DeepSeek models
+portable — Qwen3.8-27B spells it `xhigh`, GLM-5.3-Flash spells it `high`, the DeepSeek models
 accept `xhigh` and `max` and `high`, and they are not interchangeable. To pick per model, read
 [`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and match it
 against the table above.
@@ -168,7 +165,6 @@ against the table above.
 | DeepSeek-V4-Flash | does not think | ✅ |
 | DeepSeek-V4-Flash-Vision-Exp | does not think | ✅ |
 | DeepSeek-V4.1-Flash | does not think | ✅ |
-| Qwen3.8-Flash-Next | **thinks anyway** | ✅ |
 | Qwen3.8-27B | **thinks anyway** | ❌ |
 | GLM-5.3-Flash | **thinks anyway** | ❌ |
 | MiMo-V2.6-Flash | **thinks anyway** | ❌ |
@@ -189,8 +185,8 @@ exceptions. [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) omitted the
 thinks. Their thinking tokens cannot be separated from the rest of the output. They are still
 counted in `usage.completion_tokens`, and still billed.
 
-:::caution[Thinking is on by default on both Qwen models and on GLM-5.3-Flash, and it spends `max_tokens`]
-On Qwen3.8-Flash-Next and Qwen3.8-27B a request with no `reasoning_effort` still thinks, and the
+:::caution[Thinking is on by default on Qwen3.8-27B and GLM-5.3-Flash, and it spends `max_tokens`]
+On Qwen3.8-27B a request with no `reasoning_effort` still thinks, and the
 thinking pass draws on the same `max_tokens` budget as the answer. A budget that was generous for
 a non-thinking model can come back with an empty `content`. Either raise `max_tokens` or send
 `reasoning_effort: "low"`.
@@ -203,7 +199,6 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | DeepSeek-V4-Flash | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4-Flash-Vision-Exp | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4.1-Flash | any position, more than one allowed | `system` or `developer` |
-| Qwen3.8-Flash-Next | **exactly one, and it must come first** | `system` |
 | Qwen3.8-27B | **at most one, and it must come first** | `system` |
 | GLM-5.3-Flash | any position, more than one allowed | `system` |
 | MiMo-V2.6-Flash | any position, more than one allowed | `system` or `developer` |
@@ -213,7 +208,7 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | Gemma-4-31B-IT | one, first; other placements not verified | `system` |
 
 The three DeepSeek models and MiMo-V2.6-Flash accept `developer` as an alias for `system`.
-Qwen3.8-27B rejects it with `Unexpected message role.`, and Qwen3.8-Flash-Next, GLM-5.3-Flash and
+Qwen3.8-27B rejects it with `Unexpected message role.`, and GLM-5.3-Flash and
 MiniCPM5-2B reject it with a deserialisation error naming the offending index:
 
 ```
@@ -223,7 +218,7 @@ Failed to deserialize the JSON body into the target type: messages[0]: unknown r
 The `developer` role has not been verified on the MiniCPM-V-4.7 models or Gemma-4-31B-IT. Newer
 OpenAI SDKs emit `developer` in place of `system`. If yours does, override it back.
 
-The constraints on the two Qwen models come from the Jinja chat template shipped with their
+The constraints on Qwen3.8-27B come from the Jinja chat template shipped with its
 weights, not from a gateway rule. Qwen3.8-27B reports a violation as
 `System message must be at the beginning.`
 
@@ -242,13 +237,12 @@ model's own choice — do not build on it.
 
 ## Image input
 
-Eight chat models take images; put an `image_url` content part in the `content` array:
+Seven chat models take images; put an `image_url` content part in the `content` array:
 
 | Model | Where image usage is reported |
 |---|---|
 | DeepSeek-V4-Flash-Vision-Exp | `usage.prompt_tokens_details.image_tokens`, 115 in the sample |
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`, 202 in the sample |
-| Qwen3.8-Flash-Next | `usage.prompt_tokens_details.image_tokens`, 144 in the sample |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`, 72 in the sample, on its earlier deployment |
 | MiMo-V2.6-Flash | `usage.prompt_tokens_details.image_tokens` |
 | MiniCPM-V-4.7-1B | `usage.prompt_tokens_details.image_tokens` |
