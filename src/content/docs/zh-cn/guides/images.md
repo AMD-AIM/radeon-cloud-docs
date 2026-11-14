@@ -9,19 +9,21 @@ description: 该从哪个镜像开始、列表里每个镜像是做什么的、�
 
 列表里有一组由平台维护、持续更新的稳定镜像。选中后，下拉框下方会显示一句英文说明。
 
-| 镜像 | 表单里的说明 | 适合做什么 |
-|---|---|---|
-| **Base** | General-purpose ROCm environment with Python, JupyterLab and OpenCode. | 通用 ROCm 环境，日常开发、熟悉 GPU。 |
-| **PyTorch · Stable** | PyTorch on ROCm, stable release, for training and running models. | 大多数 PyTorch 代码：训练、微调、运行模型。 |
-| **PyTorch · Latest** | PyTorch on ROCm, newest release, for trying the latest features. | 需要比稳定版更新的 PyTorch 或 ROCm 时使用。 |
-| **vLLM · Stable** | vLLM for serving LLMs behind an OpenAI-compatible API. | 自己用 `vllm serve` 部署模型。 |
-| **vLLM · Latest** | vLLM on the newest ROCm release, for trying the latest features. | 想在更新的 ROCm 上试用 vLLM 时使用；正式部署服务请用 vLLM · Stable。 |
-| **SGLang** | SGLang for serving LLMs behind an OpenAI-compatible API. | 用 SGLang 而不是 vLLM 部署模型。 |
-| **Unsloth · Fine-tuning** | Unsloth Studio for fine-tuning LLMs, with JupyterLab. | 用 Unsloth 微调大模型。 |
-| **llama.cpp** | llama.cpp for running GGUF models, with Unsloth included. | 运行 GGUF 格式的模型。 |
-| **ComfyUI** | ComfyUI for node-based image and video generation. | 图像和视频生成工作流。 |
+<!-- image-versions:start -->
+| 镜像 | 主要版本（当前构建） | 表单里的说明 | 适合做什么 |
+|---|---|---|---|
+| **Base** | ROCm 7.2.1 · Python 3.12 · PyTorch 2.9.1 · vLLM 0.16.1 | General-purpose ROCm environment with Python and JupyterLab. | 通用 ROCm 环境，日常开发、熟悉 GPU。 |
+| **PyTorch · Stable** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 | PyTorch on ROCm, stable release, for training and running models. | 大多数 PyTorch 代码：训练、微调、运行模型。 |
+| **PyTorch · Latest** | ROCm 10.1.0 · Python 3.12 · PyTorch 2.14.0 | PyTorch on ROCm, newest release, for trying the latest features. | 需要比稳定版更新的 PyTorch 或 ROCm 时使用。 |
+| **vLLM · Stable** | ROCm 7.2.3 · Python 3.12 · PyTorch 2.13.0 · vLLM 0.33.0 | vLLM for serving LLMs behind an OpenAI-compatible API. | 自己用 `vllm serve` 部署模型。 |
+| **vLLM · Latest** | ROCm 10.0.0 · Python 3.12 · PyTorch 2.13.0 · vLLM 0.33.0 | vLLM on the newest ROCm release, for trying the latest features. | 想在更新的 ROCm 上试用 vLLM 时使用；正式部署服务请用 vLLM · Stable。 |
+| **SGLang** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 · SGLang 0.5.19 | SGLang for serving LLMs behind an OpenAI-compatible API. | 用 SGLang 而不是 vLLM 部署模型。 |
+| **Unsloth · Fine-tuning** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 · Unsloth 2026.7.2 | Unsloth Studio for fine-tuning LLMs, with JupyterLab. | 用 Unsloth 微调大模型。 |
+| **llama.cpp** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 · llama.cpp b9766 · Unsloth 2026.6.9 | llama.cpp for running GGUF models, with Unsloth included. | 运行 GGUF 格式的模型。 |
+| **ComfyUI** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 · ComfyUI 0.45.0 | ComfyUI for node-based image and video generation. | 图像和视频生成工作流。 |
+<!-- image-versions:end -->
 
-稳定镜像会原地更新：名称不变，新启动的实例拿到的是更新后的版本。镜像里的版本会随之变化，请在实例里确认（方法见下文），不要只看名称。
+稳定镜像会原地更新：名称不变，新启动的实例拿到的是更新后的版本。表格里和下拉框下方说明里的主要版本是当前构建的版本，每次发布都会更新。版本取自 Global 的构建，中国站可能短时间内落后一个版本。想看镜像里的全部内容，请在实例里确认（方法见下文）。
 
 用 **部署类型：模型 API** 部署模型时不用在这里选镜像，那个表单会自带运行环境，见[部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。
 
