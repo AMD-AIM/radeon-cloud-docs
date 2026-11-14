@@ -12,7 +12,7 @@ The list has a small set of stable images that the platform maintains and keeps 
 <!-- image-versions:start -->
 | Image | Key versions (current build) | Description in the form | Use it for |
 |---|---|---|---|
-| **Base** | ROCm 7.2.1 · Python 3.12 · PyTorch 2.9.1 · vLLM 0.16.1 | General-purpose ROCm environment with Python, JupyterLab and OpenCode. | General development and exploring the GPU. |
+| **Base** | ROCm 7.2.1 · Python 3.12 · PyTorch 2.9.1 · vLLM 0.16.1 | General-purpose ROCm environment with Python and JupyterLab. | General development and exploring the GPU. |
 | **PyTorch · Stable** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 | PyTorch on ROCm, stable release, for training and running models. | Most PyTorch code: training, fine-tuning, running models. |
 | **PyTorch · Latest** | ROCm 10.1.0 · Python 3.12 · PyTorch 2.14.0 | PyTorch on ROCm, newest release, for trying the latest features. | Code that needs a newer PyTorch or ROCm than the stable image. |
 | **vLLM · Stable** | ROCm 7.2.3 · Python 3.12 · PyTorch 2.13.0 · vLLM 0.33.0 | vLLM for serving LLMs behind an OpenAI-compatible API. | Serving a model yourself with `vllm serve`. |
@@ -23,7 +23,7 @@ The list has a small set of stable images that the platform maintains and keeps 
 | **ComfyUI** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 · ComfyUI 0.45.0 | ComfyUI for node-based image and video generation. | Image and video generation workflows. |
 <!-- image-versions:end -->
 
-Stable images are updated in place: the name stays the same and new instances get the newer build. The key versions in the table, and in the description under the field, are those of the current build and are updated with each release. To see everything an image contains, check inside your instance (see below).
+Stable images are updated in place: the name stays the same and new instances get the newer build. The key versions in the table, and in the description under the field, are those of the current build and are updated with each release. They come from the Global build; China can be one release behind for a short time. To see everything an image contains, check inside your instance (see below).
 
 To serve a model with **Deploy type: Model API**, you don't pick an image here; that form picks its own runtime. See [Serve a model](/radeon-cloud-docs/guides/serve-model/).
 
