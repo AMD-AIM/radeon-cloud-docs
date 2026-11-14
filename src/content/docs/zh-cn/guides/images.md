@@ -1,6 +1,6 @@
 ---
 title: 选择镜像
-description: 该从哪个镜像开始、列表里每个镜像是做什么的，以及怎么确认镜像里装了什么。
+description: 该从哪个镜像开始、列表里每个镜像是做什么的、怎么确认镜像里装了什么，以及怎么用 hk-dsl 加速 vLLM。
 ---
 
 镜像决定实例里有哪些软件：ROCm、Python、PyTorch 以及相关工具。在启动表单的 **镜像** 里选择。
@@ -54,3 +54,21 @@ pip list
 ## 自定义镜像
 
 在经典版 **Custom Images** 页面构建的自定义镜像，构建完成后会出现在列表里，名称后面带 **(custom)**。
+
+## 用 hk-dsl 加速 vLLM
+
+[hk-dsl](https://pypi.org/project/hk-dsl/) 是一个 Python 包，它会把 vLLM 的部分 GPU kernel 换成专为 Radeon GPU 编写的 kernel。使用方法：
+
+1. 用 **vLLM · Stable** 镜像启动实例。
+2. 在终端里安装，然后照常启动 vLLM：
+
+   ```bash
+   pip install -U hk-dsl
+   vllm serve <模型名>
+   ```
+
+3. 查看启动日志。出现 `[hk] vLLM routes on: ...` 说明 hk-dsl 已生效。想关闭它，启动 vLLM 时加上 `HK_DISABLE=1`。
+
+hk-dsl 需要 0.9.21 或更新版本，可以用 `pip show hk-dsl` 查看。在 vLLM 版本不受 hk-dsl 支持的镜像上（例如 **Base**），它不会生效，日志里会用一行说明，vLLM 按原版运行。
+
+实测结果见 [hk-dsl scorecard](https://vivienfanghuagood.github.io/hk-dsl/performance/scorecard/)。
