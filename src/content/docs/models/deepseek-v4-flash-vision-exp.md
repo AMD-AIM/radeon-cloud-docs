@@ -93,8 +93,8 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 As permissive as the text model: a `system` message may sit at any position, there may be more than
 one, and the role may be spelled either `system` or `developer`.
 
-This differs from [Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/), which accepts
-only a single leading `system`. For one client driving both, follow the stricter shape.
+This differs from [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/), which accepts
+at most one `system`, and only at the start. For one client driving both, follow the stricter shape.
 
 ### Thinking
 

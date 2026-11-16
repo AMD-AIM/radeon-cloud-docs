@@ -50,7 +50,7 @@ Context Intelligence*（[arXiv:2606.19348](https://arxiv.org/abs/2606.19348)）�
 :::note[没有 Jinja chat template]
 和多数开源权重不同，这份权重**不带 Jinja chat template**——提示词拼装放在 Python 的 `encoding/`
 目录里。这正是它对 `system` 消息放在哪毫不在意的原因：没有模板去抛异常。带模板的模型会是什么样，
-见 [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/)。
+见 [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/)。
 :::
 
 ## 在 Radeon Cloud 上的行为
@@ -97,7 +97,7 @@ Context Intelligence*（[arXiv:2606.19348](https://arxiv.org/abs/2606.19348)）�
 
 `system` 消息放在哪个位置都行、可以放多条，角色名写 `system` 或 `developer` 都接受。
 
-但 [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) **不是这样**。要用一套
+但 [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) **不是这样**。要用一套
 代码同时打两个模型，请按那个模型更严格的规则写：一条 `system`、放在首位、角色名写 `system`。
 
 ### 上限

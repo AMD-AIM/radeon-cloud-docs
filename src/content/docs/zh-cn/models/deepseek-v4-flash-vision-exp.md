@@ -89,8 +89,8 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
 和文本版一样宽松：`system` 消息放在哪个位置都行、可以放多条，角色名写 `system` 或 `developer`
 都接受。
 
-这一点和 [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) 不同，
-后者只接受“单个且在首位”的 `system`。要写一套代码同时打两个模型，就按后者的规矩写。
+这一点和 [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) 不同，
+后者最多只接受一条 `system`，且必须在首位。要写一套代码同时打两个模型，就按后者的规矩写。
 
 ### 思考
 

@@ -63,8 +63,8 @@ token id，也就是说这个发布版本是多模态的。但本部署只提供
 ### `messages`
 
 `system` 消息可以放在任意位置，也可以有多条——这一点和
-[Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) 不同，
-那个模型只允许一条且必须放在最前面。
+[Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) 不同，
+那个模型最多只允许一条且必须放在最前面。
 
 :::caution[角色名要写 `system`，不是 `developer`]
 接受的角色是 `system`、`user`、`assistant`、`tool`。较新的 OpenAI SDK 会发 `developer`
@@ -93,7 +93,6 @@ Failed to deserialize the JSON body into the target type: messages[0]: unknown r
 
 :::caution[`xhigh` 在这里是 422——这个模型是例外]
 平台上其他思考模型的最高档都叫 `xhigh`，而
-[Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) 和
 [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) 恰恰拒收 `high`。
 GLM-5.3-Flash 正好反过来：`high` 能用，`xhigh` 不能。
 
@@ -107,7 +106,7 @@ Failed to deserialize the JSON body into the target type: reasoning_effort: unkn
 `none`、`minimal`、`max` 会报同样的 422，只是报文里换成它们自己的名字。
 **只有 `low`、`medium`、`high` 三个值可用**，也就是 OpenAI 那三档，再没有别的。
 
-同一套代码要同时打这个模型和 Qwen 系列时，「多想一会儿」没法共用一个字面量：
+同一套代码要同时打这个模型和 Qwen3.8-27B 时，「多想一会儿」没法共用一个字面量：
 这边发 `high`，那边发 `xhigh`，或者两边都干脆不传。
 :::
 
@@ -137,7 +136,8 @@ Invalid `--allowed-local-media-path`: The path <path> does not exist.
 
 请只发文本。需要图像时请用
 [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/)、
-[DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/) 或两个 Qwen3.8 模型。
+[DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/) 或
+[Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/)。
 
 ### 限制
 

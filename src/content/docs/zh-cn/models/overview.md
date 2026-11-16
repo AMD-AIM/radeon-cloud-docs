@@ -49,7 +49,6 @@ sidebar:
 | [DeepSeek-V4-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
 | [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
 | [DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
-| [Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/) | 262,144 | ✅ | ✅ |
 | [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) | 262,144 | ✅ | ✅ |
 | [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
@@ -79,7 +78,6 @@ Token Factory 的用量以 pts 计量。pts 不是钱，也和积分无关，见
 | DeepSeek-V4-Flash | 0.14 | 0.28 | 0.0028 |
 | DeepSeek-V4-Flash-Vision-Exp | 0.14 | 0.28 | 0.0028 |
 | DeepSeek-V4.1-Flash | 0.28 | 0.56 | 0.0056 |
-| Qwen3.8-Flash-Next | 0.14 | 0.28 | 0.0028 |
 | Qwen3.8-27B | 0.035 | 0.07 | 0.0007 |
 | GLM-5.3-Flash | 0.28 | 0.56 | 0.0056 |
 | MiMo-V2.6-Flash | 0.14 | 0.28 | 0.0028 |
@@ -108,7 +106,6 @@ Token Factory 的用量以 pts 计量。pts 不是钱，也和积分无关，见
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
-| Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
@@ -132,7 +129,7 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 :::
 
 :::caution[`xhigh` 在 GLM-5.3-Flash 上是 422]
-[GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) 和 Qwen 系列恰好相反，
+[GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) 和 Qwen3.8-27B 恰好相反，
 只收 OpenAI 那三个值：
 
 ```
@@ -146,7 +143,7 @@ Qwen3.8-27B 返回的是校验器报的 **400**。
 :::
 
 :::tip[一套代码打所有思考模型，就用 `low` 或 `medium`]
-这两个值是上表所有模型的交集。最高档的名字不通用——两个 Qwen 模型用 `xhigh`，
+这两个值是上表所有模型的交集。最高档的名字不通用——Qwen3.8-27B 用 `xhigh`，
 GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模型选值时，读
 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 确认当前发布的是哪几个模型，再对照上表。
 :::
@@ -158,7 +155,6 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 | DeepSeek-V4-Flash | 不思考 | ✅ |
 | DeepSeek-V4-Flash-Vision-Exp | 不思考 | ✅ |
 | DeepSeek-V4.1-Flash | 不思考 | ✅ |
-| Qwen3.8-Flash-Next | **照样思考** | ✅ |
 | Qwen3.8-27B | **照样思考** | ❌ |
 | GLM-5.3-Flash | **照样思考** | ❌ |
 | MiMo-V2.6-Flash | **照样思考** | ❌ |
@@ -178,8 +174,8 @@ token 数用 **`usage.completion_tokens_details.reasoning_tokens`**，有两个�
 即使思考了也在这里报 `0`。所以它们的思考 token 无法与其余输出分开统计，
 但仍然计入 `usage.completion_tokens`，也仍然计费。
 
-:::caution[两个 Qwen 模型和 GLM-5.3-Flash 默认就在思考，而且思考要花 `max_tokens`]
-Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
+:::caution[Qwen3.8-27B 和 GLM-5.3-Flash 默认就在思考，而且思考要花 `max_tokens`]
+Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
 而思考和正文共用同一份 `max_tokens` 预算。对非思考模型够用的预算，换到这里可能返回空 `content`。
 要么调大 `max_tokens`，要么传 `reasoning_effort: "low"`。
 :::
@@ -191,7 +187,6 @@ Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照�
 | DeepSeek-V4-Flash | 位置任意，可多条 | `system` 或 `developer` |
 | DeepSeek-V4-Flash-Vision-Exp | 位置任意，可多条 | `system` 或 `developer` |
 | DeepSeek-V4.1-Flash | 位置任意，可多条 | `system` 或 `developer` |
-| Qwen3.8-Flash-Next | **只放一条，且必须在首位** | `system` |
 | Qwen3.8-27B | **最多一条，且必须在首位** | `system` |
 | GLM-5.3-Flash | 位置任意，可多条 | `system` |
 | MiMo-V2.6-Flash | 位置任意，可多条 | `system` 或 `developer` |
@@ -201,7 +196,7 @@ Qwen3.8-Flash-Next 和 Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照�
 | Gemma-4-31B-IT | 一条，放在首位；其他位置未验证 | `system` |
 
 三个 DeepSeek 模型和 MiMo-V2.6-Flash 把 `developer` 当作 `system` 的别名接受。
-Qwen3.8-27B 报 `Unexpected message role.`，Qwen3.8-Flash-Next、GLM-5.3-Flash 和
+Qwen3.8-27B 报 `Unexpected message role.`，GLM-5.3-Flash 和
 MiniCPM5-2B 报反序列化错误，并指出是第几条消息：
 
 ```
@@ -211,7 +206,7 @@ Failed to deserialize the JSON body into the target type: messages[0]: unknown r
 MiniCPM-V-4.7 两个模型和 Gemma-4-31B-IT 尚未验证 `developer` 角色。
 较新的 OpenAI SDK 会发 `developer` 代替 `system`，如果你用的是这种，请改回。
 
-两个 Qwen 模型的限制来自它们自带的 Jinja chat template，不是网关加的规则。
+Qwen3.8-27B 的限制来自它自带的 Jinja chat template，不是网关加的规则。
 Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 **所有模型都能接受的写法**：一条 `system` 消息、放在数组下标 `0`、角色名写 `system`。
@@ -228,13 +223,12 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 ## 图片输入
 
-八个对话模型收图，`content` 数组里放 `image_url` 内容块即可：
+七个对话模型收图，`content` 数组里放 `image_url` 内容块即可：
 
 | 模型 | 图片用量报在哪里 |
 |---|---|
 | DeepSeek-V4-Flash-Vision-Exp | `usage.prompt_tokens_details.image_tokens`，示例值 115 |
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`，示例值 202 |
-| Qwen3.8-Flash-Next | `usage.prompt_tokens_details.image_tokens`，示例值 144 |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`，示例值 72，测于更早的部署 |
 | MiMo-V2.6-Flash | `usage.prompt_tokens_details.image_tokens` |
 | MiniCPM-V-4.7-1B | `usage.prompt_tokens_details.image_tokens` |

@@ -50,7 +50,7 @@ sidebar:
 
 答案从 `choices[0].message.content` 读。需要分离的思考过程时，用
 [DeepSeek-V4-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash/) 或
-[Qwen3.8-Flash-Next](/radeon-cloud-docs/zh-cn/models/qwen3-8-flash-next/)。
+[Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/)。
 
 ### `messages`
 

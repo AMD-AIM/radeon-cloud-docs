@@ -64,7 +64,7 @@ token ids, so the release is multimodal. This deployment serves text only. See
 ### `messages`
 
 A `system` message may sit at any position, and there may be more than one — unlike
-[Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/), which allows exactly one and
+[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/), which allows at most one and
 insists it comes first.
 
 :::caution[Spell the role `system`, not `developer`]
@@ -94,8 +94,7 @@ Accepted values:
 
 :::caution[`xhigh` is a 422 here — this model is the exception]
 Every other thinking model on this platform takes `xhigh` as its top tier, and
-[Qwen3.8-Flash-Next](/radeon-cloud-docs/models/qwen3-8-flash-next/) and
-[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) reject `high`. GLM-5.3-Flash is the mirror
+[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) rejects `high`. GLM-5.3-Flash is the mirror
 image: `high` works, `xhigh` does not.
 
 ```
@@ -108,7 +107,7 @@ value is rejected while the request body is being deserialised, before any valid
 `none`, `minimal` and `max` produce the same 422 with their own name in the message. Only `low`,
 `medium` and `high` are accepted — the OpenAI trio, and nothing else.
 
-Portable code that has to run against both this model and the Qwen models cannot share one literal
+Portable code that has to run against both this model and Qwen3.8-27B cannot share one literal
 for "think hard": send `high` here and `xhigh` there, or omit the parameter on both.
 :::
 
@@ -140,7 +139,8 @@ Invalid `--allowed-local-media-path`: The path <path> does not exist.
 
 Send text only. For images use
 [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/),
-[DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) or either Qwen3.8 model.
+[DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) or
+[Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/).
 
 ### Limits
 

@@ -65,7 +65,7 @@ sidebar:
 token 数从 **`usage.completion_tokens_details.reasoning_tokens`** 取。已验证的模型中除 Qwen3.8-27B 外都有这个字段；Qwen3.8-27B 不返回 `completion_tokens_details`，
 它的思考 token 计入 `usage.completion_tokens`。
 MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 的这些 usage 字段尚未验证。
-顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek 两个模型和 Qwen3.8-Flash-Next 有，MiniCPM5-2B 没有），不要依赖它。
+顶层的 `usage.reasoning_tokens` 只有部分模型给（DeepSeek 两个模型有，MiniCPM5-2B 没有），不要依赖它。
 
 **不传 `reasoning_effort` 不等于不思考**，各模型的默认值不一样：
 
@@ -74,7 +74,6 @@ MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 的这些 usage 字�
 | DeepSeek-V4-Flash | 不思考（`reasoning` 为空，`reasoning_tokens` 为 0） |
 | DeepSeek-V4-Flash-Vision-Exp | 不思考 |
 | DeepSeek-V4.1-Flash | 不思考 |
-| Qwen3.8-Flash-Next | **照样思考**，默认档位是 `xhigh`，也就是最长的一档 |
 | Qwen3.8-27B | **照样思考**，默认档位是 `xhigh` |
 | GLM-5.3-Flash | **照样思考** |
 | MiMo-V2.6-Flash | **照样思考**，传 `none` 也关不掉 |
@@ -83,7 +82,7 @@ MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 的这些 usage 字�
 | MiniCPM-V-4.7-35B-A3B | 不思考 |
 | Gemma-4-31B-IT | 不思考 |
 
-要确定性地控制，就显式传值；想让两个 Qwen 模型和 GLM-5.3-Flash 少思考，传 `low`。
+要确定性地控制，就显式传值；想让 Qwen3.8-27B 和 GLM-5.3-Flash 少思考，传 `low`。
 
 **各模型接受的档位不一样**：
 
@@ -92,7 +91,6 @@ MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 的这些 usage 字�
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
-| Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | 任何取值都接受，但不起作用 |

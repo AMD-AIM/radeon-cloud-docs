@@ -82,7 +82,6 @@ emitted by some models, so do not rely on it.
 | DeepSeek-V4-Flash | Does not think (`reasoning` empty, `reasoning_tokens` 0) |
 | DeepSeek-V4-Flash-Vision-Exp | Does not think |
 | DeepSeek-V4.1-Flash | Does not think |
-| Qwen3.8-Flash-Next | **Still thinks**; the default tier is `xhigh`, the longest one |
 | Qwen3.8-27B | **Still thinks**; the default tier is `xhigh` |
 | GLM-5.3-Flash | **Still thinks** |
 | MiMo-V2.6-Flash | **Still thinks**, and `none` doesn't turn it off |
@@ -91,7 +90,7 @@ emitted by some models, so do not rely on it.
 | MiniCPM-V-4.7-35B-A3B | Does not think |
 | Gemma-4-31B-IT | Does not think |
 
-Pass the value explicitly if you want deterministic behaviour; send `low` to make the Qwen models
+Pass the value explicitly if you want deterministic behaviour; send `low` to make Qwen3.8-27B
 and GLM-5.3-Flash think less.
 
 **Which tiers a model accepts differs per model:**
@@ -101,7 +100,6 @@ and GLM-5.3-Flash think less.
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
-| Qwen3.8-Flash-Next | `none` `low` `medium` `xhigh` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | Any value is accepted but has no effect |
