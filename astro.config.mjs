@@ -98,6 +98,7 @@ export default defineConfig({
           items: [
             { slug: 'guides/instances' },
             { slug: 'guides/launch' },
+            { slug: 'guides/gpu-on-demand' },
             { slug: 'guides/images' },
             { slug: 'guides/storage' },
             { slug: 'guides/jupyterlab' },
