@@ -25,17 +25,21 @@ The workspace always uses persistent `/workspace` storage. See [Keep your data](
 2. Select the kernel **Python 3 (GPU, on demand)**.
 3. Run a cell.
 
-When a GPU is free, it usually attaches in a few seconds. The cell output shows a line such as `[GPU] ... GPU attached in 4s.`, and then the cell runs on the GPU.
+When a GPU is free, it usually attaches in a few seconds. The first attach on a GPU node can take a few minutes while the node downloads the image. The cell output shows a line such as `[GPU] ... GPU attached in 4s.`, and then the cell runs on the GPU.
 
 When no GPU is free, the cell says you are in the queue, for example `No GPU is free right now - you are #2 in the queue.` Leave the cell as it is. It runs by itself when a GPU frees up.
+
+If the queue is full, the cell says `The GPU queue is full, so this request was not queued. Your files are safe; run again later.`
+
+A workspace has one GPU kernel at a time. If the GPU kernel stops unexpectedly, for example when it runs out of memory, the GPU is released and the cell says so. Your files are kept; run again to attach a new GPU kernel.
 
 The status bar at the bottom of JupyterLab shows the GPU state, for example **GPU ● attached** or **GPU … queued #2**.
 
 ## When the GPU is idle
 
-If no cell runs for 30 minutes, the GPU is released. This is the default; the platform may set a different time. The status bar tooltip shows the current value.
+If no cell runs for 30 minutes, the GPU is released.
 
-Shortly before the release (two minutes by default), a notice appears with two buttons:
+Two minutes before the release, a notice appears with two buttons:
 
 - **Keep GPU** keeps the GPU attached and restarts the idle timer.
 - **Release now** releases the GPU at once.
