@@ -133,7 +133,7 @@ Honour `Retry-After` rather than picking your own interval, and add exponential 
 
 Cap concurrency on your side to match the per-key allowance instead of firing requests and catching `429`s. A semaphore of 8 is simpler and faster than a retry loop.
 
-Don't retry `4xx` other than `429`. A `400` or `401` will fail identically every time.
+Don't retry `4xx` other than `429`. A `400`, `401` or `413` will fail identically every time. Shrink a `413` payload instead.
 
 ```python
 import time, random, requests
