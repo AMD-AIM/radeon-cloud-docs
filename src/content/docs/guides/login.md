@@ -18,7 +18,7 @@ The login page has two tabs:
 - **验证码登录 / Verification Code Login**: enter your mobile number or email, click **发送验证码 / Send Code**, and type in the code. You may need to pass a slider captcha first. After a code is sent, the button counts down before you can request another.
 - **密码登录 / Password Login**: for accounts that already have a password.
 
-Below the form, you can also sign in with a ModelScope (魔搭), CSDN, or GitHub account.
+Below the form, you can also sign in with a ModelScope (魔搭), CSDN, or GitHub account. If you used GitHub before and the console asks you to bind an AMD AI Developer Program account, finish that step before you can launch an instance.
 
 ![The AMD AI Developer Program sign-in form](../../../assets/guide/cn-login-form.png)
 
@@ -28,14 +28,16 @@ Once you're signed in to the program, you're signed in to the China site too. Yo
 
 ## Global site
 
-Open [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/), click **Sign in** in the top-right corner, and choose **Login with Email**. To use a GitHub account instead, choose **Login with GitHub**. In the classic interface, the button reads **Login**.
+Open [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) and click **Sign in** in the top-right corner. The new console offers two methods:
 
-![The Global site login menu in the classic interface](../../../assets/guide/login.png)
+- **Login with Email**: enter your email, click **Send code**, then enter the six-digit code and click **Verify & sign in**.
+- **Login with AMD Developer Program**: signs you in with an AMD Developer Program account. That is not the China-site [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/).
 
-1. Enter your email address and click **Send code**.
-2. Enter the six-digit code sent to you and click **Verify & sign in**.
+![The Global site Sign in menu](../../../assets/guide/en/global-login-menu.png)
 
 Codes expire after a few minutes. If one doesn't arrive, wait until **Resend code** is available and request another.
+
+In the classic interface the same menu is under **Login**.
 
 ## After signing in
 
@@ -50,7 +52,9 @@ Click your account in the top-right corner for:
 
 The header also has buttons for the language (**EN** / **中**) and the light or dark theme.
 
-If your console has a **Profile** page instead, you're on the classic interface. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
+If your console has a **Profile** page instead, you're on the classic interface. On the China site that can be the first screen after sign-in; a banner on **Home** and **Profile** points to the new console. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
+
+On the new interface, a short tour can appear the first time. Replay it from the account menu.
 
 ## If your account needs review
 
