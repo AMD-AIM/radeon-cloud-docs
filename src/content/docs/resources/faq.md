@@ -31,7 +31,10 @@ Running instances: 1 credit per GPU per hour. Token Factory doesn't use credits.
 Yes. An instance spends credits for as long as it exists, whether or not you're using it. [Destroy it](/radeon-cloud-docs/guides/destroy/) when you're done.
 
 **Will my instance be stopped for me?**
-Only when your credits run out, or when the **Auto-reclaim** time shown on the launch form has passed. Don't rely on either to save credits.
+Only when your credits run out, or when the **Auto-delete** time you chose on the launch form has passed, unless the form reads **Never**. You can **Extend** once while it is running. Don't rely on either to save credits.
+
+**What do Available, Limited and Full mean?**
+The pill next to **Size** on the launch form shows whether GPUs are free in your pool right now. **Full** does not disable **Launch instance**, but the launch will likely fail. Wait, or turn on **Customize** and pick another pool.
 
 **Are Token Factory usage and credits the same thing?**
 No. Token Factory has its own daily usage cap, counted in points (pts). See it on **Credits & Usage**, or with [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).
@@ -76,7 +79,10 @@ Not through the platform. To expose a service publicly, run it in the instance a
 No. API keys work for Token Factory only. JupyterLab and the console need a browser session, and scripts manage instances with [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/).
 
 **Why can't I launch an instance?**
-Usually one of these: no free node in the resource pool, not enough credits, an instance already running, or an account still under review. See [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#launching).
+Usually one of these: no free node in the resource pool (the size pill may already say **Full**), not enough credits, an instance already running, or an account still under review. See [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#launching).
+
+**Why do I see Profile and My Templates after signing in?**
+That's the classic interface. On the China site it is often the first screen. Click **Go to the new UI** on the banner. See [Classic interface](/radeon-cloud-docs/resources/classic-ui/).
 
 ## Operations
 
