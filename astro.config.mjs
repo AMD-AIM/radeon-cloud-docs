@@ -57,6 +57,25 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:image:alt', content: 'Radeon Cloud Docs' } },
       ],
       customCss: ['./src/styles/custom.css'],
+      // Always Dark+ so fenced blocks match the homepage terminal,
+      // including on the light site theme.
+      expressiveCode: {
+        themes: ['dark-plus', 'dark-plus'],
+        styleOverrides: {
+          borderRadius: '12px',
+          borderWidth: '1px',
+          frames: {
+            frameBoxShadowCssValue: 'none',
+            terminalTitlebarDotsOpacity: '1',
+            terminalTitlebarDotsForeground: '#2b313b',
+            terminalTitlebarBackground: '#14181f',
+            terminalTitlebarForeground: '#6b7280',
+            terminalTitlebarBorderBottomColor: '#1f242d',
+            terminalBackground: '#0e1116',
+            editorBackground: '#0e1116',
+          },
+        },
+      },
       defaultLocale: 'root',
       locales: {
         root: { label: 'English', lang: 'en' },
