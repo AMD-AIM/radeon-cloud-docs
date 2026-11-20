@@ -187,12 +187,12 @@ Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
 | DeepSeek-V4-Flash | 位置任意，可多条 | `system` 或 `developer` |
 | DeepSeek-V4-Flash-Vision-Exp | 位置任意，可多条 | `system` 或 `developer` |
 | DeepSeek-V4.1-Flash | 位置任意，可多条 | `system` 或 `developer` |
-| Qwen3.8-27B | **最多一条，且必须在首位** | `system` |
+| Qwen3.8-27B | **可省略；如提供，最多一条且必须在首位** | `system` |
 | GLM-5.3-Flash | 位置任意，可多条 | `system` |
 | MiMo-V2.6-Flash | 位置任意，可多条 | `system` 或 `developer` |
 | MiniCPM5-2B | 位置任意，可多条 | `system` |
-| MiniCPM-V-4.7-1B | **最多一条，且必须在首位** | `system` |
-| MiniCPM-V-4.7-35B-A3B | **最多一条，且必须在首位** | `system` |
+| MiniCPM-V-4.7-1B | **可省略；如提供，最多一条且必须在首位** | `system` |
+| MiniCPM-V-4.7-35B-A3B | **可省略；如提供，最多一条且必须在首位** | `system` |
 | Gemma-4-31B-IT | 一条，放在首位；其他位置未验证 | `system` |
 
 三个 DeepSeek 模型和 MiMo-V2.6-Flash 把 `developer` 当作 `system` 的别名接受。

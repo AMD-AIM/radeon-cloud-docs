@@ -199,12 +199,12 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | DeepSeek-V4-Flash | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4-Flash-Vision-Exp | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4.1-Flash | any position, more than one allowed | `system` or `developer` |
-| Qwen3.8-27B | **at most one, and it must come first** | `system` |
+| Qwen3.8-27B | **optional; at most one, and first if present** | `system` |
 | GLM-5.3-Flash | any position, more than one allowed | `system` |
 | MiMo-V2.6-Flash | any position, more than one allowed | `system` or `developer` |
 | MiniCPM5-2B | any position, more than one allowed | `system` |
-| MiniCPM-V-4.7-1B | **at most one, and it must come first** | `system` |
-| MiniCPM-V-4.7-35B-A3B | **at most one, and it must come first** | `system` |
+| MiniCPM-V-4.7-1B | **optional; at most one, and first if present** | `system` |
+| MiniCPM-V-4.7-35B-A3B | **optional; at most one, and first if present** | `system` |
 | Gemma-4-31B-IT | one, first; other placements not verified | `system` |
 
 The three DeepSeek models and MiMo-V2.6-Flash accept `developer` as an alias for `system`.
