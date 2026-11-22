@@ -1,6 +1,6 @@
 ---
 title: Hy4-flash
-description: 腾讯的稀疏 MoE 模型，滑动窗口层与稀疏注意力层混合，上下文 100 万 token，支持图像输入。默认思考，chat template 只认两种模式：关闭和 high。
+description: 腾讯的稀疏 MoE 模型，上下文 100 万 token，支持图像输入。默认思考，reasoning_effort 只接受 none 和 medium 及以上。
 sidebar:
   order: 8.5
 ---
@@ -13,8 +13,8 @@ sidebar:
 
 ## 模型简介
 
-这里提供的权重是腾讯的 **Hy4-flash**，使用其 FP8 版本 `tencent/Hy4-flash-FP8` ——
-一个混合两种注意力层的稀疏 MoE 模型，除文本外也接受图像。除非你关掉，它总会先思考再回答。
+**Hy4-flash** 是腾讯的稀疏 MoE 模型，混合使用稀疏注意力层和滑动窗口层，接受文本和图像，
+默认先思考再回答。
 
 ### 架构
 
@@ -45,91 +45,65 @@ sidebar:
 | 上下文长度 | 1,048,320 token |
 | 输入模态 | **文本、图像** |
 | 流式 | ✅ |
-| 工具调用 | ✅ —— 但 `tool_choice` 不能强制调用，见[工具调用](#工具调用) |
+| 工具调用 | ✅ —— `tool_choice` 不能强制调用，见[工具](#工具) |
 | JSON 输出 | ✅ `json_object` **和** `json_schema` |
 | 思考 | ✅ —— **默认开启，传 `reasoning_effort: "none"` 才关闭** |
 | 推理引擎 | SGLang |
 | 稳定性 | `experimental` |
 
-:::note[按 1,048,320 提供，不是原生的 1,048,576]
-权重声明了 1,048,576 个位置，本端点按 1,048,320 运行，请求按 1,048,320 计算。
-:::
-
 ### `messages`
 
-`system` 消息可以出现在任意位置，也可以有多条。`role: "developer"` 也接受并正常作答，
-较新 OpenAI SDK 的输出不需要改写。
+`system` 消息可以出现在任意位置，也可以有多条。`developer` 可作为 `system` 的别名。
 
 ### 思考
 
-**不传 `reasoning_effort` 并不会关闭思考**，普通请求返回的 `reasoning` 就有内容。
-
-模型自带的 chat template 只认**两种模式：关闭思考，以及 `high`**。本端点上 OpenAI 的各档位对应如下：
+思考**默认开启**。模型的 chat template 只有两种模式：关闭和 `high`。
 
 | `reasoning_effort` | 结果 |
 |---|---|
-| 不传 | 思考 |
-| `none` | **不思考** —— 返回里没有 `reasoning` |
-| `minimal` | **400** |
-| `low` | **400** |
-| `medium` | 思考 |
-| `high` | 思考 |
-| `xhigh` | 思考 |
-| `max` | 思考 |
+| 不传、`medium`、`high`、`xhigh`、`max` | 思考 |
+| `none` | 不思考，返回里没有 `reasoning` |
+| `minimal`、`low` | **400** |
 
-`reasoning: {"effort": "high"}` 与 `reasoning_effort: "high"` 效果相同。
-
-:::caution[`low` 和 `minimal` 在这里是 400]
-两者都被模型的 chat template 拒绝，`minimal` 在报错里显示为 `low`：
-
+:::caution[`low` 和 `minimal` 返回 400]
 ```
 reasoning_effort error : low, should be no_think/high
 ```
 
-模板自己表示“关闭”的写法 `no_think` 也不被 API 接受——请求还没到模型就被拒掉：
-
-```
-Invalid enum value. Expected 'none' | 'minimal' | 'low' | 'medium' | 'high' | 'xhigh' | 'max', received 'no_think'
-```
-
-要关闭思考传 `none`，要开启就传 `medium` 或更高的档位。
+报错里的 `no_think` 是模板自己的写法，API 不接受。要关闭思考请传 `none`。
 :::
 
-输出的位置：
+思考文本在 `choices[0].message.reasoning`，token 数在
+`usage.completion_tokens_details.reasoning_tokens`，顶层 `usage.reasoning_tokens` 也有同一个值。
 
-| | |
-|---|---|
-| 思考文本 | `choices[0].message.reasoning` |
-| token 数 | `usage.completion_tokens_details.reasoning_tokens`，顶层 `usage.reasoning_tokens` 也有同一个值 |
-
-:::caution[思考会花掉 `max_tokens` 预算]
-思考 token 计入输出并计费。`max_tokens` 太小时可能全部花在思考上，`content` 为空。
-要么给足预算，要么传 `reasoning_effort: "none"`。
+:::caution[思考会花掉 `max_tokens`]
+思考 token 按输出计费，和回答共用 `max_tokens` 预算。`content` 为空时，调大 `max_tokens`
+或传 `reasoning_effort: "none"`。
 :::
 
 ### 图像输入
 
-图片用 `image_url` 内容块传入，支持 base64 data URL。
-`usage.prompt_tokens_details.image_tokens` 报告图片的用量——一张 256×256 的 PNG 计 72 个图像 token。
+图片用 `image_url` 内容块传入，支持 base64 data URL：
 
-### 结构化输出
+```json
+{
+  "role": "user",
+  "content": [
+    { "type": "image_url", "image_url": { "url": "data:image/png;base64,..." } },
+    { "type": "text", "text": "图里有什么？" }
+  ]
+}
+```
 
-两种写法都可以：
+图片用量在 `usage.prompt_tokens_details.image_tokens`，一张 256×256 的 PNG 计 72 个 token。
 
-| `response_format` | 结果 |
-|---|---|
-| `{"type": "json_object"}` | ✅ `{"a":1,"b":2}` |
-| `{"type": "json_schema", "json_schema": {..., "strict": true}}` | ✅ `{"city": "Shanghai", "population_millions": 24.87}` |
+### 工具
 
-### 工具调用
-
-传 `tools`、`tool_choice` 用默认的 `"auto"` 时，模型认为需要才会调用函数——例如问天气时返回
-`get_weather({"city": "上海"})`。
+`tools` 在默认的 `tool_choice: "auto"` 下正常工作：问题需要时，模型会调用函数。
 
 :::caution[`tool_choice` 不能强制调用]
-`tool_choice: "required"` 和 `tool_choice: {"type": "function", "function": {"name": "..."}}`
-都被接受，但不会强制生效：问题本身用不到工具时，模型直接用文字作答，没有 `tool_calls`，
-`finish_reason` 为 `"stop"`。代码必须拿到工具调用时，请检查 `tool_calls` 并处理纯文本的情况。
+`tool_choice: "required"` 和指定函数都会被接受，但不会强制生效：问题用不到工具时，模型直接用文字回答，
+没有 `tool_calls`。请先检查有没有 `tool_calls`，不要假定一定有。
 :::
 
 ### 限制
@@ -139,20 +113,18 @@ Invalid enum value. Expected 'none' | 'minimal' | 'low' | 'medium' | 'high' | 'x
 | 上下文窗口 | 1,048,320 token，按**总预算**算——提示加输出 |
 | 输入 | 文本、图像 |
 | JSON 输出 | `json_object` 和严格的 `json_schema` |
-| 思考档位 | `none` 关闭思考；`medium`、`high`、`xhigh`、`max` 保持开启；`minimal` 和 `low` 返回 400 |
+| 思考档位 | `none`（关闭）、`medium`、`high`、`xhigh`、`max`；`minimal` 和 `low` 返回 400 |
 | 工具调用 | `tool_choice: "auto"`；`required` 和指定函数不会强制生效 |
 
-`max_tokens` 按总预算校验，提示也算在内：
+提示加 `max_tokens` 超出窗口时返回 400：
 
 ```
-Requested token count exceeds the model's maximum context length of 1048320 tokens. You requested a total of 1048348 tokens: 28 tokens from the input messages and 1048320 tokens for the completion. Please reduce the number of tokens in the input messages or the completion to fit within the limit.
+Requested token count exceeds the model's maximum context length of 1048320 tokens.
 ```
 
-这是 400。
-
-:::caution[100 万的窗口填满需要时间]
-整个窗口都能用——约 1,018,000 token 的提示能正确作答——但这么长、又没有缓存的提示，
-第一次处理约要 140 秒。发几十万 token 以上的提示前，先调大客户端超时。
+:::caution[长提示很慢]
+整个窗口都能用，但接近 100 万 token 的提示，首个 token 可能要两分钟左右才返回。
+发几十万 token 以上的提示前，先调大客户端超时。
 :::
 
 ### 示例
@@ -170,4 +142,4 @@ curl https://developer.amd.com.cn/radeon/api/v1/chat/completions \
   }'
 ```
 
-传 `none` 时直接返回答案，不经过思考。去掉这个字段或改传 `high` 就会思考；`low` 是 400，见[思考](#思考)。
+传 `none` 直接返回答案，不思考；去掉这个字段就会思考。

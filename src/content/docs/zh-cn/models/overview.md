@@ -18,12 +18,8 @@ sidebar:
 :::note[最后更新：2026-11-22]
 模型换了推理引擎，行为就可能跟着变。
 
-**新增：[Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/)。** 下面各表都已补上。它拒收
-`reasoning_effort: "low"`，所以通用的档位只剩 `medium`，见[用一套代码调用所有模型](#用一套代码调用所有模型)。
-
-此前 2026-10-19：新增 [Gemma-4-31B-IT](/radeon-cloud-docs/zh-cn/models/gemma-4-31b-it/)，各表补上了
-[MiniCPM-V-4.7-1B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-1b/) 和
-[MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-35b-a3b/)。
+**新增：[Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/)。** 它不接受 `reasoning_effort: "low"`，
+所以通用档位只剩 `medium`，见[用一套代码调用所有模型](#用一套代码调用所有模型)。
 
 **MiniCPM5-1B 已不再对外提供**，其说明页已移除。
 同体量级由 [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) 提供。
@@ -74,8 +70,7 @@ sidebar:
 ## 用量单价
 
 Token Factory 的用量以 pts 计量。pts 不是钱，也和积分无关，见[用量和配额](/radeon-cloud-docs/zh-cn/api/usage/)。
-下表是 2026-10-19 从模型卡片上读取的单价，除注明外单位都是每百万 token 多少 pts。
-单价可能调整，以模型卡片上的当前值为准。
+单价除注明外，单位都是每百万 token 多少 pts。单价可能调整，以模型卡片上的当前值为准。
 
 | 模型 | 输入 | 输出 | 缓存命中 |
 |---|---:|---:|---:|
@@ -95,8 +90,6 @@ Token Factory 的用量以 pts 计量。pts 不是钱，也和积分无关，见
 | d3-flash | 0.035 | — | — |
 | OmniVoice | 每百万字符 0.035 | — | — |
 | MinerU2.5-Pro | 每页 0.001 | — | — |
-
-Hy4-flash 的单价取自 2026-11-22 的 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/)。
 
 卡片上有三处和实际计费不一致：
 
@@ -151,18 +144,18 @@ Qwen3.8-27B 返回的是校验器报的 **400**。
 :::
 
 :::caution[`low` 在 Hy4-flash 上是 400]
-[Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/) 的 chat template 只认两种模式：关闭思考和 `high`。
-`none` 关闭思考；`medium`、`high`、`xhigh`、`max` 保持开启；`low` 和 `minimal` 被模板拒绝：
+[Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/) 的 chat template 只有两种模式：关闭和 `high`。
+`none` 关闭思考，`medium` 及以上开启；`minimal` 和 `low` 被拒绝：
 
 ```
 reasoning_effort error : low, should be no_think/high
 ```
 
-模板自己表示“关闭”的 `no_think` 不被 API 接受，请传 `none`。
+API 不接受 `no_think`，请传 `none`。
 :::
 
 :::tip[一套代码打所有思考模型，就用 `medium`]
-这是上表所有模型都接受的唯一取值——`low` 在 Hy4-flash 上是 400。最高档的名字不通用——Qwen3.8-27B 用 `xhigh`，
+这是上表所有模型都接受的唯一取值。最高档的名字不通用——Qwen3.8-27B 用 `xhigh`，
 GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模型选值时，读
 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 确认当前发布的是哪几个模型，再对照上表。
 :::
@@ -243,8 +236,8 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 不要在设计上依赖它。
 
 :::caution[Hy4-flash 的 `tool_choice` 不能强制调用]
-`tool_choice: "required"` 和指定函数都被接受，但不会强制生效。问题本身用不到工具时，
-[Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/) 直接用文字作答，没有 `tool_calls`。
+[Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/) 接受 `tool_choice: "required"` 和指定函数，
+但不强制执行：它可能直接用文字回答，没有 `tool_calls`。
 :::
 
 ## 图片输入

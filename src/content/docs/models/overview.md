@@ -19,13 +19,8 @@ a page existing here does not guarantee the model is currently published. All of
 :::note[Last updated 2026-11-22]
 Behaviour can change when a model moves to a different inference engine.
 
-**New: [Hy4-flash](/radeon-cloud-docs/models/hy4-flash/).** The tables below include it. It
-rejects `reasoning_effort: "low"`, so the portable tier is now `medium` only — see
-[One client for every model](#one-client-for-every-model).
-
-Earlier, on 2026-10-19: [Gemma-4-31B-IT](/radeon-cloud-docs/models/gemma-4-31b-it/) was added, and the
-tables gained [MiniCPM-V-4.7-1B](/radeon-cloud-docs/models/minicpm-v4-7-1b/) and
-[MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/models/minicpm-v4-7-35b-a3b/).
+**New: [Hy4-flash](/radeon-cloud-docs/models/hy4-flash/).** It rejects `reasoning_effort: "low"`,
+so the portable tier is now `medium` — see [One client for every model](#one-client-for-every-model).
 
 **MiniCPM5-1B is no longer published.** Its page has been removed;
 [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) serves the same size class.
@@ -77,9 +72,8 @@ Five models are not in this table, and the parameters below do not apply to them
 ## Usage rates
 
 Token Factory meters usage in points (pts). Points aren't money and are separate from your
-credits; see [Usage and quota](/radeon-cloud-docs/api/usage/). The rates below were read from the
-model cards on 2026-10-19 and are in pts per million tokens unless noted. Rates can change, so check
-the model's card for the current values.
+credits; see [Usage and quota](/radeon-cloud-docs/api/usage/). Rates are in pts per million tokens
+unless noted. They can change, so check the model's card for the current values.
 
 | Model | Input | Output | Cache read |
 |---|---:|---:|---:|
@@ -99,8 +93,6 @@ the model's card for the current values.
 | d3-flash | 0.035 | — | — |
 | OmniVoice | 0.035 per million characters | — | — |
 | MinerU2.5-Pro | 0.001 per page | — | — |
-
-The Hy4-flash rates were read from [`GET /v1/models`](/radeon-cloud-docs/api/models/) on 2026-11-22.
 
 Three things on the cards differ from what is billed:
 
@@ -160,23 +152,23 @@ deserialisation, while Qwen3.8-27B returns **400** from a validator.
 :::
 
 :::caution[`low` is a 400 on Hy4-flash]
-[Hy4-flash](/radeon-cloud-docs/models/hy4-flash/)'s chat template knows only two modes: thinking off
-and `high`. `none` turns thinking off; `medium`, `high`, `xhigh` and `max` keep it on; `low` and
-`minimal` are rejected by the template:
+[Hy4-flash](/radeon-cloud-docs/models/hy4-flash/)'s chat template has only two modes, off and
+`high`. `none` turns thinking off and `medium` and above keep it on; `minimal` and `low` are
+rejected:
 
 ```
 reasoning_effort error : low, should be no_think/high
 ```
 
-The template's own name for "off", `no_think`, is not accepted by the API. Send `none` instead.
+`no_think` is not accepted by the API; send `none`.
 :::
 
 :::tip[For one client across the thinking models, use `medium`]
-It is the only value every model in the table accepts — `low` is a 400 on Hy4-flash. The name of
-the top tier is not portable — Qwen3.8-27B spells it `xhigh`, GLM-5.3-Flash spells it `high`, the
-DeepSeek models accept `xhigh` and `max` and `high`, and they are not interchangeable. To pick per
-model, read [`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and
-match it against the table above.
+It is the only value every model in the table accepts. The name of the top tier is not
+portable — Qwen3.8-27B spells it `xhigh`, GLM-5.3-Flash spells it `high`, the DeepSeek models
+accept `xhigh` and `max` and `high`, and they are not interchangeable. To pick per model, read
+[`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and match it
+against the table above.
 :::
 
 ## Thinking
@@ -259,9 +251,8 @@ Every chat model here supports:
 model's own choice — do not build on it.
 
 :::caution[`tool_choice` cannot force a call on Hy4-flash]
-`tool_choice: "required"` and a named function are accepted but not enforced. On a question that
-does not need the tool, [Hy4-flash](/radeon-cloud-docs/models/hy4-flash/) answers in plain text
-with no `tool_calls`.
+[Hy4-flash](/radeon-cloud-docs/models/hy4-flash/) accepts `tool_choice: "required"` and named
+functions but does not enforce them: it may answer in text with no `tool_calls`.
 :::
 
 ## Image input
