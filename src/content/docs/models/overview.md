@@ -72,10 +72,8 @@ Five models are not in this table, and the parameters below do not apply to them
 ## Usage rates
 
 Token Factory meters usage in points (pts). Points aren't money and are separate from your
-credits; see [Usage and quota](/radeon-cloud-docs/api/usage/). The rates below were read from the
-model cards on 2026-10-19 and are in pts per million tokens unless noted; the GLM-5.3-Flash row was
-updated after its rates were lowered on 2026-11-22. Rates can change, so check
-the model's card for the current values.
+credits; see [Usage and quota](/radeon-cloud-docs/api/usage/). Rates are in pts per million tokens
+unless noted. They can change, so check the model's card for the current values.
 
 | Model | Input | Output | Cache read |
 |---|---:|---:|---:|
