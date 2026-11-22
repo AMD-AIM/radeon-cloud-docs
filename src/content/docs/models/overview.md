@@ -16,11 +16,15 @@ a page existing here does not guarantee the model is currently published. All of
 [Clef](/radeon-cloud-docs/models/clef/), [d3](/radeon-cloud-docs/models/d3/) and
 [d3-flash](/radeon-cloud-docs/models/d3-flash/) (decisions).
 
-:::note[Last updated 2026-10-19]
+:::note[Last updated 2026-11-22]
 Behaviour can change when a model moves to a different inference engine.
 
-**New: [Gemma-4-31B-IT](/radeon-cloud-docs/models/gemma-4-31b-it/).** The tables below now also
-cover [MiniCPM-V-4.7-1B](/radeon-cloud-docs/models/minicpm-v4-7-1b/) and
+**New: [Hy4-flash](/radeon-cloud-docs/models/hy4-flash/).** The tables below include it. It
+rejects `reasoning_effort: "low"`, so the portable tier is now `medium` only — see
+[One client for every model](#one-client-for-every-model).
+
+Earlier, on 2026-10-19: [Gemma-4-31B-IT](/radeon-cloud-docs/models/gemma-4-31b-it/) was added, and the
+tables gained [MiniCPM-V-4.7-1B](/radeon-cloud-docs/models/minicpm-v4-7-1b/) and
 [MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/models/minicpm-v4-7-35b-a3b/).
 
 **MiniCPM5-1B is no longer published.** Its page has been removed;
@@ -58,6 +62,7 @@ For every other model, the ID, the card title and `name` are the same.
 | [MiniCPM-V-4.7-1B](/radeon-cloud-docs/models/minicpm-v4-7-1b/) | 262,144 | ✅ | ❌ |
 | [MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/models/minicpm-v4-7-35b-a3b/) | 262,144 | ✅ | ❌ |
 | [Gemma-4-31B-IT](/radeon-cloud-docs/models/gemma-4-31b-it/) | 262,144 | ✅ | ❌ |
+| [Hy4-flash](/radeon-cloud-docs/models/hy4-flash/) | 1,048,320 | ✅ | ✅ |
 
 Five models are not in this table, and the parameters below do not apply to them:
 
@@ -88,11 +93,14 @@ the model's card for the current values.
 | MiniCPM-V-4.7-1B | 0.035 | 0.07 | 0.0007 |
 | MiniCPM-V-4.7-35B-A3B | 0.035 | 0.07 | 0.0007 |
 | Gemma-4-31B-IT | 0.035 | 0.07 | 0.0007 |
+| Hy4-flash | 0.14 | 0.28 | 0.0028 |
 | Clef | 0.035 | — | — |
 | d3 | 0.035 | — | — |
 | d3-flash | 0.035 | — | — |
 | OmniVoice | 0.035 per million characters | — | — |
 | MinerU2.5-Pro | 0.001 per page | — | — |
+
+The Hy4-flash rates were read from [`GET /v1/models`](/radeon-cloud-docs/api/models/) on 2026-11-22.
 
 Three things on the cards differ from what is billed:
 
@@ -113,6 +121,7 @@ The accepted tiers differ per model:
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| Hy4-flash | `none` `medium` `high` `xhigh` `max` |
 
 The parameter may also be omitted entirely. MiniCPM5-2B does not return separated thinking, so
 `reasoning_effort` does not apply to it.
@@ -150,12 +159,24 @@ the status codes differ too — GLM-5.3-Flash returns **422** because the value 
 deserialisation, while Qwen3.8-27B returns **400** from a validator.
 :::
 
-:::tip[For one client across the thinking models, use `low` or `medium`]
-Those two are the intersection of every model in the table. The name of the top tier is not
-portable — Qwen3.8-27B spells it `xhigh`, GLM-5.3-Flash spells it `high`, the DeepSeek models
-accept `xhigh` and `max` and `high`, and they are not interchangeable. To pick per model, read
-[`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and match it
-against the table above.
+:::caution[`low` is a 400 on Hy4-flash]
+[Hy4-flash](/radeon-cloud-docs/models/hy4-flash/)'s chat template knows only two modes: thinking off
+and `high`. `none` turns thinking off; `medium`, `high`, `xhigh` and `max` keep it on; `low` and
+`minimal` are rejected by the template:
+
+```
+reasoning_effort error : low, should be no_think/high
+```
+
+The template's own name for "off", `no_think`, is not accepted by the API. Send `none` instead.
+:::
+
+:::tip[For one client across the thinking models, use `medium`]
+It is the only value every model in the table accepts — `low` is a 400 on Hy4-flash. The name of
+the top tier is not portable — Qwen3.8-27B spells it `xhigh`, GLM-5.3-Flash spells it `high`, the
+DeepSeek models accept `xhigh` and `max` and `high`, and they are not interchangeable. To pick per
+model, read [`GET /v1/models`](/radeon-cloud-docs/api/models/) for what is currently published and
+match it against the table above.
 :::
 
 ## Thinking
@@ -172,6 +193,7 @@ against the table above.
 | MiniCPM-V-4.7-1B | does not think | not verified |
 | MiniCPM-V-4.7-35B-A3B | does not think | not verified |
 | Gemma-4-31B-IT | does not think | not verified |
+| Hy4-flash | **thinks anyway** | ✅ |
 
 The Qwen3.8-27B usage values were measured on its earlier vLLM deployment.
 
@@ -206,8 +228,9 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | MiniCPM-V-4.7-1B | one, first; other placements not verified | `system` |
 | MiniCPM-V-4.7-35B-A3B | one, first; other placements not verified | `system` |
 | Gemma-4-31B-IT | one, first; other placements not verified | `system` |
+| Hy4-flash | any position, more than one allowed | `system` or `developer` |
 
-The three DeepSeek models and MiMo-V2.6-Flash accept `developer` as an alias for `system`.
+The three DeepSeek models, MiMo-V2.6-Flash and Hy4-flash accept `developer` as an alias for `system`.
 Qwen3.8-27B rejects it with `Unexpected message role.`, and GLM-5.3-Flash and
 MiniCPM5-2B reject it with a deserialisation error naming the offending index:
 
@@ -235,9 +258,15 @@ Every chat model here supports:
 `parallel_tool_calls` is accepted everywhere, but emitting several `tool_calls` in one turn is the
 model's own choice — do not build on it.
 
+:::caution[`tool_choice` cannot force a call on Hy4-flash]
+`tool_choice: "required"` and a named function are accepted but not enforced. On a question that
+does not need the tool, [Hy4-flash](/radeon-cloud-docs/models/hy4-flash/) answers in plain text
+with no `tool_calls`.
+:::
+
 ## Image input
 
-Seven chat models take images; put an `image_url` content part in the `content` array:
+Eight chat models take images; put an `image_url` content part in the `content` array:
 
 | Model | Where image usage is reported |
 |---|---|
@@ -248,6 +277,7 @@ Seven chat models take images; put an `image_url` content part in the `content` 
 | MiniCPM-V-4.7-1B | `usage.prompt_tokens_details.image_tokens` |
 | MiniCPM-V-4.7-35B-A3B | `usage.prompt_tokens_details.image_tokens` |
 | Gemma-4-31B-IT | not verified |
+| Hy4-flash | `usage.prompt_tokens_details.image_tokens`, 72 in the sample |
 
 :::caution[Qwen3.8-27B nested the image count one level deeper]
 On its earlier deployment, Qwen3.8-27B reported `prompt_tokens_details.multimodal_tokens.image`
@@ -277,8 +307,8 @@ Markdown and is billed per page.
 The shape every chat model here accepts:
 
 - a single `system` message at index `0`, with the role spelled `system`
-- `reasoning_effort` of `low` or `medium`, or omitted entirely — **not `high`** (400 on
-  Qwen3.8-27B) and **not `xhigh`** (422 on GLM-5.3-Flash)
+- `reasoning_effort` of `medium`, or omitted entirely — **not `low`** (400 on Hy4-flash),
+  **not `high`** (400 on Qwen3.8-27B) and **not `xhigh`** (422 on GLM-5.3-Flash)
 - read thinking text from `choices[0].message.reasoning`
 - read thinking tokens from `usage.completion_tokens_details.reasoning_tokens` (Qwen3.8-27B
   omitted it on its earlier deployment, and MiMo-V2.6-Flash reports `0`)

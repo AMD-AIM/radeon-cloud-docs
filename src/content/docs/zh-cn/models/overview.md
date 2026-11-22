@@ -15,10 +15,13 @@ sidebar:
 [Clef](/radeon-cloud-docs/zh-cn/models/clef/)、[d3](/radeon-cloud-docs/zh-cn/models/d3/) 和
 [d3-flash](/radeon-cloud-docs/zh-cn/models/d3-flash/)（决策）。
 
-:::note[最后更新：2026-10-19]
+:::note[最后更新：2026-11-22]
 模型换了推理引擎，行为就可能跟着变。
 
-**新增：[Gemma-4-31B-IT](/radeon-cloud-docs/zh-cn/models/gemma-4-31b-it/)。** 下面各表也补上了
+**新增：[Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/)。** 下面各表都已补上。它拒收
+`reasoning_effort: "low"`，所以通用的档位只剩 `medium`，见[用一套代码调用所有模型](#用一套代码调用所有模型)。
+
+此前 2026-10-19：新增 [Gemma-4-31B-IT](/radeon-cloud-docs/zh-cn/models/gemma-4-31b-it/)，各表补上了
 [MiniCPM-V-4.7-1B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-1b/) 和
 [MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-35b-a3b/)。
 
@@ -56,6 +59,7 @@ sidebar:
 | [MiniCPM-V-4.7-1B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-1b/) | 262,144 | ✅ | ❌ |
 | [MiniCPM-V-4.7-35B-A3B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-35b-a3b/) | 262,144 | ✅ | ❌ |
 | [Gemma-4-31B-IT](/radeon-cloud-docs/zh-cn/models/gemma-4-31b-it/) | 262,144 | ✅ | ❌ |
+| [Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/) | 1,048,320 | ✅ | ✅ |
 
 以下五个模型不在此表，下面的参数对它们不适用：
 
@@ -85,11 +89,14 @@ Token Factory 的用量以 pts 计量。pts 不是钱，也和积分无关，见
 | MiniCPM-V-4.7-1B | 0.035 | 0.07 | 0.0007 |
 | MiniCPM-V-4.7-35B-A3B | 0.035 | 0.07 | 0.0007 |
 | Gemma-4-31B-IT | 0.035 | 0.07 | 0.0007 |
+| Hy4-flash | 0.14 | 0.28 | 0.0028 |
 | Clef | 0.035 | — | — |
 | d3 | 0.035 | — | — |
 | d3-flash | 0.035 | — | — |
 | OmniVoice | 每百万字符 0.035 | — | — |
 | MinerU2.5-Pro | 每页 0.001 | — | — |
+
+Hy4-flash 的单价取自 2026-11-22 的 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/)。
 
 卡片上有三处和实际计费不一致：
 
@@ -109,6 +116,7 @@ Token Factory 的用量以 pts 计量。pts 不是钱，也和积分无关，见
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
 | MiMo-V2.6-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| Hy4-flash | `none` `medium` `high` `xhigh` `max` |
 
 这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
 
@@ -142,8 +150,19 @@ reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `hig
 Qwen3.8-27B 返回的是校验器报的 **400**。
 :::
 
-:::tip[一套代码打所有思考模型，就用 `low` 或 `medium`]
-这两个值是上表所有模型的交集。最高档的名字不通用——Qwen3.8-27B 用 `xhigh`，
+:::caution[`low` 在 Hy4-flash 上是 400]
+[Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/) 的 chat template 只认两种模式：关闭思考和 `high`。
+`none` 关闭思考；`medium`、`high`、`xhigh`、`max` 保持开启；`low` 和 `minimal` 被模板拒绝：
+
+```
+reasoning_effort error : low, should be no_think/high
+```
+
+模板自己表示“关闭”的 `no_think` 不被 API 接受，请传 `none`。
+:::
+
+:::tip[一套代码打所有思考模型，就用 `medium`]
+这是上表所有模型都接受的唯一取值——`low` 在 Hy4-flash 上是 400。最高档的名字不通用——Qwen3.8-27B 用 `xhigh`，
 GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模型选值时，读
 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 确认当前发布的是哪几个模型，再对照上表。
 :::
@@ -162,6 +181,7 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 | MiniCPM-V-4.7-1B | 不思考 | 未验证 |
 | MiniCPM-V-4.7-35B-A3B | 不思考 | 未验证 |
 | Gemma-4-31B-IT | 不思考 | 未验证 |
+| Hy4-flash | **照样思考** | ✅ |
 
 Qwen3.8-27B 的用量字段是在它更早的 vLLM 部署上测得的。
 
@@ -194,8 +214,9 @@ Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
 | MiniCPM-V-4.7-1B | 一条，放在首位；其他位置未验证 | `system` |
 | MiniCPM-V-4.7-35B-A3B | 一条，放在首位；其他位置未验证 | `system` |
 | Gemma-4-31B-IT | 一条，放在首位；其他位置未验证 | `system` |
+| Hy4-flash | 位置任意，可多条 | `system` 或 `developer` |
 
-三个 DeepSeek 模型和 MiMo-V2.6-Flash 把 `developer` 当作 `system` 的别名接受。
+三个 DeepSeek 模型、MiMo-V2.6-Flash 和 Hy4-flash 把 `developer` 当作 `system` 的别名接受。
 Qwen3.8-27B 报 `Unexpected message role.`，GLM-5.3-Flash 和
 MiniCPM5-2B 报反序列化错误，并指出是第几条消息：
 
@@ -221,9 +242,14 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 `parallel_tool_calls` 参数各模型都接受，但一轮返回多个 `tool_calls` 属于模型自主行为，
 不要在设计上依赖它。
 
+:::caution[Hy4-flash 的 `tool_choice` 不能强制调用]
+`tool_choice: "required"` 和指定函数都被接受，但不会强制生效。问题本身用不到工具时，
+[Hy4-flash](/radeon-cloud-docs/zh-cn/models/hy4-flash/) 直接用文字作答，没有 `tool_calls`。
+:::
+
 ## 图片输入
 
-七个对话模型收图，`content` 数组里放 `image_url` 内容块即可：
+八个对话模型收图，`content` 数组里放 `image_url` 内容块即可：
 
 | 模型 | 图片用量报在哪里 |
 |---|---|
@@ -234,6 +260,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 | MiniCPM-V-4.7-1B | `usage.prompt_tokens_details.image_tokens` |
 | MiniCPM-V-4.7-35B-A3B | `usage.prompt_tokens_details.image_tokens` |
 | Gemma-4-31B-IT | 未验证 |
+| Hy4-flash | `usage.prompt_tokens_details.image_tokens`，示例值 72 |
 
 :::caution[Qwen3.8-27B 的图片计数多嵌了一层]
 在更早的部署上，Qwen3.8-27B 报的是 `prompt_tokens_details.multimodal_tokens.image`，
@@ -261,7 +288,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 所有对话模型都接受的写法：
 
 - 一条 `system` 消息，放在下标 `0`，角色名写 `system`
-- `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400；
+- `reasoning_effort` 用 `medium`，或者整个不传（**别用 `low`**，Hy4-flash 会 400；**别用 `high`**，Qwen3.8-27B 会 400；
   **也别用 `xhigh`**，GLM-5.3-Flash 会 422）
 - 思考文本从 `choices[0].message.reasoning` 读
 - 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 在更早的部署上不给，MiMo-V2.6-Flash 报 `0`）
