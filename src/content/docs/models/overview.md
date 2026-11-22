@@ -72,9 +72,8 @@ Five models are not in this table, and the parameters below do not apply to them
 ## Usage rates
 
 Token Factory meters usage in points (pts). Points aren't money and are separate from your
-credits; see [Usage and quota](/radeon-cloud-docs/api/usage/). The rates below were read from the
-model cards on 2026-10-19 and are in pts per million tokens unless noted. Rates can change, so check
-the model's card for the current values.
+credits; see [Usage and quota](/radeon-cloud-docs/api/usage/). Rates are in pts per million tokens
+unless noted. They can change, so check the model's card for the current values.
 
 | Model | Input | Output | Cache read |
 |---|---:|---:|---:|
@@ -82,7 +81,7 @@ the model's card for the current values.
 | DeepSeek-V4-Flash-Vision-Exp | 0.14 | 0.28 | 0.0028 |
 | DeepSeek-V4.1-Flash | 0.28 | 0.56 | 0.0056 |
 | Qwen3.8-27B | 0.035 | 0.07 | 0.0007 |
-| GLM-5.3-Flash | 0.28 | 0.56 | 0.0056 |
+| GLM-5.3-Flash | 0.14 | 0.28 | 0.0028 |
 | MiMo-V2.6-Flash | 0.14 | 0.28 | 0.0028 |
 | MiniCPM5-2B | 0.035 | 0.07 | 0.0007 |
 | MiniCPM-V-4.7-1B | 0.035 | 0.07 | 0.0007 |
