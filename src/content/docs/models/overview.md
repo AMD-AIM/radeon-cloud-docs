@@ -205,12 +205,12 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | DeepSeek-V4-Flash | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4-Flash-Vision-Exp *(retired)* | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4.1-Flash | any position, more than one allowed | `system` or `developer` |
-| Qwen3.8-27B | **at most one, and it must come first** | `system` |
+| Qwen3.8-27B | **optional; at most one, and first if present** | `system` |
 | GLM-5.3-Flash | any position, more than one allowed | `system` |
 | MiMo-V2.6-Flash | any position, more than one allowed | `system` or `developer` |
 | MiniCPM5-2B | any position, more than one allowed | `system` |
-| MiniCPM-V-4.7-1B | one, first; other placements not verified | `system` |
-| MiniCPM-V-4.7-35B-A3B | one, first; other placements not verified | `system` |
+| MiniCPM-V-4.7-1B | **optional; at most one, and first if present** | `system` |
+| MiniCPM-V-4.7-35B-A3B | **optional; at most one, and first if present** | `system` |
 | Gemma-4-31B-IT | one, first; other placements not verified | `system` |
 
 The three DeepSeek models and MiMo-V2.6-Flash accept `developer` as an alias for `system`.
@@ -224,8 +224,8 @@ Failed to deserialize the JSON body into the target type: messages[0]: unknown r
 The `developer` role has not been verified on the MiniCPM-V-4.7 models or Gemma-4-31B-IT. Newer
 OpenAI SDKs emit `developer` in place of `system`. If yours does, override it back.
 
-The constraints on Qwen3.8-27B come from the Jinja chat template shipped with its
-weights, not from a gateway rule. Qwen3.8-27B reports a violation as
+The constraints on Qwen3.8-27B and the two MiniCPM-V-4.7 models come from the Jinja chat templates
+shipped with their weights, not from a gateway rule. A violation returns
 `System message must be at the beginning.`
 
 **The shape every model accepts**: a single `system` message at index `0`, with the role spelled

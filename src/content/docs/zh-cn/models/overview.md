@@ -192,12 +192,12 @@ Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
 | DeepSeek-V4-Flash | 位置任意，可多条 | `system` 或 `developer` |
 | DeepSeek-V4-Flash-Vision-Exp（已下线） | 位置任意，可多条 | `system` 或 `developer` |
 | DeepSeek-V4.1-Flash | 位置任意，可多条 | `system` 或 `developer` |
-| Qwen3.8-27B | **最多一条，且必须在首位** | `system` |
+| Qwen3.8-27B | **可省略；如提供，最多一条且必须在首位** | `system` |
 | GLM-5.3-Flash | 位置任意，可多条 | `system` |
 | MiMo-V2.6-Flash | 位置任意，可多条 | `system` 或 `developer` |
 | MiniCPM5-2B | 位置任意，可多条 | `system` |
-| MiniCPM-V-4.7-1B | 一条，放在首位；其他位置未验证 | `system` |
-| MiniCPM-V-4.7-35B-A3B | 一条，放在首位；其他位置未验证 | `system` |
+| MiniCPM-V-4.7-1B | **可省略；如提供，最多一条且必须在首位** | `system` |
+| MiniCPM-V-4.7-35B-A3B | **可省略；如提供，最多一条且必须在首位** | `system` |
 | Gemma-4-31B-IT | 一条，放在首位；其他位置未验证 | `system` |
 
 三个 DeepSeek 模型和 MiMo-V2.6-Flash 把 `developer` 当作 `system` 的别名接受。
@@ -211,8 +211,8 @@ Failed to deserialize the JSON body into the target type: messages[0]: unknown r
 MiniCPM-V-4.7 两个模型和 Gemma-4-31B-IT 尚未验证 `developer` 角色。
 较新的 OpenAI SDK 会发 `developer` 代替 `system`，如果你用的是这种，请改回。
 
-Qwen3.8-27B 的限制来自它自带的 Jinja chat template，不是网关加的规则。
-Qwen3.8-27B 违规时报 `System message must be at the beginning.`
+Qwen3.8-27B 和 MiniCPM-V-4.7 两个模型的限制来自它们自带的 Jinja chat template，不是网关加的规则。
+违规时报 `System message must be at the beginning.`
 
 **所有模型都能接受的写法**：一条 `system` 消息、放在数组下标 `0`、角色名写 `system`。
 
