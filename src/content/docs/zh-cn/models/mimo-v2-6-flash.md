@@ -67,7 +67,6 @@ sidebar:
 `system` 消息可以出现在任意位置，也可以有多条。
 
 :::note[这里接受 `developer` 角色]
-与 [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) 不同（那个会在反序列化阶段直接拒掉），
 本端点接受 `role: "developer"` 并正常作答。不需要把较新 OpenAI SDK 的输出改回 `system`。
 :::
 

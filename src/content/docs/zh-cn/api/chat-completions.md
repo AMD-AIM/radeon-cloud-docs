@@ -92,7 +92,7 @@ MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 的这些 usage 字�
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
-| GLM-5.3-Flash | `low` `medium` `high` |
+| GLM-5.3-Flash | 任何取值都接受，只有 `low` 和 `high` 起作用 |
 | MiMo-V2.6-Flash | 任何取值都接受，但不起作用 |
 | MiniCPM5-2B | 不适用，直接给出答案 |
 | MiniCPM-V-4.7-1B | 未验证 |
@@ -112,9 +112,8 @@ MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 改用
 
 这三个模型如何处理 `reasoning_effort` 和 `developer` 角色尚未验证；Gemma-4-31B-IT 上的这个开关也还没有端到端测试过。
 
-要用同一套代码调用所有模型，**请用 `low` 或 `medium`**，表中已验证档位的模型只有这两个值都接受。
-最高档的名字不通用，而且两种写法互斥：Qwen3.8-27B 传 `high` 返回 400，
-GLM-5.3-Flash 传 `xhigh` 返回 422。
+要用同一套代码调用所有模型，**请用 `low`、`medium` 或 `xhigh`**，表中已验证档位的模型都接受这三个值。
+`high` 不通用：Qwen3.8-27B 传 `high` 返回 400。
 完整对照表见[模型总览](/radeon-cloud-docs/zh-cn/models/overview/)。
 :::
 

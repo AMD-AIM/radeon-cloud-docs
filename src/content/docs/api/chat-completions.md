@@ -101,7 +101,7 @@ and GLM-5.3-Flash think less.
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
-| GLM-5.3-Flash | `low` `medium` `high` |
+| GLM-5.3-Flash | Any value is accepted; only `low` and `high` change it |
 | MiMo-V2.6-Flash | Any value is accepted but has no effect |
 | MiniCPM5-2B | Not applicable; answers directly |
 | MiniCPM-V-4.7-1B | Not verified |
@@ -122,10 +122,9 @@ MiniCPM-V-4.7-1B, MiniCPM-V-4.7-35B-A3B and Gemma-4-31B-IT turn thinking on with
 How these three models treat `reasoning_effort` and the `developer` role has not been verified, and
 this toggle has not been tested end to end on Gemma-4-31B-IT.
 
-For one code path across all models, **stick to `low` and `medium`**. Those are the only two
-every model in the table with verified tiers accepts. The name of the top tier is not portable, and the two spellings are mutually
-exclusive: Qwen3.8-27B returns 400 for `high`, while GLM-5.3-Flash returns 422 for `xhigh`. The
-full matrix is in the [model reference](/radeon-cloud-docs/models/overview/).
+For one code path across all models, **stick to `low`, `medium` and `xhigh`**. Every model in the
+table with verified tiers accepts those three; `high` is not portable, because Qwen3.8-27B returns
+400 for it. The full matrix is in the [model reference](/radeon-cloud-docs/models/overview/).
 :::
 
 :::danger[Don't use `thinking`]

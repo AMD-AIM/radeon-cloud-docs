@@ -68,9 +68,8 @@ The weights were built for audio and video too, but this endpoint rejects audio 
 A `system` message may sit at any position, and there may be more than one.
 
 :::note[`developer` is accepted here]
-Unlike [GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/), which rejects it while
-deserialising the body, this endpoint accepts `role: "developer"` and answers normally. You do
-not need to rewrite newer OpenAI SDK output back to `system`.
+This endpoint accepts `role: "developer"` and answers normally. You do not need to rewrite newer
+OpenAI SDK output back to `system`.
 :::
 
 ### Thinking

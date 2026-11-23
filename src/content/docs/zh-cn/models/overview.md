@@ -50,7 +50,7 @@ sidebar:
 | [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
 | [DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
 | [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) | 262,144 | ✅ | ✅ |
-| [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
+| [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) | 262,144 | ✅ | ✅ |
 | [MiMo-V2.6-Flash](/radeon-cloud-docs/zh-cn/models/mimo-v2-6-flash/) | 1,048,576 | ✅ | ✅ |
 | [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) | 131,072 | ❌ | ❌ |
 | [MiniCPM-V-4.7-1B](/radeon-cloud-docs/zh-cn/models/minicpm-v4-7-1b/) | 262,144 | ✅ | ❌ |
@@ -106,10 +106,12 @@ Token Factory 的用量以 pts 计量。pts 不是钱，也和积分无关，见
 | DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
-| GLM-5.3-Flash | `low` `medium` `high` |
+| GLM-5.3-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | MiMo-V2.6-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 
 这个参数可以整个不传。MiniCPM5-2B 不返回分离的思考内容，`reasoning_effort` 对它不适用。
+
+GLM-5.3-Flash 接受所有取值，但只有 `low` 和 `high` 起作用；其他取值的思考量和不传一样。
 
 MiMo-V2.6-Flash 接受所有取值，但不会按取值调整：2026-10-19 的测试中，包括 `none` 在内的每个取值，返回的都是同样简短的 `reasoning`。它的思考无法关闭。
 
@@ -127,23 +129,9 @@ Unexpected reasoning effort high. Supported types are xhigh (default), medium, a
 那个模型的顶层档位叫 `xhigh`，`minimal` 和 `max` 同样被它拒绝。
 :::
 
-:::caution[`xhigh` 在 GLM-5.3-Flash 上是 422]
-[GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) 和 Qwen3.8-27B 恰好相反，
-只收 OpenAI 那三个值：
-
-```
-reasoning_effort: unknown variant `xhigh`, expected one of `low`, `medium`, `high`
-```
-
-所以「多想一会儿」的两个写法在本平台是互斥的：`xhigh` 在 GLM-5.3-Flash 上失败，
-`high` 在 Qwen3.8-27B 上失败。**没有任何一个值能同时命中两边的最高档。**
-注意状态码也不同——GLM-5.3-Flash 返回 **422**（值在反序列化阶段就被拒），
-Qwen3.8-27B 返回的是校验器报的 **400**。
-:::
-
-:::tip[一套代码打所有思考模型，就用 `low` 或 `medium`]
-这两个值是上表所有模型的交集。最高档的名字不通用——Qwen3.8-27B 用 `xhigh`，
-GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼此不能互换。要按模型选值时，读
+:::tip[一套代码打所有思考模型，就用 `low`、`medium` 或 `xhigh`]
+这三个值上表所有模型都收，`high` 不是。同一个名字在不同模型上的思考量仍可能不同——
+在 GLM-5.3-Flash 上，`medium` 和 `xhigh` 的思考量都和不传一样。要按模型选值时，读
 [`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 确认当前发布的是哪几个模型，再对照上表。
 :::
 
@@ -155,7 +143,7 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 | DeepSeek-V4-Flash-Vision-Exp | 不思考 | ✅ |
 | DeepSeek-V4.1-Flash | 不思考 | ✅ |
 | Qwen3.8-27B | **照样思考** | ❌ |
-| GLM-5.3-Flash | **照样思考** | ❌ |
+| GLM-5.3-Flash | **照样思考** | ✅ |
 | MiMo-V2.6-Flash | **照样思考** | ❌ |
 | MiniCPM5-2B | 不思考 | ❌ |
 | MiniCPM-V-4.7-1B | 不思考 | 未验证 |
@@ -195,8 +183,8 @@ Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
 | Gemma-4-31B-IT | 一条，放在首位；其他位置未验证 | `system` |
 
 三个 DeepSeek 模型和 MiMo-V2.6-Flash 把 `developer` 当作 `system` 的别名接受。
-Qwen3.8-27B 报 `Unexpected message role.`，GLM-5.3-Flash 和
-MiniCPM5-2B 报反序列化错误，并指出是第几条消息：
+GLM-5.3-Flash 收 `developer` 消息不报错，但不会遵循它。
+Qwen3.8-27B 报 `Unexpected message role.`，MiniCPM5-2B 报反序列化错误，并指出是第几条消息：
 
 ```
 Failed to deserialize the JSON body into the target type: messages[0]: unknown role: developer
@@ -222,13 +210,14 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 ## 图片输入
 
-七个对话模型收图，`content` 数组里放 `image_url` 内容块即可：
+以下对话模型收图，`content` 数组里放 `image_url` 内容块即可：
 
 | 模型 | 图片用量报在哪里 |
 |---|---|
 | DeepSeek-V4-Flash-Vision-Exp | `usage.prompt_tokens_details.image_tokens`，示例值 115 |
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`，示例值 202 |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`，示例值 72，测于更早的部署 |
+| GLM-5.3-Flash | `usage.prompt_tokens_details.image_tokens` |
 | MiMo-V2.6-Flash | `usage.prompt_tokens_details.image_tokens` |
 | MiniCPM-V-4.7-1B | `usage.prompt_tokens_details.image_tokens` |
 | MiniCPM-V-4.7-35B-A3B | `usage.prompt_tokens_details.image_tokens` |
@@ -260,8 +249,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 所有对话模型都接受的写法：
 
 - 一条 `system` 消息，放在下标 `0`，角色名写 `system`
-- `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400；
-  **也别用 `xhigh`**，GLM-5.3-Flash 会 422）
+- `reasoning_effort` 用 `low` 或 `medium`，或者整个不传（**别用 `high`**，Qwen3.8-27B 会 400）
 - 思考文本从 `choices[0].message.reasoning` 读
 - 思考 token 数从 `usage.completion_tokens_details.reasoning_tokens` 读（Qwen3.8-27B 在更早的部署上不给，MiMo-V2.6-Flash 报 `0`）
 - 要 JSON 用 `response_format: {"type": "json_object"}`
