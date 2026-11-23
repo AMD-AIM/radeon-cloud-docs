@@ -72,7 +72,7 @@ MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 的这些 usage 字�
 | 模型 | 不传时 |
 |---|---|
 | DeepSeek-V4-Flash | 不思考（`reasoning` 为空，`reasoning_tokens` 为 0） |
-| DeepSeek-V4-Flash-Vision-Exp | 不思考 |
+| DeepSeek-V4-Flash-Vision-Exp（已下线） | 不思考 |
 | DeepSeek-V4.1-Flash | 不思考 |
 | Qwen3.8-27B | **照样思考**，默认档位是 `xhigh` |
 | GLM-5.3-Flash | **照样思考** |
@@ -89,7 +89,7 @@ MiniCPM-V-4.7-1B、MiniCPM-V-4.7-35B-A3B 和 Gemma-4-31B-IT 的这些 usage 字�
 | 模型 | 支持的取值 |
 |---|---|
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
-| DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| DeepSeek-V4-Flash-Vision-Exp（已下线） | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |

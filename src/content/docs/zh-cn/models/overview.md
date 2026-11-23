@@ -26,6 +26,12 @@ sidebar:
 同体量级由 [MiniCPM5-2B](/radeon-cloud-docs/zh-cn/models/minicpm5-2b/) 提供。
 :::
 
+:::caution[DeepSeek-V4-Flash-Vision-Exp 已于 2026-10-25 下线]
+该模型已停止提供。它的[说明页](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/)和下面各表里的对应行保留备查，
+并标注「（已下线）」。要发图片请改用
+[DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/)，或「图片输入」表里的其他模型。
+:::
+
 ## 模型 ID 与卡片标题
 
 `model` 字段要填模型 ID，一字不差。可以从 Token Factory 模型卡片上的 **Model** 一栏复制，
@@ -47,7 +53,7 @@ sidebar:
 | 模型 | 上下文 | 图像输入 | 默认思考 |
 |---|---|:---:|:---:|
 | [DeepSeek-V4-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
-| [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
+| [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/)（已下线） | 1,048,576 | ✅ | ❌ |
 | [DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
 | [Qwen3.8-27B](/radeon-cloud-docs/zh-cn/models/qwen3-8-27b/) | 262,144 | ✅ | ✅ |
 | [GLM-5.3-Flash](/radeon-cloud-docs/zh-cn/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
@@ -75,7 +81,7 @@ Token Factory 的用量以 pts 计量。pts 不是钱，也和积分无关，见
 | 模型 | 输入 | 输出 | 缓存命中 |
 |---|---:|---:|---:|
 | DeepSeek-V4-Flash | 0.14 | 0.28 | 0.0028 |
-| DeepSeek-V4-Flash-Vision-Exp | 0.14 | 0.28 | 0.0028 |
+| DeepSeek-V4-Flash-Vision-Exp（已下线） | 0.14 | 0.28 | 0.0028 |
 | DeepSeek-V4.1-Flash | 0.28 | 0.56 | 0.0056 |
 | Qwen3.8-27B | 0.035 | 0.07 | 0.0007 |
 | GLM-5.3-Flash | 0.14 | 0.28 | 0.0028 |
@@ -103,7 +109,7 @@ Token Factory 的用量以 pts 计量。pts 不是钱，也和积分无关，见
 | 模型 | 支持的取值 |
 |---|---|
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
-| DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| DeepSeek-V4-Flash-Vision-Exp（已下线） | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
@@ -152,7 +158,7 @@ GLM-5.3-Flash 用 `high`，DeepSeek 系列 `xhigh`、`max`、`high` 都收，彼
 | 模型 | 请求里不带思考参数时 | 顶层 `reasoning_tokens` |
 |---|:---:|:---:|
 | DeepSeek-V4-Flash | 不思考 | ✅ |
-| DeepSeek-V4-Flash-Vision-Exp | 不思考 | ✅ |
+| DeepSeek-V4-Flash-Vision-Exp（已下线） | 不思考 | ✅ |
 | DeepSeek-V4.1-Flash | 不思考 | ✅ |
 | Qwen3.8-27B | **照样思考** | ❌ |
 | GLM-5.3-Flash | **照样思考** | ❌ |
@@ -184,7 +190,7 @@ Qwen3.8-27B 上，不带 `reasoning_effort` 的请求照样思考，
 | 模型 | `system` 消息 | 角色名 |
 |---|---|---|
 | DeepSeek-V4-Flash | 位置任意，可多条 | `system` 或 `developer` |
-| DeepSeek-V4-Flash-Vision-Exp | 位置任意，可多条 | `system` 或 `developer` |
+| DeepSeek-V4-Flash-Vision-Exp（已下线） | 位置任意，可多条 | `system` 或 `developer` |
 | DeepSeek-V4.1-Flash | 位置任意，可多条 | `system` 或 `developer` |
 | Qwen3.8-27B | **最多一条，且必须在首位** | `system` |
 | GLM-5.3-Flash | 位置任意，可多条 | `system` |
@@ -222,11 +228,11 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 ## 图片输入
 
-七个对话模型收图，`content` 数组里放 `image_url` 内容块即可：
+以下对话模型收图，`content` 数组里放 `image_url` 内容块即可：
 
 | 模型 | 图片用量报在哪里 |
 |---|---|
-| DeepSeek-V4-Flash-Vision-Exp | `usage.prompt_tokens_details.image_tokens`，示例值 115 |
+| DeepSeek-V4-Flash-Vision-Exp（已下线） | `usage.prompt_tokens_details.image_tokens`，示例值 115 |
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`，示例值 202 |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`，示例值 72，测于更早的部署 |
 | MiMo-V2.6-Flash | `usage.prompt_tokens_details.image_tokens` |
@@ -241,7 +247,7 @@ Qwen3.8-27B 违规时报 `System message must be at the beginning.`
 
 ```json
 {
-  "model": "DeepSeek-V4-Flash-Vision-Exp",
+  "model": "DeepSeek-V4.1-Flash",
   "messages": [{
     "role": "user",
     "content": [

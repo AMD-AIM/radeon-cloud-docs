@@ -27,6 +27,13 @@ cover [MiniCPM-V-4.7-1B](/radeon-cloud-docs/models/minicpm-v4-7-1b/) and
 [MiniCPM5-2B](/radeon-cloud-docs/models/minicpm5-2b/) serves the same size class.
 :::
 
+:::caution[DeepSeek-V4-Flash-Vision-Exp was retired on 2026-10-25]
+It is no longer served. Its [page](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) and its
+rows in the tables below are kept for reference and marked *(retired)*. For image input use
+[DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) or another model in
+[Image input](#image-input).
+:::
+
 ## Model ID and card title
 
 Send the model ID in `model`, exactly as written. Copy it from the **Model** field on the model's
@@ -49,7 +56,7 @@ For every other model, the ID, the card title and `name` are the same.
 | Model | Context | Image input | Thinks by default |
 |---|---|:---:|:---:|
 | [DeepSeek-V4-Flash](/radeon-cloud-docs/models/deepseek-v4-flash/) | 1,048,576 | ❌ | ❌ |
-| [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) | 1,048,576 | ✅ | ❌ |
+| [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) *(retired)* | 1,048,576 | ✅ | ❌ |
 | [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) | 1,048,576 | ✅ | ❌ |
 | [Qwen3.8-27B](/radeon-cloud-docs/models/qwen3-8-27b/) | 262,144 | ✅ | ✅ |
 | [GLM-5.3-Flash](/radeon-cloud-docs/models/glm-5-3-flash/) | 262,144 | ❌ | ✅ |
@@ -78,7 +85,7 @@ unless noted. They can change, so check the model's card for the current values.
 | Model | Input | Output | Cache read |
 |---|---:|---:|---:|
 | DeepSeek-V4-Flash | 0.14 | 0.28 | 0.0028 |
-| DeepSeek-V4-Flash-Vision-Exp | 0.14 | 0.28 | 0.0028 |
+| DeepSeek-V4-Flash-Vision-Exp *(retired)* | 0.14 | 0.28 | 0.0028 |
 | DeepSeek-V4.1-Flash | 0.28 | 0.56 | 0.0056 |
 | Qwen3.8-27B | 0.035 | 0.07 | 0.0007 |
 | GLM-5.3-Flash | 0.14 | 0.28 | 0.0028 |
@@ -107,7 +114,7 @@ The accepted tiers differ per model:
 | Model | Accepted values |
 |---|---|
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
-| DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| DeepSeek-V4-Flash-Vision-Exp *(retired)* | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
@@ -162,7 +169,7 @@ against the table above.
 | Model | Without a thinking parameter | Top-level `reasoning_tokens` |
 |---|:---:|:---:|
 | DeepSeek-V4-Flash | does not think | ✅ |
-| DeepSeek-V4-Flash-Vision-Exp | does not think | ✅ |
+| DeepSeek-V4-Flash-Vision-Exp *(retired)* | does not think | ✅ |
 | DeepSeek-V4.1-Flash | does not think | ✅ |
 | Qwen3.8-27B | **thinks anyway** | ❌ |
 | GLM-5.3-Flash | **thinks anyway** | ❌ |
@@ -196,7 +203,7 @@ a non-thinking model can come back with an empty `content`. Either raise `max_to
 | Model | `system` messages | Role name |
 |---|---|---|
 | DeepSeek-V4-Flash | any position, more than one allowed | `system` or `developer` |
-| DeepSeek-V4-Flash-Vision-Exp | any position, more than one allowed | `system` or `developer` |
+| DeepSeek-V4-Flash-Vision-Exp *(retired)* | any position, more than one allowed | `system` or `developer` |
 | DeepSeek-V4.1-Flash | any position, more than one allowed | `system` or `developer` |
 | Qwen3.8-27B | **at most one, and it must come first** | `system` |
 | GLM-5.3-Flash | any position, more than one allowed | `system` |
@@ -236,11 +243,11 @@ model's own choice — do not build on it.
 
 ## Image input
 
-Seven chat models take images; put an `image_url` content part in the `content` array:
+These chat models take images; put an `image_url` content part in the `content` array:
 
 | Model | Where image usage is reported |
 |---|---|
-| DeepSeek-V4-Flash-Vision-Exp | `usage.prompt_tokens_details.image_tokens`, 115 in the sample |
+| DeepSeek-V4-Flash-Vision-Exp *(retired)* | `usage.prompt_tokens_details.image_tokens`, 115 in the sample |
 | DeepSeek-V4.1-Flash | `usage.prompt_tokens_details.image_tokens`, 202 in the sample |
 | Qwen3.8-27B | `usage.prompt_tokens_details.multimodal_tokens.image`, 72 in the sample, on its earlier deployment |
 | MiMo-V2.6-Flash | `usage.prompt_tokens_details.image_tokens` |
@@ -256,7 +263,7 @@ should read both shapes.
 
 ```json
 {
-  "model": "DeepSeek-V4-Flash-Vision-Exp",
+  "model": "DeepSeek-V4.1-Flash",
   "messages": [{
     "role": "user",
     "content": [
