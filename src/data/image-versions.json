@@ -5,10 +5,9 @@
     "Base": {
       "digest": "sha256:f7e7f2063b99efabbfc5dc61138700735010e22f523380d4f9cfbc59fb5d9909",
       "versions": {
-        "ROCm": "7.2.1",
+        "ROCm": "7.2.4",
         "Python": "3.12",
-        "PyTorch": "2.9.1",
-        "vLLM": "0.16.1"
+        "PyTorch": "2.10.0"
       }
     },
     "PyTorch · Stable": {

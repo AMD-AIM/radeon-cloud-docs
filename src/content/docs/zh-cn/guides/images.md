@@ -12,7 +12,7 @@ description: 该从哪个镜像开始、列表里每个镜像是做什么的、�
 <!-- image-versions:start -->
 | 镜像 | 主要版本（当前构建） | 表单里的说明 | 适合做什么 |
 |---|---|---|---|
-| **Base** | ROCm 7.2.1 · Python 3.12 · PyTorch 2.9.1 · vLLM 0.16.1 | General-purpose ROCm environment with Python and JupyterLab. | 通用 ROCm 环境，日常开发、熟悉 GPU。 |
+| **Base** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 | General-purpose ROCm environment with Python and JupyterLab. | 通用开发：PyTorch、Hugging Face 常用库和 JupyterLab。需要 vLLM 请用 vLLM · Stable。 |
 | **PyTorch · Stable** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 | PyTorch on ROCm, stable release, for training and running models. | 大多数 PyTorch 代码：训练、微调、运行模型。 |
 | **PyTorch · Latest** | ROCm 10.1.0 · Python 3.12 · PyTorch 2.14.0 | PyTorch on ROCm, newest release, for trying the latest features. | 需要比稳定版更新的 PyTorch 或 ROCm 时使用。 |
 | **vLLM · Stable** | ROCm 7.2.3 · Python 3.12 · PyTorch 2.13.0 · vLLM 0.33.0 | vLLM for serving LLMs behind an OpenAI-compatible API. | 自己用 `vllm serve` 部署模型。 |
@@ -22,6 +22,8 @@ description: 该从哪个镜像开始、列表里每个镜像是做什么的、�
 | **llama.cpp** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 · llama.cpp b9766 · Unsloth 2026.6.9 | llama.cpp for running GGUF models, with Unsloth included. | 运行 GGUF 格式的模型。 |
 | **ComfyUI** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 · ComfyUI 0.45.0 | ComfyUI for node-based image and video generation. | 图像和视频生成工作流。 |
 <!-- image-versions:end -->
+
+**Base 于 2026 年 11 月更新。** 不再包含 vLLM：部署模型请选 **vLLM · Stable** 或 **vLLM · Latest**。现在预装 PyTorch 2.10 以及 transformers、datasets、accelerate、scikit-learn。Hugging Face 命令改为 `hf`（例如 `hf download Qwen/Qwen3-0.6B`），原来的 `huggingface-cli` 已没有。更新前启动的实例仍使用原来的镜像。
 
 稳定镜像会原地更新：名称不变，新启动的实例拿到的是更新后的版本。表格里和下拉框下方说明里的主要版本是当前构建的版本，每次发布都会更新。版本取自 Global 的构建，中国站可能短时间内落后一个版本。想看镜像里的全部内容，请在实例里确认（方法见下文）。
 
