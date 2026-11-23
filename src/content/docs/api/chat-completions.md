@@ -80,7 +80,7 @@ emitted by some models, so do not rely on it.
 | Model | When omitted |
 |---|---|
 | DeepSeek-V4-Flash | Does not think (`reasoning` empty, `reasoning_tokens` 0) |
-| DeepSeek-V4-Flash-Vision-Exp | Does not think |
+| DeepSeek-V4-Flash-Vision-Exp *(retired)* | Does not think |
 | DeepSeek-V4.1-Flash | Does not think |
 | Qwen3.8-27B | **Still thinks**; the default tier is `xhigh` |
 | GLM-5.3-Flash | **Still thinks** |
@@ -98,7 +98,7 @@ and GLM-5.3-Flash think less.
 | Model | Accepted values |
 |---|---|
 | DeepSeek-V4-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
-| DeepSeek-V4-Flash-Vision-Exp | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
+| DeepSeek-V4-Flash-Vision-Exp *(retired)* | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | DeepSeek-V4.1-Flash | `none` `minimal` `low` `medium` `high` `xhigh` `max` |
 | Qwen3.8-27B | `low` `medium` `xhigh` |
 | GLM-5.3-Flash | `low` `medium` `high` |
