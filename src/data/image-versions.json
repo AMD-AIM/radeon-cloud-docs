@@ -3,7 +3,7 @@
   "updated": "2026-11-14",
   "images": {
     "Base": {
-      "digest": "sha256:f7e7f2063b99efabbfc5dc61138700735010e22f523380d4f9cfbc59fb5d9909",
+      "digest": "sha256:5485c054e010586ecc113827118bf335b95dc0a07d03eadb8f9fbac6c99c7dd9",
       "versions": {
         "ROCm": "7.2.4",
         "Python": "3.12",
