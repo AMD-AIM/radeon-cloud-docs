@@ -97,39 +97,39 @@ scp -P <port> results.tar.gz root@<host>:/workspace/
 
 - `OpenSSH installation failed`
 
-  下载或安装没有完成。常见原因是软件源速度慢或连不上，或者超过了 300 秒的限制。**怎么办：**过一会儿再试，或者[自己安装 SSH](#自己安装-ssh)。
+  下载或安装没有完成。常见原因是软件源速度慢或连不上，或者超过了 300 秒的限制。**怎么办**：过一会儿再试，或者[自己安装 SSH](#自己安装-ssh)。
 
 - `OpenSSH package source is unavailable`
 
-  连不上软件源。**怎么办：**同上。
+  连不上软件源。**怎么办**：同上。
 
 - `The image does not ship openssh-server. Install it inside the notebook, then start sshd.`
 
-  镜像里没有 SSH 服务端，也没有自动安装。**怎么办：**[自己安装 SSH](#自己安装-ssh)。
+  镜像里没有 SSH 服务端，也没有自动安装。**怎么办**：[自己安装 SSH](#自己安装-ssh)。
 
 - `Automatic OpenSSH installation supports Ubuntu, Debian, RHEL-family, Fedora, Amazon Linux, and Alpine images`
 
-  镜像的操作系统不在自动安装的支持范围内。**怎么办：**系统有对应软件包的话，[自己安装 SSH](#自己安装-ssh)，或者换一个镜像启动。
+  镜像的操作系统不在自动安装的支持范围内。**怎么办**：系统有对应软件包的话，[自己安装 SSH](#自己安装-ssh)，或者换一个镜像启动。
 
 - `Image does not provide the timeout command`
 
-  镜像里没有 `timeout` 命令，自动安装需要它。**怎么办：**[自己安装 SSH](#自己安装-ssh)。
+  镜像里没有 `timeout` 命令，自动安装需要它。**怎么办**：[自己安装 SSH](#自己安装-ssh)。
 
 - `Image root filesystem does not allow OpenSSH installation`
 
-  镜像的根文件系统是只读的。**怎么办：**换一个镜像启动。
+  镜像的根文件系统是只读的。**怎么办**：换一个镜像启动。
 
 - `SSH setup requires a root runtime`
 
-  镜像不是以 `root` 运行的。**怎么办：**换一个镜像启动。
+  镜像不是以 `root` 运行的。**怎么办**：换一个镜像启动。
 
 - `SSH public key is missing` 或 `SSH public key is invalid`
 
-  实例没有拿到可用的公钥。**怎么办：**检查 **设置 → SSH 密钥**，然后销毁实例并重新启动。
+  实例没有拿到可用的公钥。**怎么办**：检查 **设置 → SSH 密钥**，然后销毁实例并重新启动。
 
 - `SSH configuration failed`、`SSH host key generation failed`、`SSH server configuration is invalid` 或 `SSH server failed to start`
 
-  SSH 服务端已经装好，但配置或启动失败。**怎么办：**销毁实例后重新启动。如果再次出现，请[联系支持](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#仍然无法解决)。
+  SSH 服务端已经装好，但配置或启动失败。**怎么办**：销毁实例后重新启动。如果再次出现，请[联系支持](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#仍然无法解决)。
 
 如果看到的是上面没有列出的提示，说明配置因为平台没有列出的原因中止了。先看提示下面的小字，再重试或联系支持。
 
