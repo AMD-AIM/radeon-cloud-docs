@@ -6,6 +6,8 @@ sidebar:
   order: 2
 ---
 
+Prefer to watch first? The [walkthroughs](/radeon-cloud-docs/walkthroughs/) show each step in the real console, with the easy-to-miss points marked.
+
 This page covers two separate tasks: calling a model in Token Factory and launching a GPU instance. Neither depends on the other, so start with whichever you need.
 
 Token Factory is on the China site only. Instances are available on both sites; the examples use the China site's address.

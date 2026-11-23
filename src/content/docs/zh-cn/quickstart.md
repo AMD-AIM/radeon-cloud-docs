@@ -6,6 +6,8 @@ sidebar:
   order: 2
 ---
 
+想先看演示？[操作演示](/radeon-cloud-docs/zh-cn/walkthroughs/) 用真实控制台逐步演示，并标出容易遗漏的地方。
+
 本页包括两项互不依赖的操作：调用 Token Factory 里的模型和启动 GPU 实例，可以从任意一项开始。
 
 Token Factory 只在中国站提供。两个站点都可以启动实例，示例使用中国站的地址。

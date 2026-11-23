@@ -93,6 +93,20 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Walkthroughs',
+          translations: { 'zh-CN': '操作演示' },
+          items: [
+            { slug: 'walkthroughs' },
+            { slug: 'walkthroughs/sign-in' },
+            { slug: 'walkthroughs/credits' },
+            { slug: 'walkthroughs/launch' },
+            { slug: 'walkthroughs/jupyterlab' },
+            { slug: 'walkthroughs/ssh' },
+            { slug: 'walkthroughs/keep-your-work' },
+            { slug: 'walkthroughs/token-factory' },
+          ],
+        },
+        {
           label: 'GPU instances',
           translations: { 'zh-CN': 'GPU 实例' },
           items: [

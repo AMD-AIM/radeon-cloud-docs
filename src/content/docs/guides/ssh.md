@@ -3,7 +3,7 @@ title: Connect over SSH
 description: Add an SSH key in Settings, wait for SSH to come up, and connect from your own terminal.
 ---
 
-SSH lets you use the instance from your own terminal and editor. Every instance launched from the console has SSH. You only need to add your public key once.
+SSH lets you use the instance from your own terminal and editor. Add your public key in Settings **before** you launch: an instance launched without a key has no SSH, and adding a key later doesn't change that, so relaunch it. A saved key is used for every later launch.
 
 ## Add your public key
 
