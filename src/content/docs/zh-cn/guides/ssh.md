@@ -1,6 +1,6 @@
 ---
 title: 通过 SSH 连接
-description: 在设置里添加 SSH 密钥，等待 SSH 就绪，然后从自己的终端连接。
+description: 在设置里添加 SSH 密钥，等待 SSH 就绪，从自己的终端连接，以及 SSH 配置失败时自己动手安装。
 ---
 
 通过 SSH，你可以在自己的终端和编辑器里使用实例。请在启动实例**之前**到设置里添加公钥：没有公钥时启动的实例不会开启 SSH，之后再添加公钥也不会生效，需要重新启动实例。保存过的公钥会用于之后每次启动。
@@ -38,7 +38,7 @@ description: 在设置里添加 SSH 密钥，等待 SSH 就绪，然后从自己
 
 SSH 会比实例稍晚一点就绪：镜像里没有 SSH 服务端时，平台会在启动后自动安装并配置。配置期间，实例卡片显示 **正在配置 SSH — 请稍后再连接**，此时 JupyterLab 已经可以使用。
 
-SSH 就绪后，卡片上会显示 SSH 命令。
+SSH 就绪后，卡片上会显示 **SSH 已就绪** 和 SSH 命令。
 
 ## 连接
 
@@ -60,10 +60,6 @@ ssh root@<host> -p <port>
 ssh-keygen -R "[<host>]:<port>"
 ```
 
-### SSH 配置失败
-
-如果卡片显示 **SSH 配置失败**，说明这个实例无法通过 SSH 连接，但 JupyterLab 不受影响。可以继续用 JupyterLab，或者销毁实例后重新启动。
-
 ## 拷贝文件
 
 用 `scp` 或 `rsync`，主机、端口和用户与 SSH 命令相同，例如：
@@ -75,3 +71,48 @@ scp -P <port> results.tar.gz root@<host>:/workspace/
 ## 用 CLI 连接
 
 `rcc instance ssh` 不用复制命令就能直接连接，见[管理 GPU 实例](/radeon-cloud-docs/zh-cn/cli/instances/)。
+
+## SSH 配置失败
+
+镜像里没有 SSH 服务端时，平台会在实例启动后现装一个。网络慢时，下载可能超时，卡片就会显示 **SSH 配置失败**。JupyterLab 不受影响，SSH 命令仍然显示在卡片上。
+
+请看卡片上的提示，按下面的情况处理：
+
+| 提示的意思 | 怎么办 |
+|---|---|
+| 下载或安装失败、连不上软件源、镜像里没有 SSH 服务端 | [自己安装 SSH](#自己安装-ssh)；或者过一会儿重新启动实例；或者换一个自带 SSH 服务端的镜像（见下面的提示） |
+| 镜像的操作系统不支持、根文件系统只读、不是以 `root` 运行 | 这几种自己装也没用，换一个镜像启动 |
+| 配置失败，或 SSH 服务端启动失败 | 销毁实例后重新启动；如果再次出现，请[联系支持](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#仍然无法解决) |
+
+:::tip[自带 SSH 服务端的镜像]
+下面这些官方镜像已经自带，启动时不需要安装：Base、PyTorch · Stable、PyTorch · Latest、vLLM · Stable、vLLM · Latest、SGLang 和 ComfyUI。
+:::
+
+### 自己安装 SSH
+
+在 JupyterLab 里打开一个终端，以 `root` 运行下面的命令，`root` 是这些实例上的默认用户：
+
+```bash
+apt-get update
+apt-get install -y --no-install-recommends openssh-server
+mkdir -p /run/sshd /root/.ssh && chmod 700 /root/.ssh
+echo '<your public key>' >> /root/.ssh/authorized_keys
+chmod 600 /root/.ssh/authorized_keys
+ssh-keygen -A
+/usr/sbin/sshd -o PasswordAuthentication=no -o AllowTcpForwarding=no
+```
+
+把 `<your public key>` 换成 `.pub` 文件里的整行内容，就是你在 **设置** 里添加的那一行。RHEL 系和 Fedora 上，用 `dnf install -y openssh-server` 代替前两行；Alpine 上用 `apk add --no-cache openssh`。如果下载很慢，等一会儿再运行。
+
+然后按[连接](#连接)里的方法，用卡片上的 SSH 命令连接。
+
+:::note[和自动配置的区别]
+- 你启动的 SSH 服务端只在容器运行期间有效。实例重启后，需要重新执行这些步骤。
+- 卡片会一直显示 **SSH 配置失败**，因为它只反映平台自己的配置结果。直接复制卡片上的 SSH 命令来连接即可。
+:::
+
+## SSH 的限制
+
+- **不支持端口转发和隧道。** `ssh -L`、`ssh -R`、`ssh -D` 和跳板机都用不了。请直接在控制台打开 JupyterLab，不要通过 SSH 转发它的端口。
+- **依赖 SSH 隧道的工具无法连接，** 例如 VS Code、Cursor 和 JetBrains 的远程开发功能。普通终端会话、`scp`、`sftp`、`rsync` 以及 `rcc instance ssh` 可以正常使用。
+- **只能用密钥登录。** 不支持密码登录，登录用户是 `root`。
