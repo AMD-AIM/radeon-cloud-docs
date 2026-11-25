@@ -107,7 +107,7 @@ Context Intelligence*（[arXiv:2606.19348](https://arxiv.org/abs/2606.19348)）�
 | 上下文窗口 | 1,048,576 token，**按 prompt + 输出 的总和算** |
 | JSON 输出 | 只支持 `response_format: {"type": "json_object"}` |
 | 开启思考 | 只能用 `reasoning_effort`（或等价的 `reasoning.effort`）|
-| 输入 | 纯文本；要发图请用 [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/) |
+| 输入 | 纯文本；要发图请用 [DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/)（[DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/zh-cn/models/deepseek-v4-flash-vision-exp/) 已下线） |
 
 ### 示例
 

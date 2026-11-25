@@ -73,7 +73,7 @@ Check these in order:
 
 1. Does the instance card still say **Setting up SSH — do not connect yet**? Wait until it shows the SSH command.
 2. Are you using the command from the current instance card? The host and port can change when you launch again.
-3. Does the card say **SSH could not be set up**? SSH isn't available on this instance, but JupyterLab still works. Destroy the instance and launch again. If it happens again, email support.
+3. Does the card say **SSH could not be set up**? SSH isn't available on this instance, but JupyterLab still works. See [SSH could not be set up](/radeon-cloud-docs/guides/ssh/#ssh-could-not-be-set-up) for the reasons and for how to install SSH yourself, or destroy the instance and launch again. If it keeps happening, email support.
 
 ### Permission denied (publickey)
 

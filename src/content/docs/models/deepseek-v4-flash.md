@@ -119,7 +119,7 @@ in the array, with the role spelled `system`.
 | Context window | 1,048,576 tokens, counted as **prompt plus output** |
 | JSON output | `response_format: {"type": "json_object"}` |
 | Turning thinking on | `reasoning_effort` (or the equivalent `reasoning.effort`) |
-| Input | text only; for images use [DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) |
+| Input | text only; for images use [DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) ([DeepSeek-V4-Flash-Vision-Exp](/radeon-cloud-docs/models/deepseek-v4-flash-vision-exp/) is retired) |
 
 ### Example
 

@@ -1,8 +1,11 @@
 ---
 title: DeepSeek-V4-Flash-Vision-Exp
-description: DeepSeek-V4-Flash 的视觉实验版：多了一座视觉塔，其余行为与文本版一致。
+description: 已于 2026-10-25 下线。DeepSeek-V4-Flash 的视觉实验版：多了一座视觉塔，其余行为与文本版一致。
 sidebar:
   order: 3
+  badge:
+    text: 已下线
+    variant: caution
 ---
 
 <div class="rc-endpoint">
@@ -10,6 +13,14 @@ sidebar:
   <span class="rc-path">/v1/chat/completions</span>
   <span class="rc-auth">model: <code>DeepSeek-V4-Flash-Vision-Exp</code></span>
 </div>
+
+:::danger[已于 2026-10-25 下线]
+该模型已停止提供：[`GET /v1/models`](/radeon-cloud-docs/zh-cn/api/models/) 里已没有它，指定它的请求会被拒绝。
+要发图片请改用 [DeepSeek-V4.1-Flash](/radeon-cloud-docs/zh-cn/models/deepseek-v4-1-flash/)，
+或[模型目录](/radeon-cloud-docs/zh-cn/models/overview/)「图片输入」表里的其他模型。
+
+本页其余内容保留备查，描述的是下线前的情况。
+:::
 
 ## 模型简介
 

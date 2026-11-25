@@ -1,8 +1,11 @@
 ---
 title: DeepSeek-V4-Flash-Vision-Exp
-description: "The vision variant of DeepSeek-V4-Flash: one extra vision tower, otherwise the same behaviour as the text model."
+description: "Retired on 2026-10-25. The vision variant of DeepSeek-V4-Flash: one extra vision tower, otherwise the same behaviour as the text model."
 sidebar:
   order: 3
+  badge:
+    text: Retired
+    variant: caution
 ---
 
 <div class="rc-endpoint">
@@ -10,6 +13,16 @@ sidebar:
   <span class="rc-path">/v1/chat/completions</span>
   <span class="rc-auth">model: <code>DeepSeek-V4-Flash-Vision-Exp</code></span>
 </div>
+
+:::danger[Retired on 2026-10-25]
+This model is no longer served. It is not listed in [`GET /v1/models`](/radeon-cloud-docs/api/models/),
+and requests that name it are rejected. For image input use
+[DeepSeek-V4.1-Flash](/radeon-cloud-docs/models/deepseek-v4-1-flash/) or another model in the
+[Image input](/radeon-cloud-docs/models/overview/#image-input) table.
+
+The rest of this page is kept for reference and describes the model as it was served before it
+was retired.
+:::
 
 ## About the model
 
