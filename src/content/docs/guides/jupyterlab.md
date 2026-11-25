@@ -3,15 +3,15 @@ title: Work in JupyterLab
 description: Open JupyterLab on your instance, check the GPU, and work with files.
 ---
 
-Notebook instances run JupyterLab, a development environment in your browser with notebooks, terminals and a file browser.
+Instances launched with deploy type **Notebook** run JupyterLab. JupyterLab is a development environment in the browser, with notebooks, a terminal and a file browser.
 
 ## Open JupyterLab
 
-Click **Open notebook**, either in the launch dialog when it reads **Your instance is ready** or on the instance card on **Home**. JupyterLab opens in a new tab, in `/workspace`.
+When the instance is ready, **Open notebook** appears on the launch dialog and on the instance card on **Home**. Click it to enter JupyterLab. The default path is `/workspace`.
 
 Two buttons in the top-right corner come from Radeon Cloud: **Help**, and **Delete instance**, which destroys the instance. See [Destroy an instance](/radeon-cloud-docs/guides/destroy/#destroy-from-jupyterlab).
 
-The bar across the top shows the instance at a glance: **Workspace** use, **GPU**, **VRAM**, **RAM** and **CPU** load, **Runtime** and **Consumed Credits**.
+The bar across the top shows the instance at a glance: **Workspace** storage use, **GPU**, **VRAM**, **RAM** and **CPU** load, **Runtime** and **Consumed Credits**.
 
 ![JupyterLab on an instance, with the Radeon Cloud status bar and Delete instance at the top](../../../assets/guide/jupyterlab.png)
 
@@ -19,55 +19,74 @@ The bar across the top shows the instance at a glance: **Workspace** use, **GPU*
 
 Open a terminal (**File → New → Terminal**, or the **Terminal** tile in the Launcher) and run:
 
-```bash
-rocm-smi
+```shellsession frame="terminal" title="Terminal"
+$ rocm-smi
+=========================================== ROCm System Management Interface ===========================================
+===================================================== Concise Info =====================================================
+Device  Node  IDs              Temp    Power   Partitions          SCLK     MCLK     Fan     Perf  PwrCap  VRAM%  GPU%
+              (DID,     GUID)  (Edge)  (Avg)   (Mem, Compute, ID)
+========================================================================================================================
+0       2     0x7551,   52503  50.0°C  22.0W   N/A, N/A, 0         41Mhz    96Mhz    20.0%   auto  300.0W  0%     0%
+========================================================================================================================
+================================================= End of ROCm SMI Log ==================================================
 ```
 
-It lists the Radeon GPUs attached to the instance with their memory use and temperature. To check that PyTorch can use them:
+Each `Device` row is a GPU attached to the instance, with temperature, power, memory use (**VRAM%**) and compute use (**GPU%**). The output depends on the size; the example above is a 1-GPU instance.
 
-```bash
-python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
+Confirm that PyTorch can see those GPUs:
+
+```shellsession frame="terminal" title="Terminal"
+$ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
+True 1
 ```
 
-ROCm builds of PyTorch keep the `torch.cuda` API names, so `True` here means ROCm is working.
+ROCm builds of PyTorch keep the `torch.cuda` API. `True` means ROCm is working; the number after it is how many GPUs are visible.
 
-To see how much GPU memory you have:
+Check GPU memory capacity:
 
-```bash
-rocm-smi --showmeminfo vram
+```shellsession frame="terminal" title="Terminal"
+$ rocm-smi --showmeminfo vram
+============================ ROCm System Management Interface ============================
+================================== Memory Usage (Bytes) ==================================
+GPU[0]          : VRAM Total Memory (B): 32061259776
+GPU[0]          : VRAM Total Used Memory (B): 62087168
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
 ```
 
-## CPU and memory limits
+**VRAM Total Memory** is the GPU memory capacity, in bytes.
 
-The size you launched sets the CPU and memory limits, for example 16 cores and 55 GB. Commands such as `nproc` show every core on the node, not your limit. When a tool asks for a thread or worker count, base it on the cores in your size, not on `nproc`.
+## CPU and memory
+
+CPU and memory available to the instance are set by the size chosen at launch. Commands such as `nproc` and `free` report the host node's resources, which are typically larger than that quota. Set thread counts, workers, and other parallelism from the size, not from those commands.
 
 ## Work with files
 
-- The file browser on the left shows the instance's files. Drag files onto it, or use the upload button, to bring in notebooks and data.
-- To download a file, right-click it and choose **Download**.
-- Save anything you want to keep under `/workspace`, and launch with persistent storage. See [Keep your data](/radeon-cloud-docs/guides/storage/).
+The file browser on the left is the instance file system. To upload, drag files onto the pane or use the upload control. To download, right-click the file and choose **Download**.
 
-## See which cells have run
+Data that must survive instance destruction belongs under `/workspace`, with persistent storage enabled at launch. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
-Code cells are marked by how their last run went:
+## Cell run status
 
-- ❗ and a yellow background while the cell is running
-- ✅ and green when it ran without errors
-- ❌ and red when it raised an error
+Code cells are marked by the result of their last run:
 
-The marks are shown only in your browser. They aren't saved in the notebook and disappear when you reload the page. They need JupyterLab 4, so images with an older JupyterLab don't show them.
+- Running: yellow background, ❗
+- Succeeded: green background, ✅
+- Failed: red background, ❌
 
-## Run long jobs
+The marks exist only in the current browser session. They are not stored in the notebook and disappear on reload. They require JupyterLab 4; images with an older JupyterLab do not show them.
 
-A job started in a notebook cell stops when its kernel stops. For long runs, start the job from a terminal and write its output to a file:
+## Long-running jobs
+
+A process started in a notebook cell ends when the kernel stops. Start long-running jobs from a terminal and redirect output to a file:
 
 ```bash
 nohup python train.py > /workspace/train.log 2>&1 &
 tail -f /workspace/train.log
 ```
 
-An instance can be deleted when your credits run out or when its **Auto-reclaim** time passes, so save checkpoints to a persistent `/workspace` as you go.
+The instance is destroyed when credits run out or when **Auto-delete** is reached. Write checkpoints under `/workspace` and launch with persistent storage. See [Keep your data](/radeon-cloud-docs/guides/storage/).
 
-## Reach a web app
+## Reach a service from the internet
 
-To make a web service running in the instance reachable from the internet, such as a Gradio app or an API you're building, see [Expose a service](/radeon-cloud-docs/guides/tunnel/).
+Web services inside the instance are not reachable from the public internet by default. To assign a public URL to a Gradio app or a local API, see [Expose a service](/radeon-cloud-docs/guides/tunnel/).
