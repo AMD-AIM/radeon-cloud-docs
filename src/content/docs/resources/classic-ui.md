@@ -5,10 +5,15 @@ description: Switch between the classic and new console, and where each classic 
 
 These docs describe the new console. If your console looks different, with a **Profile** page and **My Templates**, you are on the classic interface.
 
+On the China site, signing in often opens the classic interface first. A banner on **Home** and **Profile** says the new interface is available and this one will be retired soon. Click **Go to the new UI** / **前往新版**.
+
+![The classic-interface banner: bilingual notice and Go to the new UI](../../../assets/guide/classic-banner.png)
+
 ## Switch interfaces
 
-- From the classic interface, click **Switch to the new design**.
+- From the classic interface, click **Go to the new UI** on the banner, or **Switch to the new design**.
 - From the new interface, click **Classic** in the header, or open **Settings** and click **Use classic** under **Interface**.
+- On the new interface, replay **Product tour** from the account menu.
 
 The choice is remembered in your browser.
 

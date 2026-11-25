@@ -31,7 +31,10 @@ sidebar:
 扣。实例只要存在就会消耗积分，不管你是否在用。用完请及时[销毁](/radeon-cloud-docs/zh-cn/guides/destroy/)。
 
 **平台会自动停止我的实例吗？**
-只在积分用完，或者超过启动表单上显示的 **超时回收** 时长时才会。不要指望靠它们节省积分。
+只在积分用完，或者超过你在启动表单上选择的 **自动销毁** 时长时才会；表单显示 **不自动销毁** 时没有这个限制。运行中可以 **延长** 一次。不要指望靠它们节省积分。
+
+**规格旁边的「有空闲 / 余量紧张 / 已满」是什么意思？**
+启动表单上 **规格** 旁的状态，表示当前资源池里有没有空闲 GPU。**已满** 不会禁用 **启动实例**，但这次启动很可能失败。请稍后再试，或打开 **自定义** 换一个资源池。
 
 **Token Factory 用量和积分是一回事吗？**
 不是。Token Factory 有自己的每日用量上限，以 pts 计量。可以在 **积分与用量** 页面查看，也可以调用 [`GET /v1/usage`](/radeon-cloud-docs/zh-cn/api/usage/)。
@@ -76,7 +79,10 @@ Token Factory 只有在模型目录里有 embedding 模型时才提供。实例�
 不能。API Key 只能调用 Token Factory。JupyterLab 和控制台需要浏览器会话，脚本里管理实例请用 [Radeon Cloud CLI](/radeon-cloud-docs/zh-cn/cli/overview/)。
 
 **为什么启动不了实例？**
-通常是以下原因之一：资源池里没有空闲节点、积分不够、已经有一个实例，或者账号还在审核中。见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#启动)。
+通常是以下原因之一：资源池里没有空闲节点（规格旁可能已经显示 **已满**）、积分不够、已经有一个实例，或者账号还在审核中。见[疑难排查](/radeon-cloud-docs/zh-cn/resources/troubleshooting/#启动)。
+
+**登录后为什么看到的是 Profile 和 My Templates？**
+那是经典版界面。中国站常常一登录就是这个界面。点横幅上的 **前往新版**，见[经典版界面](/radeon-cloud-docs/zh-cn/resources/classic-ui/)。
 
 ## 运维
 
