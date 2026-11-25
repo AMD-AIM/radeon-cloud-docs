@@ -6,7 +6,7 @@ sidebar:
   order: 2
 ---
 
-The China site runs on [AMD AI Developer Program](https://developer.amd.com.cn/) accounts. You need one to sign in there, and its developer points are how you get GPU credits. The Global site has its own accounts and doesn't use this program. See [Sign in](/radeon-cloud-docs/guides/login/#global-site).
+The China site runs on [AMD AI Developer Program](https://developer.amd.com.cn/) accounts. You need one to sign in there, and its developer points are how you get GPU credits. The Global site does not use this China program. Its **Sign in** menu offers **Login with Email** and **Login with AMD Developer Program**; that AMD Developer Program is a different account. See [Sign in](/radeon-cloud-docs/guides/login/#global-site).
 
 The program is free, and you don't need any AMD hardware to join. Once you're signed in, the program home page shows your level and your points balance (开发者积分).
 
