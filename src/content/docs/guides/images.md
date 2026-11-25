@@ -12,7 +12,7 @@ The list has a small set of stable images that the platform maintains and keeps 
 <!-- image-versions:start -->
 | Image | Key versions (current build) | Description in the form | Use it for |
 |---|---|---|---|
-| **Base** | ROCm 7.2.1 · Python 3.12 · PyTorch 2.9.1 · vLLM 0.16.1 | General-purpose ROCm environment with Python and JupyterLab. | General development and exploring the GPU. |
+| **Base** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 | General-purpose ROCm environment with Python and JupyterLab. | General development with PyTorch, Hugging Face libraries and JupyterLab. For vLLM, use vLLM · Stable. |
 | **PyTorch · Stable** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 | PyTorch on ROCm, stable release, for training and running models. | Most PyTorch code: training, fine-tuning, running models. |
 | **PyTorch · Latest** | ROCm 10.1.0 · Python 3.12 · PyTorch 2.14.0 | PyTorch on ROCm, newest release, for trying the latest features. | Code that needs a newer PyTorch or ROCm than the stable image. |
 | **vLLM · Stable** | ROCm 7.2.3 · Python 3.12 · PyTorch 2.13.0 · vLLM 0.33.0 | vLLM for serving LLMs behind an OpenAI-compatible API. | Serving a model yourself with `vllm serve`. |
@@ -22,6 +22,8 @@ The list has a small set of stable images that the platform maintains and keeps 
 | **llama.cpp** | ROCm 7.2.4 · Python 3.12 · PyTorch 2.10.0 · llama.cpp b9766 · Unsloth 2026.6.9 | llama.cpp for running GGUF models, with Unsloth included. | Running GGUF models. |
 | **ComfyUI** | ROCm 7.14.1 · Python 3.12 · PyTorch 2.12.0 · ComfyUI 0.45.0 | ComfyUI for node-based image and video generation. | Image and video generation workflows. |
 <!-- image-versions:end -->
+
+**Base changed in November 2026.** It no longer includes vLLM: to serve a model, pick **vLLM · Stable** or **vLLM · Latest**. It now has PyTorch 2.10 with transformers, datasets, accelerate and scikit-learn preinstalled. The Hugging Face command is `hf` (for example `hf download Qwen/Qwen3-0.6B`); the old `huggingface-cli` is gone. Instances started before the change keep their image.
 
 Stable images are updated in place: the name stays the same and new instances get the newer build. The key versions in the table, and in the description under the field, are those of the current build and are updated with each release. They come from the Global build; China can be one release behind for a short time. To see everything an image contains, check inside your instance (see below).
 
@@ -73,7 +75,7 @@ Custom images built in the classic console's **Custom Images** page appear in th
 
 3. Check the startup log. A `[hk] vLLM routes on: ...` or `[hk] SGLang routes on: ...` line means hk-dsl is active. To turn it off, start the server with `HK_DISABLE=1`.
 
-Use hk-dsl 0.9.21 or newer with vLLM, and 0.9.22 or newer with SGLang; check with `pip show hk-dsl`. On images whose vLLM or SGLang version hk-dsl doesn't support, such as **Base**, it stays inactive, says so in one log line, and the server runs as usual.
+Use hk-dsl 0.9.21 or newer with vLLM, and 0.9.22 or newer with SGLang; check with `pip show hk-dsl`. On images whose vLLM or SGLang version hk-dsl doesn't support, it stays inactive, says so in one log line, and the server runs as usual.
 
 On the **SGLang** image, the first server start in a new instance may log an aiter build message and take about 13 seconds longer. This is unrelated to hk-dsl and harmless.
 
