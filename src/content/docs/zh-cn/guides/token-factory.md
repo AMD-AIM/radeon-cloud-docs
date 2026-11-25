@@ -68,6 +68,8 @@ Token Factory 免费，但有用量上限：
 
 超出限制时，请求返回 `429` 和 `Retry-After` 响应头。每次响应的响应头里都带有剩余额度，见[限流](/radeon-cloud-docs/zh-cn/api/rate-limits/)和[用量和配额](/radeon-cloud-docs/zh-cn/api/usage/)。控制台的 **积分与用量** 页面也能看到用量。
 
+请求体太大时会返回 `413`。图片和其他附件尽量缩小；部分模型还要求整个请求不超过 5 MB，见[错误](/radeon-cloud-docs/zh-cn/api/errors/)。如果收到的 `503` 不是 JSON，多半是入口暂时忙，稍后再试。
+
 如果经常超出限制，请改为[在自己的实例上部署模型服务](/radeon-cloud-docs/zh-cn/guides/serve-model/)。
 
 ## 使用条款

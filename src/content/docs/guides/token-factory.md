@@ -68,6 +68,8 @@ Token Factory is free, but usage is capped:
 
 When you hit a limit, the request returns `429` with a `Retry-After` header. Every response carries your remaining allowance in its headers. See [Rate limits](/radeon-cloud-docs/api/rate-limits/) and [Usage and quota](/radeon-cloud-docs/api/usage/). Your usage is also on **Credits & Usage** in the console.
 
+If a request is too large, the call fails with `413`. Keep images and other attachments small; several models also cap the body at 5 MB. See [Errors](/radeon-cloud-docs/api/errors/). A `503` that is not JSON usually means the shared front door is busy — wait and retry.
+
 If you keep hitting the limits, [serve the model on your own instance](/radeon-cloud-docs/guides/serve-model/) instead.
 
 ## Terms
