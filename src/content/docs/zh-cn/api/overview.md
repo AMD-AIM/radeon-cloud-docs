@@ -34,7 +34,7 @@ Token Factory 使用你的 `rc-` API Key，模型服务使用它卡片上的 `sk
 
 ## 约定
 
-请求和响应都是 JSON，`Content-Type: application/json`。时间戳使用 ISO 8601。出错时返回非 2xx 状态码和 JSON 响应体，见[错误](/radeon-cloud-docs/zh-cn/api/errors/)。
+请求和响应都是 JSON，`Content-Type: application/json`。时间戳使用 ISO 8601。出错时返回非 2xx 状态码。多数响应体是 JSON；入口返回的 `413` 或 `503` 有时是 HTML 或空的，见[错误](/radeon-cloud-docs/zh-cn/api/errors/)。
 
 ## Token Factory API
 

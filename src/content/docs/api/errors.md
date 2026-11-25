@@ -14,11 +14,14 @@ sidebar:
 | `403` | Authenticated, but not permitted. | The cause varies; see below. |
 | `404` | No such template or instance, or a Token Factory path that no model serves. | Confirm the identifier. A model name that isn't in the catalog is a `400`, not a `404`. |
 | `409` | A conflicting state, such as the previous instance still being deleted, or email verification being required first. | Follow the `code` in the body, or wait and retry. |
+| `413` | The request body is too large. | Shrink the body. Retrying the same payload will fail again. |
 | `429` | Rate limited. | Wait for `Retry-After`, then back off. See [Rate limits](/radeon-cloud-docs/api/rate-limits/). |
 | `502` | The upstream model gateway or serving backend is unreachable. | Transient. Retry with backoff. |
-| `503` | Capacity temporarily exhausted, or a feature is disabled. | Retry after the interval in `Retry-After`. |
+| `503` | Capacity temporarily exhausted, or a feature is disabled. | If the body is JSON, honour `Retry-After`. If it isn't JSON, wait and retry; don't parse HTML as the usual error. |
 
 ## Error bodies
+
+Most error bodies are JSON. A `413` or a `503` from the front door may be HTML or empty instead.
 
 Platform API errors use FastAPI's shape:
 
@@ -108,6 +111,10 @@ your server talking.
 **`502 Model gateway is unavailable`**: The gateway is down or unreachable. Retry with backoff; if it persists across several minutes, it's an outage rather than something on your side.
 
 **`503 Model gateway is busy`**: Too many requests in flight platform-wide. `Retry-After` is short, 5 seconds by default.
+
+**`413` / `request_too_large`**: The body is over the size the API will accept. Shrink images and other attachments; several Token Factory models also cap the whole body at about 5 MB. Don't retry the same payload.
+
+**A `503` that is not JSON**: The shared front door is busy, or returned HTML or an empty body. Wait and retry. Don't parse that response as the usual error object.
 
 ## Debugging checklist
 
