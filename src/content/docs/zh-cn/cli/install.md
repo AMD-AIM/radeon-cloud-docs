@@ -76,6 +76,15 @@ python3 -m pip install --upgrade amd-oneclick-sdk   # pip 安装的
 pipx upgrade amd-oneclick-sdk                       # pipx 安装的
 ```
 
+### 1.1.0
+
+当前 PyPI 上的版本是 `amd-oneclick-sdk` 1.1.0（2026-11-26 发布）。用上面的 `--upgrade` 或
+`pipx upgrade` 命令升级，然后执行 `rcc --version`。
+
+1.1.0 增加了 `--site global|china`、同一邮箱在两个站点各自独立的账号、中国站默认 API 模式
+`auto`，以及 404 和 401 的中英双语提示。v1 命令和 Global 默认站点都没有变化。Python 仍要求
+3.9 或更高版本。
+
 ## 卸载
 
 ```bash

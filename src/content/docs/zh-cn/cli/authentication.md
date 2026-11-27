@@ -8,12 +8,13 @@ sidebar:
 ## 登录
 
 ```bash
-rcc auth login
+rcc auth login                 # Global 站（默认）
+rcc auth login --site china    # 中国站
 ```
 
 CLI 会在浏览器里打开一个一次性的授权页面。登录 Radeon Cloud 后，核对页面上显示的设备名称，
 然后批准。设备名称默认是“主机名 + RCC CLI”，可以用 `--device-name` 改。CLI 不会读取浏览器 Cookie，
-也不需要你把网页上的任何东西复制到终端。
+也不需要你把网页上的任何东西复制到终端。中国站登录见[中国站](/radeon-cloud-docs/zh-cn/cli/china-site/)。
 
 ### 在没有浏览器的机器上登录
 

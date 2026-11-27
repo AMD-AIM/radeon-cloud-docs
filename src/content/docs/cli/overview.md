@@ -32,13 +32,15 @@ environments and Windows, see [Install and upgrade](/radeon-cloud-docs/cli/insta
 ### 2. Sign in
 
 ```bash
-rcc auth login
+rcc auth login                 # Global site (default)
+rcc auth login --site china    # China site
 rcc doctor
 ```
 
 `rcc auth login` opens your browser, where you approve this device. On a server or any machine
 without a browser, run `rcc auth login --no-browser` and open the printed link on another device.
 `rcc doctor` checks the installation, your sign-in and the connection to the service.
+See [China site](/radeon-cloud-docs/cli/china-site/) for `--site china`.
 
 ### 3. Check credits and available resources
 

@@ -8,13 +8,15 @@ sidebar:
 ## Sign in
 
 ```bash
-rcc auth login
+rcc auth login                 # Global site (default)
+rcc auth login --site china    # China site
 ```
 
 The CLI opens a one-time authorization page in your browser. Sign in to Radeon Cloud, check the
 device name shown on the page, and approve. The device name defaults to your host name followed by
 `RCC CLI`; set your own with `--device-name`. The CLI does not read browser cookies and never asks
-you to copy anything from the website into the terminal.
+you to copy anything from the website into the terminal. For the China site, see
+[China site](/radeon-cloud-docs/cli/china-site/).
 
 ### Signing in on a machine without a browser
 

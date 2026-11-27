@@ -77,6 +77,15 @@ python3 -m pip install --upgrade amd-oneclick-sdk   # installed with pip
 pipx upgrade amd-oneclick-sdk                       # installed with pipx
 ```
 
+### 1.1.0
+
+The current PyPI release is `amd-oneclick-sdk` 1.1.0 (published 2026-11-26). Upgrade with the
+`--upgrade` or `pipx upgrade` commands above, then run `rcc --version`.
+
+1.1.0 adds `--site global|china`, separate profiles for the same email, a China default API mode
+of `auto`, and bilingual 404 and 401 hints. v1 commands and the Global default are unchanged.
+Python 3.9 or newer is still required.
+
 ## Uninstall
 
 ```bash

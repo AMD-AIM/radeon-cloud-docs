@@ -140,6 +140,7 @@ export default defineConfig({
             { slug: 'cli/overview' },
             { slug: 'cli/install' },
             { slug: 'cli/authentication' },
+            { slug: 'cli/china-site' },
             { slug: 'cli/instances' },
             { slug: 'cli/automation' },
           ],
