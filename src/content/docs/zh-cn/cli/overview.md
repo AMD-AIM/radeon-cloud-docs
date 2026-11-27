@@ -31,14 +31,14 @@ rcc --version
 ### 2. 登录
 
 ```bash
-rcc auth login                 # Global 站（默认）
-rcc auth login --site china    # 中国站
+rcc auth login                  # 中国站（默认）
+rcc auth login --site global    # Global 站
 rcc doctor
 ```
 
 `rcc auth login` 会打开浏览器，你在网页上批准这台设备即可。服务器这类没有浏览器的机器，用
 `rcc auth login --no-browser`，再把打印出的链接拿到别的设备上打开。`rcc doctor` 检查安装、
-登录状态和服务连通性。中国站登录见[中国站](/radeon-cloud-docs/zh-cn/cli/china-site/)。
+登录状态和服务连通性。从 1.1.1 起，不写 `--site` 时登录中国站；Global 站用 `--site global`。见[中国站](/radeon-cloud-docs/zh-cn/cli/china-site/)。
 
 ### 3. 查看积分和可用资源
 

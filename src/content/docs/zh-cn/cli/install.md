@@ -85,6 +85,15 @@ pipx upgrade amd-oneclick-sdk                       # pipx 安装的
 `auto`，以及 404 和 401 的中英双语提示。v1 命令和 Global 默认站点都没有变化。Python 仍要求
 3.9 或更高版本。
 
+### 1.1.1
+
+1.1.1 把未指定站点时的默认站点改成中国站（`https://developer.amd.com.cn/radeon`）。不写
+`--site` 的 `rcc auth login` 使用中国站；Global 站是 `rcc auth login --site global`
+（`https://radeon-global.anruicloud.com`）。还没有已保存账号时，`rcc doctor` 会显示
+`site: china`。已保存账号会保留各自的站点；升级不会把已有的 Global 账号改到中国站。
+`RCC_DEFAULT_URL` 仍然会覆盖未指定站点时的默认地址。中国站 API 模式仍是 `auto`，Global
+站仍是 `v1`。
+
 ## 卸载
 
 ```bash

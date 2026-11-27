@@ -5,24 +5,26 @@ sidebar:
   label: 中国站
 ---
 
-同一个 `rcc` 命令、同一个 PyPI 包 `amd-oneclick-sdk`，可以连接 Radeon Cloud 的 Global 站和中国站。默认仍是 Global 站。
+同一个 `rcc` 命令、同一个 PyPI 包 `amd-oneclick-sdk`，可以连接 Radeon Cloud 的 Global 站和中国站。从 1.1.1 起，不写 `--site` 的 `rcc auth login` 使用中国站 `https://developer.amd.com.cn/radeon`。
 
 | 站点 | 服务地址 | 默认 API 模式 |
 | --- | --- | --- |
-| `global`（默认） | `https://radeon-global.anruicloud.com`，或 `RCC_DEFAULT_URL` | `v1` |
-| `china` | `https://developer.amd.com.cn/radeon` | `auto` |
+| `china`（默认） | `https://developer.amd.com.cn/radeon` | `auto` |
+| `global` | `https://radeon-global.anruicloud.com` | `v1` |
+
+`RCC_DEFAULT_URL` 仍然会覆盖未指定站点时的默认地址。
 
 ## 登录
 
 ```bash
-rcc auth login                 # Global 站
-rcc auth login --site china    # 中国站
-rcc account register --site china
+rcc auth login                  # 中国站
+rcc auth login --site global    # Global 站
+rcc account register --site global
 ```
 
-`--site` 不能和 `-u` / `--base-url` 一起用。不写 `--site` 时，登录留在 Global 站。
+`--site` 不能和 `-u` / `--base-url` 一起用。不写 `--site` 时，登录使用中国站。Global 站需要显式指定：`rcc auth login --site global` → `https://radeon-global.anruicloud.com`。
 
-还没有中国站账号时，`rcc doctor` 会显示 `site: global`。这一行是当前账号所在的站点，并不表示中国站不可用。
+还没有已保存账号时，`rcc doctor` 会显示 `site: china`。这是新的默认站点，并不表示 Global 站不可用。
 
 CLI 会打开一次性授权页面。在中国站开发者门户登录，核对设备名称，然后批准。
 
@@ -40,7 +42,7 @@ CLI 会打印一个一次性链接。在能够登录中国站开发者门户的�
 
 ## 已保存的账号
 
-登录之后，后面的命令使用已保存的账号，不必再写 `--site`。同一个邮箱在两个站点会各保存一个账号，互不覆盖。自动生成的中国站账号名会加上 `-china` 后缀，例如 `alice@example.com` 和 `alice@example.com-china`。用 `rcc account use` 或 `-A` 切换：
+登录之后，后面的命令使用已保存的账号，不必再写 `--site`。已保存账号会保留各自的站点；升级不会把已有的 Global 账号改到中国站。同一个邮箱在两个站点会各保存一个账号，互不覆盖。自动生成的中国站账号名会加上 `-china` 后缀，例如 `alice@example.com` 和 `alice@example.com-china`。用 `rcc account use` 或 `-A` 切换：
 
 ```bash
 rcc account list

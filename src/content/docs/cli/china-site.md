@@ -5,24 +5,26 @@ sidebar:
   label: China site
 ---
 
-The same `rcc` command, from the PyPI package `amd-oneclick-sdk`, reaches both Radeon Cloud sites. Global remains the default.
+The same `rcc` command, from the PyPI package `amd-oneclick-sdk`, reaches both Radeon Cloud sites. From 1.1.1, unnamed `rcc auth login` uses the China site `https://developer.amd.com.cn/radeon`.
 
 | Site | Service URL | Default API mode |
 | --- | --- | --- |
-| `global` (default) | `https://radeon-global.anruicloud.com`, or `RCC_DEFAULT_URL` | `v1` |
-| `china` | `https://developer.amd.com.cn/radeon` | `auto` |
+| `china` (default) | `https://developer.amd.com.cn/radeon` | `auto` |
+| `global` | `https://radeon-global.anruicloud.com` | `v1` |
+
+`RCC_DEFAULT_URL` still overrides the unnamed default.
 
 ## Sign in
 
 ```bash
-rcc auth login                 # Global site
-rcc auth login --site china    # China site
-rcc account register --site china
+rcc auth login                  # China site
+rcc auth login --site global    # Global site
+rcc account register --site global
 ```
 
-`--site` cannot be combined with `-u` / `--base-url`. Without `--site`, login stays on Global.
+`--site` cannot be combined with `-u` / `--base-url`. Without `--site`, login uses the China site. Global is explicit: `rcc auth login --site global` → `https://radeon-global.anruicloud.com`.
 
-`rcc doctor` with no China profile shows `site: global`. That line is the site of the profile in use. It does not mean the China site is down.
+`rcc doctor` with no saved account shows `site: china`. That is the new default, not a sign that Global is down.
 
 The CLI opens a one-time authorization page. Sign in on the China developer portal, check the device name, and approve.
 
@@ -40,7 +42,7 @@ If the authorization page body is `{"detail":"Site sign-in is temporarily unavai
 
 ## Profiles
 
-After you sign in, later commands use the saved profile. The same email on Global and China keeps two profiles. A derived China name gets a `-china` suffix, for example `alice@example.com` and `alice@example.com-china`. Switch with `rcc account use` or `-A`:
+After you sign in, later commands use the saved profile. Saved accounts keep their site. An upgrade does not move an existing Global profile to China. The same email on Global and China keeps two profiles. A derived China name gets a `-china` suffix, for example `alice@example.com` and `alice@example.com-china`. Switch with `rcc account use` or `-A`:
 
 ```bash
 rcc account list
