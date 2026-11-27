@@ -77,6 +77,24 @@ python3 -m pip install --upgrade amd-oneclick-sdk   # installed with pip
 pipx upgrade amd-oneclick-sdk                       # installed with pipx
 ```
 
+### 1.1.0
+
+The current PyPI release is `amd-oneclick-sdk` 1.1.0 (published 2026-11-26). Upgrade with the
+`--upgrade` or `pipx upgrade` commands above, then run `rcc --version`.
+
+1.1.0 adds `--site global|china`, separate profiles for the same email, a China default API mode
+of `auto`, and bilingual 404 and 401 hints. v1 commands and the Global default are unchanged.
+Python 3.9 or newer is still required.
+
+### 1.1.1
+
+1.1.1 changes the unnamed default site to China (`https://developer.amd.com.cn/radeon`).
+`rcc auth login` with no `--site` uses China; Global is `rcc auth login --site global`
+(`https://radeon-global.anruicloud.com`). `rcc doctor` with no saved account shows `site: china`.
+Saved accounts keep their site; an upgrade does not move an existing Global profile to China.
+`RCC_DEFAULT_URL` still overrides the unnamed default. China API mode remains `auto`; Global
+remains `v1`.
+
 ## Uninstall
 
 ```bash
