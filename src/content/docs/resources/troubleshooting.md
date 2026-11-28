@@ -105,7 +105,7 @@ Token Lab is on the China site only. Use `https://developer.amd.com.cn/radeon/ap
 
 ### 429
 
-You've hit a rate limit or the daily usage cap. `Retry-After` says how long to wait. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
+You've hit a rate limit or used up your usage budget. For a rate limit, `Retry-After` says how long to wait. `insufficient_quota` with no `Retry-After` means the budget for this access period is used up, and waiting won't help until the key is renewed. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
 
 If you hit `429` all the time, your workload is bigger than the Token Lab allowance. [Serve the model on your own instance](/radeon-cloud-docs/guides/serve-model/) instead of retrying more.
 

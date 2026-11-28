@@ -15,7 +15,7 @@ sidebar:
 
 | 限制 | 范围 | 典型值 |
 |---|---|---|
-| 每分钟请求数 | 每个 API Key | 30 |
+| 每分钟请求数 | 每个 API Key，只针对列出模型（`GET /v1/models` 等元数据接口） | 30 |
 | 每分钟请求数 | 每个 IP 地址 | 120，仅在部署的边缘节点能提供可信的客户端地址时生效 |
 | 并发请求数 | 每个 API Key | 8 |
 | 并发请求数 | 每个模型 | 取决于该模型后端能承受的并发 |
@@ -26,8 +26,10 @@ sidebar:
 
 | 限制 | 范围 | 典型值 |
 |---|---|---|
-| 每分钟请求数 | 每个账号 | 20，60 秒滑动窗口 |
-| 每日用量上限 | 每个账号 | 以 Token Factory 的 pts 计量，按北京时间的自然日累计，每天 00:00（UTC+8）重置 |
+| 每分钟请求数 | 每个账号 | 20，60 秒滑动窗口；新用户注册后前 14 天为 60 |
+| 每日用量上限 | 每个账号 | 1 pt，新用户注册后前 14 天为 5 pts；以 Token Factory 的 pts 计量，按北京时间的自然日累计，每天 00:00（UTC+8）重置 |
+
+聊天请求的每分钟次数只由网关计量这一层限制，平台准入的每个 API Key 30 次只针对列出模型。
 
 聊天、语音合成（`/v1/audio/speech`）和决策（`/v1/systemone`）请求共用同一个每分钟窗口和同一个每日用量上限。
 
@@ -59,7 +61,7 @@ sidebar:
 {
   "detail": {
     "error": {
-      "message": "Model API rate limit exceeded; please retry later",
+      "message": "Model API rate limit exceeded. Please retry in 60 seconds. 请 60 秒后重试。",
       "type": "rate_limit_error",
       "code": "token_rate_limit_exceeded"
     }
@@ -78,14 +80,14 @@ sidebar:
 | `process_concurrency_rate_limit_exceeded` | 服务进程已满载。 |
 | `global_concurrency_rate_limit_exceeded` | 整个平台已满载。 |
 
-每分钟限制返回 `Retry-After: 60`。并发限制返回 `Retry-After: 1`，你正在进行的请求一结束就会解除。
+每分钟限制返回 `Retry-After: 60`。并发限制返回较短的等待时间，并带随机抖动：这个 API Key 的并发已满时约 15–22 秒，模型、服务进程或整个平台满载时约 5–7 秒。等待时间也会写在 `message` 里。
 
 **网关计量** 在顶层返回 OpenAI 格式的错误，`code` 统一是 `rate_limit_exceeded`，`Retry-After` 按窗口计算：
 
 ```json
 {
   "error": {
-    "message": "Rate limit exceeded: maximum 20 requests per minute for this OneClick user. Please try again later.",
+    "message": "Rate limit exceeded: maximum 20 requests per minute for this OneClick user. Please retry in 12 seconds. 请 12 秒后重试。",
     "type": "rate_limit_error",
     "param": null,
     "code": "rate_limit_exceeded"
@@ -93,7 +95,7 @@ sidebar:
 }
 ```
 
-每日用量上限用完时，返回同样格式的错误，信息是 `Daily usage limit exceeded: maximum $N per period for this OneClick user.`，`Retry-After` 是本周期剩余的秒数。
+每日用量上限用完时，返回同样格式的错误，信息中英双语，例如 `Daily usage limit exceeded: at most 1 pt per day (Beijing time) for this key. It resets at 2026-11-28 16:00 UTC (2026-11-29 00:00 UTC+8). 已达额度上限：每天（北京时间）最多 1 积分。将于 2026-11-29 00:00（UTC+8）恢复。`，`Retry-After` 是距离北京时间 0 点的秒数。
 
 在 `/v1/messages` 上，网关使用 Anthropic 的格式：`{"type": "error", "error": {"type": "rate_limit_error", "message": "..."}}`。
 

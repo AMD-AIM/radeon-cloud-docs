@@ -28,10 +28,10 @@ curl "https://developer.amd.com.cn/radeon/api/v1/usage?include_recent=true" \
 
 ```json
 {
-  "rpm_limit": 30,
-  "daily_cost_limit_usd": 10,
-  "daily_cost_used_usd": 1.8412,
-  "daily_cost_remaining_usd": 8.1588,
+  "rpm_limit": 20,
+  "daily_cost_limit_usd": 1,
+  "daily_cost_used_usd": 0.1841,
+  "daily_cost_remaining_usd": 0.8159,
   "daily_reset_timezone": "Asia/Shanghai",
   "daily_reset_at": "2026-08-26T00:00:00+08:00",
   "today": {
@@ -40,13 +40,13 @@ curl "https://developer.amd.com.cn/radeon/api/v1/usage?include_recent=true" \
     "total_tokens": 88214,
     "prompt_tokens": 31002,
     "completion_tokens": 57212,
-    "cost": 1.8412,
+    "cost": 0.1841,
     "last_request_at": "2026-08-25T14:22:07+08:00"
   },
-  "last_30_days": { "requests": 2840, "total_tokens": 1904221, "cost": 39.77 },
+  "last_30_days": { "requests": 2840, "total_tokens": 1904221, "cost": 4.21 },
   "all_time":     { "requests": 9120, "total_tokens": 6210443, "cost": 128.44 },
   "by_model": [
-    { "model": "DeepSeek-V4-Flash", "requests": 120, "total_tokens": 74001, "cost": 1.55 }
+    { "model": "DeepSeek-V4-Flash", "requests": 120, "total_tokens": 74001, "cost": 0.155 }
   ],
   "recent": []
 }

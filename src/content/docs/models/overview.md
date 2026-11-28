@@ -78,8 +78,8 @@ Five models are not in this table, and the parameters below do not apply to them
 
 ## Usage rates
 
-Token Lab meters usage in points (pts). Points aren't money and are separate from your
-credits; see [Usage and quota](/radeon-cloud-docs/api/usage/). Rates are in pts per million tokens
+Token Lab meters usage in US dollars at the rates below, against your usage budget. Token Lab is free, so you aren't charged, and the budget is separate from your
+credits; see [Usage and quota](/radeon-cloud-docs/api/usage/). Rates are in USD per million tokens
 unless noted. They can change, so check the model's card for the current values.
 
 | Model | Input | Output | Cache read |

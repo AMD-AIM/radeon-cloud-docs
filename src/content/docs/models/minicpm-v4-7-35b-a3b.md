@@ -201,6 +201,6 @@ curl --fail-with-body https://developer.amd.com.cn/radeon/api/v1/chat/completion
 ```
 
 Read `choices[0].message.content` after checking `finish_reason`; token counts are in `usage`.
-Usage is metered in points (pts) per million tokens. The current rates are in the
+Usage is metered in US dollars per million tokens, against your usage budget. The current rates are in the
 [usage rates table](/radeon-cloud-docs/models/overview/#usage-rates) and on the model's card.
-Points aren't money and are separate from your credits.
+Token Lab is free, so you aren't charged, and the budget is separate from your credits.

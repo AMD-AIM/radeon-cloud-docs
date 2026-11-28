@@ -46,11 +46,11 @@ Credits belong to the site where you redeem them and can't be moved between the 
 
 ## Token Lab usage
 
-Token Lab doesn't spend credits. It has its own daily usage cap, counted in points (pts), which resets at 00:00 Beijing time (UTC+8).
+Token Lab doesn't spend credits. Each API key has its own usage budget, currently USD 30 of usage for each 30-day access period, which doesn't reset daily.
 
 **Credits & Usage** shows:
 
-- **Daily model cap**: how much of today's cap you have used, and when it resets.
+- **Usage budget**: how much of the current period's budget you have used, and when the period ends.
 - **By model**: requests and usage per model.
 - **Recent requests**: the last 24 hours, in your local time zone.
 

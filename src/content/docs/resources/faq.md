@@ -34,7 +34,7 @@ Yes. An instance spends credits for as long as it exists, whether or not you're 
 Only when your credits run out, or when the **Auto-reclaim** time shown on the launch form has passed. Don't rely on either to save credits.
 
 **Are Token Lab usage and credits the same thing?**
-No. Token Lab has its own daily usage cap, counted in points (pts). See it on **Credits & Usage**, or with [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).
+No. Each Token Lab key has its own usage budget, currently USD 30 for each 30-day access period. See it on **Credits & Usage**, or with [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).
 
 ## Storage
 

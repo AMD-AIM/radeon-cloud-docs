@@ -16,7 +16,7 @@ Each request goes through two checks, and it has to pass both. First the platfor
 
 | Limit | Scope | Typical value |
 |---|---|---|
-| Requests per minute | Per API key | 30 |
+| Requests per minute | Per API key, model listing only (`GET /v1/models` and other metadata endpoints) | 30 |
 | Requests per minute | Per IP address | 120, where the deployment's edge supplies a trusted client address |
 | Concurrent requests | Per API key | 8 |
 | Concurrent requests | Per model | Sized to what that model's backend fleet can serve |
@@ -28,10 +28,13 @@ Each request goes through two checks, and it has to pass both. First the platfor
 | Limit | Scope | Typical value |
 |---|---|---|
 | Requests per minute | Per account | 20, on a 60-second sliding window |
-| Daily usage cap | Per account | Counted in Token Lab points (pts) over the calendar day in Beijing time; resets at 00:00 UTC+8 |
+| Concurrent requests | Per API key | 4 |
+| Usage budget | Per API key | USD 30 for each 30-day access period. It doesn't reset daily: once it's used up, requests are refused until the key is renewed for a new period |
+
+For chat requests, the per-minute limit comes from gateway metering alone; the platform's 30 per key applies only to listing models. The gateway's 4 concurrent requests per key is lower than the platform's 8, so 4 is the number to plan for.
 
 Chat, speech (`/v1/audio/speech`) and decision (`/v1/systemone`) requests all count against the same
-per-minute window and the same daily usage cap.
+per-minute window and the same usage budget.
 
 :::tip[Your quota is on every response]
 Every successful call carries the current counters as headers, so you rarely need to poll
@@ -42,12 +45,12 @@ anything:
 | `X-RateLimit-Limit-User-RPM` | Requests per minute allowed for your account. |
 | `X-RateLimit-Remaining-User-RPM` | Requests left in the current minute. |
 | `X-RateLimit-Reset` | Unix time when the per-minute window clears. |
-| `X-RateLimit-Limit-User-Daily-USD` | Daily usage cap for the current period. |
-| `X-RateLimit-Used-User-Daily-USD` | Used so far in the period. |
-| `X-RateLimit-Remaining-User-Daily-USD` | What's left before requests start being rejected. |
-| `X-RateLimit-Reset-User-Daily-USD` | Unix time when the period rolls over. |
+| `X-RateLimit-Limit-User-Budget-USD` | Your usage budget for the current access period. |
+| `X-RateLimit-Used-User-Budget-USD` | Used so far in the period. |
+| `X-RateLimit-Remaining-User-Budget-USD` | What's left before requests start being rejected. |
+| `X-RateLimit-Reset-User-Budget-USD` | Unix time when the access period ends. |
 
-The `-USD` headers carry Token Lab points, the same numbers as on **Credits & Usage**. You aren't charged money.
+The budget is measured in US dollars of usage at each model's listed rates. Token Lab is free: you aren't charged money.
 :::
 
 Listing models doesn't consume a concurrency slot, though it does count toward the per-minute limits.
@@ -62,7 +65,7 @@ Platform admission returns an OpenAI-shaped error wrapped in `detail`:
 {
   "detail": {
     "error": {
-      "message": "Model API rate limit exceeded; please retry later",
+      "message": "Model API rate limit exceeded. Please retry in 60 seconds. 请 60 秒后重试。",
       "type": "rate_limit_error",
       "code": "token_rate_limit_exceeded"
     }
@@ -81,14 +84,14 @@ The `code` tells you which gate you hit:
 | `process_concurrency_rate_limit_exceeded` | The serving process is saturated. |
 | `global_concurrency_rate_limit_exceeded` | The platform is at capacity. |
 
-Per-minute limits return `Retry-After: 60`. Concurrency limits return `Retry-After: 1`, because they clear as soon as your in-flight requests finish.
+Per-minute limits return `Retry-After: 60`. Concurrency limits return a short wait with random jitter: about 15–22 seconds when your key's own requests fill its allowance, about 5–7 seconds when a model, a serving process or the platform is at capacity. The wait is also written into `message`.
 
 Gateway metering returns an OpenAI-shaped error at the top level, with the generic `rate_limit_exceeded` code rather than a per-gate one, and a `Retry-After` computed from the window:
 
 ```json
 {
   "error": {
-    "message": "Rate limit exceeded: maximum 20 requests per minute for this OneClick user. Please try again later.",
+    "message": "Rate limit exceeded: maximum 20 requests per minute for this OneClick user. Please retry in 12 seconds. 请 12 秒后重试。",
     "type": "rate_limit_error",
     "param": null,
     "code": "rate_limit_exceeded"
@@ -96,7 +99,20 @@ Gateway metering returns an OpenAI-shaped error at the top level, with the gener
 }
 ```
 
-Reaching the daily usage cap produces the same shape with `Daily usage limit exceeded: maximum $N per period for this OneClick user.`, and `Retry-After` set to the seconds remaining in the period.
+More than 4 requests in flight on one key produces the same shape with `Rate limit exceeded: at most 4 concurrent requests per key. Please retry in 1 second.` and `Retry-After: 1`.
+
+When the usage budget is used up, the type and code are `insufficient_quota` instead, and there is **no** `Retry-After`, because waiting doesn't help until the key is renewed:
+
+```json
+{
+  "error": {
+    "message": "Budget exhausted: this key has used its $30.000000 for the current period.",
+    "type": "insufficient_quota",
+    "param": null,
+    "code": "insufficient_quota"
+  }
+}
+```
 
 On `/v1/messages` the gateway uses Anthropic's envelope instead: `{"type": "error", "error": {"type": "rate_limit_error", "message": "..."}}`.
 
@@ -110,7 +126,7 @@ is nested under `detail`.
 
 None of the above applies. A model service on your instance has no gateway in front of it: the proxy checks
 that the key matches the instance, then forwards. There is no per-minute limit, no
-concurrency allowance and no daily usage cap on the request path.
+concurrency allowance and no usage budget on the request path.
 
 What bounds you instead is the instance itself: vLLM's own queue, settings such as
 `--max-num-seqs`, and the GPU you launched. Past that, requests queue rather than
@@ -131,7 +147,7 @@ Sign-in attempts and new account creation are rate limited per IP. Relevant only
 
 Honour `Retry-After` rather than picking your own interval, and add exponential backoff with jitter on top. Clients that all retry after exactly 60 seconds recreate the spike that caused the limit.
 
-Cap concurrency on your side to match the per-key allowance instead of firing requests and catching `429`s. A semaphore of 8 is simpler and faster than a retry loop.
+Cap concurrency on your side to match the per-key allowance instead of firing requests and catching `429`s. A semaphore of 4 is simpler and faster than a retry loop.
 
 Don't retry `4xx` other than `429`. A `400` or `401` will fail identically every time.
 

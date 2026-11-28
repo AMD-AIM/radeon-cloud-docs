@@ -16,7 +16,7 @@ Token Lab is on the China site only. The platform chooses the models and changes
 
 ![Token Lab with the Your API key card: Base URL and the hidden API key](../../../assets/guide/en/tokenfactory.png)
 
-The key starts with `rc-` and works for every model in Token Lab. Keep it secret: anyone who has it can spend your daily allowance. See [Authentication](/radeon-cloud-docs/api/authentication/) for rotating a key.
+The key starts with `rc-` and works for every model in Token Lab. Keep it secret: anyone who has it can spend your usage budget. See [Authentication](/radeon-cloud-docs/api/authentication/) for rotating a key.
 
 ## Pick a model
 
@@ -24,7 +24,7 @@ Token Lab lists its models. Filter them by **Use case**, **Provider** or **Publi
 
 Click a card to see the model's description, its pricing and how to call it. The value to send in the `model` field is shown there. The [Model catalog](/radeon-cloud-docs/models/overview/) describes what each model accepts.
 
-Prices are in points (pts) per million tokens, for example **0.14 pts / 1M tokens**. A model billed by input characters, such as OmniVoice, is priced per million characters instead, and its card says so. Points measure usage against your [daily cap](#limits). They aren't money, and they aren't credits.
+Prices are in US dollars per million tokens, for example **$0.14 / 1M tokens**. A model billed by input characters, such as OmniVoice, is priced per million characters instead, and its card says so. Prices measure usage against your [usage budget](#limits). Token Lab is free, so you aren't charged, and the budget isn't credits.
 
 ## Make a request
 
@@ -57,14 +57,14 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
   -H "Authorization: Bearer $RADEON_API_KEY"
 ```
 
-Token Lab also accepts the Anthropic Messages API, for clients such as Claude Code. See [Messages](/radeon-cloud-docs/api/messages/). Every operation is described in the [API reference](/radeon-cloud-docs/api/overview/#token-factory-api).
+Token Lab also accepts the Anthropic Messages API, for clients such as Claude Code. See [Messages](/radeon-cloud-docs/api/messages/). Every operation is described in the [API reference](/radeon-cloud-docs/api/overview/#token-lab-api).
 
 ## Limits
 
 Token Lab is free, but usage is capped:
 
-- Requests per minute and concurrent requests are limited per account and per key.
-- A daily usage cap, counted in points (pts), resets at 00:00 Beijing time (UTC+8).
+- Requests per minute are limited per account (20), and concurrent requests per key (4).
+- Each key has a usage budget, currently USD 30 for each 30-day access period. It doesn't reset daily: once it's used up, requests are refused until the key is renewed.
 
 When you hit a limit, the request returns `429` with a `Retry-After` header. Every response carries your remaining allowance in its headers. See [Rate limits](/radeon-cloud-docs/api/rate-limits/) and [Usage and quota](/radeon-cloud-docs/api/usage/). Your usage is also on **Credits & Usage** in the console.
 

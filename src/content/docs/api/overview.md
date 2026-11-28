@@ -45,13 +45,13 @@ Always on, nothing to launch, and no credits spent. AMD chooses which models are
 - [`GET /v1/models/utilization`](/radeon-cloud-docs/api/model-utilization/): how busy each model is right now (China only)
 - [`POST /v1/messages`](/radeon-cloud-docs/api/messages/): Anthropic-compatible, for clients such as Claude Code
 - [`POST /v1/messages/count_tokens`](/radeon-cloud-docs/api/messages/#counting-tokens): the token count those clients ask for first
-- [`GET /v1/usage`](/radeon-cloud-docs/api/usage/): your usage and remaining daily allowance
+- [`GET /v1/usage`](/radeon-cloud-docs/api/usage/): your usage and remaining usage budget
 
 Some models use other paths under `/v1`, such as `/v1/audio/speech` for speech or `/v1/ocr` for document parsing. Each model's page in the [model catalog](/radeon-cloud-docs/models/overview/) lists the paths it uses. A path that no model serves returns `404`.
 
 Every path works with and without the `/api` prefix: `/api/v1/models` and `/v1/models` are the same endpoint.
 
-Requests go through a gateway that checks them against a fixed set of fields, so a parameter outside that set is dropped rather than passed on. See [Chat completions](/radeon-cloud-docs/api/chat-completions/) for the list. Per-key rate limits, a concurrency allowance and a daily usage cap apply. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
+Requests go through a gateway that checks them against a fixed set of fields, so a parameter outside that set is dropped rather than passed on. See [Chat completions](/radeon-cloud-docs/api/chat-completions/) for the list. Per-account rate limits, a per-key concurrency allowance and a per-key usage budget apply. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
 
 ## Model service endpoints
 
