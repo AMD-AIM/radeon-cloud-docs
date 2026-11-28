@@ -94,7 +94,7 @@ Adding a page means creating both files and adding its slug to the `sidebar` arr
 | workspace storage: temporary / persistent `/workspace` | 工作区存储：临时工作区 / 持久化 `/workspace` | Don't say PVC |
 | credits | 积分 | Matches the Chinese UI |
 | developer points | 开发者积分 | AMD AI Developer Program only; never shorten to 积分 |
-| Token Lab, Token Lab API | Token Factory、Token Factory API | The hosted models and their API. English pages say Token Lab, Chinese pages say Token Factory; never mix them in one language. Not "shared model API" or "Public Free". URLs keep `token-factory` |
+| Token Lab, Token Lab API | Token Factory、Token Factory API | The hosted models and their API. The name follows the site: the China ADP site (developer.amd.com.cn) calls it Token Factory, Global ADP calls it Token Lab. Chinese pages serve the China site and English pages serve Global, so Chinese pages say Token Factory and English pages say Token Lab; never mix them in one language. Not "shared model API" or "Public Free". URLs keep `token-factory` |
 | model service (on an instance), model service endpoint | 模型服务（自部署模型服务）、模型服务接口 | vLLM on your own instance via **Deploy type: Model API**. Not part of Token Lab. Not "dedicated" / 专属 / 独占 |
 | API key | API Key | |
 | CLI token | CLI 令牌 | Starts with `rcc_` |
