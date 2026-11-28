@@ -1,15 +1,15 @@
 ---
 title: Messages (Anthropic)
-description: Call Token Factory models with an Anthropic-compatible client such as Claude Code.
+description: Call Token Lab models with an Anthropic-compatible client such as Claude Code.
 sidebar:
   order: 5
 ---
 
-**Token Factory** is also reachable through Anthropic's Messages API, so a client
+**Token Lab** is also reachable through Anthropic's Messages API, so a client
 built for Claude, such as Claude Code or the `anthropic` SDK, works once you change the base URL
 and the key.
 
-This surface belongs to the gateway in front of Token Factory. A
+This surface belongs to the gateway in front of Token Lab. A
 [model service](/radeon-cloud-docs/api/model-services/) on your instance is your own vLLM
 server, so whether `/v1/messages` works there depends on the vLLM version it runs.
 
@@ -30,7 +30,7 @@ name. `claude-3-5-sonnet-20241022` is not served here and will be rejected with 
 
 | Parameter | Type | | Description |
 |---|---|---|---|
-| `model` | string | <span class="rc-req">Required</span> | Model to run, from Token Factory. |
+| `model` | string | <span class="rc-req">Required</span> | Model to run, from Token Lab. |
 | `messages` | array | <span class="rc-req">Required</span> | Conversation so far, in Anthropic's block format. |
 | `max_tokens` | integer | <span class="rc-req">Required</span> | Cap on tokens generated. Anthropic requires this; so does the gateway. |
 | `system` | string or array | <span class="rc-opt">Optional</span> | System prompt, as a string or as an array of text blocks. |

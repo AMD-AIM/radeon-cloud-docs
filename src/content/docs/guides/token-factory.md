@@ -1,26 +1,26 @@
 ---
-title: Token Factory
+title: Token Lab
 description: Call the models hosted by Radeon Cloud through an OpenAI-compatible API, with nothing to launch.
 sidebar:
-  label: Use Token Factory
+  label: Use Token Lab
 ---
 
-Token Factory hosts a set of models on Radeon GPUs and serves them through an OpenAI-compatible API. There's nothing to launch and no credits to spend: copy your API key and send requests. Any OpenAI client, such as `curl`, the `openai` SDK, LangChain or Cherry Studio, works once you change the base URL and the key.
+Token Lab hosts a set of models on Radeon GPUs and serves them through an OpenAI-compatible API. There's nothing to launch and no credits to spend: copy your API key and send requests. Any OpenAI client, such as `curl`, the `openai` SDK, LangChain or Cherry Studio, works once you change the base URL and the key.
 
-Token Factory is on the China site only. The platform chooses the models and changes them from time to time. To run a model that isn't listed, or with your own vLLM settings, [serve it on a GPU instance](/radeon-cloud-docs/guides/serve-model/) instead.
+Token Lab is on the China site only. The platform chooses the models and changes them from time to time. To run a model that isn't listed, or with your own vLLM settings, [serve it on a GPU instance](/radeon-cloud-docs/guides/serve-model/) instead.
 
 ## Get your API key
 
-1. Sign in to the console and open **Token Factory**.
+1. Sign in to the console and open **Token Lab**.
 2. The **Your API key** card at the top shows the **Base URL** and your **API key**. The key is hidden; click **Show key** to see it or **Copy** to copy it.
 
-![Token Factory with the Your API key card: Base URL and the hidden API key](../../../assets/guide/en/tokenfactory.png)
+![Token Lab with the Your API key card: Base URL and the hidden API key](../../../assets/guide/en/tokenfactory.png)
 
-The key starts with `rc-` and works for every model in Token Factory. Keep it secret: anyone who has it can spend your daily allowance. See [Authentication](/radeon-cloud-docs/api/authentication/) for rotating a key.
+The key starts with `rc-` and works for every model in Token Lab. Keep it secret: anyone who has it can spend your daily allowance. See [Authentication](/radeon-cloud-docs/api/authentication/) for rotating a key.
 
 ## Pick a model
 
-Token Factory lists its models. Filter them by **Use case**, **Provider** or **Publisher**, or search by name. Each card shows whether the model is busy right now.
+Token Lab lists its models. Filter them by **Use case**, **Provider** or **Publisher**, or search by name. Each card shows whether the model is busy right now.
 
 Click a card to see the model's description, its pricing and how to call it. The value to send in the `model` field is shown there. The [Model catalog](/radeon-cloud-docs/models/overview/) describes what each model accepts.
 
@@ -57,11 +57,11 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
   -H "Authorization: Bearer $RADEON_API_KEY"
 ```
 
-Token Factory also accepts the Anthropic Messages API, for clients such as Claude Code. See [Messages](/radeon-cloud-docs/api/messages/). Every operation is described in the [API reference](/radeon-cloud-docs/api/overview/#token-factory-api).
+Token Lab also accepts the Anthropic Messages API, for clients such as Claude Code. See [Messages](/radeon-cloud-docs/api/messages/). Every operation is described in the [API reference](/radeon-cloud-docs/api/overview/#token-factory-api).
 
 ## Limits
 
-Token Factory is free, but usage is capped:
+Token Lab is free, but usage is capped:
 
 - Requests per minute and concurrent requests are limited per account and per key.
 - A daily usage cap, counted in points (pts), resets at 00:00 Beijing time (UTC+8).
@@ -72,4 +72,4 @@ If you keep hitting the limits, [serve the model on your own instance](/radeon-c
 
 ## Terms
 
-Token Factory is a free trial and development service, not for production. Reselling access is not allowed. See [API terms of use](/radeon-cloud-docs/api/terms/).
+Token Lab is a free trial and development service, not for production. Reselling access is not allowed. See [API terms of use](/radeon-cloud-docs/api/terms/).

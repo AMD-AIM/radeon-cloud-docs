@@ -57,8 +57,8 @@ accepts `temperature` and `top_p`; `top_k` is dropped (see the
 
 ## On Radeon Cloud
 
-:::note[Token Factory, China site — catalog read 2026-10-19]
-The values below come from the Token Factory catalog and the serving configuration. Current
+:::note[Token Lab, China site — catalog read 2026-10-19]
+The values below come from the Token Lab catalog and the serving configuration. Current
 availability comes from [`GET /v1/models`](/radeon-cloud-docs/api/models/), and current usage
 rates are on the model's card in the console.
 :::
@@ -92,7 +92,7 @@ request says otherwise. To turn it on, send this top-level field:
 ```
 
 With the Python OpenAI SDK, pass it as `extra_body={"chat_template_kwargs": {"enable_thinking": True}}`.
-Token Factory forwards `chat_template_kwargs` to the inference engine unchanged. How this model
+Token Lab forwards `chat_template_kwargs` to the inference engine unchanged. How this model
 treats `reasoning_effort` has not been verified; use `enable_thinking`.
 
 | | |

@@ -1,6 +1,6 @@
 ---
 title: Quickstart
-description: Call a model in Token Factory, then launch a GPU instance.
+description: Call a model in Token Lab, then launch a GPU instance.
 sidebar:
   label: Quickstart
   order: 2
@@ -8,15 +8,15 @@ sidebar:
 
 Prefer to watch first? The [walkthroughs](/radeon-cloud-docs/walkthroughs/) show each step in the real console, with the easy-to-miss points marked.
 
-This page covers two separate tasks: calling a model in Token Factory and launching a GPU instance. Neither depends on the other, so start with whichever you need.
+This page covers two separate tasks: calling a model in Token Lab and launching a GPU instance. Neither depends on the other, so start with whichever you need.
 
-Token Factory is on the China site only. Instances are available on both sites; the examples use the China site's address.
+Token Lab is on the China site only. Instances are available on both sites; the examples use the China site's address.
 
-## Call a model in Token Factory
+## Call a model in Token Lab
 
-Calling a model in Token Factory needs no instance and spends no credits.
+Calling a model in Token Lab needs no instance and spends no credits.
 
-1. Open [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) and sign in. See [Sign in](/radeon-cloud-docs/guides/login/).
+1. Open [Token Lab](https://developer.amd.com.cn/radeon/tokenfactory) and sign in. See [Sign in](/radeon-cloud-docs/guides/login/).
 2. On the **Your API key** card at the top, click **Copy** next to the API key.
 3. Send a request:
 
@@ -29,7 +29,7 @@ Calling a model in Token Factory needs no instance and spends no credits.
      -d '{"model":"DeepSeek-V4-Flash","messages":[{"role":"user","content":"Say hello in one sentence."}]}'
    ```
 
-The same key works for every model in Token Factory. To use another one, change `model`. To list the models:
+The same key works for every model in Token Lab. To use another one, change `model`. To list the models:
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/models \
@@ -49,7 +49,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-Next: [Token Factory](/radeon-cloud-docs/guides/token-factory/) for limits and the model list, or the [API reference](/radeon-cloud-docs/api/overview/).
+Next: [Token Lab](/radeon-cloud-docs/guides/token-factory/) for limits and the model list, or the [API reference](/radeon-cloud-docs/api/overview/).
 
 ## Launch a GPU instance
 

@@ -99,8 +99,8 @@ The classic interface calls `POST /api/credits/redeem` with the same coupon in a
 
 ## API key
 
-The API key is shown in [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory). Regenerating it still takes the classic interface. See [Rotate a key](/radeon-cloud-docs/api/authentication/#rotate-a-key).
+The API key is shown in [Token Lab](https://developer.amd.com.cn/radeon/tokenfactory). Regenerating it still takes the classic interface. See [Rotate a key](/radeon-cloud-docs/api/authentication/#rotate-a-key).
 
-## Token Factory usage
+## Token Lab usage
 
-Token Factory usage is counted separately from credits. See [Usage and quota](/radeon-cloud-docs/api/usage/).
+Token Lab usage is counted separately from credits. See [Usage and quota](/radeon-cloud-docs/api/usage/).

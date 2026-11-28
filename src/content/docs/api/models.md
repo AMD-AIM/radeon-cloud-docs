@@ -1,11 +1,11 @@
 ---
 title: List models
-description: Discover which models Token Factory serves.
+description: Discover which models Token Lab serves.
 sidebar:
   order: 3
 ---
 
-Returns the **Token Factory** model list, with the pricing and capability metadata for
+Returns the **Token Lab** model list, with the pricing and capability metadata for
 each entry. A model service on your instance serves only the model you launched it with, and
 answers this path from vLLM instead. See
 [Model service endpoints](/radeon-cloud-docs/api/model-services/).
@@ -93,7 +93,7 @@ Use any `id` from this list as the `model` field in [chat completions](/radeon-c
 | `name`, `description`, `family`, `aliases` | Display metadata. |
 | `architecture` | Input and output modalities, and the tokenizer family. |
 | `providers` | The backends serving this model, each with its own pricing and capability flags. |
-| `pricing` | Price per token as decimal strings: `prompt`, `completion`, and `input_cache_read` where prompt caching applies. A model billed by input characters, such as OmniVoice, puts its price per character in `prompt`. Counted against your daily allowance in Token Factory points, not charged as money. See [Usage and quota](/radeon-cloud-docs/api/usage/). |
+| `pricing` | Price per token as decimal strings: `prompt`, `completion`, and `input_cache_read` where prompt caching applies. A model billed by input characters, such as OmniVoice, puts its price per character in `prompt`. Counted against your daily allowance in Token Lab points, not charged as money. See [Usage and quota](/radeon-cloud-docs/api/usage/). |
 | `context_length` | Maximum context window in tokens. |
 | `supported_parameters` | Request parameters this model accepts. The full schema is under [chat completions](/radeon-cloud-docs/api/chat-completions/). |
 | `json_output`, `structured_outputs` | Whether `response_format` is honoured. |
@@ -102,7 +102,7 @@ Use any `id` from this list as the `model` field in [chat completions](/radeon-c
 
 :::caution[Not OpenAI's model object]
 Clients that expect `data[].object == "model"` or read `owned_by` will not find those fields.
-Everything else in Token Factory follows OpenAI's schema; this endpoint does not.
+Everything else in Token Lab follows OpenAI's schema; this endpoint does not.
 :::
 
 ## Notes
@@ -113,4 +113,4 @@ The catalog is the same for every key. It isn't scoped to your account.
 
 This endpoint doesn't count against your concurrency allowance, though the per-minute rate limit still applies. It's cheap to call, but cache the result for a few minutes rather than calling it before every completion.
 
-The same metadata is rendered on each model's card in the [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory).
+The same metadata is rendered on each model's card in the [Token Lab](https://developer.amd.com.cn/radeon/tokenfactory).

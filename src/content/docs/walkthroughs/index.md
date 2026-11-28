@@ -11,5 +11,5 @@ Each step is a short animated walkthrough of the real console, with the easy-to-
 4. [Work in JupyterLab](/radeon-cloud-docs/walkthroughs/jupyterlab/): only `/workspace` can be kept.
 5. [Connect with SSH (optional)](/radeon-cloud-docs/walkthroughs/ssh/): add your key **before** you launch.
 6. [Destroy and keep your work](/radeon-cloud-docs/walkthroughs/keep-your-work/): only persistent `/workspace` is kept.
-7. [Call models with Token Factory](/radeon-cloud-docs/walkthroughs/token-factory/): leave `max_tokens` room; check `/v1/usage` for limits.
+7. [Call models with Token Lab](/radeon-cloud-docs/walkthroughs/token-factory/): leave `max_tokens` room; check `/v1/usage` for limits.
 

@@ -12,7 +12,7 @@ sidebar:
 </div>
 
 :::note[Model ID and card title]
-The Token Factory card for this model is titled **DeepSeek-V4-Flash-0731**. Send
+The Token Lab card for this model is titled **DeepSeek-V4-Flash-0731**. Send
 `DeepSeek-V4-Flash` as `model`, the value in the card's **Model** field. The card title is not
 accepted as a model ID.
 :::

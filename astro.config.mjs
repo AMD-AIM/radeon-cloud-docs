@@ -35,7 +35,7 @@ export default defineConfig({
         'zh-CN': 'Radeon\u00a0Cloud 文档',
       },
       description:
-        'Run AMD Radeon GPUs in the cloud. Launch GPU instances, call hosted models in Token Factory, and use the AMD Radeon Cloud API.',
+        'Run AMD Radeon GPUs in the cloud. Launch GPU instances, call hosted models in Token Lab, and use the AMD Radeon Cloud API.',
       logo: {
         light: './src/assets/amd-logo.png',
         dark: './src/assets/amd-logo-white.png',
@@ -123,7 +123,8 @@ export default defineConfig({
           ],
         },
         {
-          label: 'Token Factory',
+          label: 'Token Lab',
+          translations: { 'zh-CN': 'Token Factory' },
           items: [
             { slug: 'guides/token-factory' },
             {
@@ -151,7 +152,8 @@ export default defineConfig({
             { slug: 'api/overview' },
             { slug: 'api/authentication' },
             {
-              label: 'Token Factory API',
+              label: 'Token Lab API',
+              translations: { 'zh-CN': 'Token Factory API' },
               items: [
                 { slug: 'api/models' },
                 { slug: 'api/model-utilization' },

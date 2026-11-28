@@ -63,7 +63,7 @@ For an instance launched with **Deploy type: Model API**:
 1. Make sure the command binds to `--host 0.0.0.0 --port 8000`. With `127.0.0.1`, the instance looks healthy but can't be reached.
 2. Click **View logs** on the instance card and wait until the model has finished loading.
 3. Use the base URL and API key from the current instance card. They can change when you launch again.
-4. Send the name from `--served-model-name` as `model`, not a name from Token Factory.
+4. Send the name from `--served-model-name` as `model`, not a name from Token Lab.
 
 ## SSH
 
@@ -89,7 +89,7 @@ A key added after the instance launched isn't installed in it. Destroy the insta
 
 A new instance can reuse an earlier instance's host and port with a new host key. Remove the old entry with the `ssh-keygen -R` command shown on the instance card, then connect again.
 
-## Token Factory
+## Token Lab
 
 ### 401 on every request
 
@@ -101,13 +101,13 @@ If the `401` says `Login required`, you sent an API key to a console endpoint, w
 
 ### 404 on every request from the Global site
 
-Token Factory is on the China site only. Use `https://developer.amd.com.cn/radeon/api/v1`.
+Token Lab is on the China site only. Use `https://developer.amd.com.cn/radeon/api/v1`.
 
 ### 429
 
 You've hit a rate limit or the daily usage cap. `Retry-After` says how long to wait. See [Rate limits](/radeon-cloud-docs/api/rate-limits/).
 
-If you hit `429` all the time, your workload is bigger than the Token Factory allowance. [Serve the model on your own instance](/radeon-cloud-docs/guides/serve-model/) instead of retrying more.
+If you hit `429` all the time, your workload is bigger than the Token Lab allowance. [Serve the model on your own instance](/radeon-cloud-docs/guides/serve-model/) instead of retrying more.
 
 ### 400 "System message must be at the beginning."
 
@@ -124,7 +124,7 @@ Agent frameworks that add a second `system` message, or insert one mid-conversat
 
 ### "Requested model ... not supported"
 
-The model name isn't in Token Factory. Models are added and retired over time, so look names up with [`GET /v1/models`](/radeon-cloud-docs/api/models/) instead of hard-coding them.
+The model name isn't in Token Lab. Models are added and retired over time, so look names up with [`GET /v1/models`](/radeon-cloud-docs/api/models/) instead of hard-coding them.
 
 ## GPU
 

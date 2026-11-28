@@ -7,7 +7,7 @@ sidebar:
 
 The AMD Radeon Cloud API has four parts:
 
-- **The Token Factory API** calls the models hosted in [Token Factory](/radeon-cloud-docs/guides/token-factory/). It's OpenAI-compatible, with an Anthropic-compatible Messages endpoint.
+- **The Token Lab API** calls the models hosted in [Token Lab](/radeon-cloud-docs/guides/token-factory/). It's OpenAI-compatible, with an Anthropic-compatible Messages endpoint.
 - **Model service endpoints** reach vLLM running on your own instance, launched with **Deploy type: Model API**. They're also OpenAI-compatible, but run on a different host with different limits and error bodies.
 - **CLI endpoints** are what [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) calls. Use the CLI to script instances.
 - **The Platform API** serves the web console: instances, templates and your account. It accepts only a browser session.
@@ -16,27 +16,27 @@ The AMD Radeon Cloud API has four parts:
 
 | API | Base URL |
 |---|---|
-| Token Factory API | `https://developer.amd.com.cn/radeon/api/v1` (China site only) |
+| Token Lab API | `https://developer.amd.com.cn/radeon/api/v1` (China site only) |
 | Model service endpoints | Shown on the instance card, for example `https://jupyter.anruicloud.com/inference/<instance-id>/v1` |
 | Platform API | `https://developer.amd.com.cn/radeon` or `https://radeon-global.anruicloud.com` |
 
-Token Factory is available on the China site only.
+Token Lab is available on the China site only.
 
 A model service's base URL and key are shown on the instance card once it's ready. Copy them from there instead of building the URL yourself.
 
 :::note[Prefer what the console shows]
-These are the public addresses at the time of writing. If the console or Token Factory shows a different base URL, use that one.
+These are the public addresses at the time of writing. If the console or Token Lab shows a different base URL, use that one.
 :::
 
 ## Credentials
 
-Token Factory takes your `rc-` API key, a model service takes the `sk-` key on its card, the CLI uses its own `rcc_` token, and the Platform API takes a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/).
+Token Lab takes your `rc-` API key, a model service takes the `sk-` key on its card, the CLI uses its own `rcc_` token, and the Platform API takes a browser session. See [Authentication](/radeon-cloud-docs/api/authentication/).
 
 ## Conventions
 
 Requests and responses are JSON with `Content-Type: application/json`. Timestamps are ISO 8601. Errors have a non-2xx status and a JSON body. See [Errors](/radeon-cloud-docs/api/errors/).
 
-## Token Factory API
+## Token Lab API
 
 Always on, nothing to launch, and no credits spent. AMD chooses which models are served. The main operations:
 
@@ -57,7 +57,7 @@ Requests go through a gateway that checks them against a fixed set of fields, so
 
 vLLM running on an instance you launch with **Deploy type: Model API**. You choose the model and the serving flags, and the instance spends credits while it runs.
 
-Requests are passed to your server unchanged, apart from the routing prefix. Whatever vLLM serves is available, usually including `/v1/completions` and `/v1/embeddings`. There's no gateway in front, so Token Factory's rate limits, model list and error bodies don't apply.
+Requests are passed to your server unchanged, apart from the routing prefix. Whatever vLLM serves is available, usually including `/v1/completions` and `/v1/embeddings`. There's no gateway in front, so Token Lab's rate limits, model list and error bodies don't apply.
 
 See [Model service endpoints](/radeon-cloud-docs/api/model-services/).
 

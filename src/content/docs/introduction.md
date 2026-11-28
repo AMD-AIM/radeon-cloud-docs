@@ -1,6 +1,6 @@
 ---
 title: What is AMD Radeon Cloud
-description: An overview of AMD Radeon Cloud, its China and Global sites, GPU instances and Token Factory.
+description: An overview of AMD Radeon Cloud, its China and Global sites, GPU instances and Token Lab.
 sidebar:
   label: Introduction
   order: 1
@@ -10,7 +10,7 @@ AMD Radeon Cloud gives you an AMD Radeon GPU on demand. Pick an image and a size
 
 ## China site and Global site
 
-AMD Radeon Cloud has two sites, each run separately for its own region. Both offer GPU instances; Token Factory is on the China site only.
+AMD Radeon Cloud has two sites, each run separately for its own region. Both offer GPU instances; Token Lab is on the China site only.
 
 | Site | Address | Account |
 |---|---|---|
@@ -35,22 +35,22 @@ An instance can also serve a model of your choice with vLLM, behind an OpenAI-co
 
 Manage instances in the web console or from a terminal with [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) (`rcc`), which is also easy to script.
 
-### Token Factory
+### Token Lab
 
-**Token Factory** hosts a set of models on Radeon GPUs and serves them through an OpenAI-compatible API, on the China site. It's free and always on: get an API key and start sending requests. Any OpenAI client, such as `curl`, the `openai` Python SDK, LangChain or Cherry Studio, works once you change the base URL and the key. The platform chooses the models and changes them from time to time. See [Token Factory](/radeon-cloud-docs/guides/token-factory/).
+**Token Lab** hosts a set of models on Radeon GPUs and serves them through an OpenAI-compatible API, on the China site. It's free and always on: get an API key and start sending requests. Any OpenAI client, such as `curl`, the `openai` Python SDK, LangChain or Cherry Studio, works once you change the base URL and the key. The platform chooses the models and changes them from time to time. See [Token Lab](/radeon-cloud-docs/guides/token-factory/).
 
 ## Which one do you need
 
 For training, fine-tuning, notebooks or a shell, use an **instance**.
 
-For an application that calls an LLM, start with **Token Factory**. When you need a model it doesn't offer, or throughput you don't share, [serve the model on an instance](/radeon-cloud-docs/guides/serve-model/).
+For an application that calls an LLM, start with **Token Lab**. When you need a model it doesn't offer, or throughput you don't share, [serve the model on an instance](/radeon-cloud-docs/guides/serve-model/).
 
 ## Quick links
 
 | What | Where |
 |---|---|
 | Console: instances, credits, settings | [developer.amd.com.cn/radeon](https://developer.amd.com.cn/radeon/) or [radeon-global.anruicloud.com](https://radeon-global.anruicloud.com/) |
-| Token Factory: API key, models | [developer.amd.com.cn/radeon/tokenfactory](https://developer.amd.com.cn/radeon/tokenfactory) |
+| Token Lab: API key, models | [developer.amd.com.cn/radeon/tokenfactory](https://developer.amd.com.cn/radeon/tokenfactory) |
 | Radeon Cloud CLI | [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/) |
 | AMD AI Developer Program: points and coupons (China site) | [AMD AI Developer Program](/radeon-cloud-docs/guides/developer-program/) |
 | Support | [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.developer.amd.com.cn) |

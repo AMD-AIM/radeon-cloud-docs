@@ -33,8 +33,8 @@ Every pull request runs this check (`.github/workflows/check.yml`) after `npm ci
 ```
 src/
   content/docs/          English pages
-    guides/              getting started, GPU instance and Token Factory guides
-    models/              Token Factory model catalog (one page per model)
+    guides/              getting started, GPU instance and Token Lab guides
+    models/              Token Lab model catalog (one page per model)
     cli/                 Radeon Cloud CLI
     api/                 API reference
     resources/           troubleshooting, FAQ
@@ -94,8 +94,8 @@ Adding a page means creating both files and adding its slug to the `sidebar` arr
 | workspace storage: temporary / persistent `/workspace` | 工作区存储：临时工作区 / 持久化 `/workspace` | Don't say PVC |
 | credits | 积分 | Matches the Chinese UI |
 | developer points | 开发者积分 | AMD AI Developer Program only; never shorten to 积分 |
-| Token Factory, Token Factory API | Token Factory、Token Factory API | The hosted models and their API. Not "shared model API" or "Public Free" |
-| model service (on an instance), model service endpoint | 模型服务（自部署模型服务）、模型服务接口 | vLLM on your own instance via **Deploy type: Model API**. Not part of Token Factory. Not "dedicated" / 专属 / 独占 |
+| Token Lab, Token Lab API | Token Factory、Token Factory API | The hosted models and their API. English pages say Token Lab, Chinese pages say Token Factory; never mix them in one language. Not "shared model API" or "Public Free". URLs keep `token-factory` |
+| model service (on an instance), model service endpoint | 模型服务（自部署模型服务）、模型服务接口 | vLLM on your own instance via **Deploy type: Model API**. Not part of Token Lab. Not "dedicated" / 专属 / 独占 |
 | API key | API Key | |
 | CLI token | CLI 令牌 | Starts with `rcc_` |
 | account | 账号 | Use 账户 only when quoting a UI label |
@@ -127,7 +127,7 @@ To move the site elsewhere, edit `SITE` and `BASE` at the top of `astro.config.m
 
 ## Ask AI
 
-The **Ask AI** button next to search sends the reader's question to the Radeon Cloud backend (`POST /api/docs/ask` on the China site), which answers with a Token Factory model using these docs as its knowledge base.
+The **Ask AI** button next to search sends the reader's question to the Radeon Cloud backend (`POST /api/docs/ask` on the China site), which answers with a Token Lab model using these docs as its knowledge base.
 
 - Every build writes the knowledge base to `dist/ask-ai/corpus-en.md` and `dist/ask-ai/corpus-zh-cn.md` (`src/integrations/ask-ai-corpus.mjs`). The backend fetches them from the published site, so a docs change reaches Ask AI on the next deploy.
 - The button appears only when the build has `PUBLIC_ASK_AI_ENDPOINT`. In CI it comes from the repository variable `ASK_AI_ENDPOINT` (**Settings → Secrets and variables → Actions → Variables**), for example `https://developer.amd.com.cn/radeon/api/docs/ask`. Delete the variable and redeploy to hide it.

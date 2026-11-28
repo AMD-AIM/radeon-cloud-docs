@@ -9,7 +9,7 @@ AMD Radeon Cloud uses three kinds of credential. Which one you need depends on w
 
 | Credential | Looks like | Use it for |
 |---|---|---|
-| **API key** | `rc-` + 48 hex characters | Token Factory |
+| **API key** | `rc-` + 48 hex characters | Token Lab |
 | **CLI token** | `rcc_...` | [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/): instances, credits, resources |
 | **Session cookie** | Set when you sign in to the console | The console and the [Platform API](/radeon-cloud-docs/api/instances/) |
 
@@ -30,7 +30,7 @@ curl https://developer.amd.com.cn/radeon/api/v1/models \
   -H "Authorization: Bearer $RADEON_API_KEY"
 ```
 
-Token Factory also accepts the key in the `x-api-key` header, which is how Anthropic SDKs authenticate. Send `anthropic-version` with it when calling [`/v1/messages`](/radeon-cloud-docs/api/messages/):
+Token Lab also accepts the key in the `x-api-key` header, which is how Anthropic SDKs authenticate. Send `anthropic-version` with it when calling [`/v1/messages`](/radeon-cloud-docs/api/messages/):
 
 ```bash
 curl https://developer.amd.com.cn/radeon/api/v1/messages \
@@ -40,11 +40,11 @@ curl https://developer.amd.com.cn/radeon/api/v1/messages \
   -d '{"model":"DeepSeek-V4-Flash","max_tokens":256,"messages":[{"role":"user","content":"Hello"}]}'
 ```
 
-If both headers are present, `Authorization` is used. Only Token Factory reads `x-api-key`.
+If both headers are present, `Authorization` is used. Only Token Lab reads `x-api-key`.
 
 ### Get a key
 
-Open [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory). Your key is on the **Your API key** card at the top; click **Copy**. The key is created the first time you open Token Factory.
+Open [Token Lab](https://developer.amd.com.cn/radeon/tokenfactory). Your key is on the **Your API key** card at the top; click **Copy**. The key is created the first time you open Token Lab.
 
 Accounts that are still under review don't get a key. If yours is missing, check whether your account has been approved.
 
@@ -64,7 +64,7 @@ It grants access to your model quota. Keep it in an environment variable or a se
 
 ## CLI tokens
 
-`rcc auth login` signs the CLI in through your browser and stores a token that starts with `rcc_`. It manages your account and instances, and doesn't work with Token Factory. See [Sign-in and accounts](/radeon-cloud-docs/cli/authentication/).
+`rcc auth login` signs the CLI in through your browser and stores a token that starts with `rcc_`. It manages your account and instances, and doesn't work with Token Lab. See [Sign-in and accounts](/radeon-cloud-docs/cli/authentication/).
 
 ## Session cookies
 
@@ -76,7 +76,7 @@ The session ends when you sign out, when the identity provider's sign-in expires
 
 | Endpoint | API key | CLI token | Session |
 |---|---|---|---|
-| Token Factory (`/api/v1/...`) | Yes | No | Only to list models |
+| Token Lab (`/api/v1/...`) | Yes | No | Only to list models |
 | Model services on instances (`/inference/...`) | The `sk-` key on its card | No | No |
 | CLI endpoints (`/api/cli/...`) | No | Yes | No |
 | Platform API: instances, templates, account | No | No | Yes |

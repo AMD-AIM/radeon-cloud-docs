@@ -1,6 +1,6 @@
 ---
 title: Model catalog
-description: What each model in Token Factory accepts and returns.
+description: What each model in Token Lab accepts and returns.
 sidebar:
   label: Overview
   order: 1
@@ -37,7 +37,7 @@ rows in the tables below are kept for reference and marked *(retired)*. For imag
 ## Model ID and card title
 
 Send the model ID in `model`, exactly as written. Copy it from the **Model** field on the model's
-card in Token Factory, or from `id` in [`GET /v1/models`](/radeon-cloud-docs/api/models/). The
+card in Token Lab, or from `id` in [`GET /v1/models`](/radeon-cloud-docs/api/models/). The
 card title and the `name` field can differ from the ID, and neither is accepted in its place:
 
 | Model ID (send this) | Card title | `name` in `/v1/models` |
@@ -78,7 +78,7 @@ Five models are not in this table, and the parameters below do not apply to them
 
 ## Usage rates
 
-Token Factory meters usage in points (pts). Points aren't money and are separate from your
+Token Lab meters usage in points (pts). Points aren't money and are separate from your
 credits; see [Usage and quota](/radeon-cloud-docs/api/usage/). Rates are in pts per million tokens
 unless noted. They can change, so check the model's card for the current values.
 

@@ -39,12 +39,12 @@ Codes expire after a few minutes. If one doesn't arrive, wait until **Resend cod
 
 ## After signing in
 
-The console opens on **Home**, where you launch instances. The tabs at the top lead to **Gallery** and **Token Factory**.
+The console opens on **Home**, where you launch instances. The tabs at the top lead to **Gallery** and **Token Lab**.
 
 Click your account in the top-right corner for:
 
 - your credit balance
-- **Credits & Usage**: credits, redeeming coupons, Token Factory usage. See [Credits](/radeon-cloud-docs/guides/credits/).
+- **Credits & Usage**: credits, redeeming coupons, Token Lab usage. See [Credits](/radeon-cloud-docs/guides/credits/).
 - **Settings**: SSH keys, language, appearance, the AMDAI account link and the switch to the classic interface
 - **Sign out**
 

@@ -5,7 +5,7 @@ description: Run a model with vLLM on your own GPU instance and call it through 
 
 In the launch form, **Deploy type: Model API** starts an instance that runs vLLM instead of JupyterLab and gives you an OpenAI-compatible endpoint for it. You choose the model and its settings, nobody else shares the GPU, and the instance spends credits every hour it runs.
 
-This is separate from [Token Factory](/radeon-cloud-docs/guides/token-factory/), where the platform hosts the models for free. Use a model service when you need a model Token Factory doesn't offer, your own vLLM settings, or throughput you don't share with anyone.
+This is separate from [Token Lab](/radeon-cloud-docs/guides/token-factory/), where the platform hosts the models for free. Use a model service when you need a model Token Lab doesn't offer, your own vLLM settings, or throughput you don't share with anyone.
 
 ## Launch from a public template
 
@@ -54,7 +54,7 @@ When the instance is ready, the **OpenAI-compatible endpoint** card shows:
 
 - **Base URL**: the endpoint of your instance.
 - **Model**: the value for the `model` field.
-- **API key**: the key for this endpoint. It starts with `sk-`, is created for each launch, and isn't your Token Factory [API key](/radeon-cloud-docs/guides/token-factory/#get-your-api-key).
+- **API key**: the key for this endpoint. It starts with `sk-`, is created for each launch, and isn't your Token Lab [API key](/radeon-cloud-docs/guides/token-factory/#get-your-api-key).
 - **Quickstart**: a ready-to-run curl command.
 
 ![The OpenAI-compatible endpoint card with Base URL, Model and API key](../../../assets/guide/en/modelapi-access.png)
@@ -66,7 +66,7 @@ curl <base-url>/chat/completions \
   -d '{"model":"Qwen2.5-0.5B-Instruct","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
-Requests go straight to vLLM, so the endpoint exposes what vLLM exposes, such as `/v1/completions` and `/v1/embeddings`. Token Factory's rate limits and request filtering don't apply. See [Model service endpoints](/radeon-cloud-docs/api/model-services/).
+Requests go straight to vLLM, so the endpoint exposes what vLLM exposes, such as `/v1/completions` and `/v1/embeddings`. Token Lab's rate limits and request filtering don't apply. See [Model service endpoints](/radeon-cloud-docs/api/model-services/).
 
 Copy the **Base URL** and **API key** from the card after each launch rather than saving them in code.
 

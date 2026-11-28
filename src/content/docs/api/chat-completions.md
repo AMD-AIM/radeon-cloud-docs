@@ -5,7 +5,7 @@ sidebar:
   order: 4
 ---
 
-The main inference endpoint in **Token Factory**. It follows OpenAI's chat
+The main inference endpoint in **Token Lab**. It follows OpenAI's chat
 completions schema. A [model service](/radeon-cloud-docs/api/model-services/) on your instance serves
 the same path from your own vLLM, and none of the request filtering below applies
 there.

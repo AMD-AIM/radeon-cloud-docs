@@ -1,11 +1,11 @@
 ---
 title: Model load
-description: See how busy each Token Factory model is right now.
+description: See how busy each Token Lab model is right now.
 sidebar:
   order: 4
 ---
 
-Returns the current load of each **Token Factory** model, as reported by the inference engines serving it. Use it alongside [List models](/radeon-cloud-docs/api/models/): pick a model from the list, then check here how busy it is.
+Returns the current load of each **Token Lab** model, as reported by the inference engines serving it. Use it alongside [List models](/radeon-cloud-docs/api/models/): pick a model from the list, then check here how busy it is.
 
 :::note[China only]
 Only `https://developer.amd.com.cn/radeon` serves this endpoint for now. The Global site has the same route but isn't connected to a load source yet, so it always returns `503` (see [Notes](#notes)). Don't retry it there.
@@ -118,4 +118,4 @@ Returns `503` when the data is temporarily unavailable:
 
 Unlike the `404`, this body has no `code` field.
 
-The load bar on the model cards in [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) comes from a different counter, so the two can show different numbers.
+The load bar on the model cards in [Token Lab](https://developer.amd.com.cn/radeon/tokenfactory) comes from a different counter, so the two can show different numbers.

@@ -8,7 +8,7 @@ sidebar:
 ## Getting started
 
 **Do I need to launch an instance to call a model?**
-No. Token Factory is free and always on. Get an API key from [Token Factory](https://developer.amd.com.cn/radeon/tokenfactory) and start calling. It's on the China site only. See [Token Factory](/radeon-cloud-docs/guides/token-factory/).
+No. Token Lab is free and always on. Get an API key from [Token Lab](https://developer.amd.com.cn/radeon/tokenfactory) and start calling. It's on the China site only. See [Token Lab](/radeon-cloud-docs/guides/token-factory/).
 
 **Can I run more than one instance?**
 No. Each account can have one instance at a time. Destroy it to launch another.
@@ -25,7 +25,7 @@ Email [member-service@mail.developer.amd.com.cn](mailto:member-service@mail.deve
 ## Cost
 
 **What spends credits?**
-Running instances: 1 credit per GPU per hour. Token Factory doesn't use credits. A model service you run yourself does, because it runs on an instance.
+Running instances: 1 credit per GPU per hour. Token Lab doesn't use credits. A model service you run yourself does, because it runs on an instance.
 
 **Am I charged while an instance is idle?**
 Yes. An instance spends credits for as long as it exists, whether or not you're using it. [Destroy it](/radeon-cloud-docs/guides/destroy/) when you're done.
@@ -33,8 +33,8 @@ Yes. An instance spends credits for as long as it exists, whether or not you're 
 **Will my instance be stopped for me?**
 Only when your credits run out, or when the **Auto-reclaim** time shown on the launch form has passed. Don't rely on either to save credits.
 
-**Are Token Factory usage and credits the same thing?**
-No. Token Factory has its own daily usage cap, counted in points (pts). See it on **Credits & Usage**, or with [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).
+**Are Token Lab usage and credits the same thing?**
+No. Token Lab has its own daily usage cap, counted in points (pts). See it on **Credits & Usage**, or with [`GET /v1/usage`](/radeon-cloud-docs/api/usage/).
 
 ## Storage
 
@@ -52,7 +52,7 @@ No. Storage is chosen at launch. Destroy the instance and launch again with **Pe
 **Does my CUDA code work?**
 Usually, at the PyTorch level. ROCm builds of PyTorch support the `torch.cuda.*` API, so high-level PyTorch code usually runs unchanged. Hand-written CUDA kernels need porting with HIP, and libraries that ship only CUDA binaries won't work.
 
-**Which models are in Token Factory?**
+**Which models are in Token Lab?**
 The list changes. See the [model catalog](/radeon-cloud-docs/models/overview/), or call [`GET /v1/models`](/radeon-cloud-docs/api/models/) instead of hard-coding names.
 
 **Can I serve any model on my own instance?**
@@ -65,7 +65,7 @@ Yes. Set `stream: true` on chat completions.
 It depends on the model. For Qwen3.8-27B and the MiniCPM-V-4.7 models, `system` is optional: a conversation with only a `user` message is valid. If provided, there can be at most one `system` message, and it must come first; a second one, or one placed later, returns `400 System message must be at the beginning.` One `system` message at the start works on every model. See [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/).
 
 **Are embeddings available?**
-In Token Factory, only if the model catalog lists an embedding model. A model service on your instance serves whatever vLLM supports, which usually includes `/v1/embeddings`.
+In Token Lab, only if the model catalog lists an embedding model. A model service on your instance serves whatever vLLM supports, which usually includes `/v1/embeddings`.
 
 ## Access
 
@@ -73,7 +73,7 @@ In Token Factory, only if the model catalog lists an embedding model. A model se
 Not through the platform. To expose a service publicly, run it in the instance and use [rc-tunnel](/radeon-cloud-docs/guides/tunnel/), with your own authentication in front of it.
 
 **Can I use an API key to open JupyterLab or launch instances?**
-No. API keys work for Token Factory only. JupyterLab and the console need a browser session, and scripts manage instances with [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/).
+No. API keys work for Token Lab only. JupyterLab and the console need a browser session, and scripts manage instances with [Radeon Cloud CLI](/radeon-cloud-docs/cli/overview/).
 
 **Why can't I launch an instance?**
 Usually one of these: no free node in the resource pool, not enough credits, an instance already running, or an account still under review. See [Troubleshooting](/radeon-cloud-docs/resources/troubleshooting/#launching).
